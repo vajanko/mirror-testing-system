@@ -2,7 +2,7 @@
 
 = Špecifikácia =
 
-Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na Google Docs vo formáte .doc
+Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 
 
 *Dátum*: 28.3.2011
