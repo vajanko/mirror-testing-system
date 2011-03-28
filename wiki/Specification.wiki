@@ -13,4 +13,6 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
   * Hrubý návrh aplikácie - rozdelenie na hlavné moduly a ich funkcie
   * Spresnenie pojmov týkajúcich sa automobilového zrkadla a testovacej stanice
 
-*Link*: [https://docs.google.com/leaf?id=0B8XOIEPqV4lvMWNkNWIyNzUtNTMzZi00MDJkLWFkMjctZGE3ZWU2ZmRiY2E1&hl=en&authkey=CLHKtegC speficication 0.1.0.doc]
+*Links*: 
+  * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvMWNkNWIyNzUtNTMzZi00MDJkLWFkMjctZGE3ZWU2ZmRiY2E1&hl=en&authkey=CLHKtegC speficication 0.1.0.doc]
+  * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvZjgwMWQzZDUtYWQ4NC00ZGQyLTk4ODktZDRlNDk5MGQ4MDI4&hl=en&authkey=CNPwz90E specification 0.1.0.pdf]
