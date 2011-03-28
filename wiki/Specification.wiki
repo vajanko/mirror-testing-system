@@ -1,0 +1,9 @@
+#summary Dočasná stránka na tvorbu špecifikácie
+
+= Špecifikácia =
+
+Dočasná stránka na tvorbu špecifikácie
+
+|| *Dátum* || *Poznámka* || *Verzia* || *Link* ||
+|| 28.3.2011 || Úvodný text || 0.1.0 || [http://code.google.com/p/mirror-testing-system/source/browse/#svn%2Fspec doc] ||
+
