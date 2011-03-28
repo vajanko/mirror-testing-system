@@ -2,8 +2,15 @@
 
 = Špecifikácia =
 
-Dočasná stránka na tvorbu špecifikácie
+Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na Google Docs vo formáte .doc
 
-|| *Dátum* || *Poznámka* || *Verzia* || *Link* ||
-|| 28.3.2011 || Úvodný text || 0.1.0 || [http://code.google.com/p/mirror-testing-system/source/browse/#svn%2Fspec doc] ||
 
+*Dátum*: 28.3.2011
+
+*Poznámky*:
+  * Úvodný text špecifikácie 
+  * Pripravil a čiastočne som odskúšal technológie, ktoré bude potreba použiť pri implementácií.
+  * Hrubý návrh aplikácie - rozdelenie na hlavné moduly a ich funkcie
+  * Spresnenie pojmov týkajúcich sa automobilového zrkadla a testovacej stanice
+
+*Link*: [https://docs.google.com/leaf?id=0B8XOIEPqV4lvMWNkNWIyNzUtNTMzZi00MDJkLWFkMjctZGE3ZWU2ZmRiY2E1&hl=en&authkey=CLHKtegC speficication 0.1.0.doc]
