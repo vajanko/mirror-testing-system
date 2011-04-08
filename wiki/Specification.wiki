@@ -3,8 +3,36 @@
 = Špecifikácia =
 
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
+----
 
+===Správa===
+*Dátum*: 9.4.2011
 
+*Poznámky*:
+  * Vyriešený problém: zistenie konfigurácie testovacieho zariadenia
+  * Rozpracovaná kapitola 3. Vonkajšie rozhranie:
+    * Vstupy a výstupy
+    * Rozhranie s hardware
+    * Detailnejšie rozdelenie aplikácie na moduly a popísaná komunikácia medzi nimi
+  * Doplnené detaily (návrhy) z poslednej konzultácie - jazyková úprava, obrázky, referencie
+
+*Links*:
+
+----
+
+===Konzultácia===
+*Dátum*: 1.4.2011
+
+*Návrhy*:
+  * Zistenie konfigurácie (typy prídavných modulov) testovacieho zariadenia
+  * Forma databázy - čo presne sa bude ukladať
+  * Používať jednotný jazyk (zvlášť obrázky - tiež väčšie rozlíšenie)
+  * Odstrániť detaily použitých technológií
+  * Je MXIO.dll multithread?
+  * Autentifikácia
+
+----
+===Správa===
 *Dátum*: 28.3.2011
 
 *Poznámky*:
