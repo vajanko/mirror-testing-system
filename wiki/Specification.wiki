@@ -5,7 +5,7 @@
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 ----
 
-===Správa===
+===Správa 2===
 *Dátum*: 9.4.2011
 
 *Poznámky*:
@@ -14,9 +14,11 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
     * Vstupy a výstupy
     * Rozhranie s hardware
     * Detailnejšie rozdelenie aplikácie na moduly a popísaná komunikácia medzi nimi
-  * Doplnené detaily (návrhy) z poslednej konzultácie - jazyková úprava, obrázky, referencie
+  * Doplnené detaily (návrhy) z poslednej konzultácie - jazyková úprava, obrázky, referencie, ...
 
-*Links*:
+*Links*: 
+  * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvODg4MzdlNmEtMWQ5MS00NGE1LTgxMGMtOGJhNGQ5ZmQyMTdl&hl=en&authkey=CIn91aMG specification 0.2.3.doc]
+  * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvOGRkMTkyYzMtMTE2YS00YTM0LWIxOGItOTg2N2Y2MDBjMWIw&hl=en&authkey=CN3fk8kB specification 0.2.3.pdf]
 
 ----
 
@@ -32,7 +34,7 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
   * Autentifikácia
 
 ----
-===Správa===
+===Správa 1===
 *Dátum*: 28.3.2011
 
 *Poznámky*:
