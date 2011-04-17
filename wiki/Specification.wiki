@@ -5,6 +5,25 @@
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 ----
 
+===Správa 3===
+*Dátum*: 17.4.2011
+
+*Poznámky:*
+  * Popísané niektoré funkcie programu (kapitola 4):
+    * Spustenie aplikácie
+    * Nastavenie aplikácie
+    * Kalibrácia
+    * Editovanie testovacích parametrov
+  * Príklad testovacích parametrov
+  * Prieskum komunikácie ioAdmin s hardwarom
+
+*Links:*
+  * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvYjM2YzQ5M2EtMjI4Yy00MjdkLTg3MGQtOTAxMDdiY2JmZDhk&hl=en&authkey=CIrWr8YN Príklad testovacích parametrov]
+  * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvNTQwMDkyNTAtMzYxMS00MmRmLWI3MGEtYThjNWFiNmI0ODVm&hl=en&authkey=CNzyu3o specification 0.3.2.doc]
+  * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvMWE2NjFlYzYtYTgwYi00NmJhLTliZDktOWFiNWU2N2RhMjgw&hl=en&authkey=COvrlrkE specification 0.3.2.pdf]
+
+----
+
 ===Správa 2===
 *Dátum*: 9.4.2011
 
