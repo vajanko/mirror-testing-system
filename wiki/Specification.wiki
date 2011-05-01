@@ -5,8 +5,19 @@
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 ----
 
+===Konzultácia 2===
+*Dátum:* 18.4.2011
+
+*Poznámky:*
+  * Konfigurácia testovacieho zariadenia bude k programu dodaná v konfiguračnom súbore
+  * Obrázky kapitoly 3. prepracovať na UML
+  * Nie je potreba E-R model databázy. Stačí popísať aké dáta sa budú ukladať
+  * Zatiaľ bude stačiť vykonávať testy sekvenčne (efektívnejšie: diskrétna simulácia)
+
+----
+
 ===Správa 3===
-*Dátum*: 17.4.2011
+*Dátum:* 17.4.2011
 
 *Poznámky:*
   * Popísané niektoré funkcie programu (kapitola 4):
@@ -25,7 +36,7 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
 ----
 
 ===Správa 2===
-*Dátum*: 9.4.2011
+*Dátum:* 9.4.2011
 
 *Poznámky*:
   * Vyriešený problém: zistenie konfigurácie testovacieho zariadenia
@@ -35,16 +46,16 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
     * Detailnejšie rozdelenie aplikácie na moduly a popísaná komunikácia medzi nimi
   * Doplnené detaily (návrhy) z poslednej konzultácie - jazyková úprava, obrázky, referencie, ...
 
-*Links*: 
+*Links:*
   * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvODg4MzdlNmEtMWQ5MS00NGE1LTgxMGMtOGJhNGQ5ZmQyMTdl&hl=en&authkey=CIn91aMG specification 0.2.3.doc]
   * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvOGRkMTkyYzMtMTE2YS00YTM0LWIxOGItOTg2N2Y2MDBjMWIw&hl=en&authkey=CN3fk8kB specification 0.2.3.pdf]
 
 ----
 
-===Konzultácia===
-*Dátum*: 1.4.2011
+===Konzultácia 1===
+*Dátum:* 1.4.2011
 
-*Návrhy*:
+*Návrhy:*
   * Zistenie konfigurácie (typy prídavných modulov) testovacieho zariadenia
   * Forma databázy - čo presne sa bude ukladať
   * Používať jednotný jazyk (zvlášť obrázky - tiež väčšie rozlíšenie)
@@ -54,14 +65,14 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
 
 ----
 ===Správa 1===
-*Dátum*: 28.3.2011
+*Dátum:* 28.3.2011
 
-*Poznámky*:
+*Poznámky:*
   * Úvodný text špecifikácie 
   * Pripravil a čiastočne som odskúšal technológie, ktoré bude potreba použiť pri implementácií.
   * Hrubý návrh aplikácie - rozdelenie na hlavné moduly a ich funkcie
   * Spresnenie pojmov týkajúcich sa automobilového zrkadla a testovacej stanice
 
-*Links*: 
+*Links:* 
   * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvMWNkNWIyNzUtNTMzZi00MDJkLWFkMjctZGE3ZWU2ZmRiY2E1&hl=en&authkey=CLHKtegC speficication 0.1.0.doc]
   * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvZjgwMWQzZDUtYWQ4NC00ZGQyLTk4ODktZDRlNDk5MGQ4MDI4&hl=en&authkey=CNPwz90E specification 0.1.0.pdf]
