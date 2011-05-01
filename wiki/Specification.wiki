@@ -5,6 +5,21 @@
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 ----
 
+===Správa 4===
+*Dátum:* 1.5.2011
+
+*Poznámky:*
+  * Obrázky upravené na UML
+  * Doplnené ďalšie funkcie programu
+  * Popísané 4 základné obrazovky
+  * Doplnené požiadavky na výkon a bezpečnosť programu
+
+*Linky:*
+  * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvNDZmMGIwMmQtYjMxYy00YWRkLWI2NDYtMDQwZTZhNWU0Y2Rh&hl=en&authkey=CLSb_bQM specification 0.4.4.doc]
+  * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvMjdmMWNhYzItZGIxNS00MTAxLTkyMTUtNGIwMjhmMDhlYzhk&hl=en  specification 0.4.4.pdf]
+
+----
+
 ===Konzultácia 2===
 *Dátum:* 18.4.2011
 
@@ -28,7 +43,7 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
   * Príklad testovacích parametrov
   * Prieskum komunikácie ioAdmin s hardwarom
 
-*Links:*
+*Linky:*
   * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvYjM2YzQ5M2EtMjI4Yy00MjdkLTg3MGQtOTAxMDdiY2JmZDhk&hl=en&authkey=CIrWr8YN Príklad testovacích parametrov]
   * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvNTQwMDkyNTAtMzYxMS00MmRmLWI3MGEtYThjNWFiNmI0ODVm&hl=en&authkey=CNzyu3o specification 0.3.2.doc]
   * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvMWE2NjFlYzYtYTgwYi00NmJhLTliZDktOWFiNWU2N2RhMjgw&hl=en&authkey=COvrlrkE specification 0.3.2.pdf]
@@ -46,7 +61,7 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
     * Detailnejšie rozdelenie aplikácie na moduly a popísaná komunikácia medzi nimi
   * Doplnené detaily (návrhy) z poslednej konzultácie - jazyková úprava, obrázky, referencie, ...
 
-*Links:*
+*Linky:*
   * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvODg4MzdlNmEtMWQ5MS00NGE1LTgxMGMtOGJhNGQ5ZmQyMTdl&hl=en&authkey=CIn91aMG specification 0.2.3.doc]
   * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvOGRkMTkyYzMtMTE2YS00YTM0LWIxOGItOTg2N2Y2MDBjMWIw&hl=en&authkey=CN3fk8kB specification 0.2.3.pdf]
 
@@ -73,6 +88,6 @@ Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google 
   * Hrubý návrh aplikácie - rozdelenie na hlavné moduly a ich funkcie
   * Spresnenie pojmov týkajúcich sa automobilového zrkadla a testovacej stanice
 
-*Links:* 
+*Linky:* 
   * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvMWNkNWIyNzUtNTMzZi00MDJkLWFkMjctZGE3ZWU2ZmRiY2E1&hl=en&authkey=CLHKtegC speficication 0.1.0.doc]
   * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvZjgwMWQzZDUtYWQ4NC00ZGQyLTk4ODktZDRlNDk5MGQ4MDI4&hl=en&authkey=CNPwz90E specification 0.1.0.pdf]
