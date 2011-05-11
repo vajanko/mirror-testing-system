@@ -5,6 +5,19 @@
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 ----
 
+===Správa 5===
+*Dátum:* 11.5.2011
+
+*Poznámky:*
+  * Zoznam súčastí, ktoré je potreba implementovať
+  * Zmena komunikačného protokolu (EtherCAT)
+  * Upravené pripomienky k 4. kapitole
+
+*Linky:*
+  * [http://ethercat.org/en/ethercat.html EtherCAT protocol]
+
+----
+
 ===Správa 4===
 *Dátum:* 1.5.2011
 
