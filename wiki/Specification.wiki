@@ -5,6 +5,21 @@
 Dočasná stránka na tvorbu špecifikácie. Dokumenty sú uložené na *Google Docs* vo formáte .doc
 ----
 
+===Správa 6===
+*Dátum:* 26.5.2011
+
+*Poznámky:*
+  * Malé zmeny týkajúce sa komunikačného protokolu
+  * Navrhnutý časový plán implementácie
+  * Štylistická úprava
+  * Podľa mojej predstavy (takmer) finálna verzia
+
+*Linky:*
+  * [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvNTYwMDIxYWMtNjRjYi00Yjk4LTgzMjgtNGY3OTZmMWNjNTNi&hl=en_US&authkey=CInmi_cF specification 0.5.3.doc]
+  * [https://docs.google.com/leaf?id=0B8XOIEPqV4lvZTFkNjliZjUtYzYxNy00MDg3LTkzNDUtOGRkMzNjMjI3OGY2&authkey=COm4_rcL&hl=en_US specification 0.5.3.pdf]
+
+----
+
 ===Správa 5===
 *Dátum:* 11.5.2011
 
