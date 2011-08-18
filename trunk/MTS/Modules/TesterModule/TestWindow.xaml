@@ -1,0 +1,94 @@
+﻿<ad:DocumentContent x:Class="MTS.TesterModule.TestWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+    xmlns:ctrl="clr-namespace:MTS.Controls"
+    Height="300" Width="300" Title="Tester" x:Name="root">
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Setter Property="Margin" Value="3"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Orientation" Value="Vertical"/>
+                </Style>
+            </StackPanel.Resources>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition MinWidth="45"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>            
+                <Label Content="Mirrors:"/>
+                <ctrl:UpDownButton Grid.Column="1" IsEnabled="{Binding NotRunning, ElementName=root}"
+                                   Value="{Binding Mirrors, ElementName=root}"/>
+                
+                <Label Content="Finished:" Grid.Row="1"/>
+                <Label Content="{Binding Finished, ElementName=root}" Grid.Row="1" Grid.Column="1"/>
+                
+                <Label Content="Correct:" Grid.Row="2"/>
+                <Label Content="{Binding Correct, ElementName=root}" Grid.Row="2" Grid.Column="1"/>
+                
+                <Label Content="Defective:" Grid.Row="3"/>
+                <Label Content="{Binding Defective, ElementName=root}" Grid.Row="3" Grid.Column="1"/>
+            </Grid>
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Margin" Value="3"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Label Content="Shift"/>
+                <Button Content="Start" IsEnabled="{Binding ParamLoadedAndNotRunning, ElementName=root}" Click="startClick"/>
+                <Button Content="Stop" IsEnabled="{Binding IsRunning, ElementName=root}" Click="stopClick"/>
+                <Button Content="Parameters ..." Click="loadParameters" IsEnabled="{Binding NotRunning, ElementName=root}"/>
+            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <Label Content="Part number:"/>
+                <Label Grid.Column="1" x:Name="partNumber"/>
+                
+                <Label Content="Supplier name:" Grid.Row="1"/>
+                <Label Grid.Row="1" Grid.Column="1" x:Name="supplierName"/>
+                
+                <Label Content="Description:" Grid.Row="2"/>
+                <Label Grid.Row="2" Grid.Column="1" x:Name="description"/>
+                
+                <Label Content="Weight:" Grid.Row="3"/>
+                <Label Grid.Row="3" Grid.Column="1" x:Name="weight"/>
+            </Grid>
+        </StackPanel>
+        
+        <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+            <Label Content="HeatingFoilCurrent:"/>
+            <Label Content="{Binding HeatingFoilCurrent.Value}" x:Name="heatingFoil"/>
+        </StackPanel>
+        
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Label>X axis</Label>
+            <Slider x:Name="xSlider" Minimum="-90" Maximum="90" Width="200"/>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Label>Y axis</Label>
+            <Slider x:Name="ySlider" Minimum="-90" Maximum="90" Width="200"/>
+        </StackPanel>
+        <ctrl:MirrorView DockPanel.Dock="Top" HorizontalRotation="{Binding Value, ElementName=xSlider}"
+                         VerticalRotation="{Binding Value, ElementName=ySlider}" 
+                         Width="300" Height="300" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left"/>
+    </DockPanel>
+</ad:DocumentContent>

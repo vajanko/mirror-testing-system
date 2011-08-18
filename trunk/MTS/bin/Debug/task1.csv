@@ -1,0 +1,37 @@
+Name; ;Online;Type;Size;>Address;In/Out;User ID;Linked to
+Term3_1;X;;BOOL;0.1;0.0;Input;0;Input . Channel 1 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_2;X;;BOOL;0.1;0.1;Input;0;Input . Channel 2 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_3;X;;BOOL;0.1;0.2;Input;0;Input . Channel 3 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_4;X;;BOOL;0.1;0.3;Input;0;Input . Channel 4 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_5;X;;BOOL;0.1;0.4;Input;0;Input . Channel 5 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_6;X;;BOOL;0.1;0.5;Input;0;Input . Channel 6 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_7;X;;BOOL;0.1;0.6;Input;0;Input . Channel 7 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_8;X;;BOOL;0.1;0.7;Input;0;Input . Channel 8 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_9;X;;BOOL;0.1;1.0;Input;0;Input . Channel 9 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_10;X;;BOOL;0.1;1.1;Input;0;Input . Channel 10 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_11;X;;BOOL;0.1;1.2;Input;0;Input . Channel 11 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_12;X;;BOOL;0.1;1.3;Input;0;Input . Channel 12 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_13;X;;BOOL;0.1;1.4;Input;0;Input . Channel 13 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_14;X;;BOOL;0.1;1.5;Input;0;Input . Channel 14 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_15;X;;BOOL;0.1;1.6;Input;0;Input . Channel 15 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term3_16;X;;BOOL;0.1;1.7;Input;0;Input . Channel 16 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term2Ch1_1;X;;USINT;1.0;2.0;Input;0;State . Channel 1 . Term 2 (KL3152) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term2Ch1_2;X;;INT;2.0;3.0;Input;0;Data In . Channel 1 . Term 2 (KL3152) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_1;X;;BOOL;0.1;0.0;Output;0;Output . Channel 1 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_2;X;;BOOL;0.1;0.1;Output;0;Output . Channel 2 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_3;X;;BOOL;0.1;0.2;Output;0;Output . Channel 3 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_4;X;;BOOL;0.1;0.3;Output;0;Output . Channel 4 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_5;X;;BOOL;0.1;0.4;Output;0;Output . Channel 5 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_6;X;;BOOL;0.1;0.5;Output;0;Output . Channel 6 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_7;X;;BOOL;0.1;0.6;Output;0;Output . Channel 7 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_8;X;;BOOL;0.1;0.7;Output;0;Output . Channel 8 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_9;X;;BOOL;0.1;1.0;Output;0;Output . Channel 9 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_10;X;;BOOL;0.1;1.1;Output;0;Output . Channel 10 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_11;X;;BOOL;0.1;1.2;Output;0;Output . Channel 11 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_12;X;;BOOL;0.1;1.3;Output;0;Output . Channel 12 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_13;X;;BOOL;0.1;1.4;Output;0;Output . Channel 13 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_14;X;;BOOL;0.1;1.5;Output;0;Output . Channel 14 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_15;X;;BOOL;0.1;1.6;Output;0;Output . Channel 15 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term4_16;X;;BOOL;0.1;1.7;Output;0;Output . Channel 16 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term2Ch1_1;X;;USINT;1.0;2.0;Output;0;Ctrl . Channel 1 . Term 2 (KL3152) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Term2Ch1_2;X;;UINT;2.0;3.0;Output;0;Data Out . Channel 1 . Term 2 (KL3152) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
