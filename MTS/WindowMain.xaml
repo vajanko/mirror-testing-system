@@ -1,0 +1,126 @@
+﻿<Window x:Class="MTS.WindowMain"
+        x:Name="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MTS"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:ctrl="clr-namespace:MTS.Controls"
+        xmlns:ed="clr-namespace:MTS.EditorModule"
+        xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+        Title="MTS" Height="700" Width="900"
+        >
+
+    <Window.CommandBindings>
+        <!-- Application commands -->
+        <CommandBinding Command="New" CanExecute="newCanExecute" Executed="newExecuted"/>
+        <CommandBinding Command="Open" CanExecute="openCanExecute" Executed="openExecuted"/>
+        <CommandBinding Command="Save" CanExecute="saveCanExecute" Executed="saveExecuted"/>
+        <CommandBinding Command="SaveAs" CanExecute="saveAsCanExecute" Executed="saveAsExecuted"/>
+        <CommandBinding Command="Close" CanExecute="closeCanExecute" Executed="closeExecuted"/>
+        <!-- MTS (own) commands -->
+        <CommandBinding Command="{x:Static local:MTSCommands.ViewTester}" CanExecute="viewTesterCanExecute" Executed="viewTesterExecuted"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="F4" Modifiers="Ctrl"/>
+        <KeyBinding Command="SaveAs" Key="S" Modifiers="Ctrl+Shift"/>
+    </Window.InputBindings>
+
+    <DockPanel>        
+        <!-- Main Menu -->
+        <Menu DockPanel.Dock="Top">
+            <Menu.Resources>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Setter Property="Header" Value="{Binding Command.Text, RelativeSource={RelativeSource self}}"/>
+                </Style>
+            </Menu.Resources>
+            <MenuItem Header="File">
+                <MenuItem Command="New"/>   <!-- File Commands for Editor -->
+                <MenuItem Command="Open"/>
+                <MenuItem Command="Close"/>
+                <MenuItem Command="Save"/>
+                <MenuItem Command="SaveAs"/>
+                <Separator/>
+                <MenuItem Header="Exit" Click="menuClick_Exit"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Command="Undo"/>  <!-- General edit Commands -->
+                <MenuItem Command="Redo"/>
+                <Separator/>
+                <MenuItem Command="Cut"/>
+                <MenuItem Command="Copy"/>
+                <MenuItem Command="Paste"/>
+                <MenuItem Command="Delete"/>
+            </MenuItem>
+            <MenuItem Header="View">        <!-- Application commands - display windows -->
+                <MenuItem Command="{x:Static local:MTSCommands.ViewTester}"/>
+                <MenuItem Command="{x:Static local:MTSCommands.ViewSettings}"/>
+                <MenuItem Command="{x:Static local:MTSCommands.ViewData}"/>
+            </MenuItem>
+            <MenuItem Header="Option">
+                <MenuItem Header="Log off"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Command="Help"/>
+                <MenuItem Header="About ..."/>
+            </MenuItem>
+        </Menu>
+        <!-- ToolBars -->
+        <ToolBarTray DockPanel.Dock="Top">
+            <!-- Edit ToolBar -->
+            <ToolBar>
+                <Button Command="Copy">
+                    <Image Source="resources/images/copy.png"/>
+                </Button>
+                <Button Command="Paste">
+                    <Image Source="resources/images/paste.png"/>
+                </Button>
+                <Button Command="Cut">
+                    <Image Source="resources/images/cut.png"/>
+                </Button>
+            </ToolBar>
+            
+            <!-- File ToolBar -->
+            <ToolBar>
+                <Button Command="New">
+                    <Image Source="resources/images/new1.png"/>
+                </Button>
+                <Button Command="Open">
+                    <Image Source="resources/images/open.png"/>
+                </Button>
+                <Button Command="Save">
+                    <Image Source="resources/images/save.png"/>
+                </Button>
+                <Button Command="Close">
+                    <Image Source="resources/images/close.png"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <!-- Main Area - DockManager -->
+        <ad:DockingManager x:Name="dockManager" DockPanel.Dock="Top">
+            <ad:ResizingPanel Orientation="Vertical">
+                <ad:ResizingPanel Orientation="Horizontal">
+                    <!-- Left panel - Directory -->
+                    <ad:DockablePane ad:ResizingPanel.ResizeWidth="200">
+                        <ad:DockableContent Title="Directory"/>
+                        
+                    </ad:DockablePane>
+                    <!-- Center panel - Documents -->
+                    <ad:DocumentPane x:Name="filePane">
+                        <!-- add documents here -->                        
+                    </ad:DocumentPane>
+                </ad:ResizingPanel>
+                <!-- Bottom panel - Output -->
+                <ad:DockablePane ad:ResizingPanel.ResizeHeight="120">
+                    <!-- Output console -->
+                    <ad:DockableContent Title="Output">
+                        <DockPanel x:Name="outputPanel">
+                            <TextBox x:Name="outputConsole" MaxLines="100" 
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                     IsReadOnly="True"/>
+                        </DockPanel>
+                    </ad:DockableContent>
+                </ad:DockablePane>
+            </ad:ResizingPanel>
+        </ad:DockingManager>
+    </DockPanel>
+</Window>
