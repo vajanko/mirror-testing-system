@@ -13,15 +13,15 @@ namespace MTS.TesterModule
         /// <summary>
         /// Position in the 3D space of the surface which position is measured by sonde X
         /// </summary>
-        protected Point3D PointX;
+        private Point3D PointX;
         /// <summary>
         /// Position in the 3D space of the surface which position is measured by sonde Y
         /// </summary>
-        protected Point3D PointY;
+        private Point3D PointY;
         /// <summary>
         /// Position in the 3D space of the surface which position is measured by sonde Z
         /// </summary>
-        protected Point3D PointZ;
+        private Point3D PointZ;
 
         private double minAngle;
         private double angleAchieved;
@@ -103,12 +103,12 @@ namespace MTS.TesterModule
         /// (Get) Normal vector of mirror plane in the zero position. This is the moment when mirror
         /// is not rotated
         /// </summary>
-        protected Vector3D ZeroPlaneNormal { get; private set; }
+        private Vector3D ZeroPlaneNormal { get; set; }
 
         /// <summary>
         /// (Get) Angle between mirror surface and zero mirror position surface
         /// </summary>
-        protected double Angle
+        private double Angle
         {
             get { return Vector3D.AngleBetween(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal); }
         }

@@ -170,16 +170,22 @@ namespace MTS.Controls
 
         #endregion
 
-        //private const string defStringFormat = "{0}";
-        //public static readonly DependencyProperty StringFormatProperty =
-        //    DependencyProperty.Register("StringFormat", typeof(string), typeof(UpDownButton),
-        //    new PropertyMetadata(defStringFormat));
+        #region Unit Property
 
-        //public string StringFormat
-        //{
-        //    get { return (string)GetValue(StringFormatProperty); }
-        //    set { SetValue(StringFormatProperty, value); }
-        //}
+        public static readonly DependencyProperty UnitProperty =
+            DependencyProperty.Register("Unit", typeof(Unit), typeof(UpDownButton),
+            new PropertyMetadata(Units.None));
+
+        /// <summary>
+        /// (Get/Set DP) Unit of value displayed
+        /// </summary>
+        public Unit Unit
+        {
+            get { return (Unit)GetValue(UnitProperty); }
+            set { SetValue(UnitProperty, value); }
+        }
+
+        #endregion
 
         #endregion
 

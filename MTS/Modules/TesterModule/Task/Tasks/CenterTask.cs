@@ -13,15 +13,15 @@ namespace MTS.TesterModule
         /// <summary>
         /// Position in the 3D space of the surface which position is measured by sonde X
         /// </summary>
-        protected Point3D PointX;
+        private Point3D PointX;
         /// <summary>
         /// Position in the 3D space of the surface which position is measured by sonde Y
         /// </summary>
-        protected Point3D PointY;
+        private Point3D PointY;
         /// <summary>
         /// Position in the 3D space of the surface which position is measured by sonde Z
         /// </summary>
-        protected Point3D PointZ;
+        private Point3D PointZ;
         /// <summary>
         /// Direction in which we need to move the mirror to center it
         /// </summary>
@@ -80,7 +80,7 @@ namespace MTS.TesterModule
         /// (Get) Vector laying on the intersection of current mirror surface and zero position mirror surface
         /// This is the vector around which mirror is rotated
         /// </summary>
-        protected Vector3D Axis
+        private Vector3D Axis
         {
             get { return Vector3D.CrossProduct(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal); }
         }

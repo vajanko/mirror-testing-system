@@ -25,5 +25,5 @@ C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Pr
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Controls\TestControl1.g.cs
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\WindowMain.g.cs
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\WindowMain.baml
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Windows\TestWindow1.g.cs
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Windows\TestWindow1.baml
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\TestWindow1.g.cs
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\TestWindow1.baml

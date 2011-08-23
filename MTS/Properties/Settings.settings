@@ -2,8 +2,20 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MTS.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)">hello</Value>
+    <Setting Name="HW_Type" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Dummy</Value>
+    </Setting>
+    <Setting Name="TaskName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Task1</Value>
+    </Setting>
+    <Setting Name="IpAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">192.168.2.3</Value>
+    </Setting>
+    <Setting Name="Port" Type="System.UInt16" Scope="Application">
+      <Value Profile="(Default)">502</Value>
+    </Setting>
+    <Setting Name="ChannelsConfigFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:/task1.csv</Value>
     </Setting>
   </Settings>
 </SettingsFile>

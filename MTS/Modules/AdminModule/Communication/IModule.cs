@@ -9,7 +9,7 @@ namespace MTS.AdminModule
     public interface IModule
     {
         /// <summary>
-        /// Load configuration of channels form file
+        /// Load configuration of channels form file. At this time connection must not be established
         /// </summary>
         /// <param name="filename">Path to file where configuration of channels is stored</param>
         void LoadConfiguration(string filename);
@@ -25,12 +25,6 @@ namespace MTS.AdminModule
         /// must be established already.
         /// </summary>
         void Initialize();
-
-        /// <summary>
-        /// For debug purpose only
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        void Update(TimeSpan time);
 
         /// <summary>
         /// Read all input and write all output channels
@@ -58,6 +52,11 @@ namespace MTS.AdminModule
         /// </summary>
         /// <param name="name">Unic name (identifier) of required channel</param>
         IChannel GetChannelByName(string name);
+
+        /// <summary>
+        /// (Get) Value indicating that this module is connected to remote hardware
+        /// </summary>
+        bool IsConnected { get; }
 
         //#region Channels
 

@@ -71,19 +71,64 @@ namespace MTS.EditorModule
             return new ParamValue<T> { Value = this.Value, Metadata = this };
         }
     }
-
     public class IntParamMetadata : ParamMetadata<int>
     {
+        /// <summary>
+        /// (Get/Set) Minimal allowed value of this parameter
+        /// </summary>
+        public int MinValue { get; set; }
+        /// <summary>
+        /// (Get/Set) Maximal allowed value of this parameter
+        /// </summary>
+        public int MaxValue { get; set; }
+        /// <summary>
+        /// (Get/Set) Unit of this parameter value
+        /// </summary>
+        public Unit Unit { get; set; }
+
+        /// <summary>
+        /// Returns default instance of Parameter value which this metadata describes
+        /// </summary>
         public override ValueBase GetDefaultInstance()
         {
             return new IntParamValue { Value = this.Value, Metadata = this };
         }
+
+        public IntParamMetadata()
+        {
+            MinValue = int.MinValue;
+            MaxValue = int.MaxValue;
+            Unit = Units.None;
+        }
     }
     public class DoubleParamMetadata : ParamMetadata<double>
     {
+        /// <summary>
+        /// (Get/Set) Minimal allowed value of this parameter
+        /// </summary>
+        public double MinValue { get; set; }
+        /// <summary>
+        /// (Get/Set) Maximal allowed value of this parameter
+        /// </summary>
+        public double MaxValue { get; set; }
+        /// <summary>
+        /// (Get/Set) Unit of this parameter value
+        /// </summary>
+        public Unit Unit { get; set; }
+
+        /// <summary>
+        /// Returns default instance of Parameter value which this metadata describes
+        /// </summary>
         public override ValueBase GetDefaultInstance()
         {
             return new DoubleParamValue { Value = this.Value, Metadata = this };
+        }
+
+        public DoubleParamMetadata()
+        {
+            MinValue = double.MinValue;
+            MaxValue = double.MaxValue;
+            Unit = Units.None;
         }
     }
     public class BoolParamMetadata : ParamMetadata<bool>
@@ -94,6 +139,9 @@ namespace MTS.EditorModule
         /// </summary>
         public string Text { get; set; }
 
+        /// <summary>
+        /// Returns default instance of Parameter value which this metadata describes
+        /// </summary>
         public override ValueBase GetDefaultInstance()
         {
             return new BoolParamValue { Value = this.Value, Metadata = this };
@@ -101,6 +149,9 @@ namespace MTS.EditorModule
     }
     public class StringParamMetadata : ParamMetadata<string> 
     {
+        /// <summary>
+        /// Returns default instance of Parameter value which this metadata describes
+        /// </summary>
         public override ValueBase GetDefaultInstance()
         {
             return new StringParamValue { Value = this.Value, Metadata = this };
@@ -113,6 +164,9 @@ namespace MTS.EditorModule
         /// </summary>
         public string[] Values { get; set; }
 
+        /// <summary>
+        /// Returns default instance of Parameter value which this metadata describes
+        /// </summary>
         public override ValueBase GetDefaultInstance()
         {
             return new EnumParamValue { Value = this.Value, Metadata = this };

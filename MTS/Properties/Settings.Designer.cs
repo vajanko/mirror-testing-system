@@ -23,15 +23,48 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("hello")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("Dummy")]
+        public string HW_Type {
             get {
-                return ((string)(this["Setting"]));
+                return ((string)(this["HW_Type"]));
             }
-            set {
-                this["Setting"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Task1")]
+        public string TaskName {
+            get {
+                return ((string)(this["TaskName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.2.3")]
+        public string IpAddress {
+            get {
+                return ((string)(this["IpAddress"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("502")]
+        public ushort Port {
+            get {
+                return ((ushort)(this["Port"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:/task1.csv")]
+        public string ChannelsConfigFile {
+            get {
+                return ((string)(this["ChannelsConfigFile"]));
             }
         }
     }

@@ -7,6 +7,7 @@
         <StackPanel DockPanel.Dock="Top">
             <Button Click="startClick">Start</Button>
             <Button Click="stopClick">Stop</Button>
+            <Button Click="writeClick">Write</Button>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
