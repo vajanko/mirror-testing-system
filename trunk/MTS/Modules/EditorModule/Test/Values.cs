@@ -225,18 +225,92 @@ namespace MTS.EditorModule
         }
     }
     [Serializable]
-    public class IntParamValue : ParamValue<int> { }
+    public class IntParamValue : ParamValue<int> 
+    {
+        /// <summary>
+        /// (Get) Minimal allowed value of this parameter
+        /// </summary>
+        public int MinValue
+        {
+            get
+            {
+                IntParamMetadata meta = Metadata as IntParamMetadata;
+                return (meta != null) ? meta.MinValue : int.MinValue;
+            }
+        }
+        /// <summary>
+        /// (Get) Maximal allowed value of this parameter
+        /// </summar
+        public int MaxValue
+        {
+            get
+            {
+                IntParamMetadata meta = Metadata as IntParamMetadata;
+                return (meta != null) ? meta.MaxValue : int.MaxValue;
+            }
+        }
+        /// <summary>
+        /// (Get/Set) Unit of this parameter value
+        /// </summary>
+        public Unit Unit
+        {
+            get
+            {
+                IntParamMetadata meta = Metadata as IntParamMetadata;
+                return (meta != null) ? meta.Unit : Units.None;
+            }
+        }
+    }
     [Serializable]
-    public class DoubleParamValue : ParamValue<double> { }
+    public class DoubleParamValue : ParamValue<double>
+    {
+        /// <summary>
+        /// (Get) Minimal allowed value of this parameter
+        /// </summary>
+        public double MinValue
+        {
+            get
+            {
+                DoubleParamMetadata meta = Metadata as DoubleParamMetadata;
+                return (meta != null) ? meta.MinValue : double.MinValue;
+            }
+        }
+        /// <summary>
+        /// (Get) Maximal allowed value of this parameter
+        /// </summar
+        public double MaxValue
+        {
+            get
+            {
+                DoubleParamMetadata meta = Metadata as DoubleParamMetadata;
+                return (meta != null) ? meta.MaxValue : double.MaxValue;
+            }
+        }
+        /// <summary>
+        /// (Get/Set) Unit of this parameter value
+        /// </summary>
+        public Unit Unit
+        {
+            get
+            {
+                DoubleParamMetadata meta = Metadata as DoubleParamMetadata;
+                return (meta != null) ? meta.Unit : Units.None;
+            }
+        }
+    }
     [Serializable]
     public class BoolParamValue : ParamValue<bool> 
     {
+        /// <summary>
+        /// (Get) Short description of bool parameter. This peace of text is usually displayed
+        /// inside the check box
+        /// </summary>
         public string Text
         {
             get
             {   // if metadata are data for bool param return Text, otherwise return empty string
                 BoolParamMetadata meta = Metadata as BoolParamMetadata;
-                return (meta != null) ? meta.Text : "";
+                return (meta != null) ? meta.Text : string.Empty;
             }
         }
     }
@@ -245,6 +319,9 @@ namespace MTS.EditorModule
     [Serializable]
     public class EnumParamValue : ParamValue<int> 
     {
+        /// <summary>
+        /// (Get) Collection of possible values
+        /// </summary>
         public string[] Values
         {
             get
@@ -258,7 +335,7 @@ namespace MTS.EditorModule
             get
             {
                 EnumParamMetadata meta = (Metadata as EnumParamMetadata);
-                return (meta != null) ? (meta.Values.Length > Value ? meta.Values[Value] : "") : "";
+                return (meta != null) ? (meta.Values.Length > Value ? meta.Values[Value] : string.Empty) : string.Empty;
             }
         }
     }

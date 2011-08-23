@@ -112,8 +112,5 @@ C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Pr
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\Themes\Generic.baml
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\WindowMain.g.cs
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\WindowMain.baml
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\Windows\TestWindow1.g.cs
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\Windows\TestWindow1.baml
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\svn\MTS\bin\Debug\MTS.exe.config
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\svn\MTS\obj\Debug\MTS.exe
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\svn\MTS\obj\Debug\MTS.pdb
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\TestWindow1.g.cs
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Debug\TestWindow1.baml

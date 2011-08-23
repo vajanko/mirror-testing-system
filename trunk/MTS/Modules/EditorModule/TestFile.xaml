@@ -22,7 +22,7 @@
                         <Setter Property="Margin" Value="3"/>                    
                     </Style>
                     <Style TargetType="{x:Type ctrl:UpDownButton}">
-                        <Setter Property="MinWidth" Value="50"/>
+                        <Setter Property="MinWidth" Value="100"/>
                     </Style>
 
                     <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -43,11 +43,15 @@
                          user change any value it's get ynchronized -->
                     <!-- UpDownButton for numeric parameter -->
                     <DataTemplate DataType="{x:Type ed:IntParamValue}">
-                        <ctrl:UpDownButton Value="{Binding Value, Mode=TwoWay}" Decimals="0"/>
+                        <ctrl:UpDownButton Value="{Binding Value, Mode=TwoWay}" Decimals="0"
+                                           MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
+                                           Unit="{Binding Unit}"/>
                     </DataTemplate>
                     <!-- UpDownButton for real numeric parameter -->
                     <DataTemplate DataType="{x:Type ed:DoubleParamValue}">
-                        <ctrl:UpDownButton Value="{Binding Value, Mode=TwoWay}" Decimals="1"/>
+                        <ctrl:UpDownButton Value="{Binding Value, Mode=TwoWay}" Decimals="1"
+                                           MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
+                                           Unit="{Binding Unit}"/>
                     </DataTemplate>
                     <!-- ChechBox for bool parameter -->
                     <DataTemplate DataType="{x:Type ed:BoolParamValue}">
@@ -61,7 +65,7 @@
                     </DataTemplate>
                     <!-- ComboBox for enum parameter -->
                     <DataTemplate DataType="{x:Type ed:EnumParamValue}">
-                        <ComboBox SelectedIndex="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding Values}"/>
+                        <ComboBox SelectedIndex="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding Values}" MinWidth="80"/>
                     </DataTemplate>
                     <!-- Add new data templates here if new type of paramter is necessary ... -->
                 </ListBox.Resources>

@@ -10,7 +10,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl:UpDownButton}">
                     <DockPanel Background="{TemplateBinding Background}" VerticalAlignment="Center">
-                        <StackPanel DockPanel.Dock="Right">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                             <StackPanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Padding" Value="0"/>
@@ -19,12 +19,15 @@
                                     <Setter Property="Fill" Value="Black"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <RepeatButton x:Name="PART_upButton">
-                                <Polygon Points="0,4 8,4 4,0"/>
-                            </RepeatButton>
-                            <RepeatButton x:Name="PART_downButton">
-                                <Polygon Points="0,0 8,0 4,4"/>
-                            </RepeatButton>
+                            <StackPanel Orientation="Vertical">
+                                <RepeatButton x:Name="PART_upButton">
+                                    <Polygon Points="0,4 8,4 4,0"/>
+                                </RepeatButton>
+                                <RepeatButton x:Name="PART_downButton">
+                                    <Polygon Points="0,0 8,0 4,4"/>
+                                </RepeatButton>
+                            </StackPanel>
+                            <Label Content="{Binding Unit, RelativeSource={RelativeSource TemplatedParent}}" MinWidth="30"/>
                         </StackPanel>
                         <TextBox x:Name="PART_valueBox"
                             Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent},

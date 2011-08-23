@@ -5,8 +5,18 @@ namespace MTS.AdminModule
 {
     abstract class ModbusChannel : IChannel
     {
-        public int Slot { get; set; }
-        public int Channel { get; set; }
+        /// <summary>
+        /// (Get/Set) Slot number where this channel is placed
+        /// </summary>
+        public byte Slot { get; set; } 
+        /// <summary>
+        /// (Get/Set) Address of this channel inside a particular slot
+        /// </summary>
+        public byte Channel { get; set; }
+        /// <summary>
+        /// (Get/Set) Size of channel value in bits
+        /// </summary>
+        public int Size { get; set; }
 
         /// <summary>
         /// Constant string "Value"

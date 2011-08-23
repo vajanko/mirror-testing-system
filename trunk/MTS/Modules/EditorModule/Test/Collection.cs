@@ -200,24 +200,32 @@ namespace MTS.EditorModule
         /// </summary>
         public void InitializeDefault()
         {
-            this.Add(MIN_ANGLE, new DoubleParamMetadata { Name = "Min angle" });
-            this.Add(MIN_CURRENT, new DoubleParamMetadata { Name = "Min current" });
-            this.Add(MAX_CURRENT, new DoubleParamMetadata { Name = "Max current" });
-            this.Add(MAX_OVERLOAD_TIME, new IntParamMetadata { Name = "Max overload time" });
-            this.Add(MAX_TESTING_TIME, new IntParamMetadata { Name = "Max testing time" });
+            this.Add(MIN_ANGLE, new DoubleParamMetadata { Name = "Min angle", MinValue = 0, MaxValue = 15, 
+                Unit = Units.Degrees });
+            this.Add(MIN_CURRENT, new DoubleParamMetadata { Name = "Min current", MinValue = 0, 
+                MaxValue = 150, Unit = Units.Miliampheres });
+            this.Add(MAX_CURRENT, new DoubleParamMetadata { Name = "Max current", MinValue = 0, 
+                MaxValue = 150, Unit = Units.Miliampheres });
+            this.Add(MAX_OVERLOAD_TIME, new IntParamMetadata { Name = "Max overload time", MinValue = 0, MaxValue = 2000,
+                Unit = Units.Miliseconds });
+            this.Add(MAX_TESTING_TIME, new IntParamMetadata { Name = "Max testing time", MinValue = 0, 
+                MaxValue = 20000, Unit = Units.Miliseconds });
             this.Add(TEST_PRESENCE, new BoolParamMetadata { Name = "Presence", Text = "Check" });
             this.Add(SUPPLIER_NAME, new StringParamMetadata { Name = "Supplier name" });
             this.Add(SUPPLIER_CODE, new StringParamMetadata { Name = "Supplier code" });
             this.Add(PART_NUMBER, new StringParamMetadata { Name = "Part number" });
             this.Add(DESCRIPTION, new StringParamMetadata { Name = "Description" });
-            this.Add(WEIGHT, new IntParamMetadata { Name = "Weight" });
+            this.Add(WEIGHT, new IntParamMetadata { Name = "Weight", MinValue = 0, MaxValue = 3000, Unit = Units.Grams });
             this.Add(ORIENTATION, new EnumParamMetadata { Name = "Orientation", Values = new string[] { "Left", "Right" } });
-            this.Add(LIGHTENING_TIME, new IntParamMetadata { Name = "Lightening time" });
-            this.Add(BREAK_TIME, new IntParamMetadata { Name = "Break time" });
+            this.Add(LIGHTENING_TIME, new IntParamMetadata { Name = "Lightening time", MinValue = 0, 
+                MaxValue = 5000, Unit = Units.Miliseconds });
+            this.Add(BREAK_TIME, new IntParamMetadata { Name = "Break time", MinValue = 0, MaxValue = 5000, 
+                Unit = Units.Miliseconds });
             this.Add(BLINK_COUNT, new IntParamMetadata { Name = "Number of blinks" });
             this.Add(SENSOR, new BoolParamMetadata { Name = "Sensor" });
             this.Add(GLASS_TYPE, new EnumParamMetadata { Name = "Type of glass", Values = new string[] { "Spheric", "Aspheric" } });
-            this.Add(TESTING_TIME, new IntParamMetadata { Name = "Testing time" });
+            this.Add(TESTING_TIME, new IntParamMetadata { Name = "Testing time", MinValue = 0, MaxValue = 20000, 
+                Unit = Units.Miliseconds });
         }
     }
 

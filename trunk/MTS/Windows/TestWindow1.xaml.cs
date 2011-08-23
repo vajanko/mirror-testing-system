@@ -24,7 +24,6 @@ namespace MTS
     public partial class TestWindow1 : Window
     {
         Timer timer = new Timer();
-        Random gen = new Random();
         IModule module;
         Channels channels;
 
@@ -34,9 +33,12 @@ namespace MTS
             timer.Interval = 400;
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
         }
-
+        bool value = false;
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            channels.HeatingFoilOn.Value = value;
+            value = !value;
+
             channels.Update();
             graph.Dispatcher.Invoke(new Action<double>(addValue), channels.HeatingFoilCurrent.RealValue);
         }
@@ -49,10 +51,11 @@ namespace MTS
 
         private void startClick(object sender, RoutedEventArgs e)
         {
-            module = new ECModule("Task1");
-            module.LoadConfiguration("C:/task1.csv");
+            //module = new ECModule("Task1");
+            module = new ModbusModule("192.168.2.3", 502);
+            module.LoadConfiguration("C:/ioLogik4010.csv");
             module.Connect();
-            //module.Initialize();
+            
 
             channels = new Channels(module);
             channels.Initialize();
@@ -62,8 +65,14 @@ namespace MTS
 
         private void stopClick(object sender, RoutedEventArgs e)
         {
-            module.Disconnect();
+            channels.Disconnect();
             timer.Stop();
+        }
+
+        private void writeClick(object sender, RoutedEventArgs e)
+        {
+            //channels.HeatingFoilOn.SetValue(true);
+            //channels.UpdateOutputs();
         }
     }
 }

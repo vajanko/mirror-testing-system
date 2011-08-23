@@ -3,7 +3,7 @@ using System;
 namespace MTS.AdminModule {
 
     public class Channels : IModule
-    {
+    {        
         private IModule module;
 
         #region IModule Members
@@ -42,8 +42,8 @@ namespace MTS.AdminModule {
             // spiral
             HeatingFoilOn = (IDigitalOutput)module.GetChannelByName("HeatingFoilOn");
             HeatingFoilCurrent = (IAnalogInput)module.GetChannelByName("HeatingFoilCurrent");
-            HeatingFoilCurrent.RealLow = 0;
-            HeatingFoilCurrent.RealHigh = 10;
+            //HeatingFoilCurrent.RealLow = 0;
+            //HeatingFoilCurrent.RealHigh = 10;
             HeatingFoilSignSensor = (IDigitalInput)module.GetChannelByName("HeatingFoilSignSensor");
 
             // mirror movement
@@ -86,10 +86,6 @@ namespace MTS.AdminModule {
         {   // update all channels: read in/out and write out channels
             module.Update();
         }
-        public void Update(TimeSpan time)
-        {   // for debug prpose only
-            module.Update(time);
-        }
         public void UpdateInputs()
         {
             module.UpdateInputs();
@@ -99,14 +95,18 @@ namespace MTS.AdminModule {
             module.UpdateOutputs();
         }
         public void Disconnect()
-        {
-            module.Disconnect();
+        {   // prevent from disconnecting multiple times
+            if (module != null && !module.IsConnected)
+                module.Disconnect();
         }
 
         public IChannel GetChannelByName(string name)
         {
             return module.GetChannelByName(name);
         }
+
+        public bool IsConnected { get { return module.IsConnected; } }
+
 
         #endregion
 

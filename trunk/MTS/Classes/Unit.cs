@@ -48,7 +48,7 @@ namespace MTS
                     case "A": return Units.Ampheres;
                     case "s": return Units.Seconds;
                     case "ms": return Units.Miliseconds;
-                    default: return string.Empty;
+                    default: return Units.None;
                 }
             }
             return base.ConvertFrom(context, culture, value);
@@ -66,6 +66,8 @@ namespace MTS
 
     public static class Units
     {
+        public static Unit None { get; set; }
+
         public static Unit Miliampheres { get; set; }
         public static Unit Ampheres { get; set; }
 
@@ -74,8 +76,16 @@ namespace MTS
 
         public static Unit Milimeters { get; set; }
 
+        public static Unit Grams { get; set; }
+
+        public static Unit Volts { get; set; }
+
+        public static Unit Degrees { get; set; }
+
         static Units()
         {
+            None = new Unit() { Name = "", FullName = "None" };
+
             Miliampheres = new Unit() { Name = "mA", FullName = "Miliampheres" };
             Ampheres = new Unit { Name = "A", FullName = "Ampheres", SmallerUnit = Miliampheres };
             Miliampheres.LargerUnit = Ampheres;
@@ -85,6 +95,12 @@ namespace MTS
             Seconds.SmallerUnit = Miliseconds;
 
             Milimeters = new Unit() { Name = "mm", FullName = "Milimeters" };
+
+            Grams = new Unit() { Name = "g", FullName = "Grams" };
+
+            Volts = new Unit() { Name = "V", FullName = "Volts" };
+
+            Degrees = new Unit() { Name = "°", FullName = "Degrees" };
         }
     }
 }
