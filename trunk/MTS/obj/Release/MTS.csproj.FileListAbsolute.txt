@@ -13,11 +13,9 @@ C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Pr
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\bin\Release\AvalonDock.Themes.dll
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Modules\EditorModule\TestFile.g.cs
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Modules\TesterModule\TestWindow.g.cs
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\WindowMain.g.cs
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Modules\EditorModule\TestFile.baml
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Modules\TesterModule\TestWindow.baml
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Themes\Generic.baml
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\WindowMain.baml
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\MTS.g.resources
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\MTS.Properties.Resources.resources
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\MTS.csproj.GenerateResource.Cache
@@ -25,5 +23,7 @@ C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Pr
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\MTS.pdb
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Controls\TestControl1.baml
 C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Controls\TestControl1.g.cs
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\TestWindow1.g.cs
-C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\TestWindow1.baml
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\WindowMain.g.cs
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\WindowMain.baml
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Windows\TestWindow1.g.cs
+C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\obj\Release\Windows\TestWindow1.baml

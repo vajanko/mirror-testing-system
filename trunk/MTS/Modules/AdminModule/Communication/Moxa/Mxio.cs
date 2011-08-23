@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MTS.Modules.TesterModule
+namespace MTS.AdminModule
 {
     static class Mxio
     {

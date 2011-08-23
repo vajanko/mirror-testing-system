@@ -88,12 +88,12 @@ namespace MTS.AdminModule
 
         public int RealHigh { get; set; }
 
-        protected int value;
+        protected uint value;
         /// <summary>
         /// (Get) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
-        public int Value { get { return value; } }
+        public uint Value { get { return value; } }
 
         /// <summary>
         /// (Get/Set) Real value of this channel. Setting this value afects <paramref name="Value"/>
@@ -108,13 +108,13 @@ namespace MTS.AdminModule
             }
         }
 
-        public Converter<int, double> RawToReal { get; set; }
+        public Converter<uint, double> RawToReal { get; set; }
 
         /// <summary>
         /// Set value of property <paramref name="Value"/>. An event will be raised
         /// </summary>
         /// <param name="value">Value to set</param>
-        public void SetValue(int value)
+        public void SetValue(uint value)
         {
             if (this.value != value)    // only change if necessary - no event will be raised
             {
@@ -129,9 +129,9 @@ namespace MTS.AdminModule
         /// Default method for converting raw values to real
         /// </summary>
         /// <param name="rawValue">Interger (raw) value to convert to double (real)</param>
-        public double ConvertLinear(int rawValue)
+        public double ConvertLinear(uint rawValue)
         {
-            return (double)(((rawValue - RawLow) * (RealHigh - RealLow)) / (RawHigh - RawLow) + RealLow);
+            return (double)(((rawValue - RawLow) * (RealHigh - RealLow)) / (double)(RawHigh - RawLow) + RealLow);
         }
 
         public DummyAnalogInput()
@@ -150,7 +150,7 @@ namespace MTS.AdminModule
         /// (Get/Set) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
-        public new int Value
+        public new uint Value
         {
             get { return base.Value; }
             set { this.value = value; }

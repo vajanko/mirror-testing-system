@@ -60,7 +60,7 @@ namespace MTS.AdminModule
         /// (Get) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
-        int Value { get; }
+        uint Value { get; }
 
         /// <summary>
         /// (Get) Real value of this channel. Setting this value afects <paramref name="Value"/>
@@ -72,14 +72,14 @@ namespace MTS.AdminModule
         /// Set value of property <paramref name="Value"/>. An event will be raised
         /// </summary>
         /// <param name="value">Value to set</param>
-        void SetValue(int value);
+        void SetValue(uint value);
 
         /// <summary>
         /// (Get/Set) Delegate that converts raw value to real value (<paramref name="Value"/> to <paramref name="RealValue"/>
         /// in this case) according to values <paramref name="RawLow"/>, <paramref name="RawHigh"/>, <paramref name="RealLow"/>
         /// and <paramref name="RealHigh"/>
         /// </summary>
-        Converter<int, double> RawToReal { get; set; }
+        Converter<uint, double> RawToReal { get; set; }
     }
 
     public interface IAnalogOutput : IAnalogInput
@@ -88,7 +88,7 @@ namespace MTS.AdminModule
         /// (Get/Set) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
-        new int Value { get; set; }
+        new uint Value { get; set; }
     }
 
 

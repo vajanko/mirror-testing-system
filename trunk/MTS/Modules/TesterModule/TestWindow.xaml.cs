@@ -19,6 +19,8 @@ using AvalonDock;
 
 using Microsoft.Win32;
 
+using System.Windows.Media.Media3D;
+
 namespace MTS.TesterModule
 {
     /// <summary>
@@ -192,20 +194,42 @@ namespace MTS.TesterModule
 
         // test area
         private void startClick(object sender, RoutedEventArgs e)
-        {
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
-            timer.Interval = 100;  // ms
+        {           
+            //Channels = new Channels(new ECModule("Task1"));
+            Channels = new Channels(new DummyModule());
 
-            scheduler = new TaskScheduler();
-            var module = new DummyModule();
-            module.LoadConfiguration("task1.csv");
-            module.Connect();
+            Channels.LoadConfiguration("C:/task1.csv");
+            Channels.Connect();
 
-            Channels = new Channels(module);
-            heatingFoil.DataContext = Channels;
+            Channels.Initialize();
+            
+            scheduler = new TaskScheduler(Channels);
+
+            scheduler.AddTask(new CenterTask(Channels, ZeroPlaneNormal, PointX, PointY, PointZ) { Name = "Center" });
+            scheduler.AddTask(new TravelTest(Channels, Tests[TestDictionary.TRAVEL_NORTH],
+                ZeroPlaneNormal, PointX, PointY, PointZ, MoveDirection.Up));
+            scheduler.AddTask(new CenterTask(Channels, ZeroPlaneNormal, PointX, PointY, PointZ) { Name = "Center" });
+
+            scheduler.AddTask(new TravelTest(Channels, Tests[TestDictionary.TRAVEL_SOUTH],
+                ZeroPlaneNormal, PointX, PointY, PointZ, MoveDirection.Down));
+            scheduler.AddTask(new CenterTask(Channels, ZeroPlaneNormal, PointX, PointY, PointZ) { Name = "Center" });
+
+            scheduler.AddTask(new TravelTest(Channels, Tests[TestDictionary.TRAVEL_EAST],
+                ZeroPlaneNormal, PointX, PointY, PointZ, MoveDirection.Right));
+            scheduler.AddTask(new CenterTask(Channels, ZeroPlaneNormal, PointX, PointY, PointZ) { Name = "Center" });
+
+            scheduler.AddTask(new TravelTest(Channels, Tests[TestDictionary.TRAVEL_WEST],
+                ZeroPlaneNormal, PointX, PointY, PointZ, MoveDirection.Left));
+            scheduler.AddTask(new CenterTask(Channels, ZeroPlaneNormal, PointX, PointY, PointZ) { Name = "Center" });
+
             //scheduler.AddTask(new SpiralTest(Channels, Tests[TestDictionary.SPIRAL]));
+            //scheduler.AddTask(new HeatingSignPresence(Channels, Tests[TestDictionary.SPIRAL]));
             //scheduler.AddTask(new BlinkerTest(Channels, Tests[TestDictionary.BLINKER]));
-            scheduler.AddTask(new PowerfoldTest(Channels, Tests[TestDictionary.POWERFOLD]));
+            //scheduler.AddTask(new PowerfoldTest(Channels, Tests[TestDictionary.POWERFOLD]));
+
+            Channels.DistanceX.SetValue((uint)PointX.Z);
+            Channels.DistanceY.SetValue((uint)PointY.Z);
+            Channels.DistanceZ.SetValue((uint)PointZ.Z);
 
             scheduler.Initialize();
             scheduler.Executed += new ExecutedHandler(scheduler_SchedulerExecuted);
@@ -228,11 +252,31 @@ namespace MTS.TesterModule
 
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Channels.Update(watch.Elapsed);
+            scheduler.UpdateOutputs(watch.Elapsed);
             scheduler.Update(watch.Elapsed);
+
+            spiralCurrent.Dispatcher.BeginInvoke(new Action(updateGui));
         }
 
         #endregion
+
+        private void updateGui()
+        {
+            setRotation();
+            spiralCurrent.AddValue(Channels.HeatingFoilCurrent.RealValue);
+            actuatorACurrent.AddValue(Channels.VerticalActuatorCurrent.RealValue);
+            actuatorBCurrent.AddValue(Channels.HorizontalActuatorCurrent.RealValue);
+        }
+        private void setRotation()
+        {
+            PointX.Z = Channels.DistanceX.Value;
+            PointY.Z = Channels.DistanceY.Value;
+            PointZ.Z = Channels.DistanceZ.Value;
+            Vector3D mirrorNormal = getPlaneNormal(PointX, PointY, PointZ);
+            Vector3D axis = Vector3D.CrossProduct(ZeroPlaneNormal, mirrorNormal);
+            mirrorView.RotationAxis = axis;
+            mirrorView.RotationAngle = Vector3D.AngleBetween(mirrorNormal, ZeroPlaneNormal);
+        }
 
         #region Constructors
 
@@ -240,8 +284,75 @@ namespace MTS.TesterModule
         {
             InitializeComponent();
             IsRunning = false;
+            // test
+            xSonde.ValueChanged += new RoutedPropertyChangedEventHandler<double>(sonde_ValueChanged);
+            ySonde.ValueChanged += new RoutedPropertyChangedEventHandler<double>(sonde_ValueChanged);
+            zSonde.ValueChanged += new RoutedPropertyChangedEventHandler<double>(sonde_ValueChanged);
+
+            PointX = new Point3D(0, 0, 100);          // zero plane
+            PointY = new Point3D(200, 0, 100);
+            PointZ = new Point3D(200, 100, 100);
+            ZeroPlaneNormal = getPlaneNormal(PointX, PointY, PointZ);
+
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+            timer.Interval = 400;  // ms
         }
 
         #endregion
+
+        void sonde_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //Channels.DistanceX.SetValue((uint)xSonde.Value);
+            //Channels.DistanceY.SetValue((uint)ySonde.Value);
+            //Channels.DistanceZ.SetValue((uint)zSonde.Value);
+
+            PointX.Z = xSonde.Value;
+            PointY.Z = ySonde.Value;
+            PointZ.Z = zSonde.Value;
+            Vector3D mirrorNormal = getPlaneNormal(PointX, PointY, PointZ);
+            Vector3D axis = Vector3D.CrossProduct(ZeroPlaneNormal, mirrorNormal);
+            mirrorView.RotationAxis = axis;
+            mirrorView.RotationAngle = Vector3D.AngleBetween(mirrorNormal, ZeroPlaneNormal);
+        }
+
+        // test area
+        private Vector3D getPlaneNormal(Point3D x, Point3D y, Point3D z)
+        {   // get two vectors from tree points. Cross product gives us a pependicular vector to both of them
+            return Vector3D.CrossProduct(new Vector3D(y.X - x.X, y.Y - x.Y, y.Z - x.Z), new Vector3D(z.X - x.X, z.Y - x.Y, z.Z - x.Z));
+        }
+
+        /// <summary>
+        /// (Get) Angle between mirror surface and zero mirror position surface
+        /// </summary>
+        protected double Angle
+        {
+            get { return Vector3D.AngleBetween(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal); }
+        }
+
+        /// <summary>
+        /// Position in the 3D space of the surface which position is measured by sonde X
+        /// </summary>
+        protected Point3D PointX;
+        /// <summary>
+        /// Position in the 3D space of the surface which position is measured by sonde Y
+        /// </summary>
+        protected Point3D PointY;
+        /// <summary>
+        /// Position in the 3D space of the surface which position is measured by sonde Z
+        /// </summary>
+        protected Point3D PointZ;
+
+        /// <summary>
+        /// (Get) Normal vector of mirror plane in the zero position. This is the moment when mirror
+        /// is not rotated
+        /// </summary>
+        protected Vector3D ZeroPlaneNormal { get; private set; }
+
+        private void resetClick(object sender, RoutedEventArgs e)
+        {
+            xSonde.Value = 100;
+            ySonde.Value = 100;
+            zSonde.Value = 100;
+        }
     }
 }

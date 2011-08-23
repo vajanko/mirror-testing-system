@@ -98,7 +98,7 @@ namespace MTS.EditorModule
             param = test.Parameters;
             add(param, ParamDictionary.MIN_ANGLE);
             add(param, ParamDictionary.MAX_TESTING_TIME);
-            add(param, ParamDictionary.MIN_CURRENT);
+            add(param, ParamDictionary.MAX_CURRENT);
             add(param, ParamDictionary.MAX_OVERLOAD_TIME);
             this.Add(TRAVEL_EAST, test);
 
@@ -107,7 +107,7 @@ namespace MTS.EditorModule
             param = test.Parameters;
             add(param, ParamDictionary.MIN_ANGLE);
             add(param, ParamDictionary.MAX_TESTING_TIME);
-            add(param, ParamDictionary.MIN_CURRENT);
+            add(param, ParamDictionary.MAX_CURRENT);
             add(param, ParamDictionary.MAX_OVERLOAD_TIME);
             this.Add(TRAVEL_WEST, test);
 
@@ -116,7 +116,7 @@ namespace MTS.EditorModule
             param = test.Parameters;
             add(param, ParamDictionary.MIN_ANGLE);
             add(param, ParamDictionary.MAX_TESTING_TIME);
-            add(param, ParamDictionary.MIN_CURRENT);
+            add(param, ParamDictionary.MAX_CURRENT);
             add(param, ParamDictionary.MAX_OVERLOAD_TIME);
             this.Add(TRAVEL_NORTH, test);
 
@@ -125,7 +125,7 @@ namespace MTS.EditorModule
             param = test.Parameters;
             add(param, ParamDictionary.MIN_ANGLE);
             add(param, ParamDictionary.MAX_TESTING_TIME);
-            add(param, ParamDictionary.MIN_CURRENT);
+            add(param, ParamDictionary.MAX_CURRENT);
             add(param, ParamDictionary.MAX_OVERLOAD_TIME);
             this.Add(TRAVEL_SOUTH, test);
 

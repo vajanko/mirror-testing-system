@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -21,38 +22,34 @@ namespace MTS.Controls
     {
         #region Dependency Properties
 
-        public const double zero = 0;
+        #region RotationAxis Property
 
-        #region Vertical Rotation
-
-        public static readonly DependencyProperty VerticalRotationProperty =
-            DependencyProperty.Register("VerticalRotation", typeof(double), typeof(MirrorView),
-            new PropertyMetadata(zero));
+        public static readonly DependencyProperty RotationAxisProperty =
+            DependencyProperty.Register("RotationAxis", typeof(Vector3D), typeof(MirrorView));
 
         /// <summary>
-        /// (Get/Set DP) 
+        /// (Get/Set DP) Axis arond which is the mirror rotated
         /// </summary>
-        public double VerticalRotation
+        public Vector3D RotationAxis
         {
-            get { return (double)GetValue(VerticalRotationProperty); }
-            set { SetValue(VerticalRotationProperty, value); }
+            get { return (Vector3D)GetValue(RotationAxisProperty); }
+            set { SetValue(RotationAxisProperty, value); }
         }
 
         #endregion
 
-        #region Horizontal Rotation
+        #region RotationAngle Property
 
-        public static readonly DependencyProperty HorizontalRotationProperty =
-            DependencyProperty.Register("HorizontalRotation", typeof(double), typeof(MirrorView),
-            new PropertyMetadata(zero));
+        public static readonly DependencyProperty RotationAngleProperty =
+            DependencyProperty.Register("RotationAngle", typeof(double), typeof(MirrorView));
 
         /// <summary>
-        /// (Get/Set DP) 
+        /// (Get/Set DP) Angle of mirror rotation
         /// </summary>
-        public double HorizontalRotation
+        public double RotationAngle
         {
-            get { return (double)GetValue(HorizontalRotationProperty); }
-            set { SetValue(HorizontalRotationProperty, value); }
+            get { return (double)GetValue(RotationAngleProperty); }
+            set { SetValue(RotationAngleProperty, value); }
         }
 
         #endregion

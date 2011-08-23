@@ -11,35 +11,60 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace MTS.Controls
 {
     /// <summary>
     /// Control that holds a flow of values measured each one per timestep
     /// </summary>
-    public class FlowControl : Control
+    public class FlowControl : Control, INotifyPropertyChanged
     {
-        #region Dependency Properties
-
-        #region Values Property
-
-        static public readonly DependencyProperty ValuesProperty =
-            DependencyProperty.Register("Values", typeof(PointCollection), typeof(FlowControl));
+        #region Properties
 
         /// <summary>
-        /// (Get/Set DP) Collection of measured values
+        /// (Get) Collection of measured values
         /// </summary>
-        public PointCollection Values
+        public DoubleQueue Values
         {
-            get { return (PointCollection)GetValue(ValuesProperty); }
-            set { SetValue(ValuesProperty, value); }
+            get;
+            protected set;
+        }
+
+        private string title;
+        /// <summary>
+        /// (Get/Set) Short description that is displayed inside this control
+        /// </summary>
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                RaisePropertyChanged("Title");
+            }
+        }
+        private double currentValue;
+        /// <summary>
+        /// (Get/Set) Last value added
+        /// </summary>
+        public double CurrentValue
+        {
+            get { return currentValue; }
+            set
+            {
+                currentValue = value;
+                RaisePropertyChanged("CurrentValue");
+            }
         }
 
         #endregion
 
+        #region Dependency Properties
+
         #region ValuesCapacity Property
 
-        public const int DefaultValuesCapacity = 30;
+        public const int DefaultValuesCapacity = 20;
         static public readonly DependencyProperty ValuesCapacityProperty =
             DependencyProperty.Register("ValuesCapacity", typeof(int), typeof(FlowControl),
             new PropertyMetadata(DefaultValuesCapacity));
@@ -71,21 +96,20 @@ namespace MTS.Controls
         }
 
         #endregion
-        
-        #region GraphRect Property
 
-        static public readonly Rect DefaultRect = new Rect(0, 0, 100, 100);
-        static public readonly DependencyProperty GraphRectProperty =
-            DependencyProperty.Register("GraphRect", typeof(Rect), typeof(FlowControl),
-            new PropertyMetadata(DefaultRect));
+        #region TextBrush Property
+
+        static public readonly DependencyProperty TextBrushProperty =
+            DependencyProperty.Register("TextBrush", typeof(Brush), typeof(FlowControl),
+            new PropertyMetadata(Brushes.White));
 
         /// <summary>
-        /// (Get/Set DP) Area of displayed graph
+        /// (Get/Set DP) Brush used to draw graph curve
         /// </summary>
-        public Rect GraphRect
+        public Brush TextBrush
         {
-            get { return (Rect)GetValue(GraphRectProperty); }
-            set { SetValue(GraphRectProperty, value); }
+            get { return (Brush)GetValue(TextBrushProperty); }
+            set { SetValue(TextBrushProperty, value); }
         }
 
         #endregion
@@ -104,28 +128,118 @@ namespace MTS.Controls
         public double Zero
         {
             get { return (double)GetValue(ZeroProperty); }
-            set { SetValue(ZeroProperty, value); }
+            private set { SetValue(ZeroProperty, value); }
         }
 
         #endregion
 
-        #endregion
 
-        public void AddValue(Point value)
+
+        #region Unit Property
+
+        static public readonly DependencyProperty UnitProperty =
+            DependencyProperty.Register("Unit", typeof(Unit), typeof(FlowControl));
+
+        /// <summary>
+        /// (Get/Set DP) Unit of values
+        /// </summary>
+        public Unit Unit
         {
+            get { return (Unit)GetValue(UnitProperty); }
+            set { SetValue(UnitProperty, value); }
         }
+
+        #endregion
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+        }
+
+        #endregion
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            // when ActualWidth changes - step will be changed apropriatelly
+            if (e.Property == ActualWidthProperty && ActualWidth != 0)
+                Values.Step = ActualWidth / ValuesCapacity; // entire line (all values) are always displayed
+            // when ActualWidth changes - zero will be changed apropriatelly
+            else if (e.Property == ActualHeightProperty)
+                Zero = ActualHeight / 2;    // zero line is always in the middle
+        }
+
+        public void AddValue(double value)
+        {
+            // by adding new values, too old ones get removed from Values collection
+            Values.AddValue(value);
+            // last value added
+            CurrentValue = value;
+            RaisePropertyChanged("Values");     // this is for binding
+        }
+
+        #region Constructors
 
         public FlowControl()
         {
-            Random gen = new Random();
-            Values = new PointCollection();
-            for (int i = 0; i < 30; i++)
-                Values.Add(new Point(i*2, gen.Next(30)));
+            // new measured values are added and too old values are removed
+            Values = new DoubleQueue();
+            // bind Zero dependency property on this FlowControl with Zero property on Values
+            Binding bind = new Binding("Zero") { Source = Values, Mode = BindingMode.TwoWay };
+            SetBinding(ZeroProperty, bind);
+            // bind ValuesCapacity dependency property on this FlowControl with Capacity property on Values
+            bind = new Binding("Capacity") { Source = Values, Mode = BindingMode.OneWay };
+            SetBinding(ValuesCapacityProperty, bind);
         }
 
         static FlowControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FlowControl), new FrameworkPropertyMetadata(typeof(FlowControl)));
         }
+
+        #endregion        
+    }
+
+    public class DoubleQueue : Queue<double>
+    {
+        /// <summary>
+        /// (Get/Set) Each value of this double collection represents a value on Y-axis. This is a space
+        /// between each value on X-axis
+        /// </summary>
+        public double Step { get; set; }
+        /// <summary>
+        /// (Get/Set) Value of X-axis. As this double collection is converted to points collection and dispalyed
+        /// as a line
+        /// </summary>
+        public double Zero { get; set; }
+        /// <summary>
+        /// (Get/Set) Maximum number of items stored in this queue
+        /// </summary>
+        public int Capacity { get; set; }
+
+        /// <summary>
+        /// Add new value to collection (and remove too old values). When there are more values than 
+        /// <paramref name="Capacity"/> values from the end are removed.
+        /// </summary>
+        /// <param name="value">Value to add</param>
+        public void AddValue(double value)
+        {
+            // insert value and remove too old ones
+            Enqueue(value);
+            while (Count > Capacity)
+                Dequeue();
+        }
+
+        /// <summary>
+        /// Create a new instance of <typeparamref name="DoubleQueue"/> with default capacity
+        /// </summary>
+        public DoubleQueue() { Capacity = 20; }
     }
 }

@@ -13,6 +13,8 @@ namespace MTS.AdminModule
 
         #region IModule Members
 
+        public void Initialize() { }
+
         public void Connect()
         {
             IsConnected = true;
@@ -21,9 +23,9 @@ namespace MTS.AdminModule
         public void Update(TimeSpan time)
         {
             if (HeatingFoilOn.Value)
-                HeatingFoilCurrent.SetValue(gen.Next(10, 100));
+                HeatingFoilCurrent.SetValue((uint)gen.Next(0, 20000));
             if (DirectionLightOn.Value)
-                DirectionLightCurrent.SetValue(gen.Next(0, 100));
+                DirectionLightCurrent.SetValue((uint)gen.Next(0, 100));
 
             double duration = (time - powerfoldStarted).TotalMilliseconds;
 
@@ -37,13 +39,13 @@ namespace MTS.AdminModule
                 else if (duration > 500 && duration < 600)
                     PowerFoldCurrent.SetValue(150);
                 else
-                    PowerFoldCurrent.SetValue(gen.Next(-50, 50));
+                    PowerFoldCurrent.SetValue((uint)gen.Next(-50, 50));
                 if (duration > 1000)
                     PowerFoldFoldedPositionSensor.SetValue(true);
             }
             else if (!Fold.Value && Unfold.Value)
             {
-                PowerFoldCurrent.SetValue(gen.Next(-50, 50));
+                PowerFoldCurrent.SetValue((uint)gen.Next(-50, 50));
                 if (duration > 2000)
                 {
                     PowerFoldUnfoldedPositionSensor1.SetValue(true);
@@ -55,21 +57,57 @@ namespace MTS.AdminModule
         public void Update()
         {
             if (HeatingFoilOn.Value)
-                HeatingFoilCurrent.SetValue(gen.Next(10, 100));
+                HeatingFoilCurrent.SetValue((uint)gen.Next(0, short.MaxValue));
+            else HeatingFoilCurrent.SetValue(0);
+
+            if (MoveMirrorUp.Value)
+                VerticalActuatorCurrent.SetValue((uint)gen.Next(0, short.MaxValue));
+            else VerticalActuatorCurrent.SetValue(0);
+
+            if (MoveMirrorLeft.Value)
+                HorizontalActuatorCurrent.SetValue((uint)gen.Next(0, short.MaxValue));
+            else HorizontalActuatorCurrent.SetValue(0);
+
             if (DirectionLightOn.Value)
-                DirectionLightCurrent.SetValue(gen.Next(0, 100));
-            
+                DirectionLightCurrent.SetValue((uint)gen.Next(0, 100));
+            DirectionLightCurrent.SetValue(0);
+
+            const int step = 2;
+            if (MoveMirrorUp.Value && !MoveReverse.Value)
+            {
+                if (DistanceZ.Value < 1000)
+                    DistanceZ.SetValue(DistanceZ.Value + step);
+            }
+            else if (MoveMirrorUp.Value && MoveReverse.Value)
+            {
+                if (DistanceZ.Value > 0)
+                    DistanceZ.SetValue(DistanceZ.Value - step);
+            }
+            else if (MoveMirrorLeft.Value && !MoveReverse.Value)
+            {
+                if (DistanceX.Value < 1000)
+                    DistanceX.SetValue(DistanceX.Value + step);
+            }
+            else if (MoveMirrorLeft.Value && MoveReverse.Value)
+            {
+                if (DistanceX.Value > 0)
+                    DistanceX.SetValue(DistanceX.Value - step);
+            }
+
         }
 
         /// <summary>
         /// Read all inputs and outputs channels
         /// </summary>
-        public void UpdateInputs() { }
+        public void UpdateInputs()
+        {
+            //Update(DateTime.Now.TimeOfDay);
+        }
 
         /// <summary>
         /// Write all outputs channels
         /// </summary>
-        public void UpdateOutputs() { }
+        public void UpdateOutputs() { Update(); }
 
         public void Disconnect()
         {
@@ -114,15 +152,29 @@ namespace MTS.AdminModule
 
             // mirror movement
             VerticalActuatorCurrent = new DummyAnalogInput() { Name = "VerticalActuatorCurrent" };
+            VerticalActuatorCurrent.RawHigh = ushort.MaxValue;
+            VerticalActuatorCurrent.RealHigh = 100;
+            channels.Add("VerticalActuatorCurrent", VerticalActuatorCurrent);
             HorizontalActuatorCurrent = new DummyAnalogInput() { Name = "HorizontalActuatorCurrent" };
+            HorizontalActuatorCurrent.RawHigh = ushort.MaxValue;
+            HorizontalActuatorCurrent.RealHigh = 100;
+            channels.Add("HorizontalActuatorCurrent", HorizontalActuatorCurrent);
+
             ActuatorPowerSupplyVoltage = new DummyAnalogInput() { Name = "ActuatorPowerSupplyVoltage" };
             OtherPowerSupplyVoltage = new DummyAnalogInput() { Name = "OtherPowerSupplyVoltage" };
+
             DistanceX = new DummyAnalogInput() { Name = "DistanceX" };
+            channels.Add("DistanceX", DistanceX);
             DistanceY = new DummyAnalogInput() { Name = "DistanceY" };
+            channels.Add("DistanceY", DistanceY);
             DistanceZ = new DummyAnalogInput() { Name = "DistanceZ" };
+            channels.Add("DistanceZ", DistanceZ);
             MoveMirrorUp = new DummyDigitalOutput() { Name = "MoveMirrorUp" };
+            channels.Add("MoveMirrorUp", MoveMirrorUp);
             MoveMirrorLeft = new DummyDigitalOutput() { Name = "MoveMirrorLeft" };
+            channels.Add("MoveMirrorLeft", MoveMirrorLeft);
             MoveReverse = new DummyDigitalOutput() { Name = "MoveReverse" };
+            channels.Add("MoveReverse", MoveReverse);
         }
 
         #endregion

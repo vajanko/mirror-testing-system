@@ -1,11 +1,87 @@
 using System;
 
 namespace MTS.AdminModule {
-    
-    public class Channels {
 
+    public class Channels : IModule
+    {
         private IModule module;
 
+        #region IModule Members
+
+        public void LoadConfiguration(string filename)
+        {
+            module.LoadConfiguration(filename);
+        }
+        public void Connect()
+        {
+            module.Connect();
+        }
+        public void Initialize()
+        {
+            module.Initialize();
+
+            // initialize channels: 
+            // !!! PROPERTY NAME IS ALWAYS THE SAME AS CHANNEL NAME STRING !!!
+            // Consider this when setting variable names in TwinCAT IO Server
+
+            // ???
+            TestingDeviceOpened = (IDigitalInput)module.GetChannelByName("TestingDeviceOpened");
+            TestingDeviceClosed = (IDigitalInput)module.GetChannelByName("TestingDeviceClosed");
+            StartButton = (IDigitalInput)module.GetChannelByName("StartButton");
+            ErrorAcknButton = (IDigitalInput)module.GetChannelByName("ErrorAcknButton");
+            ControlCurrentOn = (IDigitalInput)module.GetChannelByName("ControlCurrentOn");
+
+            // powerfold
+            PowerFoldUnfoldedPositionSensor1 = (IDigitalInput)module.GetChannelByName("PowerFoldUnfoldedPositionSensor1");
+            PowerFoldUnfoldedPositionSensor2 = (IDigitalInput)module.GetChannelByName("PowerFoldUnfoldedPositionSensor2");
+            PowerFoldFoldedPositionSensor = (IDigitalInput)module.GetChannelByName("PowerFoldFoldedPositionSensor");
+            PowerFoldCurrent = (IAnalogInput)module.GetChannelByName("PowerFoldCurrent");
+            Fold = (IDigitalOutput)module.GetChannelByName("Fold");
+            Unfold = (IDigitalOutput)module.GetChannelByName("Unfold");
+
+            // spiral
+            HeatingFoilOn = (IDigitalOutput)module.GetChannelByName("HeatingFoilOn");
+            HeatingFoilCurrent = (IAnalogInput)module.GetChannelByName("HeatingFoilCurrent");
+            HeatingFoilCurrent.RealLow = 0;
+            HeatingFoilCurrent.RealHigh = 10;
+            HeatingFoilSignSensor = (IDigitalInput)module.GetChannelByName("HeatingFoilSignSensor");
+
+            // mirror movement
+            VerticalActuatorCurrent = (IAnalogInput)module.GetChannelByName("VerticalActuatorCurrent");
+            HorizontalActuatorCurrent = (IAnalogInput)module.GetChannelByName("HorizontalActuatorCurrent");
+            ActuatorPowerSupplyVoltage = (IAnalogInput)module.GetChannelByName("ActuatorPowerSupplyVoltage");
+            OtherPowerSupplyVoltage = (IAnalogInput)module.GetChannelByName("OtherPowerSupplyVoltage");
+            DistanceX = (IAnalogInput)module.GetChannelByName("DistanceX");
+            DistanceY = (IAnalogInput)module.GetChannelByName("DistanceY");
+            DistanceZ = (IAnalogInput)module.GetChannelByName("DistanceZ");
+            MoveMirrorUp = (IDigitalOutput)module.GetChannelByName("MoveMirrorUp");
+            MoveMirrorLeft = (IDigitalOutput)module.GetChannelByName("MoveMirrorLeft");
+            MoveReverse = (IDigitalOutput)module.GetChannelByName("MoveReverse");
+
+            // blinker
+            DirectionLightCurrent = (IAnalogInput)module.GetChannelByName("DirectionLightCurrent");
+            DirectionLightOn = (IDigitalOutput)module.GetChannelByName("DirectionLightOn");
+
+
+            SensorHeadOut = (IDigitalInput)module.GetChannelByName("SensorHeadOut");
+            SensorHeadIn = (IDigitalInput)module.GetChannelByName("SensorHeadIn");
+            InsCheck1 = (IDigitalInput)module.GetChannelByName("InsCheck1");
+            InsCheck2 = (IDigitalInput)module.GetChannelByName("InsCheck2");
+            InsCheck3 = (IDigitalInput)module.GetChannelByName("InsCheck3");
+            InsCheck4 = (IDigitalInput)module.GetChannelByName("InsCheck4");
+            InsCheck5 = (IDigitalInput)module.GetChannelByName("InsCheck5");
+            InsCheck6 = (IDigitalInput)module.GetChannelByName("InsCheck6");
+            InsCheck7 = (IDigitalInput)module.GetChannelByName("InsCheck7");
+            InsCheck8 = (IDigitalInput)module.GetChannelByName("InsCheck8");
+            InsCheck9 = (IDigitalInput)module.GetChannelByName("InsCheck9");
+            InsCheck10 = (IDigitalInput)module.GetChannelByName("InsCheck10");
+            InsCheck11 = (IDigitalInput)module.GetChannelByName("InsCheck11");
+            InsCheck12 = (IDigitalInput)module.GetChannelByName("InsCheck12");
+            InsCheck13 = (IDigitalInput)module.GetChannelByName("InsCheck13");
+            InsCheck14 = (IDigitalInput)module.GetChannelByName("InsCheck14");
+            InsCheck15 = (IDigitalInput)module.GetChannelByName("InsCheck15");
+            InsCheck16 = (IDigitalInput)module.GetChannelByName("InsCheck16");
+        }
         public void Update()
         {   // update all channels: read in/out and write out channels
             module.Update();
@@ -14,11 +90,31 @@ namespace MTS.AdminModule {
         {   // for debug prpose only
             module.Update(time);
         }
+        public void UpdateInputs()
+        {
+            module.UpdateInputs();
+        }
+        public void UpdateOutputs()
+        {
+            module.UpdateOutputs();
+        }
+        public void Disconnect()
+        {
+            module.Disconnect();
+        }
+
+        public IChannel GetChannelByName(string name)
+        {
+            return module.GetChannelByName(name);
+        }
+
+        #endregion
 
         #region Channels
 
         #region Digital inputs
 
+        public IDigitalInput HeatingFoilSignSensor { get; set; }
         public IDigitalInput PowerFoldUnfoldedPositionSensor1 { get; set; }
         public IDigitalInput PowerFoldUnfoldedPositionSensor2 { get; set; }
         public IDigitalInput PowerFoldFoldedPositionSensor { get; set; }
@@ -109,64 +205,7 @@ namespace MTS.AdminModule {
         public Channels(IModule module)
         {
             this.module = module;
-            // initialize channels: 
-            // !!! PROPERTY NAME IS ALWAYS THE SAME AS CHANNEL NAME STRING !!!
-            // Consider this when setting variable names in TwinCAT IO Server
-
-            // ???
-            TestingDeviceOpened = (IDigitalInput)module.GetChannelByName("TestingDeviceOpened");
-            TestingDeviceClosed = (IDigitalInput)module.GetChannelByName("TestingDeviceClosed");
-            StartButton = (IDigitalInput)module.GetChannelByName("StartButton");
-            ErrorAcknButton = (IDigitalInput)module.GetChannelByName("ErrorAcknButton");
-            ControlCurrentOn = (IDigitalInput)module.GetChannelByName("ControlCurrentOn");
-
-            // powerfold
-            PowerFoldUnfoldedPositionSensor1 = (IDigitalInput)module.GetChannelByName("PowerFoldUnfoldedPositionSensor1");
-            PowerFoldUnfoldedPositionSensor2 = (IDigitalInput)module.GetChannelByName("PowerFoldUnfoldedPositionSensor2");
-            PowerFoldFoldedPositionSensor = (IDigitalInput)module.GetChannelByName("PowerFoldFoldedPositionSensor");
-            PowerFoldCurrent = (IAnalogInput)module.GetChannelByName("PowerFoldCurrent");
-            Fold = (IDigitalOutput)module.GetChannelByName("Fold");
-            Unfold = (IDigitalOutput)module.GetChannelByName("Unfold");
-
-            // spiral
-            HeatingFoilOn = (IDigitalOutput)module.GetChannelByName("HeatingFoilOn");
-            HeatingFoilCurrent = (IAnalogInput)module.GetChannelByName("HeatingFoilCurrent");
-
-            // mirror movement
-            VerticalActuatorCurrent = (IAnalogInput)module.GetChannelByName("VerticalActuatorCurrent");
-            HorizontalActuatorCurrent = (IAnalogInput)module.GetChannelByName("HorizontalActuatorCurrent");
-            ActuatorPowerSupplyVoltage = (IAnalogInput)module.GetChannelByName("ActuatorPowerSupplyVoltage");
-            OtherPowerSupplyVoltage = (IAnalogInput)module.GetChannelByName("OtherPowerSupplyVoltage");
-            DistanceX = (IAnalogInput)module.GetChannelByName("DistanceX");
-            DistanceY = (IAnalogInput)module.GetChannelByName("DistanceY");
-            DistanceZ = (IAnalogInput)module.GetChannelByName("DistanceZ");
-            MoveMirrorUp = (IDigitalOutput)module.GetChannelByName("MoveMirrorUp");
-            MoveMirrorLeft = (IDigitalOutput)module.GetChannelByName("MoveMirrorLeft");
-            MoveReverse = (IDigitalOutput)module.GetChannelByName("MoveReverse");
-
-            // blinker
-            DirectionLightCurrent = (IAnalogInput)module.GetChannelByName("DirectionLightCurrent");
-            DirectionLightOn = (IDigitalOutput)module.GetChannelByName("DirectionLightOn");
-
-
-            SensorHeadOut = (IDigitalInput)module.GetChannelByName("SensorHeadOut");
-            SensorHeadIn = (IDigitalInput)module.GetChannelByName("SensorHeadIn");
-            InsCheck1 = (IDigitalInput)module.GetChannelByName("InsCheck1");
-            InsCheck2 = (IDigitalInput)module.GetChannelByName("InsCheck2");
-            InsCheck3 = (IDigitalInput)module.GetChannelByName("InsCheck3");
-            InsCheck4 = (IDigitalInput)module.GetChannelByName("InsCheck4");
-            InsCheck5 = (IDigitalInput)module.GetChannelByName("InsCheck5");
-            InsCheck6 = (IDigitalInput)module.GetChannelByName("InsCheck6");
-            InsCheck7 = (IDigitalInput)module.GetChannelByName("InsCheck7");
-            InsCheck8 = (IDigitalInput)module.GetChannelByName("InsCheck8");
-            InsCheck9 = (IDigitalInput)module.GetChannelByName("InsCheck9");
-            InsCheck10 = (IDigitalInput)module.GetChannelByName("InsCheck10");
-            InsCheck11 = (IDigitalInput)module.GetChannelByName("InsCheck11");
-            InsCheck12 = (IDigitalInput)module.GetChannelByName("InsCheck12");
-            InsCheck13 = (IDigitalInput)module.GetChannelByName("InsCheck13");
-            InsCheck14 = (IDigitalInput)module.GetChannelByName("InsCheck14");
-            InsCheck15 = (IDigitalInput)module.GetChannelByName("InsCheck15");
-            InsCheck16 = (IDigitalInput)module.GetChannelByName("InsCheck16");
+            
         }
 
         #endregion
