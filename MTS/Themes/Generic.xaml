@@ -36,64 +36,82 @@
     </Style>
 
     <Style TargetType="{x:Type ctrl:MirrorView}">
+        <Style.Resources>
+            <ctrl:DoubleAmplifierConverter x:Key="angleConverter"/>
+        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl:MirrorView}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Viewport3D>
-                            <Viewport3D.Camera>
-                                <!-- Realistic camera -->
-                                <PerspectiveCamera Position="0,0,3" UpDirection="0,1,0" LookDirection="0,0,-1" FieldOfView="50"/>
-                            </Viewport3D.Camera>
-                            <Viewport3D.Children>
-                                <ModelVisual3D>
-                                    <!-- White ambient light -->
+                        <DockPanel LastChildFill="True">
+                            <Grid DockPanel.Dock="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                
+                                <Label Content="Angle:" HorizontalAlignment="Center"/>
+                                <Label Content="{TemplateBinding RotationAngle}" ContentStringFormat="F2" Grid.Column="1"/>
+
+                                <Label Content="Axis" Grid.Row="1"/>
+                                <Label Content="{TemplateBinding RotationAxis}" Grid.Row="1" Grid.Column="1"/>
+                            </Grid>
+                            <Viewport3D Margin="10">
+                                <Viewport3D.Camera>
+                                    <!-- Realistic camera -->
+                                    <PerspectiveCamera Position="0,0,4" UpDirection="0,1,0" LookDirection="0,0,-1" FieldOfView="50"/>
+                                </Viewport3D.Camera>
+                                <Viewport3D.Children>
                                     <ModelVisual3D>
+                                        <!-- White ambient light -->
+                                        <ModelVisual3D>
+                                            <ModelVisual3D.Content>
+                                                <Model3DGroup>
+                                                <!--<DirectionalLight Color="White" Direction="0,0,-1"/>-->
+                                                    <PointLight Color="White" Position="2,2,2" ConstantAttenuation="0"
+                                                            LinearAttenuation="0" QuadraticAttenuation="0.125"/>
+                                                    <PointLight Color="White" Position="-2,2,2" ConstantAttenuation="0"
+                                                                LinearAttenuation="0" QuadraticAttenuation="0.1" />
+                                                </Model3DGroup>
+                                            </ModelVisual3D.Content>
+                                        </ModelVisual3D>
                                         <ModelVisual3D.Content>
-                                            <DirectionalLight Color="White" Direction="0,0,-1"/>
+                                            <Model3DGroup>
+                                                <Model3DGroup.Children>
+                                                    <!-- Blue unit rectangle -->
+                                                    <GeometryModel3D>
+                                                        <GeometryModel3D.Geometry>
+                                                            <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0 -1,1,-0.2 -1,-1,-0.2 1,-1,-0.2 1,1,-0.2" 
+                                                                            Normals="0,0,1 0,0,1 0,0,1 0,0,1 0,0,-1 0,0,-1 0,0,-1 0,0,-1"
+                                                                            TriangleIndices="0,1,2 0,2,3 4,5,6 4,6,7 0,3,7 0,7,4 0,5,1 0,4,5 1,6,2 1,5,6 2,6,7 2,7,3"/>
+                                                        </GeometryModel3D.Geometry>
+                                                        <GeometryModel3D.Material>
+                                                            <DiffuseMaterial Brush="LightBlue"/>
+                                                        </GeometryModel3D.Material>
+                                                    </GeometryModel3D>
+                                                </Model3DGroup.Children>
+                                                <!-- Rotation -->
+                                                <Model3DGroup.Transform>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="{Binding RotationAxis, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                                 Angle="{Binding RotationAngle, RelativeSource={RelativeSource TemplatedParent}, 
+                                                                Converter={StaticResource angleConverter}, ConverterParameter=2}"/>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                </Model3DGroup.Transform>
+                                            </Model3DGroup>
                                         </ModelVisual3D.Content>
                                     </ModelVisual3D>
-                                    <ModelVisual3D.Content>
-                                        <Model3DGroup>
-                                            <Model3DGroup.Children>
-                                                <!-- Blue unit rectangle -->
-                                                <GeometryModel3D>
-                                                    <GeometryModel3D.Geometry>
-                                                        <MeshGeometry3D Positions="-1,1,0 -1,-1,0 1,-1,0 1,1,0 -1,1,-0.2 -1,-1,-0.2 1,-1,-0.2 1,1,-0.2" 
-                                                                        Normals="0,0,1 0,0,1 0,0,1 0,0,1 0,0,-1 0,0,-1 0,0,-1 0,0,-1"
-                                                                        TriangleIndices="0,1,2 0,2,3 4,5,6 4,6,7 0,3,7 0,7,4 0,5,1 0,4,5 1,6,2 1,5,6 2,6,7 2,7,3"/>
-                                                    </GeometryModel3D.Geometry>
-                                                    <GeometryModel3D.Material>
-                                                        <DiffuseMaterial Brush="LightBlue"/>
-                                                    </GeometryModel3D.Material>
-                                                </GeometryModel3D>
-                                            </Model3DGroup.Children>
-                                            <!-- Rotation -->
-                                            <Model3DGroup.Transform>
-                                                <Transform3DGroup>
-                                                    <!-- X-axis rotation -->
-                                                    <RotateTransform3D>
-                                                        <RotateTransform3D.Rotation>
-                                                            <AxisAngleRotation3D Axis="1,0,0" Angle="{Binding HorizontalRotation, 
-                                                                RelativeSource={RelativeSource TemplatedParent}}"/>
-                                                        </RotateTransform3D.Rotation>
-                                                    </RotateTransform3D>
-                                                    <!-- Y-axis rotation -->
-                                                    <RotateTransform3D>
-                                                        <RotateTransform3D.Rotation>
-                                                            <AxisAngleRotation3D Axis="0,1,0" Angle="{Binding VerticalRotation,
-                                                                RelativeSource={RelativeSource TemplatedParent}}"/>
-                                                        </RotateTransform3D.Rotation>
-                                                    </RotateTransform3D>
-                                                </Transform3DGroup>
-                                            </Model3DGroup.Transform>
-                                        </Model3DGroup>
-                                    </ModelVisual3D.Content>
-                                </ModelVisual3D>
-                            </Viewport3D.Children>
-                        </Viewport3D>
+                                </Viewport3D.Children>
+                            </Viewport3D>
+                        </DockPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -101,31 +119,36 @@
     </Style>
 
     <Style TargetType="{x:Type ctrl:FlowControl}">
+        <Style.Resources>
+            <ctrl:DoubleToPointCollection x:Key="converter"/>
+        </Style.Resources>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl:FlowControl}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <Border.Background>
-                            <DrawingBrush ViewportUnits="Absolute" 
-                                          Viewport="{Binding GraphRect, RelativeSource={RelativeSource TemplatedParent}}">
-                                <DrawingBrush.Drawing>
-                                    <GeometryDrawing>
-                                        <GeometryDrawing.Pen>
-                                            <Pen Brush="Green" Thickness="1"/>
-                                        </GeometryDrawing.Pen>
-                                        <GeometryDrawing.Geometry>
-                                            <GeometryGroup>
-                                                <LineGeometry StartPoint="0,-50" EndPoint="0,50"/>
-                                                <RectangleGeometry Rect="0,0,100,100"/>
-                                            </GeometryGroup>
-                                        </GeometryDrawing.Geometry>
-                                    </GeometryDrawing>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Border.Background>
-                        <Polyline Points="{Binding Values, RelativeSource={RelativeSource TemplatedParent}}"
-                                  Stroke="{TemplateBinding GraphBrush}"/>
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}">
+                        <DockPanel>
+                            <Grid DockPanel.Dock="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{TemplateBinding TextBrush}"/>
+                                <Label Content="{Binding CurrentValue, RelativeSource={RelativeSource TemplatedParent}}" 
+                                       Foreground="{TemplateBinding TextBrush}" Grid.Column="1"
+                                       ContentStringFormat="F2"/>
+                                <Label Content="{TemplateBinding Unit}" Grid.Column="2" Foreground="{TemplateBinding TextBrush}"/>
+                            </Grid>
+                            <Canvas ClipToBounds="True">
+                                <Line X1="0" Y1="{TemplateBinding Zero}" X2="{TemplateBinding ActualWidth}" Y2="{TemplateBinding Zero}" 
+                                      Stroke="Green"/>
+                                <Polyline Points="{Binding Values, RelativeSource={RelativeSource TemplatedParent}, 
+                                          Converter={StaticResource converter}}"
+                                          Stroke="{TemplateBinding GraphBrush}"/>
+                            </Canvas>
+                        </DockPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

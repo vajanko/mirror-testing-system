@@ -8,6 +8,12 @@ namespace MTS.AdminModule
     /// </summary>
     public interface IModule
     {
+        /// <summary>
+        /// Load configuration of channels form file
+        /// </summary>
+        /// <param name="filename">Path to file where configuration of channels is stored</param>
+        void LoadConfiguration(string filename);
+
          /// <summary>
         /// Create a new connection between local computer and some hardware component. At the beginning of
         /// the communication this method must be called.
@@ -15,9 +21,15 @@ namespace MTS.AdminModule
         void Connect();
 
         /// <summary>
-        /// Only for debugging
+        /// Prepare (initialize) channels for reading and writing. When this method is called, connection
+        /// must be established already.
         /// </summary>
-        /// <param name="time"></param>
+        void Initialize();
+
+        /// <summary>
+        /// For debug purpose only
+        /// </summary>
+        /// <param name="time">Time of calling this method</param>
         void Update(TimeSpan time);
 
         /// <summary>
@@ -46,12 +58,6 @@ namespace MTS.AdminModule
         /// </summary>
         /// <param name="name">Unic name (identifier) of required channel</param>
         IChannel GetChannelByName(string name);
-
-        /// <summary>
-        /// Load configuration of channels form file
-        /// </summary>
-        /// <param name="filename">Path to file where configuration of channels is stored</param>
-        void LoadConfiguration(string filename);
 
         //#region Channels
 

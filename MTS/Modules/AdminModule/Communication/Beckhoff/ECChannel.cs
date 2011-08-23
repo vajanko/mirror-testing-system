@@ -98,7 +98,7 @@ namespace MTS.AdminModule
         #endregion
     }
 
-    class ECDigitalOutput : ECDigitalInput
+    class ECDigitalOutput : ECDigitalInput, IDigitalOutput
     {
         /// <summary>
         /// (Get/Set) Logical value of this channel.
@@ -112,6 +112,11 @@ namespace MTS.AdminModule
 
     class ECAnalogInput : ECChannel, IAnalogInput
     {
+        /// <summary>
+        /// Constant string "RealValue"
+        /// </summary>
+        public const string RealValueString = "RealValue";
+
         #region IAnalog Members
 
         public int RawLow { get; set; }
@@ -122,12 +127,12 @@ namespace MTS.AdminModule
 
         public int RealHigh { get; set; }
 
-        protected int value;
+        protected uint value;
         /// <summary>
         /// (Get) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
-        public int Value { get { return value; } }
+        public uint Value { get { return value; } }
 
         /// <summary>
         /// (Get/Set) Real value of this channel. Setting this value afects <paramref name="Value"/>
@@ -142,18 +147,19 @@ namespace MTS.AdminModule
             }
         }
 
-        public Converter<int, double> RawToReal { get; set; }
+        public Converter<uint, double> RawToReal { get; set; }
 
         /// <summary>
         /// Set value of property <paramref name="Value"/>. An event will be raised
         /// </summary>
         /// <param name="value">Value to set</param>
-        public void SetValue(int value)
+        public void SetValue(uint value)
         {
             if (this.value != value)    // only change if necessary - no event will be raised
             {
                 this.value = value;
-                NotifyPropretyChanged(ValueString);
+                //NotifyPropretyChanged(ValueString);
+                NotifyPropretyChanged(RealValueString);
             }
         }
 
@@ -164,19 +170,19 @@ namespace MTS.AdminModule
                 switch (Size)   // analog channel may be of different interger type (byte, inte16, inte32)
                 {               // return only as much bytes as belogns to integer type of this channel
                     case 1: return BitConverter.GetBytes((byte)value);
-                    case 2: return BitConverter.GetBytes((Int16)value);
-                    case 4: return BitConverter.GetBytes((Int32)value);
+                    case 2: return BitConverter.GetBytes((ushort)value);
+                    case 4: return BitConverter.GetBytes((uint)value);
                     default: return BitConverter.GetBytes(value);
                 }
             }
             set
             {
-                int val = 0;
+                uint val = 0;
                 switch (Size)
                 {
                     case 1: val = value[0]; break;
-                    case 2: val = BitConverter.ToInt16(value, 0); break;
-                    case 4: val = BitConverter.ToInt32(value, 0); break;
+                    case 2: val = BitConverter.ToUInt16(value, 0); break;
+                    case 4: val = BitConverter.ToUInt32(value, 0); break;
                 }
                 SetValue(val);
             }
@@ -188,24 +194,29 @@ namespace MTS.AdminModule
         /// Default method for converting raw values to real
         /// </summary>
         /// <param name="rawValue">Interger (raw) value to convert to double (real)</param>
-        public double ConvertLinear(int rawValue)
+        public double ConvertLinear(uint rawValue)
         {
-            return (double)((rawValue - RawLow) / (RawHigh - RawLow)) * (RealHigh - RealLow) + RealLow;
+            //if (RawHigh - RawLow == 0) return Value;    // prevent to devide by zero
+            return (double)(((rawValue - RawLow) * (RealHigh - RealLow)) / (double)(RawHigh - RawLow) + RealLow);
         }
 
         public ECAnalogInput()
         {
             RawToReal = ConvertLinear;  // initialize with default (linear) converter
+            RawLow = 0;
+            RawHigh = 65536;
+            RealLow = 0;
+            RealHigh = 100;
         }
     }
 
-    class ECAnalogOutput : ECAnalogInput
+    class ECAnalogOutput : ECAnalogInput, IAnalogOutput
     {
         /// <summary>
         /// (Get/Set) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
-        public new int Value
+        public new uint Value
         {
             get { return base.Value; }
             set { this.value = value; }

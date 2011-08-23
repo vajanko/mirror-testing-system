@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using MTS.AdminModule;
+
 namespace MTS.TesterModule
 {
     public delegate void ExecutedHandler(TaskScheduler sender, EventArgs args);
 
     public class TaskScheduler
     {
+        #region Private Fields
+
+        private Channels channels;
+
         // these tasks should be executed
         private LinkedList<Task> toExecute = new LinkedList<Task>();
         // tasks that can be executed right now, but its method BeginExecute was not called yet
@@ -17,6 +23,8 @@ namespace MTS.TesterModule
         private LinkedList<Task> executing = new LinkedList<Task>();
         // these tasks are already executed - necessary to collect data
         private LinkedList<Task> executed = new LinkedList<Task>();
+
+        #endregion
 
         public event ExecutedHandler Executed;
 
@@ -94,25 +102,39 @@ namespace MTS.TesterModule
             // add first task to prepared collection
             prepared.AddFirst(toExecute.First.Value);
             toExecute.RemoveFirst();
+            // initialize channels
         }
-
-        /// <summary>
-        /// Update all executing tasks
-        /// </summary>
-        /// <param name="time">Time at moment of calling this method</param>
-        public void Update(TimeSpan time)
-        {   
+        public void UpdateOutputs(TimeSpan time)
+        {
             // begin execute all prepared tasks and add them to executing colletion
             foreach (Task task in prepared)
             {
-                task.BeginExecute(time);
+                task.Initialize(time);
                 executing.AddFirst(task);
             }
             prepared.Clear();
 
             // update all executing tasks
-            LinkedListNode<Task> node1 = executing.First;
-            LinkedListNode<Task> node2;
+            LinkedListNode<Task> node1 = executing.First, node2;
+            while (node1 != null)
+            {
+                node2 = node1.Next;
+                node1.Value.UpdateOutputs(time);    // notice that when updating node1 - it could be removed
+                node1 = node2;                      // because of that we hold next node = node2
+            }
+            // update output channels - values that has been just writed by executing tasks
+            channels.UpdateOutputs();
+        }
+        /// <summary>
+        /// Update all executing tasks
+        /// </summary>
+        /// <param name="time">Time at moment of calling this method</param>
+        public void Update(TimeSpan time)
+        {
+            // update input channels - values that are going to be read by executing tasks
+            channels.UpdateInputs();
+            // update all executing tasks
+            LinkedListNode<Task> node1 = executing.First, node2;
             while (node1 != null)
             {
                 node2 = node1.Next;
@@ -130,9 +152,9 @@ namespace MTS.TesterModule
 
         #region Constructors
 
-        public TaskScheduler()
+        public TaskScheduler(Channels channels)
         {
-
+            this.channels = channels;
         }
 
         #endregion

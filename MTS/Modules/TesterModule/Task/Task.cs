@@ -69,18 +69,26 @@ namespace MTS.TesterModule
                 TaskExecuted(this, new TaskExecutedEventArgs(result, EndTime));
         }
 
+        #region Task Execution
+
         /// <summary>
         /// Override this method to implement task execution, but also call this implementation. This method
         /// is called only once and initialize task execution.
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        public virtual void BeginExecute(TimeSpan time)
+        public virtual void Initialize(TimeSpan time)
         {
-            if (IsRunning) return;  // running taks shall not be started again
-
             BeginTime = time;
             state = TaskState.Running;
-            Output.WriteLine(string.Format("Task \"{0}\" started.", Name));
+            Output.WriteLine("{0}: started. Time: {1}", Name, time);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="time">Current time - time of system clock when this method is called</param>
+        public virtual void UpdateOutputs(TimeSpan time)
+        {
+            EndTime = time;
         }
         /// <summary>
         /// Override this method to implement task execution, but also call this implementation. This method
@@ -89,9 +97,7 @@ namespace MTS.TesterModule
         /// <param name="time">Current time - time of system clock when this method is called</param>
         public virtual void Update(TimeSpan time)
         {
-            if (!IsRunning) return;     // do not update if task is not running
-
-            EndTime = time;
+            EndTime = time;     // last time updated
         }
         /// <summary>
         /// Overrirde this method to implement task execution, but also call this implementation. This method
@@ -99,13 +105,15 @@ namespace MTS.TesterModule
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
         /// <param name="state">State of task at the end of execution</param>
-        public virtual void EndExecute(TimeSpan time, TaskState state)
+        public virtual void Finish(TimeSpan time, TaskState state)
         {
             EndTime = time;
             this.state = state;
             RaiseTaskExecuted();
-            Output.WriteLine("Task \"{0}\" finished with status \"{1}\". Total time: {2}", Name, state, Duration);
+            Output.WriteLine("{0}: finished with status \"{1}\". Time: {2} Duration: {3}", Name, state, time, Duration);
         }
+
+        #endregion
 
         #region Constructors
 
