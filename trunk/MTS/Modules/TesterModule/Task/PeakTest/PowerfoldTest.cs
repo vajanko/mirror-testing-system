@@ -7,81 +7,95 @@ namespace MTS.TesterModule
 {
     sealed class PowerfoldTest : PeakTest
     {
-        #region Properties
+        #region Private fields
 
         /// <summary>
         /// Maximal duration allowed for this test
         /// </summary>
         private int maxTestingTime;
-        /// <summary>
-        /// True if powerfold is folded
-        /// </summary>
-        private bool isFolded = false;
-
-        private IDigitalOutput FoldChannel;
-        private IDigitalOutput UnfoldChannel;
-
-        private IDigitalInput FoldedSensor;
-        private IDigitalInput UnfoldedSensor1;
-        private IDigitalInput UnfoldedSensor2;
 
         #endregion
 
         public override void Initialize(TimeSpan time)
         {
-            //FoldChannel.Value = true;   // fold powerfold
-            isFolded = false;
-
+            currentState = State.Initializing;
             base.Initialize(time);
-            Output.WriteLine("{0}: Folding ... Time: {1}", Name, time);
-        }
-        public override void UpdateOutputs(TimeSpan time)
-        {
-            if (!isFolded && FoldedSensor.Value)
-            {   // powerfold was not folded, but right now get folded
-                isFolded = true;
-                FoldChannel.Value = false;  // now lets go back - unfold ???
-                UnfoldChannel.Value = true;
-                Output.WriteLine("{0}: Unfolding ... Time: {1}", Name, time);
-            }
-            else if (isFolded && UnfoldedSensor1.Value && UnfoldedSensor2.Value)
-            {   // powerfold was folded, but right now get unfolded
-                Output.WriteLine("{0}: Unfolded! Time: {1}", Name, time);
-                Finish(time, TaskState.Completed);
-            }
-            else
-                base.UpdateOutputs(time);
         }
         public override void Update(TimeSpan time)
         {
-            // In this case, if max time elapses, task has to be aborted. But also folding must be finished
-            // because mirror is not in right position
+            // In this case, if max time elapsed, task has to be aborted. If folding is running too long
+            // it means that there is some problem with the acutator - Test will be aborted and folding
+            // will not be finished
 
             // measure time - end if enought time has elapsed
             if (Duration.TotalMilliseconds > maxTestingTime)
-            {   // time of this test has elapsed - finish it
-                Output.WriteLine("{0}: running too long. Aborting... Time: {1}", Name, time);
-                Finish(time, TaskState.Aborted);        // test has been aborted by itself
-                return;     // no other measures shall be done
+                currentState = State.Aborting;
+
+            switch (currentState)
+            {
+                case State.Initializing:
+                    Output.WriteLine("{0}: Unfolding ... Time: {1}", Name, time);
+                    channels.UnfoldPowerfold.Value = true;          // start to unfold
+                    currentState = State.Unfolding;                 // switch to next state
+                    break;
+                case State.Unfolding:
+                    // check current while unfolding
+                    measureCurrent(time);
+                    if ((channels.IsOldMirror.Value && channels.IsOldPowerfoldDown.Value) ||
+                        (!channels.IsOldMirror.Value && channels.IsPowerfoldDown.Value))
+                    {
+                        channels.UnfoldPowerfold.Value = false;     // stop unfolding
+                        channels.FoldPowerfold.Value = true;        // start to fold
+                        currentState = State.Folding;               // switch to next state
+                    }
+                    break;
+                case State.Folding:
+                    // check current while folding
+                    measureCurrent(time);
+                    if ((channels.IsOldMirror.Value && channels.IsOldPowerfoldUp.Value) ||
+                        (!channels.IsOldMirror.Value && channels.IsPowerfoldUp.Value))
+                    {
+                        channels.FoldPowerfold.Value = false;       // stop folding
+                        currentState = State.Finalizing;            // switch to next state
+                    }
+                    break;
+                case State.Finalizing:
+                    // for sure - switch off actuator
+                    channels.FoldPowerfold.Value = false;
+                    channels.UnfoldPowerfold.Value = false;
+                    Finish(time, getTaskState());                   // raise events, save state
+                    currentState = State.None;                      // for sure - this test never get updated
+                    break;
+                case State.Aborting:
+                    channels.FoldPowerfold.Value = false;
+                    channels.UnfoldPowerfold.Value = false;
+                    Finish(time, TaskState.Aborted);
+                    currentState = State.None;
+                    break;
             }
-            
-            base.Update(time);  // measure current
         }
+
+        #region State
+
+        private State currentState = State.None;
+        private enum State
+        {
+            Initializing,
+            Unfolding,
+            Folding,
+            Aborting,
+            Finalizing,
+            None
+        }
+
+        #endregion
 
         #region Constructors
 
         public PowerfoldTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
-            CurrentChannel = channels.PowerFoldCurrent;     // reading current values
-            FoldChannel = channels.Fold;        // control folding
-            UnfoldChannel = channels.Unfold;    // control unfolding
-
-            // checking foled/unfolded state
-            FoldedSensor = channels.PowerFoldFoldedPositionSensor;
-            UnfoldedSensor1 = channels.PowerFoldUnfoldedPositionSensor1;
-            UnfoldedSensor2 = channels.PowerFoldUnfoldedPositionSensor2;
-
+            CurrentChannel = channels.PowerfoldCurrent;     // reading current values
 
             ParamCollection param = testParam.Parameters;
             IntParamValue iValue;

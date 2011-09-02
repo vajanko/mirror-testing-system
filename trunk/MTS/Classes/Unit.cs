@@ -48,6 +48,7 @@ namespace MTS
                     case "A": return Units.Ampheres;
                     case "s": return Units.Seconds;
                     case "ms": return Units.Miliseconds;
+                    case "V": return Units.Volts;
                     default: return Units.None;
                 }
             }

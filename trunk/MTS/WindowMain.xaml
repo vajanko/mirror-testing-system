@@ -7,7 +7,7 @@
         xmlns:ctrl="clr-namespace:MTS.Controls"
         xmlns:ed="clr-namespace:MTS.EditorModule"
         xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
-        Title="MTS" Height="700" Width="900"
+        Title="MTS" Height="800" Width="800" Left="0" Top="0"
         >
 
     <Window.CommandBindings>
@@ -100,7 +100,7 @@
             <ad:ResizingPanel Orientation="Vertical">
                 <ad:ResizingPanel Orientation="Horizontal">
                     <!-- Left panel - Directory -->
-                    <ad:DockablePane ad:ResizingPanel.ResizeWidth="200">
+                    <ad:DockablePane ad:ResizingPanel.ResizeWidth="10">
                         <ad:DockableContent Title="Directory"/>
                         
                     </ad:DockablePane>
@@ -110,7 +110,7 @@
                     </ad:DocumentPane>
                 </ad:ResizingPanel>
                 <!-- Bottom panel - Output -->
-                <ad:DockablePane ad:ResizingPanel.ResizeHeight="120">
+                <ad:DockablePane ad:ResizingPanel.ResizeHeight="200">
                     <!-- Output console -->
                     <ad:DockableContent Title="Output">
                         <DockPanel x:Name="outputPanel">

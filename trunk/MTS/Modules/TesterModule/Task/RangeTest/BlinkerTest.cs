@@ -8,7 +8,7 @@ namespace MTS.TesterModule
 {
     sealed class BlinkerTest : RangeCurrentTest
     {
-        #region Fields
+        #region Private fields
 
         /// <summary>
         /// Time of blinker switched on. This is a testing parameter, not a measured value
@@ -35,51 +35,68 @@ namespace MTS.TesterModule
 
         public override void Initialize(TimeSpan time)
         {
-            blinkerOn = time;   // test is starting with blinker on
-            blinksCount--;      // first blink has started just now
-            base.Initialize(time);    // this will switch on blinker
-        }
-        public override void UpdateOutputs(TimeSpan time)
-        {
-            if (ControlChannel.Value)
-            {   // blinker is on
-                if ((time - blinkerOn).TotalMilliseconds > lightingTime)
-                {   // its time has elapsed
-                    if (blinksCount == 0)   // no other blinks should be executed
-                        Finish(time, TaskState.Completed);  // then finish this task
-                    else
-                    {   // more blinks should be executed
-                        ControlChannel.Value = false;    // switch off light
-                        blinksCount--;
-                        blinkerOff = time;
-                    }
-                }
-            }
-            else
-            {   // blinker is off
-                if ((time - blinkerOff).TotalMilliseconds > breakTime)
-                {   // its time has elapsed
-                    ControlChannel.Value = true;      // switch on light
-                    blinkerOn = time;
-                }
-            }
-            base.UpdateOutputs(time);
+            currentState = State.Initializing;
+            base.Initialize(time);
         }
         public override void Update(TimeSpan time)
         {
-            // only measure current when blinker is on
-            if (ControlChannel.Value)
-                base.Update(time);
+            switch (currentState)
+            {
+                case State.Initializing:
+                    maxMeasuredCurrent = double.MinValue;
+                    minMeasuredCurrent = double.MaxValue;
+                    channels.DirectionLightOn.Value = true;                 // switch on direction light
+                    blinkerOn = time;                                       // save time of light on
+                    currentState = State.BlinkerOn;                         // go to next state
+                    break;
+                case State.BlinkerOn:   // measure current
+                    measureCurrent(time, channels.DirectionLightCurrent);   // measure current
+                    if ((time - blinkerOn).TotalMilliseconds > lightingTime)// if lighting time elapsed
+                    {
+                        channels.DirectionLightOn.Value = false;            // switch of light
+                        blinkerOff = time;                                  // save time of light off
+                        blinksCount--;                                      // decrease one lighting period
+                        if (blinksCount <= 0)                               // if no more periods should be executed
+                            currentState = State.Finalizing;                // finish: go to next state
+                        else
+                            currentState = State.BlinkerOff;                // switch off: go to next state
+                    }
+                    break;
+                case State.BlinkerOff:  // do not measure current
+                    if ((time - blinkerOff).TotalMilliseconds > breakTime)  // if break time elapsed
+                    {
+                        channels.DirectionLightOn.Value = true;             // switch on light
+                        blinkerOn = time;                                   // save time of lihgt on
+                        currentState = State.BlinkerOn;                     // go to next state
+                    }
+                    break;
+                case State.Finalizing:
+                    Finish(time, getTaskState());                           // finish test with right result
+                    currentState = State.None;                              // do not update this task any more
+                    break;
+            }
         }
+
+        #region State
+
+        private State currentState = State.None;
+        private enum State
+        {
+            Initializing,
+            BlinkerOn,
+            BlinkerOff,
+            Finalizing,
+            Aborting,
+            None
+        }
+
+        #endregion
 
         #region Constructors
 
         public BlinkerTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
-            ControlChannel = channels.DirectionLightOn;
-            CurrentChannel = channels.DirectionLightCurrent;
-
             ParamCollection param = testParam.Parameters;
             IntParamValue iValue;
             // from test parameters get LIGHTENING_TIME item

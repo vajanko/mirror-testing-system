@@ -53,9 +53,6 @@ namespace MTS.AdminModule
         /// <param name="filename">Path to file where configuration of channels is stored</param>
         public void LoadConfiguration(string filename)
         {
-            //if (!client.IsConnected)    // we need to get variable handles - for this connection is necessary
-            //    Connect();
-
             // When loading channels: all of them are added to inputs and they are added to this collection
             // Some of these channels are also outputs - to write them when channels are update, add them to
             // outputs collection
@@ -213,6 +210,16 @@ namespace MTS.AdminModule
             get { return (client != null) ? client.IsConnected : false; }
         }
 
+        public void SwitchOffDigitalOutputs()
+        {
+            foreach (ECChannel ch in outputs)
+            {
+                if (ch is IDigitalOutput)
+                    (ch as IDigitalOutput).Value = false;
+            }
+            UpdateOutputs();
+        }
+
         #endregion
 
         #region Channel manipulation
@@ -243,7 +250,7 @@ namespace MTS.AdminModule
             // seek to position behid info data (IndexGroup, IndexOffset and Size), bytes before never change
             oWriter.Seek(oWriterOffset, SeekOrigin.Begin);
             // write channels values
-            for (int i = 0; i < outputs.Count; i++)     
+            for (int i = 0; i < outputs.Count; i++)
                 oWriter.Write(outputs[i].ValueBytes);
 
             // write values from stream to hardware

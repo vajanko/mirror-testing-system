@@ -25,7 +25,7 @@ namespace MTS.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Dummy")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Moxa")]
         public string HW_Type {
             get {
                 return ((string)(this["HW_Type"]));
@@ -43,7 +43,7 @@ namespace MTS.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.2.3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.127.254")]
         public string IpAddress {
             get {
                 return ((string)(this["IpAddress"]));
@@ -61,7 +61,17 @@ namespace MTS.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:/task1.csv")]
+        [global::System.Configuration.DefaultSettingValueAttribute("./logs.txt")]
+        public string LogFile {
+            get {
+                return ((string)(this["LogFile"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Documents and Settings\\kovaco\\My Documents\\Visual Studio 2008\\Projects\\MTS Pro" +
+            "ject\\MTS\\MTS\\bin\\Debug\\moxaConfig.csv")]
         public string ChannelsConfigFile {
             get {
                 return ((string)(this["ChannelsConfigFile"]));

@@ -43,6 +43,8 @@ namespace MTS.EditorModule
         public const int THERMOMETER = 0x10;
         public const int MIRROR_GLASS = 0x11;
         public const int BOUDEN = 0x12;
+        public const int PULLOFF = 0x13;
+        public const int RUBBER = 0x14;
 
         #endregion
 
@@ -157,6 +159,18 @@ namespace MTS.EditorModule
             add(param, ParamDictionary.MAX_CURRENT);
             add(param, ParamDictionary.TESTING_TIME);
             this.Add(SPIRAL, test);
+
+            // initialize pull-off test
+            test = new TestMetadata { Name = "Pull-off", GroupName = "Other" };
+            param = test.Parameters;
+            add(param, ParamDictionary.TESTING_TIME);
+            this.Add(PULLOFF, test);
+
+            // initialize wire test
+            test = new TestMetadata { Name = "Rubber", GroupName = "Other" };
+            param = test.Parameters;
+            add(param, ParamDictionary.TEST_PRESENCE);
+            this.Add(RUBBER, test);
         }
     }
     /// <summary>
@@ -210,7 +224,7 @@ namespace MTS.EditorModule
                 Unit = Units.Miliseconds });
             this.Add(MAX_TESTING_TIME, new IntParamMetadata { Name = "Max testing time", MinValue = 0, 
                 MaxValue = 20000, Unit = Units.Miliseconds });
-            this.Add(TEST_PRESENCE, new BoolParamMetadata { Name = "Presence", Text = "Check" });
+            this.Add(TEST_PRESENCE, new BoolParamMetadata { Name = "Is present" });
             this.Add(SUPPLIER_NAME, new StringParamMetadata { Name = "Supplier name" });
             this.Add(SUPPLIER_CODE, new StringParamMetadata { Name = "Supplier code" });
             this.Add(PART_NUMBER, new StringParamMetadata { Name = "Part number" });

@@ -27,6 +27,32 @@ namespace MTS.TesterModule
 
         #endregion
 
+        protected TaskState getTaskState()
+        {
+            if (maxMeasuredOverloadTime > MaxOverloadTime)
+                return TaskState.Failed;
+            else return TaskState.Passed;
+        }
+        protected void measureCurrent(TimeSpan time)
+        {
+            // value of current measured on current channel
+            double measuredCurrent = CurrentChannel.RealValue;
+            if (!isOverloaded && measuredCurrent > MaxCurrent)
+            {   // current was not overloaded and started to be right now
+                isOverloaded = true;
+                overloaded = time;      // start to measure overload time
+            }
+            else if (isOverloaded && measuredCurrent < MaxCurrent)
+            {   // current was overloaded and stopted to be right now
+                isOverloaded = false;
+                // time of current being overloaded
+                int timeOverloaded = (int)(time - overloaded).TotalMilliseconds;
+
+                if (timeOverloaded > maxMeasuredOverloadTime)   // save maximum value
+                    maxMeasuredOverloadTime = timeOverloaded;
+            }
+        }
+
         public override void Update(TimeSpan time)
         {
             // value of current measured on current channel

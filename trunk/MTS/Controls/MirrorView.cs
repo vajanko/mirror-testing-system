@@ -22,10 +22,16 @@ namespace MTS.Controls
     {
         #region Dependency Properties
 
+        static private void rotationChanged(DependencyObject source, DependencyPropertyChangedEventArgs args) 
+        {   // called when RotationAxis or RotationAngle changed
+
+        }
+
         #region RotationAxis Property
 
         public static readonly DependencyProperty RotationAxisProperty =
-            DependencyProperty.Register("RotationAxis", typeof(Vector3D), typeof(MirrorView));
+            DependencyProperty.Register("RotationAxis", typeof(Vector3D), typeof(MirrorView),
+            new PropertyMetadata(new PropertyChangedCallback(rotationChanged)));
 
         /// <summary>
         /// (Get/Set DP) Axis arond which is the mirror rotated
@@ -41,7 +47,8 @@ namespace MTS.Controls
         #region RotationAngle Property
 
         public static readonly DependencyProperty RotationAngleProperty =
-            DependencyProperty.Register("RotationAngle", typeof(double), typeof(MirrorView));
+            DependencyProperty.Register("RotationAngle", typeof(double), typeof(MirrorView),
+            new PropertyMetadata(new PropertyChangedCallback(rotationChanged)));
 
         /// <summary>
         /// (Get/Set DP) Angle of mirror rotation
@@ -50,6 +57,38 @@ namespace MTS.Controls
         {
             get { return (double)GetValue(RotationAngleProperty); }
             set { SetValue(RotationAngleProperty, value); }
+        }
+
+        #endregion
+
+        #region HorizontalAngle Property
+
+        public static readonly DependencyProperty HorizontalAngleProperty =
+            DependencyProperty.Register("HorizontalAngle", typeof(double), typeof(MirrorView));
+
+        /// <summary>
+        /// (Get/Set DP) Horizontal angle of mirror rotation
+        /// </summary>
+        public double HorizontalAngle
+        {
+            get { return (double)GetValue(HorizontalAngleProperty); }
+            set { SetValue(HorizontalAngleProperty, value); }
+        }
+
+        #endregion
+
+        #region VerticalAngle Property
+
+        public static readonly DependencyProperty VerticalAngleProperty =
+            DependencyProperty.Register("VerticalAngle", typeof(double), typeof(MirrorView));
+
+        /// <summary>
+        /// (Get/Set DP) Vertical angle of mirror rotation
+        /// </summary>
+        public double VerticalAngle
+        {
+            get { return (double)GetValue(VerticalAngleProperty); }
+            set { SetValue(VerticalAngleProperty, value); }
         }
 
         #endregion

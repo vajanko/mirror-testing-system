@@ -133,8 +133,6 @@ namespace MTS.Controls
 
         #endregion
 
-
-
         #region Unit Property
 
         static public readonly DependencyProperty UnitProperty =
@@ -223,6 +221,14 @@ namespace MTS.Controls
         /// (Get/Set) Maximum number of items stored in this queue
         /// </summary>
         public int Capacity { get; set; }
+        /// <summary>
+        /// (Get) Minimal value present in the queue
+        /// </summary>
+        public double MinValue { get; private set; }
+        /// <summary>
+        /// (Get) Maximal value presnet in the queue
+        /// </summary>
+        public double MaxValue { get; private set; }
 
         /// <summary>
         /// Add new value to collection (and remove too old values). When there are more values than 
@@ -235,6 +241,8 @@ namespace MTS.Controls
             Enqueue(value);
             while (Count > Capacity)
                 Dequeue();
+            MinValue = this.Min();
+            MaxValue = this.Max();
         }
 
         /// <summary>

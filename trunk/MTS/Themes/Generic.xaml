@@ -57,13 +57,20 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
                                 </Grid.RowDefinitions>
+                                <Label Content="Horizontal angle:" Grid.Column="0" Grid.Row="0"/>
+                                <Label Content="{TemplateBinding HorizontalAngle}" Grid.Column="1" Grid.Row="0"/>
                                 
-                                <Label Content="Angle:" HorizontalAlignment="Center"/>
-                                <Label Content="{TemplateBinding RotationAngle}" ContentStringFormat="F2" Grid.Column="1"/>
+                                <Label Content="Vertical angle:" Grid.Column="0" Grid.Row="1"/>
+                                <Label Content="{TemplateBinding VerticalAngle}" Grid.Column="1" Grid.Row="1"/>
+                                
+                                <Label Content="Angle:" Grid.Row="2"/>
+                                <Label Content="{TemplateBinding RotationAngle}" ContentStringFormat="F2" Grid.Column="1" Grid.Row="2"/>
 
-                                <Label Content="Axis" Grid.Row="1"/>
-                                <Label Content="{TemplateBinding RotationAxis}" Grid.Row="1" Grid.Column="1"/>
+                                <Label Content="Axis" Grid.Row="3"/>
+                                <Label Content="{TemplateBinding RotationAxis}" Grid.Row="3" Grid.Column="1" ContentStringFormat="F3"/>
                             </Grid>
                             <Viewport3D Margin="10">
                                 <Viewport3D.Camera>

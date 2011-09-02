@@ -58,6 +58,8 @@ namespace MTS.AdminModule
         /// </summary>
         bool IsConnected { get; }
 
+        void SwitchOffDigitalOutputs();
+
         //#region Channels
 
         //#region Digital inputs

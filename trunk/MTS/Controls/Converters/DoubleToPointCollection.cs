@@ -24,10 +24,16 @@ namespace MTS.Controls
 
             var points = new PointCollection();
 
+            // let hight to be:
+            double hight = queue.Zero;
+            double range = queue.MaxValue - queue.MinValue;
+            if (range == 0) range = hight;
+            double mult = hight / range;
+
             // skip values that are not added yet
             double x = (queue.Capacity - queue.Count - 1) * queue.Step;
             foreach (double val in queue)
-                points.Add(new Point(x += queue.Step, (queue.Zero - val)));
+                points.Add(new Point(x += queue.Step, (queue.Zero - val * mult)));
 
             return points;
         }
