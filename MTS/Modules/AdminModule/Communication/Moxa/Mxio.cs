@@ -89,6 +89,12 @@ namespace MTS.AdminModule
         public static extern int AI_ReadRaw(Int32 connection, byte slot, byte channel, ref UInt16 value);
 
 
+        [DllImport("MXIO_NET.dll")]
+        public static extern int AO_ReadRaws(Int32 connection, byte slot, byte startChannel, byte count, UInt16[] value);
+
+        [DllImport("MXIO_NET.dll")]
+        public static extern int AO_Reads(Int32 connection, byte slot, byte startChannel, byte count, double[] value);
+
 
         /*************************************************/
         /*                                               */

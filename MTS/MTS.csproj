@@ -113,12 +113,19 @@
   <ItemGroup>
     <Compile Include="Classes\Unit.cs" />
     <Compile Include="Classes\Utils.cs" />
+    <Compile Include="Controls\Converters\BoolNegationConverter.cs" />
     <Compile Include="Controls\Converters\DoubleAmplifierConverter.cs" />
     <Compile Include="Controls\Converters\DoubleToPointCollection.cs" />
     <Compile Include="Controls\FlowControl.cs" />
     <Compile Include="Controls\MirrorView.cs" />
     <Compile Include="Controls\TestControl1.xaml.cs">
       <DependentUpon>TestControl1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HWSettings.cs" />
+    <Compile Include="HWSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>HWSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="Modules\AdminModule\Communication\Base\Channel.cs" />
     <Compile Include="Modules\AdminModule\Communication\Moxa\ModbusModule.cs" />
@@ -144,7 +151,7 @@
     <Compile Include="Modules\EditorModule\TestFile.xaml.cs">
       <DependentUpon>TestFile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\TesterModule\Task\PresenceTest\HeatingSignPresence.cs" />
+    <Compile Include="Modules\TesterModule\Shift.cs" />
     <Compile Include="Modules\TesterModule\Task\PresenceTest\PresenceTest.cs" />
     <Compile Include="Modules\TesterModule\Task\RangeTest\BlinkerTest.cs" />
     <Compile Include="Modules\TesterModule\Task\PeakTest\PeakTest.cs" />
@@ -152,9 +159,15 @@
     <Compile Include="Modules\TesterModule\Task\RangeTest\RangeTest.cs" />
     <Compile Include="Modules\TesterModule\Task\Scheduler.cs" />
     <Compile Include="Modules\TesterModule\Task\RangeTest\SpiralTest.cs" />
-    <Compile Include="Modules\TesterModule\Task\SensorTest.cs" />
+    <Compile Include="Modules\TesterModule\Task\PulloffTest.cs" />
     <Compile Include="Modules\TesterModule\Task\Task.cs" />
+    <Compile Include="Modules\TesterModule\Task\Tasks\Calibrate.cs" />
     <Compile Include="Modules\TesterModule\Task\Tasks\CenterTask.cs" />
+    <Compile Include="Modules\TesterModule\Task\Tasks\SetMultipleValues.cs" />
+    <Compile Include="Modules\TesterModule\Task\Tasks\SetValue.cs" />
+    <Compile Include="Modules\TesterModule\Task\Tasks\Wait.cs" />
+    <Compile Include="Modules\TesterModule\Task\Tasks\WaitForValue.cs" />
+    <Compile Include="Modules\TesterModule\Task\Tasks\ExecuteIf.cs" />
     <Compile Include="Modules\TesterModule\Task\TestTask.cs" />
     <Compile Include="Modules\TesterModule\Task\PeakTest\TravelTest.cs" />
     <Compile Include="Modules\TesterModule\TestWindow.xaml.cs">
@@ -175,6 +188,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Windows\TestWindow1.xaml.cs">
       <DependentUpon>TestWindow1.xaml</DependentUpon>
     </Compile>
@@ -184,6 +198,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="HWSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>HWSettings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

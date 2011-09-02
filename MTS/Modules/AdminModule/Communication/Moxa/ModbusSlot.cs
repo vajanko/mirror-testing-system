@@ -33,7 +33,7 @@ namespace MTS.AdminModule
         /// Read values of all channels
         /// <param name="hConnnection">Handle of connection from which to read</param>
         /// </summary>
-        public abstract void Read(int hConnnection);
+        public abstract void Read(int hConnection);
 
         /// <summary>
         /// Insert a channel to this slot
@@ -41,7 +41,7 @@ namespace MTS.AdminModule
         /// <param name="channel">Modbus channel to insert</param>
         public void AddChannel(ModbusChannel channel)
         {
-            Channels[channel.Channel] = channel;
+            Channels[channel.Channel - StartChannel] = channel;
         }
         /// <summary>
         /// Get an instance of paricular channel identified by its name. Return null if ther is no such a channel
@@ -124,15 +124,15 @@ namespace MTS.AdminModule
         /// Read values of all channels
         /// <param name="hConnnection">Handle of connection from which to read</param>
         /// </summary>
-        public override void Read(int hConnnection)
+        public override void Read(int hConnection)
         {
             ModbusDigitalInput channel;
 
             // read value from channels to integer vector
-            Mxio.DI_Reads(hConnnection, Slot, StartChannel, ChannelsCount, ref inputs);
+            Mxio.DI_Reads(hConnection, Slot, StartChannel, ChannelsCount, ref inputs);
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)
-            {
+            {   // some of channels may be unused
                 channel = Channels[i] as ModbusDigitalInput;
                 if (channel != null)                        // get logical values at particular position in
                     channel.SetValue(getValue(inputs, i));  // readed input values
@@ -194,15 +194,15 @@ namespace MTS.AdminModule
         /// Read values of all channels
         /// <param name="hConnnection">Handle of connection from which to read</param>
         /// </summary>
-        public override void Read(int hConnnection)
+        public override void Read(int hConnection)
         {
             ModbusDigitalOutput channel;
 
             // read value from hardware channels to integer vector
-            Mxio.DO_Reads(hConnnection, Slot, StartChannel, ChannelsCount, ref outputs);
+            Mxio.DO_Reads(hConnection, Slot, StartChannel, ChannelsCount, ref outputs);
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)         // get logical values at particular position in
-            {
+            {   // some of channels may be unused
                 channel = Channels[i] as ModbusDigitalOutput;
                 if (channel != null)
                     channel.SetValue(getValue(outputs, i)); // readed input values
@@ -218,7 +218,7 @@ namespace MTS.AdminModule
 
             // copy value from channels to outputs vector
             for (int i = 0; i < ChannelsCount; i++)
-            {
+            {   // some of channels may be unused
                 channel = Channels[i] as ModbusDigitalOutput;
                 if (channel != null)                        // set zero/one values at particular position in
                     setValue(ref outputs, i, channel.Value);// output vector
@@ -252,19 +252,30 @@ namespace MTS.AdminModule
         /// StartChannel and so on ...
         /// </summary>
         ushort[] inputs;
+        double[] dInputs;
 
-        public override void Read(int hConnnection)
+        /// <summary>
+        /// Read values of all channels
+        /// <param name="hConnnection">Handle of connection from which to read</param>
+        /// </summary>
+        public override void Read(int hConnection)
         {
             ModbusAnalogInput channel;
-
             // read values from hardware channels to integer array
-            Mxio.AI_ReadRaws(hConnnection, Slot, StartChannel, ChannelsCount, inputs);
+
+            // maximum 4 values can read
+            // !!! NOT VERY EFFECTIVE !!!
+
+            //Mxio.AI_ReadRaws(hConnection, Slot, StartChannel, 4, inputs);            
+            for (int i = 0; i < ChannelsCount; i++)
+                Mxio.AI_ReadRaw(hConnection, Slot, (byte)(i + StartChannel), ref inputs[i]);
+
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)
-            {
+            {   // some of channels may be unused
                 channel = Channels[i] as ModbusAnalogInput;
                 if (channel != null)
-                    channel.SetValue(inputs[i]);
+                    channel.SetValue(inputs[i]);    // for unused channel value of inputs[i] is unspecified
             }
         }
 
@@ -282,6 +293,7 @@ namespace MTS.AdminModule
             // allocate as much memory as necessary
             Channels = new ModbusAnalogInput[channelsCount];
             inputs = new ushort[channelsCount];
+            dInputs = new double[channelsCount];
         }
 
         #endregion

@@ -5,37 +5,42 @@ using MTS.EditorModule;
 
 namespace MTS.TesterModule
 {
-    public abstract class PresenceTest : TestTask
+    public class PresenceTest : TestTask
     {
-        protected bool shouldBePresent;
         protected IDigitalInput PresenceChannel;
-
-        protected bool isPresent;
+        private bool shouldBePresent;
 
         public override void Update(TimeSpan time)
         {
-            isPresent = PresenceChannel.Value;
-            Finish(time, TaskState.Completed);
+            TaskState state = TaskState.Passed;
+            if (PresenceChannel.Value != shouldBePresent)
+                state = TaskState.Failed;
+
+            if (PresenceChannel.Value)
+                Output.WriteLine("\"{0}\" test result: Is present", Name);
+            else Output.WriteLine("\"{0}\" test result: Is not present", Name);
+
+            Finish(time, state);
 
             base.Update(time);
-        }
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            string msg;
-            if (isPresent) msg = "Is present ";
-            else msg = "Is not present ";
-            if (shouldBePresent) msg += "and should be installed";
-            else msg += "and should not be installed";
-            Output.WriteLine("{0}: {1}, Time: {2}, Duration: {3}", Name, msg, time, Duration);
-            
-            base.Finish(time, state);
         }
 
         #region Constructors
 
-        public PresenceTest(Channels channels, TestValue testParam)
+        public PresenceTest(Channels channels, TestValue testParam, IDigitalInput channel)
             : base(channels, testParam)
-        {            
+        {
+            PresenceChannel = channel;
+
+            ParamCollection param = testParam.Parameters;
+            BoolParamValue bValue;
+            // from test parameters get TestingTime item
+            if (param.ContainsKey(ParamDictionary.TEST_PRESENCE))
+            {  // it must be bool type value
+                bValue = param[ParamDictionary.TEST_PRESENCE] as BoolParamValue;
+                if (bValue != null)     // otherwise param is of other type then bool
+                    shouldBePresent = bValue.Value;
+            }
         }
 
         #endregion

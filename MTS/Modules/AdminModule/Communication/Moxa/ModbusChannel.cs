@@ -176,10 +176,6 @@ namespace MTS.AdminModule
         public ModbusAnalogInput()
         {
             RawToReal = ConvertLinear;  // initialize with default (linear) converter
-            RawLow = 0;
-            RawHigh = 65536;
-            RealLow = 0;
-            RealHigh = 10;
         }
     }
 

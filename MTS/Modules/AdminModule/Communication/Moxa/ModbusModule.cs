@@ -21,6 +21,7 @@ namespace MTS.AdminModule
 
         private readonly char[] whiteSpaces = { ' ', '\t', '\r' };
         private readonly char[] csvSep = { ';' };
+        private const int itemsPerLine = 5; // number of items per one line
 
         private const string inputString = "Input";
         private const string outputString = "Output";
@@ -29,8 +30,7 @@ namespace MTS.AdminModule
         {
             string str;         // temporary value for string while parsing
             int value;          // temporary value fot integer while parsing
-            string[] items;     // parsed items on one line
-            int itemsPerLine;   // number of items per one line
+            string[] items;     // parsed items on one line 
 
             // reference to just created channel
             ModbusChannel channel;
@@ -43,8 +43,9 @@ namespace MTS.AdminModule
             reader = new StreamReader(filename);
 
             // skip first line (.csv file format) and count number of items on first line
-            itemsPerLine = reader.ReadLine().Split(csvSep, StringSplitOptions.RemoveEmptyEntries).Length;
-            // [Channel Name];[Slot Number];[Channel Number];[I/O type];[I/O Data Length(bits)]
+            //itemsPerLine = 
+            reader.ReadLine().Split(csvSep, StringSplitOptions.RemoveEmptyEntries);
+            // [Channel Name];[Slot Number];[Channel Number];[I/O type];[I/O Data Length(bits)];[Comment]
 
             while (!reader.EndOfStream)
             {
@@ -100,10 +101,14 @@ namespace MTS.AdminModule
             {
                 byte slot = channels[0].Slot;   // this item must exist, otherwise channels.Count == 0
                 ModbusSlot mSlot = null;
-
-                // get number of channel in the same slot
-                int channelsCount = channels.Count(c => c.Slot == slot);
+                
                 int startChannel = (from c in channels where c.Slot == slot select c.Channel).Min();
+                // get maximum number of channel in the same slot
+                int channelsCount = (from c in channels where c.Slot == slot select c.Channel).Max();
+                // this is the number of reserved channels - there may be some free slots between
+                // startChannel and channel with max number, but we must leave them free
+                // add 1 because the numbers of channel starts with 0
+                channelsCount = channelsCount - startChannel + 1;
 
                 Type type = channels[0].GetType();
                 if (type == typeof(ModbusDigitalInput))
@@ -168,9 +173,18 @@ namespace MTS.AdminModule
         /// </summary>
         public void UpdateInputs()
         {
-            // read values from all slots
-            foreach (ModbusSlot slot in inputs.Values)
-                slot.Read(hConnection);
+            try
+            {
+                // read values from all slots
+                foreach (ModbusSlot slot in inputs.Values)
+                    if (slot != null)
+                        slot.Read(hConnection);
+            }
+            catch (Exception ex)
+            {
+                Output.Log(ex.Message);
+                throw ex;
+            }
         }
         /// <summary>
         /// Write all outputs channels
@@ -179,7 +193,8 @@ namespace MTS.AdminModule
         {
             // write values to all output slots
             foreach (ModbusOutputSlot slot in outputs.Values)
-                slot.Write(hConnection);
+                if (slot != null)
+                    slot.Write(hConnection);
         }
 
         public void Disconnect()
@@ -211,6 +226,28 @@ namespace MTS.AdminModule
         {
             get { return isConnected; }
             private set { isConnected = value; }
+        }
+
+        public void SwitchOffDigitalOutputs()
+        {
+            if (!IsConnected) return;
+
+            ModbusDOSlot s;
+            ModbusDigitalOutput ch;
+            foreach (ModbusOutputSlot slot in outputs.Values)
+            {
+                s = slot as ModbusDOSlot;
+                if (s != null)
+                {
+                    for (int i = 0; i < s.ChannelsCount; i++)
+                    {
+                        ch = s.Channels[i] as ModbusDigitalOutput;
+                        if (ch != null)
+                            ch.Value = false;
+                    }
+                    s.Write(hConnection);
+                }
+            }
         }
 
         #endregion

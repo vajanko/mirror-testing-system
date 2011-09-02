@@ -21,6 +21,7 @@
                 <Label x:Name="rawValue" Grid.Column="1"/>
                 <Label Content="Real value:" Grid.Row="1"/>
                 <Label x:Name="realValue" Grid.Row="1" Grid.Column="1"/>
+                
             </Grid>            
         </StackPanel>
         <ctrl:FlowControl x:Name="graph" Background="Black" BorderBrush="Green" TextBrush="Green"

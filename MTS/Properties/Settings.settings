@@ -3,19 +3,22 @@
   <Profiles />
   <Settings>
     <Setting Name="HW_Type" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Dummy</Value>
+      <Value Profile="(Default)">Moxa</Value>
     </Setting>
     <Setting Name="TaskName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Task1</Value>
     </Setting>
     <Setting Name="IpAddress" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">192.168.2.3</Value>
+      <Value Profile="(Default)">192.168.127.254</Value>
     </Setting>
     <Setting Name="Port" Type="System.UInt16" Scope="Application">
       <Value Profile="(Default)">502</Value>
     </Setting>
+    <Setting Name="LogFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">./logs.txt</Value>
+    </Setting>
     <Setting Name="ChannelsConfigFile" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:/task1.csv</Value>
+      <Value Profile="(Default)">C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\bin\Debug\moxaConfig.csv</Value>
     </Setting>
   </Settings>
 </SettingsFile>

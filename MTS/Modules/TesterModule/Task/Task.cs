@@ -18,7 +18,7 @@ namespace MTS.TesterModule
     {
         protected Channels channels;
         protected TaskState state;
-        protected TaskResult result;
+        protected TaskResult result = new TaskResult();
 
         #region Properties
 
@@ -80,7 +80,6 @@ namespace MTS.TesterModule
         {
             BeginTime = time;
             state = TaskState.Running;
-            Output.WriteLine("{0}: started. Time: {1}", Name, time);
         }
         /// <summary>
         /// 
@@ -109,8 +108,9 @@ namespace MTS.TesterModule
         {
             EndTime = time;
             this.state = state;
+            result.State = this.state;
+            result.Duration = this.Duration;
             RaiseTaskExecuted();
-            Output.WriteLine("{0}: finished with status \"{1}\". Time: {2} Duration: {3}", Name, state, time, Duration);
         }
 
         #endregion
@@ -170,9 +170,17 @@ namespace MTS.TesterModule
         /// </summary>
         Aborted,
         /// <summary>
-        /// Task has been executed corectly and is completed
+        /// Task has been executed and is completed
         /// </summary>
-        Completed
+        Completed,
+        /// <summary>
+        /// Task has been executed correctly. This value is used only for test tasks
+        /// </summary>
+        Passed,
+        /// <summary>
+        /// Task has not been executed correctly and error has been found. This value is used only for test tasks
+        /// </summary>
+        Failed
     }
 
     /// <summary>
@@ -196,5 +204,6 @@ namespace MTS.TesterModule
     /// </summary>
     public class TestTaskResult : TaskResult
     {
+        
     }
 }
