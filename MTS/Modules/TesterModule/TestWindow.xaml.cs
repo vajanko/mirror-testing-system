@@ -331,6 +331,9 @@ namespace MTS.TesterModule
                 DeviceStatusMessage = "Connected";
             }
         }
+        /// <summary>
+        /// Release connection resources and break the connection
+        /// </summary>
         private void disconnectClick(object sender, RoutedEventArgs e)
         {
             if (channels != null)
@@ -346,6 +349,9 @@ namespace MTS.TesterModule
         /// </summary>
         private void startClick(object sender, RoutedEventArgs e)
         {
+            // prevent to start shift when device is not connected
+            if (!IsDeviceConnected) return;
+
             // prevent from starting shift multiple times (too dangerous)
             if (shift != null && shift.IsRunning)
                 return;
@@ -374,16 +380,24 @@ namespace MTS.TesterModule
             if (IsRunning)
                 ShiftStatusMessage = "Running";
         }
+        /// <summary>
+        /// Stop shift. Abort if it is running
+        /// </summary>
         private void stopClick(object sender, RoutedEventArgs e)
         {
             if (shift != null)
                 shift.Abort();
 
             IsRunning = false;
-            timer.Stop();
+            timer.Stop();   // this timer updates gui
 
             ShiftStatusMessage = "Stoped";
         }
+        /// <summary>
+        /// This method is called when shift get executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void shiftExecuted(Shift sender, EventArgs args)
         {
             IsRunning = false;
@@ -391,6 +405,11 @@ namespace MTS.TesterModule
 
             ShiftStatusMessage = "Stoped";
         }
+        /// <summary>
+        /// This method is called cyclically to update gui
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void timerElapsed(object sender, ElapsedEventArgs e)
         {
             // run on gui thread
@@ -422,6 +441,7 @@ namespace MTS.TesterModule
             {   
                 // initialize handler that will be executed when some channel value change
                 bindChannels(channels);
+                throw new NotImplementedException("hello");
             }
             catch
             {
@@ -571,38 +591,6 @@ namespace MTS.TesterModule
 
         #region Debug
 
-        //private void moveUp()
-        //{
-        //    channels.MoveMirrorHorizontal.Value = true;
-        //    channels.MoveMirrorReverse.Value = true;
-        //    channels.MoveMirrorVertical.Value = false;
-        //}
-        //private void moveDown()
-        //{
-        //    channels.MoveMirrorVertical.Value = true;
-        //    channels.MoveMirrorReverse.Value = false;
-        //    channels.MoveMirrorHorizontal.Value = false;
-        //}
-        //private void moveLeft()
-        //{
-        //    channels.MoveMirrorHorizontal.Value = true;
-        //    channels.MoveMirrorReverse.Value = false;
-        //    channels.MoveMirrorVertical.Value = false;
-        //}
-        //private void moveRight()
-        //{
-        //    channels.MoveMirrorHorizontal.Value = false;
-        //    channels.MoveMirrorReverse.Value = true;
-        //    channels.MoveMirrorVertical.Value = true;
-        //}
-
-        //private void Stop()
-        //{
-        //    channels.MoveMirrorHorizontal.Value = false;
-        //    channels.MoveMirrorVertical.Value = false;
-        //    channels.MoveMirrorReverse.Value = false;
-        //}
-
         private void updateGui()
         {
             if (channels.IsDistanceSensorUp.Value)  // measuring is activated
@@ -687,5 +675,26 @@ namespace MTS.TesterModule
         }
 
         #endregion        
+
+        // for presentation purpose only
+
+        private void startButtonMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (channels != null)
+                channels.IsStartPressed.SetValue(true);
+        }
+
+        private void startButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (channels != null)
+                channels.IsStartPressed.SetValue(false);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            e.Handled = false;
+        }
+
+        // for presentation purpose only
     }
 }

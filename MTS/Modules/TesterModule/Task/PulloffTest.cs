@@ -8,7 +8,10 @@ namespace MTS.TesterModule
 {
     class PulloffTest : TestTask
     {
-        private int testingTime;
+        /// <summary>
+        /// Required duration of this test
+        /// </summary>
+        private int testingTime = 0;
 
         public override void Initialize(System.TimeSpan time)
         {

@@ -117,10 +117,14 @@ namespace MTS.TesterModule
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of task that will be executed in cyclic loop
+        /// </summary>
+        /// <param name="channels">Instance of channels collection for communication with hardware</param>
         public Task(Channels channels)
         {
-            state = TaskState.NotExecuted;
-            this.channels = channels;
+            state = TaskState.NotExecuted;  // task has not been executed yet
+            this.channels = channels;       // channels are used for communication with HW
         }
 
         #endregion

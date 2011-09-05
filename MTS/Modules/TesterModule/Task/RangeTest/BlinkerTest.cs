@@ -79,14 +79,35 @@ namespace MTS.TesterModule
 
         #region State
 
+        /// <summary>
+        /// Current state of the task execution
+        /// </summary>
         private State currentState = State.None;
         private enum State
         {
+            /// <summary>
+            /// Test is being initialized
+            /// </summary>
             Initializing,
+            /// <summary>
+            /// Direction light is switched on, current is being measured
+            /// </summary>
             BlinkerOn,
+            /// <summary>
+            /// Direction light is switched off, nothing is being provided
+            /// </summary>
             BlinkerOff,
+            /// <summary>
+            /// Test is being finalized
+            /// </summary>
             Finalizing,
+            /// <summary>
+            /// Test is being aborted
+            /// </summary>
             Aborting,
+            /// <summary>
+            /// Unspecified state of test, nothig is executed
+            /// </summary>
             None
         }
 
@@ -94,9 +115,14 @@ namespace MTS.TesterModule
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of test that will execute direction light test
+        /// </summary>
+        /// <param name="channels"></param>
+        /// <param name="testParam"></param>
         public BlinkerTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
-        {
+        {            
             ParamCollection param = testParam.Parameters;
             IntParamValue iValue;
             // from test parameters get LIGHTENING_TIME item

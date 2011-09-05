@@ -3,20 +3,39 @@ using System.Windows.Media.Media3D;
 
 namespace MTS.AdminModule {
 
+    /// <summary>
+    /// This class is only a thin cover oover some IModule implementation
+    /// It allows access to channels directrly by properties
+    /// </summary>
     public partial class Channels : IModule
-    {        
+    {
+        /// <summary>
+        /// Instance of layer that is resposible for communication with hardware
+        /// </summary>
         private IModule module;
 
         #region IModule Members
 
+        /// <summary>
+        /// Load configuration of channels form file. At this time connection must not be established
+        /// </summary>
+        /// <param name="filename">Path to file where configuration of channels is stored</param>
         public void LoadConfiguration(string filename)
         {
             module.LoadConfiguration(filename);
         }
+        /// <summary>
+        /// Create a new connection between local computer and some hardware component. At the beginning of
+        /// the communication this method must be called.
+        /// </summary>
         public void Connect()
         {
             module.Connect();
         }
+        /// <summary>
+        /// Prepare (initialize) channels for reading and writing. When this method is called, connection
+        /// must be established already.
+        /// </summary>
         public void Initialize()
         {
             module.Initialize();
@@ -25,6 +44,8 @@ namespace MTS.AdminModule {
             // !!! PROPERTY NAME IS ALWAYS THE SAME AS CHANNEL NAME STRING !!!
             // Consider this when setting variable names in TwinCAT IO Server or 
             // editing configuration file for Moxa
+
+            // setting channels propety here is only temporary a will be changed in the future
 
             // analog inputs
             DistanceX = (IAnalogInput)module.GetChannelByName("DistanceX");
@@ -166,65 +187,103 @@ namespace MTS.AdminModule {
             InsCheck16 = (IDigitalInput)module.GetChannelByName("InsCheck16");
             IsPowerSupplyOff = (IDigitalInput)module.GetChannelByName("IsPowerSupplyOff");
         }
+        /// <summary>
+        /// Read all input and write all output channels
+        /// </summary>
         public void Update()
         {   // update all channels: read in/out and write out channels
             module.Update();
         }
+        /// <summary>
+        /// Read all inputs and outputs channels
+        /// </summary>
         public void UpdateInputs()
         {
             module.UpdateInputs();
         }
+        /// <summary>
+        /// Write all outputs channels
+        /// </summary>
         public void UpdateOutputs()
         {
             module.UpdateOutputs();
         }
+        /// <summary>
+        /// Close connection between local computer and some hardware component. Call this method at the end of
+        /// the communication to release resources.
+        /// </summary>
         public void Disconnect()
         {   // prevent from disconnecting multiple times
             if (module != null && !module.IsConnected)
                 module.Disconnect();
         }
-
+        /// <summary>
+        /// Get an instance of paricular channel identified by its name. Return null if ther is no such a channel
+        /// </summary>
+        /// <param name="name">Unic name (identifier) of required channel</param>
         public IChannel GetChannelByName(string name)
         {
             return module.GetChannelByName(name);
         }
-
+        /// <summary>
+        /// (Get) Value indicating that this module is connected to remote hardware
+        /// </summary>
         public bool IsConnected { get { return module.IsConnected; } }
 
-        #endregion
-
+        /// <summary>
+        /// Not implemented yet
+        /// </summary>
         public void SwitchOffDigitalOutputs()
         {
+            throw new NotImplementedException("Method which switch all ouputs to safe state is not implemented yet!");
+
             if (module != null)
                 module.SwitchOffDigitalOutputs();
         }
 
+        #endregion
+
         #region Public methods
 
+        /// <summary>
+        /// Start to move up mirror glass
+        /// </summary>
         public void MoveUp()
         {
             MoveMirrorVertical.Value = false;
             MoveMirrorReverse.Value = true;
             MoveMirrorHorizontal.Value = true;
         }
+        /// <summary>
+        /// Start to move down mirror glass
+        /// </summary>
         public void MoveDown()
         {
             MoveMirrorVertical.Value = true;
             MoveMirrorReverse.Value = false;
             MoveMirrorHorizontal.Value = false;
         }
+        /// <summary>
+        /// Start to move left mirror glass
+        /// </summary>
         public void MoveLeft()
         {
             MoveMirrorHorizontal.Value = false;
             MoveMirrorReverse.Value = true;
             MoveMirrorVertical.Value = true;
         }
+        /// <summary>
+        /// Start to move right mirror glass
+        /// </summary>
         public void MoveRight()
         {
             MoveMirrorHorizontal.Value = true;
             MoveMirrorReverse.Value = false;
             MoveMirrorVertical.Value = false;
         }
+        /// <summary>
+        /// Stop moveing of mirror glass
+        /// </summary>
         public void Stop()
         {
             MoveMirrorHorizontal.Value = false;
@@ -232,6 +291,7 @@ namespace MTS.AdminModule {
             MoveMirrorReverse.Value = false;
         }
 
+        // TODO: Optimize calculating of angles. YAxis and XAxis is not exact
         #region Rotation
 
         /// <summary>
@@ -247,7 +307,7 @@ namespace MTS.AdminModule {
         /// </summary>
         private Point3D PointZ;
 
-        private Vector3D YAxis = new Vector3D(0, 1, 0);
+        private Vector3D YAxis = new Vector3D(0, 1, 0);     // this is not exactly
         private Vector3D XAxis = new Vector3D(1, 0, 0);
         /// <summary>
         /// (Get) Normal vector of mirror plane in the zero position. This is the moment when mirror
@@ -296,9 +356,9 @@ namespace MTS.AdminModule {
 
         #endregion
 
-
         #endregion
 
+        // TODO: add description channels
         #region Channels
 
         #region Digital inputs

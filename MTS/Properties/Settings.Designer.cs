@@ -25,7 +25,7 @@ namespace MTS.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Moxa")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Dummy")]
         public string HW_Type {
             get {
                 return ((string)(this["HW_Type"]));
@@ -75,6 +75,15 @@ namespace MTS.Properties {
         public string ChannelsConfigFile {
             get {
                 return ((string)(this["ChannelsConfigFile"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Task1")]
+        public string ConstructorParam {
+            get {
+                return ((string)(this["ConstructorParam"]));
             }
         }
     }

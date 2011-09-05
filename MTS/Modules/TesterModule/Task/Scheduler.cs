@@ -179,8 +179,6 @@ namespace MTS.TesterModule
             // allow mirror movement
             this.AddTask(new SetValue(channels, channels.AllowMirrorMovement, true));
 
-            this.AddWaitForStart(); // test
-
             // center mirror glass to zero plane saved in HWSettings
             this.AddTask(new CenterTask(channels));
             // move north

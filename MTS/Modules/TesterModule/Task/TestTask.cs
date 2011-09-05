@@ -6,6 +6,9 @@ using MTS.EditorModule;
 
 namespace MTS.TesterModule
 {
+    /// <summary>
+    /// Base class for all testing tasks. This task must have a result from its execution
+    /// </summary>
     public class TestTask : Task
     {
         protected TestValue testParam;
@@ -23,11 +26,15 @@ namespace MTS.TesterModule
             base.Finish(time, state);
         }
 
+        #region Constructors
+
         public TestTask(Channels channels, TestValue testParam) : base(channels) 
         {
             this.testParam = testParam;
             Name = testParam.Name;
             Enabled = testParam.Enabled;
         }
+
+        #endregion
     }
 }

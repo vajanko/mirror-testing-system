@@ -127,7 +127,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>HWSettings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Modules\AdminModule\Communication\Base\Channel.cs" />
     <Compile Include="Modules\AdminModule\Communication\Moxa\ModbusModule.cs" />
     <Compile Include="Modules\AdminModule\Communication\Beckhoff\ECChannel.cs" />
     <Compile Include="Modules\AdminModule\Communication\Beckhoff\ECModule.cs" />

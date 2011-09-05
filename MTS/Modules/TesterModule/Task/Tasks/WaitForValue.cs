@@ -16,11 +16,19 @@ namespace MTS.TesterModule
         /// </summary>
         private bool value;
 
+        /// <summary>
+        /// Show what we are waiting for
+        /// </summary>
+        /// <param name="time">Time of calling this method</param>
         public override void Initialize(System.TimeSpan time)
         {
             base.Initialize(time);
             Output.WriteLine("Waiting for \"{0}\" to be {1}", Name, value);
         }
+        /// <summary>
+        /// Check if particular channel has required value and finish this task if so
+        /// </summary>
+        /// <param name="time">Time of calling this method</param>
         public override void Update(TimeSpan time)
         {
             // wait for expected value on a particular channel
@@ -28,6 +36,11 @@ namespace MTS.TesterModule
                 Finish(time, TaskState.Completed);
             base.Update(time);
         }
+        /// <summary>
+        /// Show value on channel we have been observing
+        /// </summary>
+        /// <param name="time">Time of calling this method</param>
+        /// <param name="state">Final state of this task</param>
         public override void Finish(TimeSpan time, TaskState state)
         {
             Output.WriteLine("Channel \"{0}\" is {1}", Name, channel.Value);
