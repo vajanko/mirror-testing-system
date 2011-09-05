@@ -9,6 +9,10 @@ namespace MTS.TesterModule
 {
     class Calibrate : Task
     {
+        /// <summary>
+        /// Read distances, caluculate zero plane normal and save this setting
+        /// </summary>
+        /// <param name="time"></param>
         public override void Update(TimeSpan time)
         {
             base.Update(time);
@@ -19,8 +23,10 @@ namespace MTS.TesterModule
 
             // read distance values
             x.Z = channels.DistanceX.RealValue;
-            y.Z = channels.DistanceY.RealValue;
+            y.Z = channels.DistanceY.RealValue;            
             z.Z = channels.DistanceZ.RealValue;
+
+            // this could be move to Channels class !!!
 
             // calculate perpendicular vector to two vectors made from three points
             HWSettings.Default.ZeroPlaneNormal = Vector3D.CrossProduct(new Vector3D(y.X - x.X, y.Y - x.Y, y.Z - x.Z), 
@@ -38,10 +44,13 @@ namespace MTS.TesterModule
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instace of task that will read distance values of mirror distance sensors
+        /// and save it to application settings
+        /// </summary>
+        /// <param name="channels"></param>
         public Calibrate(Channels channels)
-            : base(channels) 
-        {
-        }
+            : base(channels) { }
 
         #endregion
     }

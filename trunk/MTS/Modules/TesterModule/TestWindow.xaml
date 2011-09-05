@@ -71,6 +71,9 @@
             </Button>
             <Button Content="Stop Shift" Grid.Column="4" Grid.Row="4" Click="stopClick"
                     IsEnabled="{Binding IsRunning, ElementName=root}"/>
+            <Button Content="StartButton" Grid.Column="5" Grid.Row="4"
+                    PreviewMouseLeftButtonDown="startButtonMouseLeftButtonDown"
+                    PreviewMouseLeftButtonUp="startButtonMouseLeftButtonUp"/>
             
             <!-- Device state -->
             <Label Content="Device:" Grid.Column="5"/>

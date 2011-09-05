@@ -11,7 +11,7 @@ namespace MTS.TesterModule
         #region Private fields
 
         /// <summary>
-        /// Duration of this test
+        /// Required duration of this test
         /// </summary>
         private int testingTime;
 
@@ -49,13 +49,31 @@ namespace MTS.TesterModule
 
         #region State
 
+        /// <summary>
+        /// Current state of the task execution
+        /// </summary>
         private State currentState = State.None;
         private enum State
         {
+            /// <summary>
+            /// Test is being initialized
+            /// </summary>
             Initializing,
+            /// <summary>
+            /// Test is measuring current
+            /// </summary>
             Measuring,
+            /// <summary>
+            /// Test is being finalized
+            /// </summary>
             Finalizing,
+            /// <summary>
+            /// Test is being aborted
+            /// </summary>
             Aborting,
+            /// <summary>
+            /// Unspecified state of test, nothig is executed
+            /// </summary>
             None
         }
 
@@ -63,6 +81,11 @@ namespace MTS.TesterModule
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of test task that will execute spiral heating
+        /// </summary>
+        /// <param name="channels"></param>
+        /// <param name="testParam"></param>
         public SpiralTest(Channels channels, TestValue testParam)
             : base(channels, testParam) 
         {

@@ -5,6 +5,9 @@ using MTS.EditorModule;
 
 namespace MTS.TesterModule
 {
+    /// <summary>
+    /// Base class for test that check for current in some range
+    /// </summary>
     public abstract class RangeCurrentTest : TestTask
     {
         #region Fields
@@ -23,17 +26,21 @@ namespace MTS.TesterModule
         #region Properties
 
         /// <summary>
-        /// (Get/Set) Mininal allowed current for this test
+        /// (Get) Mininal allowed current for this test
         /// </summary>
         protected double MinCurrent { get; private set; }
         /// <summary>
-        /// (Get/Set) Maximal allowed current for this test
+        /// (Get) Maximal allowed current for this test
         /// </summary>
         protected double MaxCurrent { get; private set; }
 
         #endregion
 
-
+        /// <summary>
+        /// Check if current is inside required range
+        /// </summary>
+        /// <param name="time">Time of calling this method</param>
+        /// <param name="channel">Channel to measure current on</param>
         protected void measureCurrent(TimeSpan time, IAnalogInput channel)
         {
             // value of current measured on current channel
@@ -45,54 +52,16 @@ namespace MTS.TesterModule
             else if (measuredCurrent < minMeasuredCurrent)
                 minMeasuredCurrent = measuredCurrent;
         }
+        /// <summary>
+        /// Get the final state of this task: Passed if everythig is OK, Failed otherwise
+        /// </summary>
         protected TaskState getTaskState()
         {
             if (maxMeasuredCurrent > MaxCurrent ||
                 minMeasuredCurrent < MinCurrent)
                 return TaskState.Failed;
             else return TaskState.Passed;
-        }
-
-        //public override void Initialize(TimeSpan time)
-        //{
-        //    //ControlChannel.Value = true;// start current
-
-        //    //// these values (for sure) will be changed
-        //    //maxMeasuredCurrent = double.MinValue;
-        //    //minMeasuredCurrent = double.MaxValue;
-
-        //    base.Initialize(time);    // save begin time
-        //}
-        //public override void Update(TimeSpan time)
-        //{   // notice that this update implementation is running foreaver - override to finish it                        
-        //    // value of current measured on current channel
-        //    //double measuredCurrent = CurrentChannel.RealValue;
-
-        //    //// save max a min measured values of current
-        //    //if (measuredCurrent > maxMeasuredCurrent)
-        //    //    maxMeasuredCurrent = measuredCurrent;
-        //    //else if (measuredCurrent < minMeasuredCurrent)
-        //    //    minMeasuredCurrent = measuredCurrent;
-
-        //    //base.Update(time);
-        //}
-        //public override void Finish(TimeSpan time, TaskState state)
-        //{            
-        //    //ControlChannel.Value = false;   // stop current
-
-        //    //if (maxMeasuredCurrent > MaxCurrent)
-        //    //{
-        //    //    Output.WriteLine("Max current exceeded: {0} mA measured, {1} mA expected", maxMeasuredCurrent, MaxCurrent);
-        //    //    state = TaskState.Failed;
-        //    //}
-        //    //if (minMeasuredCurrent < MinCurrent)
-        //    //{
-        //    //    Output.WriteLine("Min current exceeded: {0} mA measured, {1} mA expected", minMeasuredCurrent, MinCurrent);
-        //    //    state = TaskState.Failed;
-        //    //}
-
-        //    base.Finish(time, state);   // save end time
-        //}
+        }        
 
         #region Constructors
 

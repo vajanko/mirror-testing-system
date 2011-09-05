@@ -125,10 +125,13 @@ namespace MTS.TesterModule
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of task that will center the mirror glass to zero plane as
+        /// it is save in application settings
+        /// </summary>
+        /// <param name="channels"></param>
         public CenterTask(Channels channels)
-            : base(channels)
-        {
-        }
+            : base(channels) { }
 
         #endregion     
     }

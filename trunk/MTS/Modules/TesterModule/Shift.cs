@@ -228,6 +228,7 @@ namespace MTS.TesterModule
 
                 while (!scheduler.IsFinished)
                 {
+                    Thread.Sleep(50);   // for presentation purpose only
                     scheduler.UpdateOutputs(watch.Elapsed);
                     scheduler.Update(watch.Elapsed);
                 }
