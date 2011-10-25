@@ -1,2 +1,0 @@
-2011.8.24 20:28:20	Failed to initialize channels. Probably one of them is missing in configuration file: C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\bin\Debug\task1.csv
-2011.8.24 20:29:10	Failed to initialize channels. Probably one of them is missing in configuration file: C:\Documents and Settings\kovaco\My Documents\Visual Studio 2008\Projects\MTS Project\MTS\MTS\bin\Debug\task1.csv
