@@ -1,3 +1,0 @@
-Name; ;Type;Size;>Address;In/Out;User ID;Linked to
-HeatingFoilCurrent;X;INT;2.0;0.0;Input;0;Data In . Channel 1 . Term 2 (KL3152) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-HeatingFoilOn;X;BOOL;0.1;0.0;Output;0;Output . Channel 1 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
