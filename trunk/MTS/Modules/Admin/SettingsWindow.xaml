@@ -12,12 +12,15 @@
     >
     <ScrollViewer VerticalScrollBarVisibility="Visible">
         <TabControl x:Name="tabControl" IsSynchronizedWithCurrentItem="True">
+            <TabControl.Resources>
+                <Style x:Key="sectionHeaderStyle">
+                    <Setter Property="Label.Background" Value="White"/>
+                </Style>
+            </TabControl.Resources>
             <TabItem Header="Hardware Settings">
                 <StackPanel>
                     <StackPanel.Resources>
-                        <Style x:Key="sectionHeaderStyle">
-                            <Setter Property="Label.Background" Value="White"/>
-                        </Style>
+
                         <Style TargetType="{x:Type Label}">
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
@@ -157,6 +160,49 @@
             </TabItem>
             <TabItem Header="Operators">
                 
+            </TabItem>
+            <TabItem Header="Channels" Loaded="TabItem_Loaded">
+                <TabItem.Resources>
+                    <Style TargetType="{x:Type ctrl:UpDownButton}">
+                        <Setter Property="MinValue" Value="0"/>
+                        <Setter Property="MaxValue" Value="40000"/>
+                        <Setter Property="Decimals" Value="0"/>
+                        <Setter Property="MinWidth" Value="100"/>
+                    </Style>
+                           
+                </TabItem.Resources>
+                <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:ChannelSetting}">
+                            <StackPanel>
+                                <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
+                                    <ctrl:UpDownButton Grid.Row="0" Grid.Column="1"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
+                                    <ctrl:UpDownButton Grid.Row="1" Grid.Column="1"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
+                                    <ctrl:UpDownButton Grid.Row="2" Grid.Column="1"/>
+
+                                    <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
+                                    <ctrl:UpDownButton Grid.Row="3" Grid.Column="1"/>
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </TabItem>
         </TabControl>
     </ScrollViewer>

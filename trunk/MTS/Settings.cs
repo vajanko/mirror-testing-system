@@ -59,6 +59,12 @@ namespace MTS.Properties {
         {
             return Path.Combine(GetConfigDirectory(), Settings.Default.TemplateFile);
         }
+
+        public string GetChannelsConfigPath()
+        {
+            return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
+        }
+
         /// <summary>
         /// Create an open file dialog that will handle opening of caonfiguration file
         /// </summary>

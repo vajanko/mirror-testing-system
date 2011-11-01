@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- collection of channel descriptions -->
+<!ELEMENT channels (channel)*>
+
+<!-- template for a test: collection of test parameters -->
+<!ELEMENT channel (name, description?, rawLow, rawHigh, realLow, realHigh)>
+
+<!-- each defined channel has a unique identifier -->
+<!ATTLIST channel id NMTOKEN #REQUIRED>
+
+
+<!-- sub elements of channel -->
+<!ELEMENT name (#PCDATA)><!-- name of channel -->
+<!ELEMENT description (#PCDATA)><!-- description of channel -->
+<!ELEMENT rawLow (#PCDATA)>
+<!ELEMENT rawHigh (#PCDATA)>
+<!ELEMENT realLow (#PCDATA)>
+<!ELEMENT realHigh (#PCDATA)>
