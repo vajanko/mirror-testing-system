@@ -169,5 +169,17 @@ namespace MTS.Properties {
                 this["PrinterName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("analog_channels.xml")]
+        public string ChannelsConfigFile {
+            get {
+                return ((string)(this["ChannelsConfigFile"]));
+            }
+            set {
+                this["ChannelsConfigFile"] = value;
+            }
+        }
     }
 }

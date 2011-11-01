@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C186DE23-9AF7-4C5D-8328-7E00AE2AC4FF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -139,6 +139,7 @@
     <Compile Include="Modules\Admin\CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modules\Admin\ChannelSetting.cs" />
     <Compile Include="Modules\Admin\EthercatSettings.xaml.cs">
       <DependentUpon>EthercatSettings.xaml</DependentUpon>
     </Compile>
@@ -217,6 +218,7 @@
     <None Include="app.config">
       <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
     </None>
+    <None Include="Modules\Admin\analog_channels.dtd" />
     <None Include="Settings\HWSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>HWSettings.Designer.cs</LastGenOutput>
@@ -268,6 +270,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Modules\EditorModule\template.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Modules\Admin\analog_channels.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\DataModule\" />

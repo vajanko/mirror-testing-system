@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +36,21 @@ namespace MTS.Admin
         public const string DisplayTitleString = "DisplayTitle";
 
         private readonly string[] protocolTypes = new string[] { "EtherCAT", "Modbus", "Dummy" };
+
+        #region XmlConstants
+
+        private static readonly XName ChannelElem = "channel";
+        private static readonly XName IdAttr = "id";
+        private static readonly XName NameElem = "name";
+        private static readonly XName DescriptionElem = "description";
+        private static readonly XName RawLowElem = "rawLow";
+        private static readonly XName RawHighElem = "rawHigh";
+        private static readonly XName RealLowElem = "realLow";
+        private static readonly XName RealHighElem = "realHigh";
+
+        #endregion
+
+        public List<ChannelSetting> ChannelSettings { get; private set; }
 
         #endregion
 
@@ -195,6 +211,35 @@ namespace MTS.Admin
         {   // check if there are some unsaved values
             if (!Saved)
                 e.Cancel = !askToClose();  // ask user to discard changes and cancel event if he has not agreed
+        }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            // load channels configuration file to memory
+            XElement root = XElement.Load(Settings.Default.GetChannelsConfigPath());
+            ChannelSettings = new List<ChannelSetting>();
+
+            try
+            {
+                foreach (XElement channel in root.Elements(ChannelElem))
+                {
+                    string id = channel.Attribute(IdAttr).Value;
+                    ChannelSetting chs = new ChannelSetting(id);
+
+                    chs.Name = channel.Element(NameElem).Value;
+                    chs.Description = channel.Element(DescriptionElem).Value;
+                    chs.RawLow = int.Parse(channel.Element(RawLowElem).Value);
+                    chs.RawHigh = int.Parse(channel.Element(RawHighElem).Value);
+                    chs.RealLow = double.Parse(channel.Element(RealLowElem).Value);
+                    chs.RealHigh = double.Parse(channel.Element(RealHighElem).Value);
+
+                    ChannelSettings.Add(chs);
+                }
+                RaisePropertyChanged("ChannelSettings");
+            }
+            catch
+            {
+            }
         }
 
         #endregion
