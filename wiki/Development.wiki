@@ -6,9 +6,9 @@ Na tejto stránke budem zaznamenávať postupné kroky vývoja aplikácie
 
 = Prezentácia 1 =
 
- * Video testovacej stanice počas testovania
- * Video z programu počas testovania
- * Fotky prístroja
+ * [http://www.youtube.com/watch?v=dsL_NS7j8nM Video] testovacej stanice počas testovania
+ * [http://mts.php5.cz/mts_demo.html Video] z programu počas testovania
+ * [https://picasaweb.google.com/106579931717771153570/TestovaciaStanica?authkey=Gv1sRgCPyt3PaDyL6qPw Fotky] testovacej stanice
 
 *Návrhy:*
  * Súbory s parametrami ukladať v XML formáte (nie serializovať)
