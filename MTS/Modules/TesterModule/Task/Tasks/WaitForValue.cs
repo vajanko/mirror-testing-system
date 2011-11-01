@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
+using MTS.IO;
 
 namespace MTS.TesterModule
 {
@@ -17,34 +17,29 @@ namespace MTS.TesterModule
         private bool value;
 
         /// <summary>
-        /// Show what we are waiting for
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        public override void Initialize(System.TimeSpan time)
-        {
-            base.Initialize(time);
-            Output.WriteLine("Waiting for \"{0}\" to be {1}", Name, value);
-        }
-        /// <summary>
         /// Check if particular channel has required value and finish this task if so
         /// </summary>
         /// <param name="time">Time of calling this method</param>
         public override void Update(TimeSpan time)
         {
-            // wait for expected value on a particular channel
-            if (channel.Value == value)
-                Finish(time, TaskState.Completed);
-            base.Update(time);
-        }
-        /// <summary>
-        /// Show value on channel we have been observing
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        /// <param name="state">Final state of this task</param>
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            Output.WriteLine("Channel \"{0}\" is {1}", Name, channel.Value);
-            base.Finish(time, state);
+            switch (exState)
+            {
+                case ExState.Initializing:  // start to check for a value
+                    exState = ExState.Measuring;
+                    break;
+                case ExState.Measuring:     // wait for expected value on a particular channel
+                    if (channel.Value == value)
+                        exState = ExState.Finalizing;
+                    break;
+                case ExState.Finalizing:
+                    Finish(time, TaskState.Completed);
+                    break;
+                case ExState.Aborting:
+                    Finish(time, TaskState.Aborted);
+                    break;
+            }
+
+            
         }
 
         #region Constructors

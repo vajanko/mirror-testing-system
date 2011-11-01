@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:utl="clr-namespace:MTS.Utils"
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Settings gorups of test file -->
+    
+    <!-- Description group -->
+    <system:String x:Key="l_description">Description</system:String>        
+        <system:String x:Key="l_supplierNumber">Supplier number</system:String>
+        <system:String x:Key="l_supplierName">Supplier name</system:String>
+        <system:String x:Key="l_change">Change</system:String>
+        <system:String x:Key="l_note">Note</system:String>
+        <system:String x:Key="l_partNumber">Part number</system:String>
+        <system:String x:Key="l_weightNetto">Weight netto</system:String>
+        <system:String x:Key="l_weightBrutto">Weight brutto</system:String>
+        <system:String x:Key="l_smallLabelDesc">Small label description</system:String>
+        <system:String x:Key="l_boxLabelDesc">Box label description</system:String>
+    
+     <!-- Mirror travel -->
+    <system:String x:Key="l_mirrorTravel">Mirror travel</system:String>
+        <!-- Mirror control -->
+        <system:String x:Key="l_control">Control</system:String>
+            <system:String x:Key="l_mechanical">Mechanical</system:String>
+            <system:String x:Key="l_electrical">Electrical</system:String>
+        <!-- Mirror orientation -->
+        <system:String x:Key="l_orientation">Oriantation</system:String>
+            <system:String x:Key="l_left">Left</system:String>
+            <system:String x:Key="l_right">Right</system:String>
+    <utl:StringCollection x:Key="l_sides">
+        <system:String>East</system:String>
+        <system:String>West</system:String>
+        <system:String>North</system:String>
+        <system:String>South</system:String>
+    </utl:StringCollection>
+
+    <!-- Check mirror travel -->
+    <system:String x:Key="l_checkTravel">Check travel</system:String>
+    <system:String x:Key="l_completeMinAngle">Min. angle (Complete test)</system:String>
+    <system:String x:Key="l_shortMinAngle">Min. angle (Short test)</system:String>
+    
+    
+    
+        <system:String x:Key="l_powerfold">Powerfold</system:String>
+    <system:String x:Key="l_heating">Heating</system:String>
+    <system:String x:Key="l_idicator">Direction indicator</system:String>
+    <system:String x:Key="l_iluminator">Iluminator</system:String>
+    
+</ResourceDictionary>

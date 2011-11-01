@@ -5,7 +5,7 @@ using System.Windows;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 
-namespace MTS.EditorModule
+namespace MTS.tmp.Editor
 {
     [Serializable]
     public class ValueBase : INotifyPropertyChanged

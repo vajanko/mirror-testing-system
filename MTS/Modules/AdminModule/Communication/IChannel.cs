@@ -28,6 +28,17 @@ namespace MTS.AdminModule
         /// (Get/Set) Array of memory bytes containing Value of this channel
         /// </summary>
         byte[] ValueBytes { get; set; }
+
+        /// <summary>
+        /// (Get/Set) Size of channel value in bytes. (Size of <paramref name="ValueBytes"/> array)
+        /// </summary>
+        int Size { get; set; }
+
+        /// <summary>
+        /// (Get/Set) Address of channel inside tha hardware. This allows us to access (read/write)
+        /// data (from/to) this channel
+        /// </summary>
+        object Address { get; set; }
     }
     public interface IDigitalInput : IChannel
     {
@@ -48,6 +59,15 @@ namespace MTS.AdminModule
         /// (Get/Set) Logical value of this channel
         /// </summary>
         new bool Value { get; set; }
+
+        /// <summary>
+        /// Set logical value of this channel to true
+        /// </summary>
+        void SwitchOn();
+        /// <summary>
+        /// Set logical value of this channel to false
+        /// </summary>
+        void SwitchOff();
     }
     public interface IAnalogInput : IChannel
     {

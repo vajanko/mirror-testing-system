@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
     /// <summary>
     /// Base class for all testing tasks. This task must have a result from its execution
     /// </summary>
-    public class TestTask : Task
+    public abstract class TestTask : Task
     {
+        /// <summary>
+        /// Parameter necesaary for execution of this task. Include inforamtion such as
+        /// maximum duration of task or allowed range of current etc.
+        /// </summary>
         protected TestValue testParam;
+        /// <summary>
+        /// (Get) Value indiating if this test task is enabled. If true, task is executed,
+        /// otherwise not.
+        /// </summary>
         protected bool Enabled { get; private set; }
 
-        public override void Initialize(TimeSpan time)
-        {
-            Output.WriteLine("{0} started", Name);
-            base.Initialize(time);
-        }
-
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            Output.WriteLine("{0} finished in {1}", Name, Duration);
-            base.Finish(time, state);
-        }
+        protected TaskState finalState;
+        protected virtual TaskState getFinalState() { return finalState; }
 
         #region Constructors
 

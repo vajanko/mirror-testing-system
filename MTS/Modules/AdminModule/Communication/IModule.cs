@@ -57,7 +57,5 @@ namespace MTS.AdminModule
         /// (Get) Value indicating that this module is connected to remote hardware
         /// </summary>
         bool IsConnected { get; }
-
-        void SwitchOffDigitalOutputs();
     }
 }

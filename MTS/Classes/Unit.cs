@@ -83,6 +83,23 @@ namespace MTS
 
         public static Unit Degrees { get; set; }
 
+        public static Unit UnitFromString(string unit)
+        {
+            unit = unit.ToLower();
+            switch (unit)
+            {
+                case "miliampheres": return Miliampheres;
+                case "ampheres": return Ampheres;
+                case "seconds": return Seconds;
+                case "miliseconds": return Miliseconds;
+                case "milimeters": return Milimeters;
+                case "grams": return Grams;
+                case "volts": return Volts;
+                case "degrees": return Degrees;
+                default: return None;
+            }
+        }
+
         static Units()
         {
             None = new Unit() { Name = "", FullName = "None" };

@@ -1,7 +1,7 @@
 ﻿using System;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -68,22 +68,14 @@ namespace MTS.TesterModule
         public RangeCurrentTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
-            ParamCollection param = testParam.Parameters;
-            DoubleParamValue dValue;
-            // from test parameters get MIN_CURRENT item
-            if (param.ContainsKey(ParamDictionary.MIN_CURRENT))
-            {   // it must be double type value
-                dValue = param[ParamDictionary.MIN_CURRENT] as DoubleParamValue;
-                if (dValue != null)     // param is of other type then double
-                    MinCurrent = dValue.Value;
-            }
-            // from test parameters get MAX_CURRENT item
-            if (param.ContainsKey(ParamDictionary.MAX_CURRENT))
-            {   // it must be double type value
-                dValue = param[ParamDictionary.MAX_CURRENT] as DoubleParamValue;
-                if (dValue != null)     // param is of other type then double
-                    MaxCurrent = dValue.Value;
-            }            
+            // from test parameters get MinCurrent parameter
+            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.MinCurrent);
+            if (dValue != null)     // it must be of type double
+                MinCurrent = dValue.DoubleValue;
+            // from test parameters get MaxCurrent parameter
+            dValue = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
+            if (dValue != null)     // it must be of type double
+                MaxCurrent = dValue.DoubleValue;
         }
 
         #endregion

@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="MTS.Controls.Test"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="clr-namespace:MTS.Controls">
+    <StackPanel>
+        <StackPanel.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="../Resources/Languages/LangEnglishTestFile.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </StackPanel.Resources>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!-- Check travel 0 -->
+            <Label Target="{Binding ElementName=checkTravel}"
+                                               Content="{DynamicResource l_checkTravel}" Grid.Column="0" Grid.Row="0"/>
+            <CheckBox x:Name="checkTravel" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
+            <!-- Min. angle complete test 1 -->
+            <Label Target="{Binding ElementName=completeAngle}"
+                                               Content="{DynamicResource l_completeMinAngle}" Grid.Column="0" Grid.Row="1"/>
+            <ctrl:NumericButton x:Name="complateAngle" Grid.Column="1" Grid.Row="1"
+                                                Unit="Degrees"/>
+            <!-- Min. angle short test 2 -->
+            <Label Target="{Binding ElementName=shortAngle}"
+                                               Content="{DynamicResource l_shortMinAngle}" Grid.Column="0" Grid.Row="2"/>
+            <ctrl:NumericButton x:Name="shortAngle" Grid.Column="1" Grid.Row="2"
+                                                Unit="Degrees"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

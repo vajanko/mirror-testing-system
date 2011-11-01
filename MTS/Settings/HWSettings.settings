@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MTS.Settings" GeneratedClassName="HWSettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ZeroPlaneNormal" GenerateDefaultValueInCode="false" Type="System.Windows.Media.Media3D.Vector3D" Scope="User">
+      <Value Profile="(Default)">0,0,0</Value>
+    </Setting>
+    <Setting Name="SondeYPosition" Type="System.Windows.Media.Media3D.Point3D" Scope="User">
+      <Value Profile="(Default)">0,0,0</Value>
+    </Setting>
+    <Setting Name="SondeZPosition" Type="System.Windows.Media.Media3D.Point3D" Scope="User">
+      <Value Profile="(Default)">0,94.4,0</Value>
+    </Setting>
+    <Setting Name="SondeXPosition" Type="System.Windows.Media.Media3D.Point3D" Scope="User">
+      <Value Profile="(Default)">58.8,94.4,0</Value>
+    </Setting>
+    <Setting Name="XYDistance" Description="Distance of X and Y sondes. Sonds are measuring distance between them and mirror glass" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="YZDistance" Description="Distance of Y and Z sondes. Sonds are measuring distance between them and mirror glass" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">40</Value>
+    </Setting>
+    <Setting Name="XZDistance" Description="Distance of X and Z sondes. Sonds are measuring distance between them and mirror glass" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

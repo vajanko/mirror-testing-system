@@ -27,7 +27,7 @@ namespace MTS.AdminModule
 
         #endregion
 
-        public ModbusChannel[] Channels { get; protected set; }
+        public ChannelBase[] Channels { get; protected set; }
 
         /// <summary>
         /// Read values of all channels
@@ -39,15 +39,18 @@ namespace MTS.AdminModule
         /// Insert a channel to this slot
         /// </summary>
         /// <param name="channel">Modbus channel to insert</param>
-        public void AddChannel(ModbusChannel channel)
+        public void AddChannel(ChannelBase channel)
         {
-            Channels[channel.Channel - StartChannel] = channel;
+            // this is the only place where modbus address is used
+            ModbusAddress addr = channel.Address as ModbusAddress;
+            if (addr != null)
+                Channels[addr.Channel - StartChannel] = channel;
         }
         /// <summary>
         /// Get an instance of paricular channel identified by its name. Return null if ther is no such a channel
         /// </summary>
         /// <param name="name">Unic name (identifier) of required channel</param>
-        public ModbusChannel GetChannelByName(string name)
+        public ChannelBase GetChannelByName(string name)
         {
             for (int i = 0; i < Channels.Length; i++)
                 if (Channels[i] != null && Channels[i].Name == name)       
@@ -126,14 +129,14 @@ namespace MTS.AdminModule
         /// </summary>
         public override void Read(int hConnection)
         {
-            ModbusDigitalInput channel;
+            DigitalInput channel;
 
             // read value from channels to integer vector
             Mxio.DI_Reads(hConnection, Slot, StartChannel, ChannelsCount, ref inputs);
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)
             {   // some of channels may be unused
-                channel = Channels[i] as ModbusDigitalInput;
+                channel = Channels[i] as DigitalInput;
                 if (channel != null)                        // get logical values at particular position in
                     channel.SetValue(getValue(inputs, i));  // readed input values
             }
@@ -151,7 +154,7 @@ namespace MTS.AdminModule
             : base(slot, startChannel, channelsCount)
         {
             // allocate as much memory as necessary
-            Channels = new ModbusDigitalInput[channelsCount];
+            Channels = new DigitalInput[channelsCount];
         }
 
         #endregion
@@ -196,14 +199,14 @@ namespace MTS.AdminModule
         /// </summary>
         public override void Read(int hConnection)
         {
-            ModbusDigitalOutput channel;
+            DigitalOutput channel;
 
             // read value from hardware channels to integer vector
             Mxio.DO_Reads(hConnection, Slot, StartChannel, ChannelsCount, ref outputs);
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)         // get logical values at particular position in
             {   // some of channels may be unused
-                channel = Channels[i] as ModbusDigitalOutput;
+                channel = Channels[i] as DigitalOutput;
                 if (channel != null)
                     channel.SetValue(getValue(outputs, i)); // readed input values
             }
@@ -214,12 +217,12 @@ namespace MTS.AdminModule
         /// <param name="hConnection">Handle of connection to which to write</param>
         public override void Write(int hConnection)
         {
-            ModbusDigitalOutput channel;
+            DigitalOutput channel;
 
             // copy value from channels to outputs vector
             for (int i = 0; i < ChannelsCount; i++)
             {   // some of channels may be unused
-                channel = Channels[i] as ModbusDigitalOutput;
+                channel = Channels[i] as DigitalOutput;
                 if (channel != null)                        // set zero/one values at particular position in
                     setValue(ref outputs, i, channel.Value);// output vector
             }
@@ -239,7 +242,7 @@ namespace MTS.AdminModule
             : base(slot, startChannel, channelsCount)
         {
             // allocate as much memory as necessary
-            Channels = new ModbusDigitalOutput[channelsCount];
+            Channels = new DigitalOutput[channelsCount];
         }
 
         #endregion
@@ -260,7 +263,7 @@ namespace MTS.AdminModule
         /// </summary>
         public override void Read(int hConnection)
         {
-            ModbusAnalogInput channel;
+            AnalogInput channel;
             // read values from hardware channels to integer array
 
             // maximum 4 values can read
@@ -273,7 +276,7 @@ namespace MTS.AdminModule
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)
             {   // some of channels may be unused
-                channel = Channels[i] as ModbusAnalogInput;
+                channel = Channels[i] as AnalogInput;
                 if (channel != null)
                     channel.SetValue(inputs[i]);    // for unused channel value of inputs[i] is unspecified
             }
@@ -291,7 +294,7 @@ namespace MTS.AdminModule
             : base(slot, startChannel, channelsCount)
         {
             // allocate as much memory as necessary
-            Channels = new ModbusAnalogInput[channelsCount];
+            Channels = new AnalogInput[channelsCount];
             inputs = new ushort[channelsCount];
             dInputs = new double[channelsCount];
         }

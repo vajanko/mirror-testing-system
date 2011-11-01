@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C186DE23-9AF7-4C5D-8328-7E00AE2AC4FF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -77,6 +77,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Modules\Admin\CalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Admin\EthercatSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Admin\ModbusSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Modules\Admin\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Modules\EditorModule\TestFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -112,7 +128,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Unit.cs" />
-    <Compile Include="Classes\Utils.cs" />
     <Compile Include="Controls\Converters\BoolNegationConverter.cs" />
     <Compile Include="Controls\Converters\DoubleAmplifierConverter.cs" />
     <Compile Include="Controls\Converters\DoubleToPointCollection.cs" />
@@ -121,35 +136,38 @@
     <Compile Include="Controls\TestControl1.xaml.cs">
       <DependentUpon>TestControl1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HWSettings.cs" />
-    <Compile Include="HWSettings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>HWSettings.settings</DependentUpon>
+    <Compile Include="Modules\Admin\CalibrationWindow.xaml.cs">
+      <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\AdminModule\Communication\Moxa\ModbusModule.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Beckhoff\ECChannel.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Beckhoff\ECModule.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Channels.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Dummy\DummyChannel.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Dummy\DummyModule.cs" />
-    <Compile Include="Modules\AdminModule\Communication\IChannel.cs" />
-    <Compile Include="Modules\AdminModule\Communication\IModule.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Moxa\ModbusChannel.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Moxa\ModbusSlot.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Moxa\Mxio.cs" />
-    <Compile Include="Modules\AdminModule\Communication\Moxa\RTB.cs" />
+    <Compile Include="Modules\Admin\EthercatSettings.xaml.cs">
+      <DependentUpon>EthercatSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Admin\ModbusSettings.xaml.cs">
+      <DependentUpon>ModbusSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\HWSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\HWSettings.Designer.cs">
+      <DependentUpon>HWSettings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Modules\Admin\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\EditorModule\FileManager.cs" />
-    <Compile Include="Modules\EditorModule\Test\Metadata.cs" />
-    <Compile Include="Modules\EditorModule\Test\Collection.cs" />
+    <Compile Include="Modules\EditorModule\ParamValue.cs" />
+    <Compile Include="Modules\EditorModule\TestCollection.cs" />
+    <Compile Include="Modules\EditorModule\TestValue.cs" />
     <Compile Include="Controls\UpDownButton.cs" />
-    <Compile Include="Modules\EditorModule\Test\Values.cs" />
     <Compile Include="Controls\Mirror.xaml.cs">
       <DependentUpon>Mirror.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\EditorModule\TestFile.xaml.cs">
       <DependentUpon>TestFile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modules\EditorModule\ValueBase.cs" />
     <Compile Include="Modules\TesterModule\Shift.cs" />
     <Compile Include="Modules\TesterModule\Task\PresenceTest\PresenceTest.cs" />
     <Compile Include="Modules\TesterModule\Task\RangeTest\BlinkerTest.cs" />
@@ -196,11 +214,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="HWSettings.settings">
+    <None Include="app.config">
+      <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
+    </None>
+    <None Include="Settings\HWSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>HWSettings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
     </None>
+    <None Include="Modules\EditorModule\template.dtd" />
+    <None Include="Modules\EditorModule\test.dtd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -233,6 +256,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Modules\EditorModule\test.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Communication\IO.csproj">
+      <Project>{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}</Project>
+      <Name>IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Modules\EditorModule\template.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\DataModule\" />

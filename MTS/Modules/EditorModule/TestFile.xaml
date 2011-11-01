@@ -1,17 +1,17 @@
-﻿<ad:DocumentContent x:Class="MTS.EditorModule.TestFile"
+﻿<ad:DocumentContent x:Class="MTS.Editor.TestFile"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
     xmlns:ctrl="clr-namespace:MTS.Controls"
-    xmlns:ed="clr-namespace:MTS.EditorModule"
+    xmlns:ed="clr-namespace:MTS.Editor"
     Height="400" Width="400" Name="root" Title="{Binding DisplayFileName, RelativeSource={RelativeSource self}}">
 
     <DockPanel LastChildFill="True">
-        <ListBox ItemsSource="{Binding Tests.Values}" DisplayMemberPath="Name" DockPanel.Dock="Left"/>
+        <ListBox ItemsSource="{Binding Tests}" DisplayMemberPath="Name" DockPanel.Dock="Left"/>
         <!-- Main area where all controls for setting testin paramater are placed -->
         <ScrollViewer>
-            <ListBox ItemsSource="{Binding Tests.Values}"
+            <ListBox ItemsSource="{Binding Tests}"
                      DockPanel.Dock="Left" x:Name="testList">
                 <ListBox.Resources>
                     <!-- Styles -->
@@ -42,30 +42,30 @@
                          inside data templates are binded to parameters in collectio (TwoWay mode) - so when
                          user change any value it's get ynchronized -->
                     <!-- UpDownButton for numeric parameter -->
-                    <DataTemplate DataType="{x:Type ed:IntParamValue}">
-                        <ctrl:UpDownButton Value="{Binding Value, Mode=TwoWay}" Decimals="0"
+                    <DataTemplate DataType="{x:Type ed:IntParam}">
+                        <ctrl:UpDownButton Value="{Binding IntValue, Mode=TwoWay}" Decimals="0"
                                            MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
                                            Unit="{Binding Unit}"/>
                     </DataTemplate>
                     <!-- UpDownButton for real numeric parameter -->
-                    <DataTemplate DataType="{x:Type ed:DoubleParamValue}">
-                        <ctrl:UpDownButton Value="{Binding Value, Mode=TwoWay}" Decimals="1"
+                    <DataTemplate DataType="{x:Type ed:DoubleParam}">
+                        <ctrl:UpDownButton Value="{Binding DoubleValue, Mode=TwoWay}" Decimals="1"
                                            MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
                                            Unit="{Binding Unit}"/>
                     </DataTemplate>
                     <!-- ChechBox for bool parameter -->
-                    <DataTemplate DataType="{x:Type ed:BoolParamValue}">
-                        <CheckBox IsChecked="{Binding Value, Mode=TwoWay}">
+                    <DataTemplate DataType="{x:Type ed:BoolParam}">
+                        <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay}">
                             <Label Content="{Binding Text}"/>   <!-- BoolParameterMetadata has additional property for chech box description -->
                         </CheckBox>
                     </DataTemplate>
                     <!-- TextBox for string parameter -->
-                    <DataTemplate DataType="{x:Type ed:StringParamValue}">
-                        <TextBox Text="{Binding Value, Mode=TwoWay}" MinWidth="80"/>
+                    <DataTemplate DataType="{x:Type ed:StringParam}">
+                        <TextBox Text="{Binding StringValue, Mode=TwoWay}" MinWidth="80"/>
                     </DataTemplate>
                     <!-- ComboBox for enum parameter -->
-                    <DataTemplate DataType="{x:Type ed:EnumParamValue}">
-                        <ComboBox SelectedIndex="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding Values}" MinWidth="80"/>
+                    <DataTemplate DataType="{x:Type ed:EnumParam}">
+                        <ComboBox SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Values}" MinWidth="80"/>
                     </DataTemplate>
                     <!-- Add new data templates here if new type of paramter is necessary ... -->
                 </ListBox.Resources>
@@ -74,8 +74,6 @@
                     <!-- Style applied to each test (panel with header) -->
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="VerticalAlignment" Value="Top"/>  <!-- in group different test are aligned top -->
-                        <!--<Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="BorderBrush" Value="Black"/>-->
                         <Setter Property="Focusable" Value="False"/>    <!-- disable selection-->
                     </Style>
                 </ListBox.ItemContainerStyle>
@@ -85,7 +83,7 @@
                     <DataTemplate DataType="{x:Type ed:TestValue}">
                         <!-- Test propery Parametes is a dictionary - collection of <key,value> pairs. Because we only
                              want values, binding to Parameters.Values is used -->
-                        <ListView ItemsSource="{Binding Parameters.Values}">
+                        <ListView ItemsSource="{Binding}">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListViewItem}">
                                     <Setter Property="VerticalAlignment" Value="Top"/>

@@ -1,7 +1,7 @@
 ﻿using System;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -16,11 +16,6 @@ namespace MTS.TesterModule
 
         #endregion
 
-        public override void Initialize(TimeSpan time)
-        {
-            currentState = State.Initializing;
-            base.Initialize(time);
-        }
         public override void Update(TimeSpan time)
         {
             // In this case, if max time elapsed, task has to be aborted. If folding is running too long
@@ -29,83 +24,49 @@ namespace MTS.TesterModule
 
             // measure time - end if enought time has elapsed
             if (Duration.TotalMilliseconds > maxTestingTime)
-                currentState = State.Aborting;
+                exState = ExState.Aborting;
 
-            switch (currentState)
+            switch (exState)
             {
-                case State.Initializing:
-                    Output.WriteLine("{0}: Unfolding ... Time: {1}", Name, time);
-                    channels.UnfoldPowerfold.Value = true;          // start to unfold
-                    currentState = State.Unfolding;                 // switch to next state
+                case ExState.Initializing:
+                    channels.StartUnfolding();                   // start to unfold
+                    exState = ExState.Unfolding;                 // switch to next state
                     break;
-                case State.Unfolding:
-                    // check current while unfolding
-                    measureCurrent(time);
-                    if ((channels.IsOldMirror.Value && channels.IsOldPowerfoldDown.Value) ||
-                        (!channels.IsOldMirror.Value && channels.IsPowerfoldDown.Value))
+                case ExState.Unfolding:                          // check current while unfolding
+                    measureCurrent(time, channels.PowerfoldCurrent);
+                    if (channels.IsFolded())
                     {
-                        channels.UnfoldPowerfold.Value = false;     // stop unfolding
-                        channels.FoldPowerfold.Value = true;        // start to fold
-                        currentState = State.Folding;               // switch to next state
+                        channels.StartFolding();                 // stop unfolding and start to fold
+                        exState = ExState.Folding;               // switch to next state
                     }
                     break;
-                case State.Folding:
-                    // check current while folding
-                    measureCurrent(time);
-                    if ((channels.IsOldMirror.Value && channels.IsOldPowerfoldUp.Value) ||
-                        (!channels.IsOldMirror.Value && channels.IsPowerfoldUp.Value))
-                    {
-                        channels.FoldPowerfold.Value = false;       // stop folding
-                        currentState = State.Finalizing;            // switch to next state
-                    }
+                case ExState.Folding:                            // check current while folding
+                    measureCurrent(time, channels.PowerfoldCurrent);
+                    if (channels.IsUnfolded())
+                        exState = ExState.Finalizing;            // switch to next state
                     break;
-                case State.Finalizing:
-                    // for sure - switch off actuator
-                    channels.FoldPowerfold.Value = false;
-                    channels.UnfoldPowerfold.Value = false;
-                    Finish(time, getTaskState());                   // raise events, save state
-                    currentState = State.None;                      // for sure - this test never get updated
+                case ExState.Finalizing:
+                    channels.StopPowerfold();                    // for sure - switch off actuator
+                    Finish(time, getTaskState());                // raise events, save state
+                    exState = ExState.None;                      // stop to update this test
                     break;
-                case State.Aborting:
-                    channels.FoldPowerfold.Value = false;
-                    channels.UnfoldPowerfold.Value = false;
-                    Finish(time, TaskState.Aborted);
-                    currentState = State.None;
+                case ExState.Aborting:
+                    channels.StopPowerfold();                    // for sure - swtitch off actuator
+                    Finish(time, TaskState.Aborted);             // raise events, save state
+                    exState = ExState.None;                      // stop to update this test
                     break;
             }
         }
-
-        #region State
-
-        private State currentState = State.None;
-        private enum State
-        {
-            Initializing,
-            Unfolding,
-            Folding,
-            Aborting,
-            Finalizing,
-            None
-        }
-
-        #endregion
 
         #region Constructors
 
         public PowerfoldTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
-            CurrentChannel = channels.PowerfoldCurrent;     // reading current values
-
-            ParamCollection param = testParam.Parameters;
-            IntParamValue iValue;
             // from test parameters get MAX_TESTING_TIME item
-            if (param.ContainsKey(ParamDictionary.MAX_TESTING_TIME))
-            {   // it must be double type value
-                iValue = param[ParamDictionary.MAX_TESTING_TIME] as IntParamValue;
-                if (iValue != null)     // param is of other type then double
-                    maxTestingTime = iValue.Value;
-            }
+            IntParam iValue = testParam.GetParam<IntParam>(TestValue.MaxTestingTime);
+            if (iValue != null)     // it must be of type int
+                maxTestingTime = iValue.IntValue;
         }
 
         #endregion

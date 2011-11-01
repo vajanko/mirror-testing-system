@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
+using MTS.IO;
 
 namespace MTS.TesterModule
 {
@@ -25,42 +25,23 @@ namespace MTS.TesterModule
             outChannels.Add(channel);
             outValues.Add(value);
         }
-        /// <summary>
-        /// Show values we are going to write
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        public override void Initialize(System.TimeSpan time)
-        {
-            base.Initialize(time);
-            string msg = "Setting multiple values:";
-            for (int i = 0; i < outChannels.Count; i++)
-                msg += string.Format("\n\t{0} <- {1}", outChannels[i].Name, outValues[i]);
-            Output.WriteLine(msg);
-        }
-        /// <summary>
-        /// Write values to channels
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        public override void UpdateOutputs(TimeSpan time)
-        {
-            for (int i = 0; i < outChannels.Count; i++)
-                outChannels[i].Value = outValues[i];
-            Finish(time, TaskState.Completed);
-            base.UpdateOutputs(time);
-        }
-        /// <summary>
-        /// Show what we have written
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        /// <param name="state">Final state of this task</param>
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            string msg = "Multiple values are set:";
-            for (int i = 0; i < outChannels.Count; i++)
-                msg += string.Format("\n\t{0} == {1}", outChannels[i].Name, outChannels[i].Value);
-            Output.WriteLine(msg);
 
-            base.Finish(time, state);
+        public override void Update(TimeSpan time)
+        {
+            switch (exState)
+            {
+                case ExState.Initializing:
+                    exState = ExState.Finalizing;
+                    break;
+                case ExState.Finalizing:
+                    for (int i = 0; i < outChannels.Count; i++)
+                        outChannels[i].Value = outValues[i];
+                    Finish(time, TaskState.Completed);
+                    break;
+                case ExState.Aborting:
+                    Finish(time, TaskState.Aborted);
+                    break;
+            }
         }
 
         #region Constructors

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -182,22 +182,22 @@ namespace MTS.TesterModule
             // center mirror glass to zero plane saved in HWSettings
             this.AddTask(new CenterTask(channels));
             // move north
-            this.AddTask(new TravelTest(channels, tests[TestDictionary.TRAVEL_NORTH], MoveDirection.Up));
+            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelNorth) , MoveDirection.Up));
 
             // center mirror glass to zero plane saved in HWSettings
             this.AddTask(new CenterTask(channels));
             // move north
-            this.AddTask(new TravelTest(channels, tests[TestDictionary.TRAVEL_SOUTH], MoveDirection.Down));
+            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelSouth), MoveDirection.Down));
 
             // center mirror glass to zero plane saved in HWSettings
             this.AddTask(new CenterTask(channels));
             // move north
-            this.AddTask(new TravelTest(channels, tests[TestDictionary.TRAVEL_WEST], MoveDirection.Left));
+            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelWest), MoveDirection.Left));
 
             // center mirror glass to zero plane saved in HWSettings
             this.AddTask(new CenterTask(channels));
             // move north
-            this.AddTask(new TravelTest(channels, tests[TestDictionary.TRAVEL_EAST], MoveDirection.Right));
+            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelEast), MoveDirection.Right));
 
             // after travel test has been executed - center mirror back to its zero position
             this.AddTask(new CenterTask(channels));
@@ -211,7 +211,7 @@ namespace MTS.TesterModule
 
         public void AddRubberTest(TestCollection tests)
         {
-            TestValue test = tests[TestDictionary.RUBBER];
+            TestValue test = tests.GetTest(TestCollection.Rubber);
             // add this test if it is enabled
             if (test.Enabled)
                 this.AddTask(new ExecuteIf(channels, this, channels.IsLeftMirror, true,
@@ -237,7 +237,7 @@ namespace MTS.TesterModule
             this.AddTask(new WaitForValue(channels, channels.IsVacuum, true));
 
             // provide test
-            this.AddTask(new PulloffTest(channels, tests[TestDictionary.PULLOFF]));
+            this.AddTask(new PulloffTest(channels, tests.GetTest(TestCollection.Pulloff)));
 
             // stop suction
             this.AddTask(new SetValue(channels, channels.SuckOn, false));
@@ -368,7 +368,7 @@ namespace MTS.TesterModule
             while (node1 != null)
             {
                 node2 = node1.Next;
-                node1.Value.UpdateOutputs(time);    // notice that when updating node1 - it could be removed
+                //node1.Value.UpdateOutputs(time);    // notice that when updating node1 - it could be removed
                 node1 = node2;                      // because of that we hold next node = node2
             }
             // update output channels - values that has been just writed by executing tasks

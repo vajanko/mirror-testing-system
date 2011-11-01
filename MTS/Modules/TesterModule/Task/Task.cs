@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
+using MTS.IO;
 
 
 namespace MTS.TesterModule
@@ -14,8 +14,16 @@ namespace MTS.TesterModule
     /// <param name="args">Holds result of this task</param>
     public delegate void TaskExecutedHandler(Task sender, TaskExecutedEventArgs args);
 
+    /// <summary>
+    /// Base class of each task.
+    /// </summary>
     public abstract class Task
     {
+        /// <summary>
+        /// Collection of channels from communication with remote hardware. This colleciton is regulary
+        /// updated in a loop. New values are writed to remote hardware memory and values from hardware
+        /// are writed to this collection
+        /// </summary>
         protected Channels channels;
         protected TaskState state;
         protected TaskResult result = new TaskResult();
@@ -58,6 +66,9 @@ namespace MTS.TesterModule
 
         #endregion
 
+        /// <summary>
+        /// Event that is raised when task get executed
+        /// </summary>
         public event TaskExecutedHandler TaskExecuted;
 
         /// <summary>
@@ -72,23 +83,18 @@ namespace MTS.TesterModule
         #region Task Execution
 
         /// <summary>
-        /// Override this method to implement task execution, but also call this implementation. This method
-        /// is called only once and initialize task execution.
+        /// This method is called only once and initialize task execution. Any task can be reused just
+        /// by calling this initialization method
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        public virtual void Initialize(TimeSpan time)
+        public void Initialize(TimeSpan time)
         {
+            // any task can be reused just by calling this initialization method
+            exState = ExState.Initializing;     // this makes the task reusable
             BeginTime = time;
             state = TaskState.Running;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="time">Current time - time of system clock when this method is called</param>
-        public virtual void UpdateOutputs(TimeSpan time)
-        {
-            EndTime = time;
-        }
+
         /// <summary>
         /// Override this method to implement task execution, but also call this implementation. This method
         /// is cyclically called and performs task execution.
@@ -99,19 +105,132 @@ namespace MTS.TesterModule
             EndTime = time;     // last time updated
         }
         /// <summary>
-        /// Overrirde this method to implement task execution, but also call this implementation. This method
-        /// is called only once and initialize task result data.
+        /// This method is called only once and initialize task result data.
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
         /// <param name="state">State of task at the end of execution</param>
-        public virtual void Finish(TimeSpan time, TaskState state)
+        public void Finish(TimeSpan time, TaskState state)
         {
             EndTime = time;
             this.state = state;
             result.State = this.state;
             result.Duration = this.Duration;
             RaiseTaskExecuted();
+
+            exState = ExState.None;     // prevnet to do anithig else
         }
+
+        #endregion
+
+        #region Execution State
+
+        /// <summary>
+        /// Current state of the task execution. During execution task is passing throught various
+        /// states. In update method is desided what to do according the current state.
+        /// </summary>
+        protected ExState exState;
+        /// <summary>
+        /// Possible states of any task. This include possible states of all tasks.
+        /// It is not necessary to handle all of this state in task implementation
+        /// </summary>
+        protected enum ExState
+        {
+            /// <summary>
+            /// Test is being initialized
+            /// </summary>
+            Initializing,
+
+            /// <summary>
+            /// Test is measuring some kind of value (current, time, temperature, ...)
+            /// </summary>
+            Measuring,
+
+            /// <summary>
+            /// Direction light is switched on, current is being measured
+            /// </summary>
+            BlinkerOn,
+            /// <summary>
+            /// Direction light is switched off, nothing is being provided
+            /// </summary>
+            BlinkerOff,
+
+            /// <summary>
+            /// Whole mirror is being unfoled
+            /// </summary>
+            Unfolding,
+            /// <summary>
+            /// Whole mirror is being folded
+            /// </summary>
+            Folding,
+
+            /// <summary>
+            /// Sucker for pull-off test is down
+            /// </summary>
+            SuckerIsDown,
+            /// <summary>
+            /// Sucker for pull-off test is up
+            /// </summary>
+            SuckerIsUp,
+            /// <summary>
+            /// Air from the sudker disk is being sucked in. Vacuum is going to be created
+            /// </summary>
+            Sucking,
+            /// <summary>
+            /// Air is being blowed in the sucker disk. This removes vacuum, so sucker disk may be moved
+            /// down. This is usually done when finilizing pull-off test.
+            /// </summary>
+            Blowing,
+            /// <summary>
+            /// Some hardware component is being moved up (sucker disk, distance sensors, galss ...)
+            /// </summary>
+            MoveingUp,
+            /// <summary>
+            /// Some hardware component is being moved down (sucker disk, distance sensors, glass ...)
+            /// </summary>
+            MoveingDown,
+            /// <summary>
+            /// Some hardware component is being moved left
+            /// </summary>
+            MoveingLeft,
+            /// <summary>
+            /// Some hardware component is being moved right
+            /// </summary>
+            MoveingRight,
+
+            StateA,
+            StateB,
+
+            /// <summary>
+            /// Test is being finalized
+            /// </summary>
+            Finalizing,
+            /// <summary>
+            /// Test is being aborted
+            /// </summary>
+            Aborting,
+            /// <summary>
+            /// Unspecified state of test, nothig is executed
+            /// </summary>
+            None
+        }
+
+        #endregion
+
+        #region Time Measurement
+
+        private TimeSpan start;
+        /// <summary>
+        /// Start to measure time from now. This method is usually used by some test that need to
+        /// measure intervals between two states
+        /// </summary>
+        /// <param name="time">Current time - time of system clock when this method is called</param>
+        protected void StartWatch(TimeSpan time) { start = time; }
+        /// <summary>
+        /// Calculate time elapsed since time measurement has been started
+        /// </summary>
+        /// <param name="time">Current time - time of system clock when this method is called</param>
+        /// <returns>Time elapsed since StartWatch has been called</returns>
+        protected double TimeElapsed(TimeSpan time) { return (time - start).TotalMilliseconds; }
 
         #endregion
 

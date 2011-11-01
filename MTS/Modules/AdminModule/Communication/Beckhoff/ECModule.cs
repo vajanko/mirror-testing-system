@@ -16,14 +16,14 @@ namespace MTS.AdminModule
         private TcAdsClient client = new TcAdsClient();
 
         // all channels
-        private List<ECChannel> inputs = new List<ECChannel>();
+        private List<ChannelBase> inputs = new List<ChannelBase>();
         private BinaryWriter iWriter;      // input writer
         private AdsStream iReadStream;     // input read stream
         private int iReadStreamOffset;
         private const int readCommand = 0xF080;     // constant that is entered to method call when reading
 
         // only output channels
-        private List<ECChannel> outputs = new List<ECChannel>();
+        private List<ChannelBase> outputs = new List<ChannelBase>();
         private BinaryWriter oWriter;   // output writer
         private AdsStream oReadStream;  // output read stream
         private int oWriterOffset;      // 
@@ -61,7 +61,7 @@ namespace MTS.AdminModule
             // Example: HeatingFoilCurrent;X;INT;2.0;0.0;Input;0;Data In . Channel 1 . Term 2 (KL3152) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
 
             // parse TwinCAT configuration file
-            ECChannel channel;
+            ChannelBase channel;
             string tmp;
             int size;
             string[] items;
@@ -80,10 +80,10 @@ namespace MTS.AdminModule
                 if (tmp == boolString)      // bool is a digital channel
                 {
                     if (items[5] == inputString)
-                        channel = new ECDigitalInput();
+                        channel = new DigitalInput();
                     else if (items[5] == outputString)
                     {
-                        channel = new ECDigitalOutput();
+                        channel = new DigitalOutput();
                         outputs.Add(channel);           // outputs channels are added also to inputs   
                     }
                     else continue;          // skip this line
@@ -98,25 +98,30 @@ namespace MTS.AdminModule
                     {
                         // read channel type: input/output
                         if (items[5] == inputString)
-                            channel = new ECAnalogInput();
+                            channel = new AnalogInput();
                         else if (items[5] == outputString)
                         {
-                            channel = new ECAnalogOutput();
+                            channel = new AnalogOutput();
                             outputs.Add(channel);           // outputs channels are added also to inputs
                         }
                         else continue;  // skip this line
                     }
                     else continue;      // skip this line
                 }
+                // create a particular type of address fot this king of channel
+                ECAddress addr = new ECAddress();
                 channel.Name = items[0];
                 channel.Size = size;
                 // Full name in format: TaskName.Inputs.VariableName
                 // notice the "s" at the end of "Input" or "Output" string
-                channel.FullName = TaskName + "." + items[5] + "s." + items[0];
+                addr.FullName = TaskName + "." + items[5] + "s." + items[0];
                 // initialize variable "address"
-                channel.IndexGroup = (int)AdsReservedIndexGroups.SymbolValueByHandle;
+                addr.IndexGroup = (int)AdsReservedIndexGroups.SymbolValueByHandle;
                 // notice that we do not initialize channel.IndexOffset, because for that a connection is necessary
-                //channel.IndexOffset = client.CreateVariableHandle(channel.FullName);
+                //addr.IndexOffset = client.CreateVariableHandle(channel.FullName);
+
+                // set channel address
+                channel.Address = addr;
 
                 // all channel are added to inputs (also outputs)
                 inputs.Add(channel);
@@ -141,8 +146,12 @@ namespace MTS.AdminModule
         public void Initialize()
         {
             // see that we are calling a method of the client - connection must be established
-            foreach (ECChannel channel in inputs)
-                channel.IndexOffset = client.CreateVariableHandle(channel.FullName);
+            foreach (ChannelBase channel in inputs)
+            {
+                ECAddress addr = channel.Address as ECAddress;
+                if (addr != null)   // specifiy address of each channel - it must be ethercat address
+                    addr.IndexOffset = client.CreateVariableHandle(addr.FullName);
+            }
 
             alocateChannels();  // alocat memory for reading a writing channels
         }
@@ -185,7 +194,11 @@ namespace MTS.AdminModule
         {
             // delete variable handles
             for (int i = 0; i < inputs.Count; i++)
-                client.DeleteVariableHandle(inputs[i].IndexOffset);
+            {
+                ECAddress addr = inputs[i].Address as ECAddress;
+                if (addr != null)
+                    client.DeleteVariableHandle(addr.IndexOffset);
+            }
             client.Dispose();
         }
 
@@ -208,16 +221,6 @@ namespace MTS.AdminModule
         public bool IsConnected
         {
             get { return (client != null) ? client.IsConnected : false; }
-        }
-
-        public void SwitchOffDigitalOutputs()
-        {
-            foreach (ECChannel ch in outputs)
-            {
-                if (ch is IDigitalOutput)
-                    (ch as IDigitalOutput).Value = false;
-            }
-            UpdateOutputs();
         }
 
         #endregion
@@ -275,8 +278,10 @@ namespace MTS.AdminModule
             iWriter = new BinaryWriter(new AdsStream(writeLength));
             for (int i = 0; i < count; i++)
             {
-                iWriter.Write(inputs[i].IndexGroup);
-                iWriter.Write(inputs[i].IndexOffset);
+                ECAddress addr = inputs[i].Address as ECAddress;
+                if (addr == null) continue;     // skip this channel if no (or not correct) address is present
+                iWriter.Write(addr.IndexGroup);
+                iWriter.Write(addr.IndexOffset);
                 iWriter.Write(inputs[i].Size);
                 readLength += inputs[i].Size;       // count size of readed memory (+error codes)
             }
@@ -300,8 +305,10 @@ namespace MTS.AdminModule
             oWriter = new BinaryWriter(new AdsStream(writeLength));
             for (int i = 0; i < count; i++)
             {
-                oWriter.Write(outputs[i].IndexGroup);    // notice that data are writed at the end
-                oWriter.Write(outputs[i].IndexOffset);
+                ECAddress addr = inputs[i].Address as ECAddress;
+                if (addr == null) continue;     // skip this channel if no (or not correct) address is present
+                oWriter.Write(addr.IndexGroup);    // notice that data are writed at the end
+                oWriter.Write(addr.IndexOffset);
                 oWriter.Write(outputs[i].Size);
             }
             // when writing add data at the end of this writer - oWriterOffset points here

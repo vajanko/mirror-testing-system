@@ -17,7 +17,7 @@ using AvalonDock;
 
 using Microsoft.Win32;
 
-namespace MTS.EditorModule
+namespace MTS.Editor
 {
     /// <summary>
     /// Interaction logic for TestFile.xaml
@@ -135,7 +135,7 @@ namespace MTS.EditorModule
             // content. This happens when new file is created or already created file is opened
 
             // By default every collection has a view. Just take its default view and modify it
-            var view = CollectionViewSource.GetDefaultView(Tests.Values);
+            var view = CollectionViewSource.GetDefaultView(Tests);
 
             // sort tests by Name
             //view.SortDescriptions.Clear();
@@ -161,7 +161,7 @@ namespace MTS.EditorModule
             // which does not exists
             Exists = false;
             // fill with default collection
-            Tests = new TestCollection();
+            Tests = FileManager.CreateNew();
             // create view of tests - grouping and sorting
             createTestView(Tests);
             // register method that is called when any property is changed

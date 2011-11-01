@@ -1,7 +1,7 @@
 ﻿using System;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -22,18 +22,10 @@ namespace MTS.TesterModule
         /// <param name="time">Time of calling this method</param>
         public override void Update(TimeSpan time)
         {
-            // decide if test passed of failed
-            TaskState state = TaskState.Passed;
-            if (PresenceChannel.Value != shouldBePresent)
-                state = TaskState.Failed;
-            // show result to user
-            if (PresenceChannel.Value)
-                Output.WriteLine("\"{0}\" test result: Is present", Name);
-            else Output.WriteLine("\"{0}\" test result: Is not present", Name);
-
-            Finish(time, state);
-
-            base.Update(time);
+            if (PresenceChannel.Value == shouldBePresent)
+                Finish(time, TaskState.Passed);
+            else
+                Finish(time, TaskState.Failed);
         }
 
         #region Constructors
@@ -49,15 +41,10 @@ namespace MTS.TesterModule
         {
             PresenceChannel = channel;
 
-            ParamCollection param = testParam.Parameters;
-            BoolParamValue bValue;
-            // from test parameters get TestingTime item
-            if (param.ContainsKey(ParamDictionary.TEST_PRESENCE))
-            {  // it must be bool type value
-                bValue = param[ParamDictionary.TEST_PRESENCE] as BoolParamValue;
-                if (bValue != null)     // otherwise param is of other type then bool
-                    shouldBePresent = bValue.Value;
-            }
+            // from test parameters get TestPresence parameter
+            BoolParam bValue = testParam.GetParam<BoolParam>(TestValue.TestPresence);
+            if (bValue != null)     // it must be of type bool
+                shouldBePresent = bValue.BoolValue;
         }
 
         #endregion
