@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Media.Media3D;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -15,43 +15,44 @@ namespace MTS.TesterModule
         private int maxTestingTime;
 
         private MoveDirection travelDirection;
+        private IAnalogInput actuatorChannel;
 
         #endregion
 
-        public override void UpdateOutputs(TimeSpan time)
-        {
-            // decide which direction to move
-            switch (travelDirection)
-            {
-                case MoveDirection.Up: channels.MoveUp(); break;
-                case MoveDirection.Down: channels.MoveDown(); break;
-                case MoveDirection.Left: channels.MoveLeft(); break;
-                case MoveDirection.Right: channels.MoveRight(); break;
-                default: channels.Stop(); break;
-            }
-
-            // this test is running too long - it must be aborted
-            if (Duration.TotalMilliseconds > maxTestingTime)
-                Finish(time, TaskState.Aborted);
-
-            base.UpdateOutputs(time);
-        }
         public override void Update(TimeSpan time)
         {
-            angleAchieved = channels.GetRotationAngle();
-            // final position has been reached - finish
-            if (angleAchieved > minAngle)
-                Finish(time, TaskState.Completed);
+            // In this case, if max time elapsed, task has to be aborted. The final position has not been reached,
+            // but we already know that this is a bed pieace
+            if (Duration.TotalMilliseconds > maxTestingTime)
+                exState = ExState.Aborting;
 
-            base.Update(time);
-        }
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            channels.Stop();
-
-            Output.WriteLine("{0}: Angle achieved: {1}, Time: {2}, Duration: {3}", Name, angleAchieved, time, Duration);
-
-            base.Finish(time, state);
+            switch (exState)
+            {
+                case ExState.Initializing:
+                    angleAchieved = 0;                              // initialize variables - default values
+                    channels.MoveMirror(travelDirection);           // start to move mirror glass
+                    actuatorChannel = travelDirection.IsHorizontal() ?
+                        channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
+                        channels.VerticalActuatorCurrent;           // depends on which direction we are moveing in
+                    exState = ExState.Measuring;                    // swtich to next state
+                    break;
+                case ExState.Measuring:
+                    measureCurrent(time, actuatorChannel);          // measure current
+                    angleAchieved = channels.GetRotationAngle();    // measure angle
+                    if (angleAchieved > minAngle)                   // final position reached
+                        exState = ExState.Finalizing;               // finish
+                    break;
+                case ExState.Finalizing:
+                    channels.StopMirror();                          // stop moveing mirror glass
+                    exState = ExState.None;                         // stop to update this test
+                    Finish(time, getTaskState());                   // finish with apropriate state
+                    break;
+                case ExState.Aborting:
+                    channels.StopMirror();                          // stop moveing mirror glass
+                    exState = ExState.None;                         // stop to update this test
+                    Finish(time, TaskState.Aborted);
+                    break;
+            }
         }
 
         #region Constructors
@@ -59,32 +60,18 @@ namespace MTS.TesterModule
         public TravelTest(Channels channels, TestValue testParam, MoveDirection travelDirection)
             : base(channels, testParam)
         {
-            // find right current channel - we only measure current on actuator that is going to be used for
-            // movement
-            if (travelDirection.IsVertical())
-                CurrentChannel = channels.VerticalActuatorCurrent;
-            else CurrentChannel = channels.HorizontalActuatorCurrent;
             // this test is going to move the mirror in this direction
             this.travelDirection = travelDirection;
 
             // initialization of testing parameters
-            ParamCollection param = testParam.Parameters;
-            DoubleParamValue dValue;
-            // from test parameters get MIN_ANGLE item
-            if (param.ContainsKey(ParamDictionary.MIN_ANGLE))
-            {   // it must be double type value
-                dValue = param[ParamDictionary.MIN_ANGLE] as DoubleParamValue;
-                if (dValue != null)     // param is of other type then double
-                    minAngle = dValue.Value;
-            }
-            IntParamValue iValue;
-            // from test parameters get MAX_TESTING_TIME item
-            if (param.ContainsKey(ParamDictionary.MAX_TESTING_TIME))
-            {   // it must be double type value
-                iValue = param[ParamDictionary.MAX_TESTING_TIME] as IntParamValue;
-                if (iValue != null)     // param is of other type then double
-                    maxTestingTime = iValue.Value;
-            }
+            // from test parameters get MinAngle item
+            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.MinAngle);
+            if (dValue != null)     // it must be of type double
+                minAngle = dValue.DoubleValue;
+            // from test parameters get MaxTestingTime item
+            IntParam iValue = testParam.GetParam<IntParam>(TestValue.MaxTestingTime);
+            if (iValue != null)     // it must be of type int
+                maxTestingTime = iValue.IntValue;
         }
 
         #endregion

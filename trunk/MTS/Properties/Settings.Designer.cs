@@ -23,67 +23,150 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        /// <summary>
+        /// Name of protocol used to communicate with tester hardware. Possible values are: Modbus, Ethercat or Dummy
+        /// </summary>
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("Name of protocol used to communicate with tester hardware. Possible values are: M" +
+            "odbus, Ethercat or Dummy")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Dummy")]
-        public string HW_Type {
+        public string Protocol {
             get {
-                return ((string)(this["HW_Type"]));
+                return ((string)(this["Protocol"]));
+            }
+            set {
+                this["Protocol"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Task1")]
-        public string TaskName {
+        public string EthercatTaskName {
             get {
-                return ((string)(this["TaskName"]));
+                return ((string)(this["EthercatTaskName"]));
+            }
+            set {
+                this["EthercatTaskName"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.127.254")]
-        public string IpAddress {
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
+        public string ModbusIpAddress {
             get {
-                return ((string)(this["IpAddress"]));
+                return ((string)(this["ModbusIpAddress"]));
+            }
+            set {
+                this["ModbusIpAddress"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("502")]
-        public ushort Port {
+        public ushort ModbusPort {
             get {
-                return ((ushort)(this["Port"]));
+                return ((ushort)(this["ModbusPort"]));
+            }
+            set {
+                this["ModbusPort"] = value;
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("./logs.txt")]
+        [global::System.Configuration.DefaultSettingValueAttribute("logs.txt")]
         public string LogFile {
             get {
                 return ((string)(this["LogFile"]));
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Documents and Settings\\kovaco\\My Documents\\Visual Studio 2008\\Projects\\MTS Pro" +
-            "ject\\MTS\\MTS\\bin\\Debug\\moxaConfig.csv")]
-        public string ChannelsConfigFile {
+        [global::System.Configuration.DefaultSettingValueAttribute("task1.csv")]
+        public string EthercatConfigFile {
             get {
-                return ((string)(this["ChannelsConfigFile"]));
+                return ((string)(this["EthercatConfigFile"]));
+            }
+            set {
+                this["EthercatConfigFile"] = value;
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Task1")]
-        public string ConstructorParam {
+        [global::System.Configuration.DefaultSettingValueAttribute("template.xml")]
+        public string TemplateFile {
             get {
-                return ((string)(this["ConstructorParam"]));
+                return ((string)(this["TemplateFile"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("config\\")]
+        public string ConfigDir {
+            get {
+                return ((string)(this["ConfigDir"]));
+            }
+            set {
+                this["ConfigDir"] = value;
+            }
+        }
+        
+        /// <summary>
+        /// Absolute path to configuration file of channels for modbus protocol are stored
+        /// </summary>
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("Absolute path to configuration file of channels for modbus protocol are stored")]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("moxaConfig.csv")]
+        public string ModbusConfigFile {
+            get {
+                return ((string)(this["ModbusConfigFile"]));
+            }
+            set {
+                this["ModbusConfigFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal PrinterWidth {
+            get {
+                return ((decimal)(this["PrinterWidth"]));
+            }
+            set {
+                this["PrinterWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal PrinterHeight {
+            get {
+                return ((decimal)(this["PrinterHeight"]));
+            }
+            set {
+                this["PrinterHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PrinterName {
+            get {
+                return ((string)(this["PrinterName"]));
+            }
+            set {
+                this["PrinterName"] = value;
             }
         }
     }

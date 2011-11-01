@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Runtime.Serialization;
 
-namespace MTS.EditorModule
+namespace MTS.tmp.Editor
 {
     /// <summary>
     /// Base class for all metadata class. Metadata holds information about test or parameters

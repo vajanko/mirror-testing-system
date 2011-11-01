@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
+using MTS.IO;
 
 namespace MTS.TesterModule
 {
@@ -37,17 +37,30 @@ namespace MTS.TesterModule
         /// <param name="time">Time of calling this method</param>
         public override void Update(TimeSpan time)
         {
-            if (conditionChannel.Value == conditionValue)
-                scheduler.ChangeTask(this, thenTask);
-            else
-            {   // check if else condition is specified
-                // if not just finish this task
-                if (elseTask != null)
-                    scheduler.ChangeTask(this, elseTask);
-                else Finish(time, TaskState.Completed);
+            switch (exState)
+            {
+                case ExState.Initializing:
+                    if (conditionChannel.Value == conditionValue)
+                        exState = ExState.StateA;
+                    else 
+                        exState = ExState.StateB;
+                    break;
+                case ExState.StateA:
+                    scheduler.ChangeTask(this, thenTask);
+                    break;
+                case ExState.StateB:
+                    if (elseTask != null)
+                        scheduler.ChangeTask(this, elseTask);
+                    else
+                        exState = ExState.Finalizing;
+                    break;
+                case ExState.Finalizing:
+                    Finish(time, TaskState.Completed);
+                    break;
+                case ExState.Aborting:
+                    Finish(time, TaskState.Aborted);
+                    break;
             }
-            // after this method is called it never returns to be called            
-            base.Update(time);
         }
 
         #region Constructors

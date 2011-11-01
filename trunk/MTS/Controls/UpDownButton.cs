@@ -20,7 +20,6 @@ namespace MTS.Controls
     [TemplatePart(Name="PART_valueBox", Type=typeof(TextBox))]
     public class UpDownButton : Control
     {
-
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -43,7 +42,15 @@ namespace MTS.Controls
                     StringFormat = this.StringFormat
                 };
                 tb.SetBinding(TextBox.TextProperty, bind);
+                // initialize handler that will be executed when value of value text box change
+                tb.TextChanged += new TextChangedEventHandler(tb_TextChanged);
             }
+        }
+
+        private void tb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // text of text box has been changed - raise event of value changed
+            OnValueChanged(this, new RoutedEventArgs(ValueChangedEvent));
         }
 
         public string StringFormat
@@ -191,6 +198,25 @@ namespace MTS.Controls
 
         #region Events
 
+        #region ValueChanged Event
+
+        public static readonly RoutedEvent ValueChangedEvent =
+            EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Direct,
+            typeof(RoutedEventHandler), typeof(UpDownButton));
+
+        public event RoutedEventHandler ValueChanged
+        {
+            add { AddHandler(ValueChangedEvent, value); }
+            remove { RemoveHandler(ValueChangedEvent, value); }
+        }
+
+        protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(e);
+        }
+
+        #endregion
+
         #region Increment Event
 
         public static readonly RoutedEvent IncrementEvent =
@@ -212,6 +238,7 @@ namespace MTS.Controls
         protected virtual void OnIncrement(object sender, RoutedEventArgs e)
         {
             RaiseEvent(e);
+            OnValueChanged(sender, new RoutedEventArgs(ValueChangedEvent));
         }
 
         static private void handleMoveUpCommand(object target, ExecutedRoutedEventArgs e)
@@ -246,6 +273,7 @@ namespace MTS.Controls
         protected virtual void OnDecrement(object sender, RoutedEventArgs e)
         {
             RaiseEvent(e);
+            OnValueChanged(sender, new RoutedEventArgs(ValueChangedEvent));
         }
 
         static private void handleMoveDownCommand(object target, ExecutedRoutedEventArgs e)

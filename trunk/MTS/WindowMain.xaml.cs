@@ -12,7 +12,8 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 
 using MTS.Controls;
-using MTS.EditorModule;
+using MTS.Editor;
+using MTS.Admin;
 using MTS.TesterModule;
 
 using AvalonDock;
@@ -241,6 +242,40 @@ namespace MTS
             filePane.SelectedItem = tab;    // select just created tab
         }
 
+        // viewSettings
+        private void viewSettingsCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // setting window could be opened just once
+            foreach(var item in filePane.Items)
+                if (item is SettingsWindow)    // one of tab is a settings window
+                {
+                    e.CanExecute = false;   // could no open next one
+                    e.Handled = true;
+                    return;
+                }
+            // there is no setting window - could be opened
+            e.CanExecute = true;
+        }
+
+        private void viewSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var tab = new SettingsWindow(); // create new settings window
+            filePane.Items.Add(tab);        // add it to tab colleciton
+            filePane.SelectedItem = tab;    // select just created tab
+        }
+
+        // viewData
+        private void viewDataCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = false;
+            e.Handled = true;
+        }
+
+        private void viewDataExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            
+        }
+
         #endregion
 
         #region Constructors
@@ -252,5 +287,7 @@ namespace MTS
         }
 
         #endregion
+
+
     }
 }

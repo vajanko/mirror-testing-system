@@ -236,19 +236,18 @@ namespace MTS.AdminModule {
         public void SwitchOffDigitalOutputs()
         {
             throw new NotImplementedException("Method which switch all ouputs to safe state is not implemented yet!");
-
-            if (module != null)
-                module.SwitchOffDigitalOutputs();
         }
 
         #endregion
 
         #region Public methods
 
+        #region Mirror glass
+
         /// <summary>
         /// Start to move up mirror glass
         /// </summary>
-        public void MoveUp()
+        public void MoveMirrorUp()
         {
             MoveMirrorVertical.Value = false;
             MoveMirrorReverse.Value = true;
@@ -257,7 +256,7 @@ namespace MTS.AdminModule {
         /// <summary>
         /// Start to move down mirror glass
         /// </summary>
-        public void MoveDown()
+        public void MoveMirrorDown()
         {
             MoveMirrorVertical.Value = true;
             MoveMirrorReverse.Value = false;
@@ -266,7 +265,7 @@ namespace MTS.AdminModule {
         /// <summary>
         /// Start to move left mirror glass
         /// </summary>
-        public void MoveLeft()
+        public void MoveMirrorLeft()
         {
             MoveMirrorHorizontal.Value = false;
             MoveMirrorReverse.Value = true;
@@ -275,7 +274,7 @@ namespace MTS.AdminModule {
         /// <summary>
         /// Start to move right mirror glass
         /// </summary>
-        public void MoveRight()
+        public void MoveMirrorRight()
         {
             MoveMirrorHorizontal.Value = true;
             MoveMirrorReverse.Value = false;
@@ -284,12 +283,128 @@ namespace MTS.AdminModule {
         /// <summary>
         /// Stop moveing of mirror glass
         /// </summary>
-        public void Stop()
+        public void StopMirror()
         {
             MoveMirrorHorizontal.Value = false;
             MoveMirrorVertical.Value = false;
             MoveMirrorReverse.Value = false;
         }
+        /// <summary>
+        /// Start to move mirror glass in a particular direction
+        /// </summary>
+        /// <param name="dir">Direction in which to move the mirror</param>
+        public void MoveMirror(MoveDirection dir)
+        {
+            switch (dir)
+            {
+                case MoveDirection.Up: MoveMirrorUp(); break;
+                case MoveDirection.Down: MoveMirrorDown(); break;
+                case MoveDirection.Left: MoveMirrorLeft(); break;
+                case MoveDirection.Right: MoveMirrorRight(); break;
+                default: StopMirror(); break;
+            }
+        }
+
+        #endregion
+
+        #region Sucker
+
+        /// <summary>
+        /// Start to move sucker down. Does not need to be stoped.
+        /// </summary>
+        public void SuckerDown()
+        {
+            MoveSuckerUp.Value = false;
+            MoveSuckerDown.Value = true;
+        }
+        /// <summary>
+        /// Start to move sucker up. Does not need to be stoped.
+        /// </summary>
+        public void SuckerUp()
+        {
+            MoveSuckerUp.Value = true;
+            MoveSuckerDown.Value = false;
+        }
+        /// <summary>
+        /// Start to suck air from the sucker disk. If air is being blowed, it will be stoped
+        /// </summary>
+        public void StartSucking()
+        {
+            // for sure setup all values - so that never can happen that both values will be true
+            SuckOn.Value = true;
+            BlowOn.Value = false;
+        }
+        /// <summary>
+        /// Start to blow air form the sucker disk. If air is being sucked, it will be stoped
+        /// </summary>
+        public void StartBlowing()
+        {
+            // for sure setup all values - so that never can happen that both values will be true
+            SuckOn.Value = false;
+            BlowOn.Value = true;
+        }
+        /// <summary>
+        /// Stop to suck or blow air from sucker disk.
+        /// </summary>
+        public void StopAir()
+        {
+            SuckOn.Value = false;
+            BlowOn.Value = false;
+        }
+
+        #endregion
+
+        #region Powerfold
+
+        /// <summary>
+        /// Start to fold the powerfold. This method switch on actuators so that entire mirror is
+        /// being moved in the direction to the car
+        /// </summary>
+        public void StartFolding()
+        {
+            UnfoldPowerfold.Value = false;
+            FoldPowerfold.Value = true;
+        }
+        /// <summary>
+        /// Start to unfold the powerfold. This method switch on actuators so that entire mirror is
+        /// being moved in the direction from the car
+        /// </summary>
+        public void StartUnfolding()
+        {
+            UnfoldPowerfold.Value = true;
+            FoldPowerfold.Value = false;
+        }
+        /// <summary>
+        /// Stop to move mirror with powerfold. This method switch off actuators
+        /// </summary>
+        public void StopPowerfold()
+        {
+            FoldPowerfold.Value = false;
+            UnfoldPowerfold.Value = false;
+        }
+        /// <summary>
+        /// Get value indicating whether is powerfold folded
+        /// </summary>
+        public bool IsFolded()
+        {   // if it is old mirror type, check for old powerfold sensor
+            if (IsOldMirror.Value)
+                return IsOldPowerfoldDown.Value;
+            else
+                return IsPowerfoldDown.Value;
+        }
+        /// <summary>
+        /// Get value indicating whether is powerfold unfolded
+        /// </summary>
+        public bool IsUnfolded()
+        {
+            if (IsOldMirror.Value)
+                return IsOldPowerfoldUp.Value;
+            else
+                return IsPowerfoldUp.Value;
+        }
+
+
+        #endregion
 
         // TODO: Optimize calculating of angles. YAxis and XAxis is not exact
         #region Rotation
@@ -352,6 +467,18 @@ namespace MTS.AdminModule {
         public double GetVerticalAngle()
         {
             return -GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), XAxis) / 180 * Math.PI);
+        }
+
+        /// <summary>
+        /// Calculate normal vector to the current position of mirror glass
+        /// </summary>
+        /// <returns>Normal vector of mirror glass surface</returns>
+        public Vector3D GetMirrorNormal()
+        {
+            PointX.Z = DistanceX.RealValue;
+            PointY.Z = DistanceY.RealValue;
+            PointZ.Z = DistanceZ.RealValue;
+            return getPlaneNormal(PointX, PointY, PointZ);
         }
 
         #endregion
@@ -442,18 +569,6 @@ namespace MTS.AdminModule {
         public IDigitalOutput GreenLightOn { get; set; }
         public IDigitalOutput RedLightOn { get; set; }
         public IDigitalOutput BuzzerOn { get; set; }
-
-
-        public IDigitalOutput OpenTestingDevice { get; set; }
-        public IDigitalOutput CloseTestingDevice { get; set; }
-
-        IDigitalOutput MARKER_LEFT { get; set; }
-        IDigitalOutput MARKER_RIGHT { get; set; }
-        IDigitalOutput MOVE_SENSOR_UP { get; set; }
-        IDigitalOutput MOVE_SENSOR_DOWN { get; set; }
-        IDigitalOutput MOVE_SUPPORT_IN { get; set; }
-        IDigitalOutput MOVE_SUPPORT_UP { get; set; }
-        IDigitalOutput MOVE_SUPPORT_DOWN { get; set; }
 
         #endregion
 

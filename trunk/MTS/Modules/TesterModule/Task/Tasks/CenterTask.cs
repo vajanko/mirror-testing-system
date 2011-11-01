@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Media.Media3D;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -13,114 +13,70 @@ namespace MTS.TesterModule
         /// <summary>
         /// Direction in which we need to move the mirror to center it
         /// </summary>
-        private MoveDirection CenterDir;
-
+        private MoveDirection centerDir;
+        
         #endregion
 
-        public override void Initialize(TimeSpan time)
+        private MoveDirection getCenterDir(double verAngle, double horAngle)
         {
-            // define in which direction to center first
-            double ver = channels.GetVerticalAngle();
-            if (ver > 0)
-            {
-                channels.MoveUp();
-                CenterDir = MoveDirection.Up;
-            }
-            else if (ver < 0)
-            {
-                channels.MoveDown();
-                CenterDir = MoveDirection.Down;
-            }
-            else
-            {
-                double hor = channels.GetHorizontalAngle();
-                if (hor > 0)
-                {
-                    channels.MoveRight();
-                    CenterDir = MoveDirection.Right;
-                }
-                else if (hor < 0)
-                {
-                    channels.MoveLeft();
-                    CenterDir = MoveDirection.Left;
-                }
-                else
-                    CenterDir = MoveDirection.None;
-            }
-            Output.WriteLine("Centering ... Init direction: {0}, angle: {1}", CenterDir, ver);
-
-            base.Initialize(time);
+            if (verAngle > 0) return MoveDirection.Up;
+            else if (verAngle < 0) return MoveDirection.Down;
+            else if (horAngle > 0) return MoveDirection.Right;
+            else if (horAngle < 0) return MoveDirection.Left;
+            else return MoveDirection.None;
         }
-        public override void UpdateOutputs(TimeSpan time)
+        private ExState getExecutionState(MoveDirection dir)
+        {
+            switch (dir)
+            {
+                case MoveDirection.Up: return ExState.MoveingUp;
+                case MoveDirection.Down: return ExState.MoveingDown;
+                case MoveDirection.Left: return ExState.MoveingLeft;
+                case MoveDirection.Right: return ExState.MoveingRight;
+                default: return ExState.Finalizing;
+            }
+        }
+
+        private void setupCenter(double verAngle, double horAngle)
+        {
+            centerDir = getCenterDir(verAngle, horAngle);
+            channels.MoveMirror(centerDir);
+            exState = getExecutionState(centerDir);
+        }
+
+        public override void Update(TimeSpan time)
         {
             double ver = channels.GetVerticalAngle();
             double hor = channels.GetHorizontalAngle();
 
-            if (CenterDir == MoveDirection.Up)    // vertialy - we need to center up
+            switch (exState)
             {
-                if (ver <= 0)        // verticaly is already centered
-                {
-                    // deside in which direction to center horizontaly
-                    if (hor > 0)
-                    {
-                        channels.MoveRight();
-                        CenterDir = MoveDirection.Right;
-                    }
-                    else if (hor < 0)
-                    {
-                        channels.MoveLeft();
-                        CenterDir = MoveDirection.Left;
-                    }
-                    else
-                    {   // this only happen when mirror is centered verticaly very exactly
+                case ExState.Initializing:
+                    setupCenter(ver, hor);
+                    break;
+                case ExState.MoveingUp:
+                    if (ver <= 0)
+                        setupCenter(0, hor);
+                    break;
+                case ExState.MoveingDown:
+                    if (ver >= 0)
+                        setupCenter(0, hor);
+                    break;
+                case ExState.MoveingLeft:
+                    if (hor >= 0)
                         Finish(time, TaskState.Completed);
-                        return;
-                    }
-                }
-            }
-            else if (CenterDir == MoveDirection.Down) // verticaly - we need to center down
-            {
-                if (ver >= 0)        // verticaly is already centered
-                {
-                    // deside in which direction to center horizontaly
-                    if (hor > 0)
-                    {
-                        channels.MoveRight();
-                        CenterDir = MoveDirection.Right;
-                    }
-                    else if (hor < 0)
-                    {
-                        channels.MoveLeft();
-                        CenterDir = MoveDirection.Left;
-                    }
-                    else
-                    {   // this only happen when mirror is centered verticaly very exactly
+                    break;
+                case ExState.MoveingRight:
+                    if (hor <= 0)
                         Finish(time, TaskState.Completed);
-                        return;
-                    }
-                }
+                    break;
+                case ExState.Finalizing:
+                    Finish(time, TaskState.Completed);
+                    break;
+                case ExState.Aborting:
+                    Finish(time, TaskState.Aborted);
+                    break;
             }
-            else if (CenterDir == MoveDirection.Left) // horizontaly - we need to center left
-            {
-                if (hor >= 0)        // horizontaly is already centered
-                    Finish(time, TaskState.Completed);  // centering finished
-            }
-            else if (CenterDir == MoveDirection.Right)// horizontaly - we need to center right
-            {
-                if (hor <= 0)        // horizontaly is already centered
-                    Finish(time, TaskState.Completed);  // centering finished
-            }
-            else
-                Finish(time, TaskState.Completed);  // in this case centerDir == CenterDirection.None
-
-            base.UpdateOutputs(time);
-        }
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            channels.Stop();
-
-            Output.WriteLine("Centered! Duration: {0}", Duration);
-            base.Finish(time, state);
         }
 
         #region Constructors

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE tests SYSTEM "test.dtd">
+
+<tests>
+  <test id="TravelEast" enabled="true">
+    <param id="MinAngle">15</param>
+    <param id="MaxCurrent">200</param>
+  </test>
+</tests>

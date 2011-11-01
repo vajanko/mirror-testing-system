@@ -33,10 +33,10 @@ namespace MTS.AdminModule
             string[] items;     // parsed items on one line 
 
             // reference to just created channel
-            ModbusChannel channel;
+            ChannelBase channel;
             // at the beginning all channels are created and inserted to this collection
             // after that slots are created and channels are inserted to them
-            List<ModbusChannel> channels = new List<ModbusChannel>();
+            List<ChannelBase> channels = new List<ChannelBase>();
 
             // open configuration file
             StreamReader reader;
@@ -63,17 +63,20 @@ namespace MTS.AdminModule
                 if (value == 1)   // digital channel is always of size 1 (bit)
                     // check for I/O type of channel
                     if (items[3] == inputString)
-                        channel = new ModbusDigitalInput();
+                        channel = new DigitalInput();
                     else if (items[3] == outputString)
-                        channel = new ModbusDigitalOutput();
+                        channel = new DigitalOutput();
                     else continue;// I/O type of channel is wrong - skip this line
                 else              // analog channel (usually 16 length)
                     // check for I/O type of channel
                     if (items[3] == inputString)
-                        channel = new ModbusAnalogInput();
+                        channel = new AnalogInput();
                     else if (items[3] == outputString)
-                        channel = new ModbusAnalogOutput();
+                        channel = new AnalogOutput();
                     else continue;// I/O type of channel is wrong - skip this line
+
+                // create a particular type of address fot this king of channel
+                ModbusAddress addr = new ModbusAddress();
 
                 // now instance of channel is created - save parsed size
                 channel.Size = value;
@@ -83,12 +86,15 @@ namespace MTS.AdminModule
                 // parsing channel number
                 if (!int.TryParse(items[2], out value))
                     continue;   // parsing channel number failed - skip this line
-                channel.Channel = (byte)value;
+                addr.Channel = (byte)value;
 
                 // parsing slot number
                 if (!int.TryParse(items[1], out value))
                     continue;   // parsing slot number failed - skip this line
-                channel.Slot = (byte)value;
+                addr.Slot = (byte)value;
+
+                // set channel address
+                channel.Address = addr;
 
                 // add all channels to this collection
                 channels.Add(channel);
@@ -98,38 +104,47 @@ namespace MTS.AdminModule
 
             // now all channels are created - add them to slots
             while (channels.Count > 0)
-            {
-                byte slot = channels[0].Slot;   // this item must exist, otherwise channels.Count == 0
+            {   
+                // this item must exist, otherwise channels.Count == 0
+                ModbusAddress addr = channels[0].Address as ModbusAddress;
+                if (addr == null) continue; // skip this channel if no (or not correct) address is present
+                byte slot = addr.Slot;   
                 ModbusSlot mSlot = null;
-                
-                int startChannel = (from c in channels where c.Slot == slot select c.Channel).Min();
-                // get maximum number of channel in the same slot
-                int channelsCount = (from c in channels where c.Slot == slot select c.Channel).Max();
+
+                var addrs = from c in channels select (c.Address as ModbusAddress);
+                // get minimum number of channel in the current slot
+                int startChannel = (from a in addrs
+                                    where a.Slot == slot
+                                    select a.Channel).Min();
+                // get maximum number of channel in the current slot
+                int channelsCount = (from a in addrs 
+                                     where a.Slot == slot 
+                                     select a.Channel).Max();
                 // this is the number of reserved channels - there may be some free slots between
                 // startChannel and channel with max number, but we must leave them free
                 // add 1 because the numbers of channel starts with 0
                 channelsCount = channelsCount - startChannel + 1;
 
                 Type type = channels[0].GetType();
-                if (type == typeof(ModbusDigitalInput))
+                if (type == typeof(DigitalInput))
                     mSlot = new ModbusDISlot(slot, (byte)startChannel, (byte)channelsCount);
-                else if (type == typeof(ModbusDigitalOutput))
+                else if (type == typeof(DigitalOutput))
                     mSlot = new ModbusDOSlot(slot, (byte)startChannel, (byte)channelsCount);
-                else if (type == typeof(ModbusAnalogInput))
+                else if (type == typeof(AnalogInput))
                     mSlot = new ModbusAISlot(slot, (byte)startChannel, (byte)channelsCount);
-                else if (type == typeof(ModbusAnalogOutput))
+                else if (type == typeof(AnalogOutput))
                     mSlot = null;       // ModbusAOSlot not implemented yet
 
                 if (mSlot == null)    // slot could not be created
                 {
                     // skip this channels, but before remove all channels that belongs to this slot
-                    channels.RemoveAll(new Predicate<ModbusChannel>(c => c.Slot == slot));
+                    channels.RemoveAll(new Predicate<ChannelBase>(c => (c.Address as ModbusAddress).Slot == slot));
                     continue;
                 }
 
                 // add all channels with same slot number and same type to created slot
                 for (int i = 0; i < channels.Count; i++)
-                    if (channels[i].Slot == slot && channels[i].GetType() == type)
+                    if ((channels[i].Address as ModbusAddress).Slot == slot && channels[i].GetType() == type)
                         mSlot.AddChannel(channels[i]);
 
                 // add created slot to inputs - all slots are inputs also
@@ -139,7 +154,7 @@ namespace MTS.AdminModule
                     outputs.Add(slot, mSlot);
 
                 // channels are added to slot - remove them from temporary collection
-                channels.RemoveAll(new Predicate<ModbusChannel>(c => c.Slot == slot));
+                channels.RemoveAll(new Predicate<ChannelBase>(c => (c.Address as ModbusAddress).Slot == slot));
             }
         }
 
@@ -208,7 +223,7 @@ namespace MTS.AdminModule
 
         public IChannel GetChannelByName(string name)
         {
-            ModbusChannel channel;
+            ChannelBase channel;
 
             // all channels are in input slots
             foreach (ModbusSlot slot in inputs.Values)
@@ -226,28 +241,6 @@ namespace MTS.AdminModule
         {
             get { return isConnected; }
             private set { isConnected = value; }
-        }
-
-        public void SwitchOffDigitalOutputs()
-        {
-            if (!IsConnected) return;
-
-            ModbusDOSlot s;
-            ModbusDigitalOutput ch;
-            foreach (ModbusOutputSlot slot in outputs.Values)
-            {
-                s = slot as ModbusDOSlot;
-                if (s != null)
-                {
-                    for (int i = 0; i < s.ChannelsCount; i++)
-                    {
-                        ch = s.Channels[i] as ModbusDigitalOutput;
-                        if (ch != null)
-                            ch.Value = false;
-                    }
-                    s.Write(hConnection);
-                }
-            }
         }
 
         #endregion

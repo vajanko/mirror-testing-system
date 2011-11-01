@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -33,85 +33,43 @@ namespace MTS.TesterModule
 
         #endregion
 
-        public override void Initialize(TimeSpan time)
-        {
-            currentState = State.Initializing;
-            base.Initialize(time);
-        }
         public override void Update(TimeSpan time)
         {
-            switch (currentState)
+            switch (exState)
             {
-                case State.Initializing:
-                    maxMeasuredCurrent = double.MinValue;
-                    minMeasuredCurrent = double.MaxValue;
-                    channels.DirectionLightOn.Value = true;                 // switch on direction light
+                case ExState.Initializing:
+                    maxMeasuredCurrent = double.MinValue;                   // initialize max and min
+                    minMeasuredCurrent = double.MaxValue;                   // measured values
+                    channels.DirectionLightOn.SwitchOn();                   // switch on direction light
                     blinkerOn = time;                                       // save time of light on
-                    currentState = State.BlinkerOn;                         // go to next state
+                    exState = ExState.BlinkerOn;                            // go to next state
                     break;
-                case State.BlinkerOn:   // measure current
+                case ExState.BlinkerOn:   // measure current
                     measureCurrent(time, channels.DirectionLightCurrent);   // measure current
                     if ((time - blinkerOn).TotalMilliseconds > lightingTime)// if lighting time elapsed
                     {
-                        channels.DirectionLightOn.Value = false;            // switch of light
+                        channels.DirectionLightOn.SwitchOff();              // switch off light
                         blinkerOff = time;                                  // save time of light off
                         blinksCount--;                                      // decrease one lighting period
-                        if (blinksCount <= 0)                               // if no more periods should be executed
-                            currentState = State.Finalizing;                // finish: go to next state
-                        else
-                            currentState = State.BlinkerOff;                // switch off: go to next state
-                    }
+                        exState = (blinksCount <= 0) ?                      // if no more periods should be executed
+                            ExState.Finalizing : ExState.BlinkerOff;        // finish this test. otherwise switch
+                    }                                                       // off blinker
                     break;
-                case State.BlinkerOff:  // do not measure current
+                case ExState.BlinkerOff:  // do not measure current
                     if ((time - blinkerOff).TotalMilliseconds > breakTime)  // if break time elapsed
                     {
-                        channels.DirectionLightOn.Value = true;             // switch on light
+                        channels.DirectionLightOn.SwitchOn();               // switch on light
                         blinkerOn = time;                                   // save time of lihgt on
-                        currentState = State.BlinkerOn;                     // go to next state
-                    }
+                        exState = ExState.BlinkerOn;                        // go to next state
+                    }   // after blinker is off olways come a period when blinker is on
                     break;
-                case State.Finalizing:
+                case ExState.Finalizing:
+                    channels.DirectionLightOn.SwitchOff();                  // switch off light
                     Finish(time, getTaskState());                           // finish test with right result
-                    currentState = State.None;                              // do not update this task any more
+                    exState = ExState.None;                                 // do not update this task any more
                     break;
             }
         }
-
-        #region State
-
-        /// <summary>
-        /// Current state of the task execution
-        /// </summary>
-        private State currentState = State.None;
-        private enum State
-        {
-            /// <summary>
-            /// Test is being initialized
-            /// </summary>
-            Initializing,
-            /// <summary>
-            /// Direction light is switched on, current is being measured
-            /// </summary>
-            BlinkerOn,
-            /// <summary>
-            /// Direction light is switched off, nothing is being provided
-            /// </summary>
-            BlinkerOff,
-            /// <summary>
-            /// Test is being finalized
-            /// </summary>
-            Finalizing,
-            /// <summary>
-            /// Test is being aborted
-            /// </summary>
-            Aborting,
-            /// <summary>
-            /// Unspecified state of test, nothig is executed
-            /// </summary>
-            None
-        }
-
-        #endregion
 
         #region Constructors
 
@@ -122,30 +80,19 @@ namespace MTS.TesterModule
         /// <param name="testParam"></param>
         public BlinkerTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
-        {            
-            ParamCollection param = testParam.Parameters;
-            IntParamValue iValue;
-            // from test parameters get LIGHTENING_TIME item
-            if (param.ContainsKey(ParamDictionary.LIGHTENING_TIME))
-            {   // it must be int type value
-                iValue = param[ParamDictionary.LIGHTENING_TIME] as IntParamValue;
-                if (iValue != null)     // param is of other type then int
-                    lightingTime = iValue.Value;
-            }
-            // from test parameters get BREAK_TIME item
-            if (param.ContainsKey(ParamDictionary.BREAK_TIME))
-            {   // it must be int type value
-                iValue = param[ParamDictionary.BREAK_TIME] as IntParamValue;
-                if (iValue != null)     // param is of other type then int
-                    breakTime = iValue.Value;
-            }
+        {
+            // from test parameters get LighteningTime item
+            IntParam iValue = testParam.GetParam<IntParam>(TestValue.LighteningTime);
+            if (iValue != null)     // it must be of type int
+                lightingTime = iValue.IntValue;
+            // from test parameters get BreakTime item
+            iValue = testParam.GetParam<IntParam>(TestValue.BreakTime);
+            if (iValue != null)     // it must be of type int
+                breakTime = iValue.IntValue;
             // from test parameters get BLINK_COUNT item
-            if (param.ContainsKey(ParamDictionary.BLINK_COUNT))
-            {   // it must be int type value
-                iValue = param[ParamDictionary.BLINK_COUNT] as IntParamValue;
-                if (iValue != null)     // param is of other type then int
-                    blinksCount = iValue.Value;
-            }
+            iValue = testParam.GetParam<IntParam>(TestValue.BlinkCount);
+            if (iValue != null)     // it must be of type int
+                blinksCount = iValue.IntValue;
         }
 
         #endregion

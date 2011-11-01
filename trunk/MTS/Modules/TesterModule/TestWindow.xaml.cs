@@ -15,9 +15,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Timers;
 
-using MTS.EditorModule;
-using MTS.AdminModule;
+using MTS.Editor;
 using MTS.Properties;
+using MTS.IO;
+using MTS.IO.Module;
 
 using AvalonDock;
 
@@ -286,16 +287,16 @@ namespace MTS.TesterModule
                     Output.WriteLine("Parameters loaded from file: {0}", filename);
                     try
                     {   // copy some parameters to testing window
-                        TestValue test = Tests[TestDictionary.INFO];
+                        TestValue test = Tests.GetTest(TestCollection.Info);
 
-                        StringParamValue param = test.Parameters[ParamDictionary.PART_NUMBER] as StringParamValue;
-                        partNumber.Content = param.Value;
+                        StringParam param = test.GetParam<StringParam>(TestValue.PartNumber);
+                        partNumber.Content = param.StringValue;
 
-                        param = test.Parameters[ParamDictionary.SUPPLIER_NAME] as StringParamValue;
-                        supplierName.Content = param.Value;
+                        param = test.GetParam<StringParam>(TestValue.SupplierName);
+                        supplierName.Content = param.StringValue;
 
-                        param = test.Parameters[ParamDictionary.DESCRIPTION] as StringParamValue;
-                        description.Content = param.Value;
+                        param = test.GetParam<StringParam>(TestValue.DescriptionId);
+                        description.Content = param.StringValue;
 
                         paramFile.Content = filename;
                     }
@@ -441,16 +442,15 @@ namespace MTS.TesterModule
             {   
                 // initialize handler that will be executed when some channel value change
                 bindChannels(channels);
-                throw new NotImplementedException("hello");
             }
             catch
             {
                 success = false;
                 MessageBox.Show("An error occured while configurating device connection. Check device configuration file:\n"
-                    + Settings.Default.ChannelsConfigFile, "Device error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    + Settings.Default.EthercatConfigFile, "Device error", MessageBoxButton.OK, MessageBoxImage.Error);
                 // write log file
                 Output.Log("Failed to initialize channels. Probably one of them is missing in configuration file: {0}",
-                    Settings.Default.ChannelsConfigFile);
+                    Settings.Default.EthercatConfigFile);
             }
             // return value indicating if this method was successfull
             return success;
@@ -465,12 +465,12 @@ namespace MTS.TesterModule
             IModule module;
 
             // determine which module to use
-            switch (Settings.Default.HW_Type)
+            switch (Settings.Default.Protocol)
             {
-                case "Beckhoff": module = new ECModule(Settings.Default.TaskName); break;
-                case "Moxa": module = new ModbusModule(Settings.Default.IpAddress, Settings.Default.Port); break;
+                case "Beckhoff": module = new ECModule(Settings.Default.EthercatTaskName); break;
+                case "Moxa": module = new ModbusModule(Settings.Default.ModbusIpAddress, Settings.Default.ModbusPort); break;
                 case "Dummy": module = new DummyModule(); break;    // this is for debugging only
-                default: module = new ECModule(Settings.Default.TaskName); break;
+                default: module = new ECModule(Settings.Default.EthercatTaskName); break;
             }
 
             Channels channels = new Channels(module);
@@ -478,7 +478,7 @@ namespace MTS.TesterModule
             // when loading file - an exception may be thrown
             try
             {   // get absolute path from relative one
-                channels.LoadConfiguration(Settings.Default.ChannelsConfigFile);
+                channels.LoadConfiguration(Settings.Default.EthercatConfigFile);
             }
             catch (System.IO.IOException ex)
             {   // file exception
@@ -664,7 +664,6 @@ namespace MTS.TesterModule
             ParamStatusMessage = "Load parameters";
             ShiftStatusMessage = "Not running";
             DeviceStatusMessage = "Disconnected";
-
 
             // load hardware settings
             PointX = HWSettings.Default.SondeXPosition;

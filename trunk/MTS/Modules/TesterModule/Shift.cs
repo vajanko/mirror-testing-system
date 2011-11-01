@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Threading;
 
-using MTS.AdminModule;
-using MTS.EditorModule;
+using MTS.IO;
+using MTS.Editor;
 
 namespace MTS.TesterModule
 {
@@ -192,17 +192,17 @@ namespace MTS.TesterModule
             // wait for start
             scheduler.AddWaitForStart();
             // test powerfold
-            scheduler.AddTask(new PowerfoldTest(channels, tests[TestDictionary.POWERFOLD]));
+            scheduler.AddTask(new PowerfoldTest(channels, tests.GetTest(TestCollection.Powerfold)));
 
             // wait for start
             scheduler.AddWaitForStart();
             // test blinker
-            scheduler.AddTask(new BlinkerTest(channels, tests[TestDictionary.BLINKER]));
+            scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.Blinker)));
 
             // wait for start
             scheduler.AddWaitForStart();
             // test spiral
-            scheduler.AddTask(new SpiralTest(channels, tests[TestDictionary.SPIRAL]));
+            scheduler.AddTask(new SpiralTest(channels, tests.GetTest(TestCollection.Spiral)));
 
             // open device
             scheduler.AddOpenDevice();

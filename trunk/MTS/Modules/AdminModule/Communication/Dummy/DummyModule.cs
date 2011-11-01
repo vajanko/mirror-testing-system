@@ -271,8 +271,8 @@ namespace MTS.AdminModule
             return null;        // channel with name "name" was not found
         }
 
-        private List<DummyChannel> inputs = new List<DummyChannel>();
-        private List<DummyChannel> outputs = new List<DummyChannel>();
+        private List<ChannelBase> inputs = new List<ChannelBase>();
+        private List<ChannelBase> outputs = new List<ChannelBase>();
 
         private readonly char[] whiteSpaces = { ' ', '\t', '\r' };
         private readonly char[] csvSep = { ';' };
@@ -288,7 +288,7 @@ namespace MTS.AdminModule
             string[] items;     // parsed items on one line 
 
             // reference to just created channel
-            DummyChannel channel;
+            ChannelBase channel;
 
             // open configuration file
             StreamReader reader;
@@ -315,20 +315,20 @@ namespace MTS.AdminModule
                 if (value == 1)   // digital channel is always of size 1 (bit)
                     // check for I/O type of channel
                     if (items[3] == inputString)
-                        channel = new DummyDigitalInput();
+                        channel = new DigitalInput();
                     else if (items[3] == outputString)
                     {
-                        channel = new DummyDigitalOutput();
+                        channel = new DigitalOutput();
                         outputs.Add(channel);
                     }
                     else continue;// I/O type of channel is wrong - skip this line
                 else              // analog channel (usually 16 length)
                     // check for I/O type of channel
                     if (items[3] == inputString)
-                        channel = new DummyAnalogInput();
+                        channel = new AnalogInput();
                     else if (items[3] == outputString)
                     {
-                        channel = new DummyAnalogOutput();
+                        channel = new AnalogOutput();
                         outputs.Add(channel);
                     }
                     else continue;// I/O type of channel is wrong - skip this line
@@ -447,8 +447,6 @@ namespace MTS.AdminModule
         //    BuzzerOn = new DummyDigitalOutput() { Name = "BuzzerOn" };
         //    channels.Add("BuzzerOn", BuzzerOn);
         //}
-
-        public void SwitchOffDigitalOutputs() { }
 
         #endregion
 

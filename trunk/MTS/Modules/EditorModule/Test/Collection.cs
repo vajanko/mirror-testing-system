@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace MTS.EditorModule
+namespace MTS.tmp.Editor
 {
     /// <summary>
     /// Base class for all key (integer) collections. Serialization possible

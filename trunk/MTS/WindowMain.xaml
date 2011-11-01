@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:MTS"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:ctrl="clr-namespace:MTS.Controls"
-        xmlns:ed="clr-namespace:MTS.EditorModule"
+        xmlns:ed="clr-namespace:MTS.Editor"
         xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
         Title="MTS" Height="800" Width="800" Left="0" Top="0"
         >
@@ -19,6 +19,8 @@
         <CommandBinding Command="Close" CanExecute="closeCanExecute" Executed="closeExecuted"/>
         <!-- MTS (own) commands -->
         <CommandBinding Command="{x:Static local:MTSCommands.ViewTester}" CanExecute="viewTesterCanExecute" Executed="viewTesterExecuted"/>
+        <CommandBinding Command="{x:Static local:MTSCommands.ViewSettings}" CanExecute="viewSettingsCanExecute" Executed="viewSettingsExecuted"/>
+        <CommandBinding Command="{x:Static local:MTSCommands.ViewData}" CanExecute="viewDataCanExecute" Executed="viewDataExecuted"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Close" Key="F4" Modifiers="Ctrl"/>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using MTS.AdminModule;
+using MTS.IO;
 
 namespace MTS.TesterModule
 {
@@ -16,35 +16,21 @@ namespace MTS.TesterModule
         /// </summary>
         private bool value;
 
-        /// <summary>
-        /// Show value we are going to write
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        public override void Initialize(TimeSpan time)
+        public override void Update(TimeSpan time)
         {
-            base.Initialize(time);
-            Output.WriteLine("Setting channel \"{0}\" to \"{1}\"", Name, value);
-        }
-        /// <summary>
-        /// Write value to channel
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        public override void UpdateOutputs(TimeSpan time)
-        {
-            // write value and finish
-            channel.Value = value;
-            Finish(time, TaskState.Completed);
-            base.UpdateOutputs(time);
-        }
-        /// <summary>
-        /// Show what we have written
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        /// <param name="state">Final state of this task</param>
-        public override void Finish(TimeSpan time, TaskState state)
-        {
-            Output.WriteLine("Channel \"{0}\" is {1}", Name, channel.Value);
-            base.Finish(time, state);
+            switch (exState)
+            {
+                case ExState.Initializing:
+                    exState = ExState.Finalizing;
+                    break;
+                case ExState.Finalizing:
+                    channel.Value = value;
+                    Finish(time, TaskState.Completed);
+                    break;
+                case ExState.Aborting:
+                    Finish(time, TaskState.Aborted);
+                    break;
+            }
         }
 
         #region Constructors

@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <!-- Default language resource file - english - for the main application window -->
+    <!-- All the language resource string are using 'l' as a prefix for the key, exmaple: l_file, l_open -->
+    
+    <!-- Window strings -->
+    <system:String x:Key="l_titleMain">Mirror Testing System</system:String>
+    <system:String x:Key="l_titleEditor">Editor</system:String>
+    <system:String x:Key="l_titleData">Database</system:String>
+    <system:String x:Key="l_titleTester">Testing</system:String>
+    <system:String x:Key="l_titleSettings">Application settings</system:String>
+
+    <!-- Menu strings -->
+        <!-- File -->
+        <system:String x:Key="l_file">File</system:String>
+            <!-- File item strings -->
+            <system:String x:Key="l_new">New</system:String>
+            <system:String x:Key="l_open">Open ...</system:String>
+            <system:String x:Key="l_close">Close</system:String>
+            <system:String x:Key="l_save">Save</system:String>
+            <system:String x:Key="l_saveAs">Save As ...</system:String>
+            <system:String x:Key="l_print">Print ...</system:String>
+            <system:String x:Key="l_exit">Exit</system:String>
+        <!-- Edit -->
+        <system:String x:Key="l_edit">Edit</system:String>
+            <!-- Edit item strings -->
+            <system:String x:Key="l_undo">Undo</system:String>
+            <system:String x:Key="l_redo">Redo</system:String>
+            <system:String x:Key="l_cut">Cut</system:String>
+            <system:String x:Key="l_copy">Copy</system:String>
+            <system:String x:Key="l_paste">Paste</system:String>
+            <system:String x:Key="l_delete">Delete</system:String>
+        <!-- View -->
+        <system:String x:Key="l_view">View</system:String>
+            <!-- View item strings -->
+            <system:String x:Key="l_editor">Editor</system:String>
+            <system:String x:Key="l_tester">Tester</system:String>
+            <system:String x:Key="l_settings">Settings</system:String>
+            <system:String x:Key="l_data">Data</system:String>    
+        <!-- Option -->
+        <system:String x:Key="l_option">Option</system:String>
+            <!-- Option item strings -->
+            <system:String x:Key="l_logoff">Log off</system:String>
+            <system:String x:Key="l_language">Language</system:String>
+        <!-- Help -->
+        <system:String x:Key="l_help">Help</system:String>
+            <!-- Help item strings -->
+            <system:String x:Key="l_helpTopics">Help Topics</system:String>
+            <system:String x:Key="l_about">About ...</system:String>
+    
+    <!-- Main window strings -->
+        <!-- Main Panels -->
+    
+    
+                   
+    
+
+</ResourceDictionary>
