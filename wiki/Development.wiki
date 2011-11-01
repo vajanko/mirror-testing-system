@@ -1,0 +1,15 @@
+#summary Dočasná stránka na záznam vývoja
+
+= Vývoj projektu MTS =
+Na tejto stránke budem zaznamenávať postupné kroky vývoja aplikácie
+
+
+= Prezentácia 1 =
+
+ * Video testovacej stanice počas testovania
+ * Video z programu počas testovania
+ * Fotky prístroja
+
+*Návrhy:*
+ * Súbory s parametrami ukladať v XML formáte (nie serializovať)
+ * Doplniť komentáre v kóde (použiť spell-checker)
