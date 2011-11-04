@@ -24,7 +24,7 @@
       <Value Profile="(Default)">template.xml</Value>
     </Setting>
     <Setting Name="ConfigDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">config\</Value>
+      <Value Profile="(Default)">..\..\..\config</Value>
     </Setting>
     <Setting Name="ModbusConfigFile" Description="Absolute path to configuration file of channels for modbus protocol are stored" Type="System.String" Scope="User">
       <Value Profile="(Default)">moxaConfig.csv</Value>

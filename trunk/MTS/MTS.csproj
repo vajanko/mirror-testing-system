@@ -272,7 +272,8 @@
     <Resource Include="Modules\EditorModule\template.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Modules\Admin\analog_channels.xml" />
+    <Resource Include="Modules\Admin\analog_channels.xml">
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\DataModule\" />
