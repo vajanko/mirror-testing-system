@@ -4,6 +4,16 @@
 Na tejto stránke budem zaznamenávať postupné kroky vývoja aplikácie
 
 
+= Správa 1 =
+
+Zmeny:
+  * *Formát* súboru s parametrami je definovaný v XML (je možné ho jednoducho editovať a pridať tak ovládacie prvky do grafického rozhrania)
+  * Samotné *súbory* s parametrami sa tiež ukladajú v XML
+  * Vytvorené okno s nastaveniami (Chýbajú užívatelia)
+    * Je možné nastaviť rôzny typ hardwaru (pre protokoly Modbus a EtherCAT)
+    * Nastavenia pre jednotlivé kanály je možné pridávať (doplnením XML súboru)
+    * Nastavujú sa vzájomné pozície meracích sond vzdialenosti
+
 = Prezentácia 1 =
 
  * [http://www.youtube.com/watch?v=dsL_NS7j8nM Video] testovacej stanice počas testovania
