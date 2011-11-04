@@ -1,20 +1,20 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace MTS.IO
+namespace MTS.IO.Channel
 {
     class DigitalInput : ChannelBase, IDigitalInput
     {
         #region IDigitalInput Members
 
+        /// <summary>
+        /// Logical value of this channel.
+        /// </summary>
         protected bool value;
         /// <summary>
         /// (Get) Logical value of this channel.
         /// </summary>
-        public bool Value
-        {
-            get { return value; }
-        }
+        public bool Value { get { return value; } }
         /// <summary>
         /// Set value of property <paramref name="Value"/>. An event will be raised
         /// </summary>
@@ -28,13 +28,13 @@ namespace MTS.IO
             }
         }
         /// <summary>
-        /// (Get/Set) Array of bytes representing channel value in memory. This is necessary for network
-        /// communication
+        /// (Get/Set) Array of memory bytes containing <paramref name="Value"/> of this channel. This 
+        /// is necessary for network communication
         /// </summary>
         public override byte[] ValueBytes
         {
             get { return BitConverter.GetBytes(value); }
-            set { SetValue(BitConverter.ToBoolean(value, 0)); }     // event raised
+            set { SetValue(BitConverter.ToBoolean(value, 0)); }     // event will be raised raised
         }
 
         #endregion

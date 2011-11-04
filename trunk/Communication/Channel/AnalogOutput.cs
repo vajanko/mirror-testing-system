@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MTS.IO
+﻿namespace MTS.IO.Channel
 {
     class AnalogOutput : AnalogInput, IAnalogOutput
     {

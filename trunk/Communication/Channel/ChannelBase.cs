@@ -1,14 +1,17 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace MTS.IO
+namespace MTS.IO.Channel
 {
     abstract class ChannelBase : IChannel
     {
+        #region Constants
+
         /// <summary>
         /// Constant string "Value"
         /// </summary>
         public const string ValueString = "Value";
+
+        #endregion
 
         /// <summary>
         /// Event that is raised when property of this channel change
@@ -32,8 +35,8 @@ namespace MTS.IO
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
         /// <summary>
-        /// (Get/Set) Array of bytes representing channel value in memory. This is necessary for network
-        /// communication
+        /// (Get/Set) Array of memory bytes containing <paramref name="Value"/> of this channel. This 
+        /// is necessary for network communication
         /// </summary>
         public abstract byte[] ValueBytes
         {

@@ -25,7 +25,8 @@ namespace MTS.IO
         void NotifyPropretyChanged(string name);
 
         /// <summary>
-        /// (Get/Set) Array of memory bytes containing Value of this channel
+        /// (Get/Set) Array of memory bytes containing <paramref name="Value"/> of this channel. This 
+        /// is necessary for network communication
         /// </summary>
         byte[] ValueBytes { get; set; }
 
@@ -82,12 +83,12 @@ namespace MTS.IO
         /// </summary>
         int RawHigh { get; set; }
         /// <summary>
-        /// (Get/Set) Minimal possible real value of this channel. Real value if value of <paramref name="Value"/>
+        /// (Get/Set) Minimal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
         /// property interpreted as some quantity.
         /// </summary>
         int RealLow { get; set; }
         /// <summary>
-        /// (Get/Set) Maximal possible real value of this channel. Real value if value of <paramref name="Value"/>
+        /// (Get/Set) Maximal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
         /// property interpreted as some quantity.
         /// </summary>
         int RealHigh { get; set; }
@@ -111,9 +112,9 @@ namespace MTS.IO
         void SetValue(uint value);
 
         /// <summary>
-        /// (Get/Set) Delegate that converts raw value to real value (<paramref name="Value"/> to <paramref name="RealValue"/>
-        /// in this case) according to values <paramref name="RawLow"/>, <paramref name="RawHigh"/>, <paramref name="RealLow"/>
-        /// and <paramref name="RealHigh"/>
+        /// (Get/Set) Delegate that converts raw value to real value (<paramref name="Value"/> to 
+        /// <paramref name="RealValue"/> in this case) according to values <paramref name="RawLow"/>,
+        /// <paramref name="RawHigh"/>, <paramref name="RealLow"/> and <paramref name="RealHigh"/>
         /// </summary>
         Converter<uint, double> RawToReal { get; set; }
     }

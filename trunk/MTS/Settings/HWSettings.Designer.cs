@@ -120,5 +120,27 @@ namespace MTS.Properties {
                 this["XZDistance"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::MTS.Admin.ChannelSettingsCollection ChannelsSettinngs {
+            get {
+                return ((global::MTS.Admin.ChannelSettingsCollection)(this["ChannelsSettinngs"]));
+            }
+            set {
+                this["ChannelsSettinngs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::MTS.Admin.ChannelSetting Setting {
+            get {
+                return ((global::MTS.Admin.ChannelSetting)(this["Setting"]));
+            }
+            set {
+                this["Setting"] = value;
+            }
+        }
     }
 }

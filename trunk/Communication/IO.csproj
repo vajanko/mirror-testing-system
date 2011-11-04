@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TwinCAT.Ads, Version=2.0.10.0, Culture=neutral, PublicKeyToken=180016cd49e5e8c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\TwinCAT.Ads.dll</HintPath>
+      <HintPath>lib\TwinCAT.Ads.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

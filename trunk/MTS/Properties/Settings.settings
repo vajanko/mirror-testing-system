@@ -41,5 +41,8 @@
     <Setting Name="ChannelsConfigFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">analog_channels.xml</Value>
     </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

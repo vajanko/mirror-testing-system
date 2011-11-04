@@ -6,6 +6,9 @@ using System.IO;
 
 using TwinCAT.Ads;
 
+using MTS.IO.Channel;
+using MTS.IO.Address;
+
 namespace MTS.IO.Module
 {
     public sealed class ECModule : IModule
@@ -73,7 +76,7 @@ namespace MTS.IO.Module
 
             while (!reader.EndOfStream)
             {
-                items = reader.ReadLine().Split(csvSep, StringSplitOptions.RemoveEmptyEntries);
+                items = reader.ReadLine().Split(csvSep, StringSplitOptions.None);
                 if (items.Length < 6) continue; // not enought items per line - skip it                
 
                 tmp = items[2].ToLower();   // type of variable
@@ -135,8 +138,10 @@ namespace MTS.IO.Module
         /// </summary>
         public void Connect()
         {
-            if (!client.IsConnected)    // use local netId                
-                client.Connect(AmsNetId.Local, 301);
+            // notice that we are connecting to local server which by the way handle any communication 
+            // with remote side
+            if (!client.IsConnected)
+                client.Connect(AmsNetId.Local, 301);    // ??? fuck - write me an email
         }
 
         /// <summary>
@@ -145,7 +150,7 @@ namespace MTS.IO.Module
         /// </summary>
         public void Initialize()
         {
-            // see that we are calling a method of the client - connection must be established
+            // see that we are calling a method of the client - connection must be established already
             foreach (ChannelBase channel in inputs)
             {
                 ECAddress addr = channel.Address as ECAddress;
@@ -154,14 +159,6 @@ namespace MTS.IO.Module
             }
 
             alocateChannels();  // alocat memory for reading a writing channels
-        }
-
-        /// <summary>
-        /// For debug purpuse only
-        /// </summary>
-        /// <param name="time">Time of calling this method</param>
-        public void Update(TimeSpan time)
-        {   // for debuggind purpose only
         }
 
         /// <summary>
@@ -192,13 +189,14 @@ namespace MTS.IO.Module
         /// </summary>
         public void Disconnect()
         {
-            // delete variable handles
+            // delete variable handles from TwinCAT IO Server
             for (int i = 0; i < inputs.Count; i++)
             {
                 ECAddress addr = inputs[i].Address as ECAddress;
                 if (addr != null)
                     client.DeleteVariableHandle(addr.IndexOffset);
             }
+            // release resources allovated by TwinCAT IO Server
             client.Dispose();
         }
 
@@ -209,6 +207,8 @@ namespace MTS.IO.Module
         /// <param name="name">Unic name (identifier) of required channel</param>
         public IChannel GetChannelByName(string name)
         {
+            // this is very simple impelementation. It looks through all channels and tries to find
+            // that one with given name
             for (int i = 0; i < inputs.Count; i++)
                 if (inputs[i].Name == name)     // look for channel with paricular name
                     return inputs[i];
@@ -225,8 +225,11 @@ namespace MTS.IO.Module
 
         #endregion
 
-        #region Channel manipulation
+        #region Channel Handlig
 
+        /// <summary>
+        /// Read all input and output channels
+        /// </summary>
         private void readChannels()
         {
             // do not read if there are no inputs
@@ -245,7 +248,9 @@ namespace MTS.IO.Module
             for (int i = 0; i < inputs.Count; i++)
                 inputs[i].ValueBytes = reader.ReadBytes(inputs[i].Size);
         }
-
+        /// <summary>
+        /// Write all output channels
+        /// </summary>
         private void writeChannels()
         {
             // do not write if there are no outputs
@@ -255,13 +260,17 @@ namespace MTS.IO.Module
             // write channels values
             for (int i = 0; i < outputs.Count; i++)
                 oWriter.Write(outputs[i].ValueBytes);
-
+            // return at previous position where outputs start
+            oWriter.Seek(oWriterOffset, SeekOrigin.Begin);
             // write values from stream to hardware
             client.ReadWrite(writeCommand, outputs.Count, oReadStream, (AdsStream)oWriter.BaseStream);
 
             // error codes are not checked - in oReadStream
         }
-
+        /// <summary>
+        /// Allocate and initialize memory necessary for channel handlig. This method is called only once
+        /// and then initialized memory is reused.
+        /// </summary>
         private void alocateChannels()
         {
             // 1. allocate memory for input channels
@@ -305,7 +314,7 @@ namespace MTS.IO.Module
             oWriter = new BinaryWriter(new AdsStream(writeLength));
             for (int i = 0; i < count; i++)
             {
-                ECAddress addr = inputs[i].Address as ECAddress;
+                ECAddress addr = outputs[i].Address as ECAddress;
                 if (addr == null) continue;     // skip this channel if no (or not correct) address is present
                 oWriter.Write(addr.IndexGroup);    // notice that data are writed at the end
                 oWriter.Write(addr.IndexOffset);
@@ -321,6 +330,11 @@ namespace MTS.IO.Module
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of EtherCAT module
+        /// </summary>
+        /// <param name="taskName">Name of task in TwinCAT IO Server. This is necessary for variables
+        /// handles</param>
         public ECModule(string taskName)
         {
             TaskName = taskName;    // this is necessary for variable handles
