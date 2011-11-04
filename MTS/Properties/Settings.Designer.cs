@@ -108,7 +108,7 @@ namespace MTS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("config\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\..\\config")]
         public string ConfigDir {
             get {
                 return ((string)(this["ConfigDir"]));
