@@ -16,18 +16,17 @@
                 <Style x:Key="sectionHeaderStyle">
                     <Setter Property="Label.Background" Value="White"/>
                 </Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="MinWidth" Value="60"/>
+                    <Setter Property="MaxWidth" Value="80"/>
+                    <Setter Property="Margin" Value="3"/>
+                </Style>
             </TabControl.Resources>
             <TabItem Header="Hardware Settings">
                 <StackPanel>
                     <StackPanel.Resources>
-
                         <Style TargetType="{x:Type Label}">
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="MinWidth" Value="60"/>
-                            <Setter Property="MaxWidth" Value="80"/>
-                            <Setter Property="Margin" Value="3"/>
                         </Style>
                         <Style TargetType="{x:Type ctrl:UpDownButton}">
                             <Setter Property="Width" Value="70"/>
@@ -168,41 +167,56 @@
                         <Setter Property="MaxValue" Value="40000"/>
                         <Setter Property="Decimals" Value="0"/>
                         <Setter Property="MinWidth" Value="100"/>
+                        <EventSetter Event="ValueChanged" Handler="channelSetting_ValueChanged"/>
                     </Style>
                            
                 </TabItem.Resources>
-                <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type local:ChannelSetting}">
-                            <StackPanel>
-                                <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
-                                    <ctrl:UpDownButton Grid.Row="0" Grid.Column="1"/>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Right">
+                        <Button Click="close_Click">Close</Button>
+                        <Button Click="apply_Click">Apply</Button>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}" DockPanel.Dock="Top">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type local:ChannelSetting}">
+                                <StackPanel>
+                                    <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
+                                        <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" 
+                                                           Value="{Binding RawLow, Mode=TwoWay}"/>
 
-                                    <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
-                                    <ctrl:UpDownButton Grid.Row="1" Grid.Column="1"/>
+                                        <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
+                                        <ctrl:UpDownButton Grid.Row="1" Grid.Column="1"
+                                                           Value="{Binding RawHigh, Mode=TwoWay}"/>
 
-                                    <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
-                                    <ctrl:UpDownButton Grid.Row="2" Grid.Column="1"/>
+                                        <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
+                                        <ctrl:UpDownButton Grid.Row="2" Grid.Column="1"
+                                                           Value="{Binding RealLow, Mode=TwoWay}"/>
 
-                                    <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
-                                    <ctrl:UpDownButton Grid.Row="3" Grid.Column="1"/>
-                                </Grid>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                        <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
+                                        <ctrl:UpDownButton Grid.Row="3" Grid.Column="1"
+                                                           Value="{Binding RealHigh, Mode=TwoWay}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Right">
+                            <Button Click="close_Click">Close</Button>
+                            <Button Click="apply_Click">Apply</Button>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
         </TabControl>
     </ScrollViewer>

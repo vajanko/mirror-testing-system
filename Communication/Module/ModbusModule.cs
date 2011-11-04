@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
+using MTS.IO.Channel;
+using MTS.IO.Address;
+
 namespace MTS.IO.Module
 {
     public sealed class ModbusModule : IModule

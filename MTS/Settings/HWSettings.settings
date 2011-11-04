@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MTS.Settings" GeneratedClassName="HWSettings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MTS.Properties" GeneratedClassName="HWSettings">
   <Profiles />
   <Settings>
     <Setting Name="ZeroPlaneNormal" GenerateDefaultValueInCode="false" Type="System.Windows.Media.Media3D.Vector3D" Scope="User">
@@ -22,6 +22,12 @@
     </Setting>
     <Setting Name="XZDistance" Description="Distance of X and Z sondes. Sonds are measuring distance between them and mirror glass" Type="System.Double" Scope="User">
       <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="ChannelsSettinngs" Type="MTS.Admin.ChannelSettingsCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Setting" Type="MTS.Admin.ChannelSetting" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

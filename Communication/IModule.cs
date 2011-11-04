@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MTS.IO
+﻿namespace MTS.IO
 {
     /// <summary>
     /// Abstract layer for accessing particular remote hardware module

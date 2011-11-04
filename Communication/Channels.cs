@@ -486,7 +486,7 @@ namespace MTS.IO
 
         #endregion
 
-        // TODO: add description channels
+        // TODO: add description of channels
         #region Channels
 
         #region Digital inputs

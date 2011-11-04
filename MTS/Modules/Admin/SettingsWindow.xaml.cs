@@ -39,6 +39,7 @@ namespace MTS.Admin
 
         #region XmlConstants
 
+        private static readonly XName ChannelsElem = "channels";
         private static readonly XName ChannelElem = "channel";
         private static readonly XName IdAttr = "id";
         private static readonly XName NameElem = "name";
@@ -242,6 +243,26 @@ namespace MTS.Admin
             }
         }
 
+        private void saveChannelSettings()
+        {
+            string path = Settings.Default.GetChannelsConfigPath();
+            XElement root = new XElement(ChannelsElem);
+            foreach (var item in ChannelSettings)
+            {
+                XElement channel = new XElement(ChannelElem);
+                channel.Add(new XAttribute(IdAttr, item.Id));
+                channel.Add(new XElement(NameElem, item.Name));
+                channel.Add(new XElement(DescriptionElem, item.Description));
+                channel.Add(new XElement(RawLowElem, item.RawLow));
+                channel.Add(new XElement(RawHighElem, item.RawHigh));
+                channel.Add(new XElement(RealLowElem, item.RealLow));
+                channel.Add(new XElement(RealHighElem, item.RealHigh));
+
+                root.Add(channel);
+            }
+            root.Save(path);
+        }
+
         #endregion
 
         /// <summary>
@@ -313,6 +334,8 @@ namespace MTS.Admin
 
             HWSettings.Default.Save();            
             Settings.Default.Save();
+
+            saveChannelSettings();
 
             Saved = true;
         }
@@ -471,5 +494,10 @@ namespace MTS.Admin
         }
 
         #endregion
+
+        private void channelSetting_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            Saved = false;
+        }
     }
 }
