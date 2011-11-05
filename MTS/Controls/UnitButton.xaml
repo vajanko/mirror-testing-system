@@ -1,9 +1,0 @@
-﻿<UserControl x:Class="MTS.Controls.UnitButton"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctrl="clr-namespace:MTS.Controls">
-    <StackPanel Orientation="Horizontal">
-        <ctrl:UpDownButton/>
-        <TextBlock Text="{Binding RelativeSource={RelativeSource self}, Path=Unit}"/>
-    </StackPanel>
-</UserControl>

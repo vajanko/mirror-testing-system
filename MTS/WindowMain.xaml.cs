@@ -224,15 +224,18 @@ namespace MTS
         //viewTester
         private void viewTesterCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // test window could be opened just once
-            foreach (var item in filePane.Items)
-                if (item is TestWindow)     // one of tab is a test window
-                {
-                    e.CanExecute = false;   // could not open next one
-                    return;
-                }
-            // there is no test window - could be opened
-            e.CanExecute = true;
+            if (filePane != null && filePane.Items != null)
+            {
+                // test window could be opened just once
+                foreach (var item in filePane.Items)
+                    if (item is TestWindow)     // one of tab is a test window
+                    {
+                        e.CanExecute = false;   // could not open next one
+                        return;
+                    }
+                // there is no test window - could be opened
+                e.CanExecute = true;
+            }
         }
         private void viewTesterExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -245,16 +248,19 @@ namespace MTS
         // viewSettings
         private void viewSettingsCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // setting window could be opened just once
-            foreach(var item in filePane.Items)
-                if (item is SettingsWindow)    // one of tab is a settings window
-                {
-                    e.CanExecute = false;   // could no open next one
-                    e.Handled = true;
-                    return;
-                }
-            // there is no setting window - could be opened
-            e.CanExecute = true;
+            if (filePane != null && filePane.Items != null)
+            {
+                // setting window could be opened just once
+                foreach (var item in filePane.Items)
+                    if (item is SettingsWindow)    // one of tab is a settings window
+                    {
+                        e.CanExecute = false;   // could no open next one
+                        e.Handled = true;
+                        return;
+                    }
+                // there is no setting window - could be opened
+                e.CanExecute = true;
+            }
         }
 
         private void viewSettingsExecuted(object sender, ExecutedRoutedEventArgs e)

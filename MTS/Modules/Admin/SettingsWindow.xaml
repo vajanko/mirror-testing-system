@@ -133,30 +133,9 @@
                                         <Setter Property="Fill" Value="Red"/>
                                     </Style>                                    
                                 </Canvas.Resources>
-                                <StackPanel Orientation="Horizontal" x:Name="sondeX">
-                                    <TextBlock Text="X"/>
-                                    <Ellipse>
-                                        <Ellipse.ToolTip>
-                                            <Label>Sonde X</Label>
-                                        </Ellipse.ToolTip>
-                                    </Ellipse>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" x:Name="sondeY">
-                                    <TextBlock Text="Y"/>
-                                    <Ellipse>
-                                        <Ellipse.ToolTip>
-                                            <Label>Sonde Y</Label>
-                                        </Ellipse.ToolTip>
-                                    </Ellipse>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" x:Name="sondeZ">
-                                    <TextBlock Text="Z"/>
-                                    <Ellipse>
-                                        <Ellipse.ToolTip>
-                                            <Label>Sonde Z</Label>
-                                        </Ellipse.ToolTip>
-                                    </Ellipse>
-                                </StackPanel>
+                                <Ellipse ToolTip="Sonde X" x:Name="sondeX"/>
+                                <Ellipse ToolTip="Sonde Y" x:Name="sondeY"/>
+                                <Ellipse ToolTip="Sonde Z" x:Name="sondeZ"/>
                             </Canvas>
                         </Border>
                     </Grid>
@@ -177,7 +156,6 @@
                         <Setter Property="MinValue" Value="0"/>
                         <Setter Property="MaxValue" Value="40000"/>
                         <Setter Property="Decimals" Value="0"/>
-                        <Setter Property="MinWidth" Value="100"/>
                         <Setter Property="MinWidth" Value="100"/>
                         <EventSetter Event="ValueChanged" Handler="upDownButton_ValueChanged"/>
                     </Style>
