@@ -107,19 +107,18 @@ namespace MTS.Admin
 
         void upDownButton_ValueChanged(object sender, RoutedEventArgs e)
         {   // this will change DisplayTitle property - a start is added at the end
-            Saved = false;
+            if (sender is Controls.UpDownButton)
+                Saved = false;
         }
         void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {   // this will change DisplayTitle property - a start is added at the end
-            Saved = false;
+            if (sender is TextBox)
+                Saved = false;
         }
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {   // this will change DisplayTitle property - a start is added at the end
+        {   // this will change DisplayTitle property - a star is added at the end
             if (e.Source is ComboBox)
-            {
                 Saved = false;
-                e.Handled = true;
-            }
         }
 
         #endregion
@@ -186,18 +185,13 @@ namespace MTS.Admin
 
 
             // register handlers for any change in application settings
-            paperHeight.ValueChanged += new RoutedEventHandler(upDownButton_ValueChanged);
-            paperWidth.ValueChanged += new RoutedEventHandler(upDownButton_ValueChanged);
-            xyDistance.ValueChanged += new RoutedEventHandler(upDownButton_ValueChanged);
-            yzDistance.ValueChanged += new RoutedEventHandler(upDownButton_ValueChanged);
-            xzDistance.ValueChanged += new RoutedEventHandler(upDownButton_ValueChanged);
-            ethercatSettings.taskName.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            ethercatSettings.configFile.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            modbusSettings.ipAddress.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            modbusSettings.port.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            modbusSettings.configFile.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            protocols.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
-            printers.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
+            //ethercatSettings.taskName.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
+            //ethercatSettings.configFile.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
+            //modbusSettings.ipAddress.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
+            //modbusSettings.port.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
+            //modbusSettings.configFile.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
+            //protocols.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
+            //printers.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
 
             tabControl.Items.CurrentChanging += new System.ComponentModel.CurrentChangingEventHandler(tabControl_CurrentChanging);
 
@@ -385,7 +379,6 @@ namespace MTS.Admin
                     showProtocolSettings(selected);
                     // hide settings panel of deselected protocol
                     hideProtocolSettings(deselected);
-                    Saved = false;
                 }
                 e.Handled = true;
             }
@@ -494,10 +487,5 @@ namespace MTS.Admin
         }
 
         #endregion
-
-        private void channelSetting_ValueChanged(object sender, RoutedEventArgs e)
-        {
-            Saved = false;
-        }
     }
 }

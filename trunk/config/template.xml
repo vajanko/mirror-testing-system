@@ -3,6 +3,7 @@
 <tests>
   <test id="Info">
     <name>Information</name>
+    <group>Informative Settings</group>
     <description></description>
     <param id="orientation">
       <name>Orientation</name>
@@ -17,6 +18,7 @@
   </test>
   <test id="TravelEast">
     <name>Travel east</name>
+    <group>Travel tests</group>
     <description></description>
     <param id="MinAngle">
       <name>Min angle</name>
@@ -49,6 +51,7 @@
 
   <test id="Powerfold">
     <name>Powerfold</name>
+    <group>Current tests</group>
     <description></description>
     <param id="Presence">
       <name>Test presence</name>
