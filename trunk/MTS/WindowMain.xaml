@@ -26,6 +26,18 @@
         <KeyBinding Command="Close" Key="F4" Modifiers="Ctrl"/>
         <KeyBinding Command="SaveAs" Key="S" Modifiers="Ctrl+Shift"/>
     </Window.InputBindings>
+    <Window.Resources>
+        <BitmapImage UriSource="resources/icons/closeFile.png" x:Key="CloseFileIcon"/>
+        <BitmapImage UriSource="resources/icons/openFile.png" x:Key="OpenFileIcon"/>
+        <BitmapImage UriSource="resources/icons/saveFile.png" x:Key="SaveFileIcon"/>
+        <BitmapImage UriSource="resources/icons/newFile.png" x:Key="NewFileIcon"/>
+        <BitmapImage UriSource="resources/icons/copy.png" x:Key="CopyIcon"/>
+        <BitmapImage UriSource="resources/icons/paste.png" x:Key="PasteIcon"/>
+        <BitmapImage UriSource="resources/icons/cut.png" x:Key="CutIcon"/>
+        
+        <BitmapImage UriSource="resources/icons/viewTester.png" x:Key="ViewTesterIcon"/>
+        <BitmapImage UriSource="resources/icons/viewData.png" x:Key="ViewDataIcon"/>
+    </Window.Resources>
 
     <DockPanel>        
         <!-- Main Menu -->
@@ -71,29 +83,37 @@
             <!-- Edit ToolBar -->
             <ToolBar>
                 <Button Command="Copy">
-                    <Image Source="resources/images/copy.png"/>
+                    <Image Source="{StaticResource CopyIcon}"/>
                 </Button>
                 <Button Command="Paste">
-                    <Image Source="resources/images/paste.png"/>
+                    <Image Source="{StaticResource PasteIcon}"/>
                 </Button>
                 <Button Command="Cut">
-                    <Image Source="resources/images/cut.png"/>
+                    <Image Source="{StaticResource CutIcon}"/>
                 </Button>
-            </ToolBar>
-            
+            </ToolBar>            
             <!-- File ToolBar -->
             <ToolBar>
                 <Button Command="New">
-                    <Image Source="resources/images/new1.png"/>
+                    <Image Source="{StaticResource NewFileIcon}"/>
                 </Button>
                 <Button Command="Open">
-                    <Image Source="resources/images/open.png"/>
+                    <Image Source="{StaticResource OpenFileIcon}"/>
                 </Button>
                 <Button Command="Save">
-                    <Image Source="resources/images/save.png"/>
+                    <Image Source="{StaticResource SaveFileIcon}"/>
                 </Button>
                 <Button Command="Close">
-                    <Image Source="resources/images/close.png"/>
+                    <Image Source="{StaticResource CloseFileIcon}"/>
+                </Button>
+            </ToolBar>
+            <!-- Window ToolBar -->
+            <ToolBar>
+                <Button Command="{x:Static local:MTSCommands.ViewTester}">
+                    <Image Source="{StaticResource ViewTesterIcon}"/>
+                </Button>
+                <Button Command="{x:Static local:MTSCommands.ViewData}">
+                    <Image Source="{StaticResource ViewDataIcon}"/>
                 </Button>
             </ToolBar>
         </ToolBarTray>

@@ -49,8 +49,13 @@ namespace MTS.Controls
 
         private void tb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // text of text box has been changed - raise event of value changed
-            OnValueChanged(this, new RoutedEventArgs(ValueChangedEvent));
+            if (sender is TextBox)
+            {
+                // text of text box has been changed - raise event of value changed
+                OnValueChanged(this, new RoutedEventArgs(ValueChangedEvent));
+                // do this event will an event of TextBox but only inside UpDownButton
+                e.Handled = true;
+            }
         }
 
         public string StringFormat
