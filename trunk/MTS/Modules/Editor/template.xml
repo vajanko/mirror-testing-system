@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE tests SYSTEM "template.dtd">
+
+<tests>
+  <test id="Info">
+    <name>Information</name>
+    <group>Informative Settings</group>
+    <description>This setting will not be used for testing.</description>
+    <param id="orientation">
+      <name>Orientation</name>
+      <description></description>
+      <type>enum</type>
+      <value>0</value>      <!-- index of selected value -->
+      <values>
+        <value>Left</value>
+        <value>Right</value>
+      </values>
+    </param>
+  </test>
+  <test id="TravelEast">
+    <name>Travel east</name>
+    <group>Travel tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type>double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type>int</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+  </test>
+
+  <test id="Powerfold">
+    <name>Powerfold</name>
+    <group>Current tests</group>
+    <description></description>
+    <param id="Presence">
+      <name>Test presence</name>
+      <description></description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+    <param id="MaxTestingTime">
+      <name>Max testing time</name>
+      <description></description>
+      <type>double</type>
+      <value>3</value>
+      <min>0</min>
+      <max>10</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+</tests>

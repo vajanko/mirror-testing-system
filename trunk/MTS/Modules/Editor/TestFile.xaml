@@ -1,0 +1,137 @@
+﻿<ad:DocumentContent x:Class="MTS.Editor.TestFile"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+    xmlns:ctrl="clr-namespace:MTS.Controls"
+    xmlns:ed="clr-namespace:MTS.Editor"
+    Height="400" Width="400" Name="root" Title="{Binding DisplayFileName, RelativeSource={RelativeSource self}}">
+
+    <DockPanel LastChildFill="True">
+        <ListBox ItemsSource="{Binding Tests}" DisplayMemberPath="Name" DockPanel.Dock="Left"/>
+        <!-- Main area where all controls for setting testin paramater are placed -->
+        <ScrollViewer>
+            <ListBox ItemsSource="{Binding Tests}"
+                     DockPanel.Dock="Left" x:Name="testList">
+                <ListBox.Resources>
+                    <!-- Styles -->
+                    <Style TargetType="{x:Type ListBox}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                    <Style TargetType="{x:Type CheckBox}">
+                        <Setter Property="Margin" Value="3"/>                    
+                    </Style>
+                    <Style TargetType="{x:Type ctrl:UpDownButton}">
+                        <Setter Property="MinWidth" Value="100"/>
+                    </Style>
+
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="MinWidth" Value="100"/>
+                    </Style>
+                    <!-- Data templates: Here each type of parameter value has its own data template defined.
+                         GUI is automatically generated from test and parameters collection. Values of controls 
+                         inside data templates are binded to parameters in collectio (TwoWay mode) - so when
+                         user change any value it's get ynchronized -->
+                    <!-- UpDownButton for numeric parameter -->
+                    <DataTemplate DataType="{x:Type ed:IntParam}">
+                        <ctrl:UpDownButton Value="{Binding IntValue, Mode=TwoWay}" Decimals="0"
+                                           MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
+                                           Unit="{Binding Unit}"/>
+                    </DataTemplate>
+                    <!-- UpDownButton for real numeric parameter -->
+                    <DataTemplate DataType="{x:Type ed:DoubleParam}">
+                        <ctrl:UpDownButton Value="{Binding DoubleValue, Mode=TwoWay}" Decimals="1"
+                                           MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
+                                           Unit="{Binding Unit}"/>
+                    </DataTemplate>
+                    <!-- ChechBox for bool parameter -->
+                    <DataTemplate DataType="{x:Type ed:BoolParam}">
+                        <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay}">
+                            <Label Content="{Binding Text}"/>   <!-- BoolParameterMetadata has additional property for chech box description -->
+                        </CheckBox>
+                    </DataTemplate>
+                    <!-- TextBox for string parameter -->
+                    <DataTemplate DataType="{x:Type ed:StringParam}">
+                        <TextBox Text="{Binding StringValue, Mode=TwoWay}" MinWidth="80"/>
+                    </DataTemplate>
+                    <!-- ComboBox for enum parameter -->
+                    <DataTemplate DataType="{x:Type ed:EnumParam}">
+                        <ComboBox SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Values}" MinWidth="80"/>
+                    </DataTemplate>
+                    <!-- Add new data templates here if new type of paramter is necessary ... -->
+                </ListBox.Resources>
+                
+                <ListBox.ItemContainerStyle>
+                    <!-- Style applied to each test (panel with header) -->
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="VerticalAlignment" Value="Top"/>  <!-- in group different test are aligned top -->
+                        <Setter Property="Focusable" Value="False"/>    <!-- disable selection-->
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <!-- Items fo this ListBox are Tests -->
+                <!-- Each item (test) is displayed inside ListView -->
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type ed:TestValue}">
+                        <!-- Test propery Parametes is a dictionary - collection of <key,value> pairs. Because we only
+                             want values, binding to Parameters.Values is used -->
+                        <ListView ItemsSource="{Binding}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="VerticalAlignment" Value="Top"/>
+                                    <Setter Property="Focusable" Value="False"/>    <!-- disable selection-->
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Name}">  <!-- This Name refers to parameters name -->
+                                        <GridViewColumnHeader>  <!-- In this case data context is entire test -->
+                                            <Label Content="{Binding Name}"/>   <!-- Name of test is dispalyed in header -->
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn>
+                                        <!-- Here no DisplayMemberBinding is used, so this column is binded to entire parameter
+                                             value and data templates are applied -->
+                                        <GridViewColumnHeader> 
+                                            <CheckBox IsChecked="{Binding Enabled}" Content="{Binding Text}"/>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel VerticalAlignment="Top"/>    <!-- Items in one group are displayed vertically -->
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Name}" BorderBrush="Black" BorderThickness="1"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Width" Value="{Binding ActualWidth, ElementName=testList}"/>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+            </ListBox>
+        </ScrollViewer>
+    </DockPanel>
+
+</ad:DocumentContent>
