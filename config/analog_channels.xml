@@ -43,7 +43,7 @@
   <channel id="verticalActuatorCurrent">
     <name>Vertical Actuator Current</name>
     <description></description>
-    <rawLow>0</rawLow>
+    <rawLow>20</rawLow>
     <rawHigh>0</rawHigh>
     <realLow>0</realLow>
     <realHigh>0</realHigh>

@@ -25,7 +25,7 @@
             <TabItem Header="Hardware Settings">
                 <StackPanel>
                     <StackPanel.Resources>
-                        <Style TargetType="{x:Type Label}">
+                        <Style TargetType="Label">
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                         <Style TargetType="{x:Type ctrl:UpDownButton}">
@@ -33,14 +33,19 @@
                             <Setter Property="Decimals" Value="0"/>
                             <Setter Property="MinValue" Value="0"/>
                             <Setter Property="MaxValue" Value="300"/>
+                            <Setter Property="MinWidth" Value="100"/>
                             <Setter Property="Unit" Value="{x:Static main:Units.Milimeters}"/>
                             <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <!-- whenever any UpDownButton value change setting state come to unsaved -->
+                            <EventSetter Event="ValueChanged" Handler="upDownButton_ValueChanged"/>
                         </Style>
-                        <Style TargetType="{x:Type ComboBox}">
-                            <Setter Property="MinWidth" Value="80"/>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="MinWidth" Value="160"/>
+                            <EventSetter Event="SelectionChanged" Handler="comboBox_SelectionChanged"/>
                         </Style>
                         <Style TargetType="{x:Type TextBox}">
                             <Setter Property="VerticalAlignment" Value="Center"/>
+                            <EventSetter Event="TextChanged" Handler="textBox_TextChanged"/>
                         </Style>
                         <Style TargetType="{x:Type ColumnDefinition}">
                             <Setter Property="MinWidth" Value="80"/>
@@ -119,11 +124,18 @@
                         <Button x:Name="calibrate" Grid.Row="3" Grid.ColumnSpan="2"
                                 Click="calibrate_Click">Calibrate</Button>
                         
-                        <Border Grid.RowSpan="3" Grid.Column="2" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left">
+                        <Border Grid.RowSpan="3" Grid.Column="2" BorderBrush="White" BorderThickness="1" HorizontalAlignment="Left">
                             <Canvas Width="150" Height="150" x:Name="sondeCanvas">
+                                <Canvas.Resources>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Width" Value="10"/>
+                                        <Setter Property="Height" Value="10"/>
+                                        <Setter Property="Fill" Value="Red"/>
+                                    </Style>                                    
+                                </Canvas.Resources>
                                 <StackPanel Orientation="Horizontal" x:Name="sondeX">
                                     <TextBlock Text="X"/>
-                                    <Ellipse Width="10" Height="10" Fill="Red">
+                                    <Ellipse>
                                         <Ellipse.ToolTip>
                                             <Label>Sonde X</Label>
                                         </Ellipse.ToolTip>
@@ -131,7 +143,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" x:Name="sondeY">
                                     <TextBlock Text="Y"/>
-                                    <Ellipse Width="10" Height="10" Fill="Red">
+                                    <Ellipse>
                                         <Ellipse.ToolTip>
                                             <Label>Sonde Y</Label>
                                         </Ellipse.ToolTip>
@@ -139,15 +151,12 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" x:Name="sondeZ">
                                     <TextBlock Text="Z"/>
-                                    <Ellipse Width="10" Height="10" Fill="Red">
+                                    <Ellipse>
                                         <Ellipse.ToolTip>
                                             <Label>Sonde Z</Label>
                                         </Ellipse.ToolTip>
                                     </Ellipse>
-                                </StackPanel>                            
-                                <!--<Line X1="{Binding Canvas.Left, ElementName=sondeX}" 
-                                      Y1="{Binding Canvas.Top, ElementName=sondeX}" X2="10" Y2="10"
-                                      Stroke="Black" StrokeThickness="1"/>-->
+                                </StackPanel>
                             </Canvas>
                         </Border>
                     </Grid>
@@ -158,7 +167,9 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Operators">
-                
+                <StackPanel>
+                    <Label Style="{StaticResource sectionHeaderStyle}">Existing operators</Label>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Channels" Loaded="TabItem_Loaded">
                 <TabItem.Resources>
@@ -167,50 +178,58 @@
                         <Setter Property="MaxValue" Value="40000"/>
                         <Setter Property="Decimals" Value="0"/>
                         <Setter Property="MinWidth" Value="100"/>
-                        <EventSetter Event="ValueChanged" Handler="channelSetting_ValueChanged"/>
+                        <Setter Property="MinWidth" Value="100"/>
+                        <EventSetter Event="ValueChanged" Handler="upDownButton_ValueChanged"/>
                     </Style>
-                           
                 </TabItem.Resources>
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Right">
-                        <Button Click="close_Click">Close</Button>
-                        <Button Click="apply_Click">Apply</Button>
-                    </StackPanel>
                     <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}" DockPanel.Dock="Top">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type local:ChannelSetting}">
-                                <StackPanel>
-                                    <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
-                                        <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" 
-                                                           Value="{Binding RawLow, Mode=TwoWay}"/>
+                                <Border Margin="5" BorderBrush="White" BorderThickness="1">
+                                    <StackPanel>
+                                        <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>
+                                        <Grid>
+                                            <Grid.Resources>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Setter Property="ToolTip" Value="{Binding Description}"/>
+                                                </Style>
+                                            </Grid.Resources>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
+                                            <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" 
+                                                               Value="{Binding RawLow, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
-                                        <ctrl:UpDownButton Grid.Row="1" Grid.Column="1"
-                                                           Value="{Binding RawHigh, Mode=TwoWay}"/>
+                                            <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
+                                            <ctrl:UpDownButton Grid.Row="1" Grid.Column="1"
+                                                               Value="{Binding RawHigh, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
-                                        <ctrl:UpDownButton Grid.Row="2" Grid.Column="1"
-                                                           Value="{Binding RealLow, Mode=TwoWay}"/>
+                                            <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
+                                            <ctrl:UpDownButton Grid.Row="2" Grid.Column="1"
+                                                               Value="{Binding RealLow, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
-                                        <ctrl:UpDownButton Grid.Row="3" Grid.Column="1"
-                                                           Value="{Binding RealHigh, Mode=TwoWay}"/>
-                                    </Grid>
-                                </StackPanel>
+                                            <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
+                                            <ctrl:UpDownButton Grid.Row="3" Grid.Column="1"
+                                                               Value="{Binding RealHigh, Mode=TwoWay}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                     </ItemsControl>
                     <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Right">
                             <Button Click="close_Click">Close</Button>

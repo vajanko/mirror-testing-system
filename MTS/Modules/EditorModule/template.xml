@@ -6,7 +6,7 @@
   <test id="Info">
     <name>Information</name>
     <group>Informative Settings</group>
-    <description></description>
+    <description>This setting will not be used for testing.</description>
     <param id="orientation">
       <name>Orientation</name>
       <description></description>
