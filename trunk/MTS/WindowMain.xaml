@@ -37,6 +37,7 @@
         
         <BitmapImage UriSource="resources/icons/viewTester.png" x:Key="ViewTesterIcon"/>
         <BitmapImage UriSource="resources/icons/viewData.png" x:Key="ViewDataIcon"/>
+        <BitmapImage UriSource="resources/icons/viewSettings.png" x:Key="ViewSettingsIcon"/>
     </Window.Resources>
 
     <DockPanel>        
@@ -114,6 +115,9 @@
                 </Button>
                 <Button Command="{x:Static local:MTSCommands.ViewData}">
                     <Image Source="{StaticResource ViewDataIcon}"/>
+                </Button>
+                <Button Command="{x:Static local:MTSCommands.ViewSettings}">
+                    <Image Source="{StaticResource ViewSettingsIcon}"/>
                 </Button>
             </ToolBar>
         </ToolBarTray>

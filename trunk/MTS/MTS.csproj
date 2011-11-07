@@ -267,6 +267,9 @@
     <Resource Include="Resources\icons\viewTester.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\icons\viewSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Modules\Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
