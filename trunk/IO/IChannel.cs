@@ -86,12 +86,12 @@ namespace MTS.IO
         /// (Get/Set) Minimal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
         /// property interpreted as some quantity.
         /// </summary>
-        int RealLow { get; set; }
+        double RealLow { get; set; }
         /// <summary>
         /// (Get/Set) Maximal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
         /// property interpreted as some quantity.
         /// </summary>
-        int RealHigh { get; set; }
+        double RealHigh { get; set; }
 
         /// <summary>
         /// (Get) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>

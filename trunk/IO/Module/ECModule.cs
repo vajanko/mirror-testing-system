@@ -141,13 +141,25 @@ namespace MTS.IO.Module
             // notice that we are connecting to local server which by the way handle any communication 
             // with remote side
             if (!client.IsConnected)
-                client.Connect(AmsNetId.Local, 301);    // ??? fuck - write me an email
+            {
+                try
+                {
+                    client.Connect(AmsNetId.Local, 301);    // ??? fuck - write me an email
+                }
+                catch (Exception ex)
+                {   // establishing connection failed
+                    throw new ConnectionException("Connection to the module could not be established",
+                        ex) { ProtocolName = ChannelException.EtherCatString };
+                }
+            }
         }
 
         /// <summary>
         /// Prepare (initialize) channels for reading and writing. When this method is called, connection
         /// must be established already.
         /// </summary>
+        /// <exception cref="AddressException">Address of some channel does not exists or it variable
+        /// handle could not be createds</exception>
         public void Initialize()
         {
             // see that we are calling a method of the client - connection must be established already
@@ -155,7 +167,22 @@ namespace MTS.IO.Module
             {
                 ECAddress addr = channel.Address as ECAddress;
                 if (addr != null)   // specifiy address of each channel - it must be ethercat address
-                    addr.IndexOffset = client.CreateVariableHandle(addr.FullName);
+                {
+                    try
+                    {
+                        addr.IndexOffset = client.CreateVariableHandle(addr.FullName);
+                    }
+                    catch (Exception ex)
+                    {   // variable handle of some address could not be created
+                        throw new AddressException(string.Format(@"Variable handle of EtherCAT address
+                            {0} could not be found", addr.FullName), ex) { ChannelName = channel.Name };
+                    }
+                }
+                else
+                {
+                    // each channel must have an address
+                    throw new AddressException("EtherCAT address on channel not found") { ChannelName = channel.Name };
+                }
             }
 
             alocateChannels();  // alocat memory for reading a writing channels
@@ -166,22 +193,54 @@ namespace MTS.IO.Module
         /// </summary>
         public void Update()
         {
-            writeChannels();
-            readChannels();
+            UpdateOutputs();
+            UpdateInputs();
         }
         /// <summary>
         /// Read all inputs and outputs channels
         /// </summary>
+        /// <exception cref="ChannelException">An error occured while reading some channel</exception>
         public void UpdateInputs()
         {
-            readChannels();
+            // do not read if there are no inputs
+            if (inputs.Count == 0) return;
+            // jump at the beginning of the read stream - readed data are going to be written here
+            iReadStream.Seek(0, SeekOrigin.Begin);
+            // read data from hardware to read stream
+            client.ReadWrite(readCommand, inputs.Count, iReadStream, (AdsStream)iWriter.BaseStream);
+            // jump at the beginng of the data (skip error codes)
+            iReadStream.Seek(iReadStreamOffset, SeekOrigin.Begin);
+
+            // remove this
+            BinaryReader reader = new BinaryReader(iReadStream);
+
+            // read values from stream and write to input channels
+            for (int i = 0; i < inputs.Count; i++)
+            {
+                // check error codes and throw exception if some error occures
+                // ...
+                inputs[i].ValueBytes = reader.ReadBytes(inputs[i].Size);
+            }
         }
         /// <summary>
         /// Write all outputs channels
         /// </summary>
+        /// <exception cref="ChannelException">An error occured while writing some channel</exception>
         public void UpdateOutputs()
         {
-            writeChannels();
+            // do not write if there are no outputs
+            if (outputs.Count == 0) return;
+            // seek to position behid info data (IndexGroup, IndexOffset and Size), bytes before never change
+            oWriter.Seek(oWriterOffset, SeekOrigin.Begin);
+            // write channels values
+            for (int i = 0; i < outputs.Count; i++)
+                oWriter.Write(outputs[i].ValueBytes);
+            // return at previous position where outputs start
+            oWriter.Seek(oWriterOffset, SeekOrigin.Begin);
+            // write values from stream to hardware
+            client.ReadWrite(writeCommand, outputs.Count, oReadStream, (AdsStream)oWriter.BaseStream);
+
+            // check error codes and throw exception if some error occures
         }
 
         /// <summary>
@@ -196,7 +255,7 @@ namespace MTS.IO.Module
                 if (addr != null)
                     client.DeleteVariableHandle(addr.IndexOffset);
             }
-            // release resources allovated by TwinCAT IO Server
+            // release resources allocated by TwinCAT IO Server
             client.Dispose();
         }
 
@@ -205,6 +264,8 @@ namespace MTS.IO.Module
         /// In case of Beckhoff (EtherCAT) IModule implementation this is TwinCAT IO Server variable name.
         /// </summary>
         /// <param name="name">Unic name (identifier) of required channel</param>
+        /// <exception cref="ChannelException">Channel identified by its name does not exists in current
+        /// module</exception>
         public IChannel GetChannelByName(string name)
         {
             // this is very simple impelementation. It looks through all channels and tries to find
@@ -212,7 +273,8 @@ namespace MTS.IO.Module
             for (int i = 0; i < inputs.Count; i++)
                 if (inputs[i].Name == name)     // look for channel with paricular name
                     return inputs[i];
-            return null;        // channel with name "name" was not found
+            // channel with name "name" was not found
+            throw new ChannelException("Channel not found") { ChannelName = name, ProtocolName = ChannelException.EtherCatString };
         }
 
         /// <summary>
@@ -230,6 +292,7 @@ namespace MTS.IO.Module
         /// <summary>
         /// Read all input and output channels
         /// </summary>
+        /// <exception cref="ChannelException">An error occured while reading some channel</exception>
         private void readChannels()
         {
             // do not read if there are no inputs
@@ -246,11 +309,16 @@ namespace MTS.IO.Module
 
             // read values from stream and write to input channels
             for (int i = 0; i < inputs.Count; i++)
+            {
+                // check error codes and throw exception if some error occures
+                // ...
                 inputs[i].ValueBytes = reader.ReadBytes(inputs[i].Size);
+            }
         }
         /// <summary>
         /// Write all output channels
         /// </summary>
+        /// <exception cref="ChannelException">An error occured while writing some channel</exception>
         private void writeChannels()
         {
             // do not write if there are no outputs
@@ -265,7 +333,8 @@ namespace MTS.IO.Module
             // write values from stream to hardware
             client.ReadWrite(writeCommand, outputs.Count, oReadStream, (AdsStream)oWriter.BaseStream);
 
-            // error codes are not checked - in oReadStream
+            // check error codes and throw exception if some error occures
+            
         }
         /// <summary>
         /// Allocate and initialize memory necessary for channel handlig. This method is called only once

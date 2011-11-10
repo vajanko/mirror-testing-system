@@ -29,12 +29,12 @@ namespace MTS.IO.Channel
         /// (Get/Set) Minimal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
         /// property interpreted as some quantity.
         /// </summary>
-        public int RealLow { get; set; }
+        public double RealLow { get; set; }
         /// <summary>
         /// (Get/Set) Maximal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
         /// property interpreted as some quantity.
         /// </summary>
-        public int RealHigh { get; set; }
+        public double RealHigh { get; set; }
 
         /// <summary>
         /// Raw value of this channel
@@ -53,7 +53,7 @@ namespace MTS.IO.Channel
         public double RealValue
         {
             get { return RawToReal(Value); }
-            set { throw new NotImplementedException("This is not necessary by the way"); }
+            set { throw new ChannelException("Trying to set real value on analog channel") { ChannelName = Name, ChannelValue = value }; }
         }
 
         /// <summary>

@@ -34,42 +34,6 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,0,0")]
-        public global::System.Windows.Media.Media3D.Point3D SondeYPosition {
-            get {
-                return ((global::System.Windows.Media.Media3D.Point3D)(this["SondeYPosition"]));
-            }
-            set {
-                this["SondeYPosition"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,94.4,0")]
-        public global::System.Windows.Media.Media3D.Point3D SondeZPosition {
-            get {
-                return ((global::System.Windows.Media.Media3D.Point3D)(this["SondeZPosition"]));
-            }
-            set {
-                this["SondeZPosition"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("58.8,94.4,0")]
-        public global::System.Windows.Media.Media3D.Point3D SondeXPosition {
-            get {
-                return ((global::System.Windows.Media.Media3D.Point3D)(this["SondeXPosition"]));
-            }
-            set {
-                this["SondeXPosition"] = value;
-            }
-        }
-        
         /// <summary>
         /// Distance of X and Y sondes. Sonds are measuring distance between them and mirror glass
         /// </summary>
@@ -118,28 +82,6 @@ namespace MTS.Properties {
             }
             set {
                 this["XZDistance"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::MTS.Admin.ChannelSettingsCollection ChannelsSettinngs {
-            get {
-                return ((global::MTS.Admin.ChannelSettingsCollection)(this["ChannelsSettinngs"]));
-            }
-            set {
-                this["ChannelsSettinngs"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::MTS.Admin.ChannelSetting Setting {
-            get {
-                return ((global::MTS.Admin.ChannelSetting)(this["Setting"]));
-            }
-            set {
-                this["Setting"] = value;
             }
         }
     }

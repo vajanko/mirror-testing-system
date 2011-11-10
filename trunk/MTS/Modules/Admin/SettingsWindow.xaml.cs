@@ -13,13 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.Drawing.Printing;
-
 using AvalonDock;
-using MTS.Properties;
-
 using Microsoft.Win32;
+
+using MTS.Properties;
+using MTS.IO.Settings;
 
 namespace MTS.Admin
 {
@@ -37,21 +36,12 @@ namespace MTS.Admin
 
         private readonly string[] protocolTypes = new string[] { "EtherCAT", "Modbus", "Dummy" };
 
-        #region XmlConstants
-
-        private static readonly XName ChannelsElem = "channels";
-        private static readonly XName ChannelElem = "channel";
-        private static readonly XName IdAttr = "id";
-        private static readonly XName NameElem = "name";
-        private static readonly XName DescriptionElem = "description";
-        private static readonly XName RawLowElem = "rawLow";
-        private static readonly XName RawHighElem = "rawHigh";
-        private static readonly XName RealLowElem = "realLow";
-        private static readonly XName RealHighElem = "realHigh";
-
-        #endregion
-
-        public List<ChannelSetting> ChannelSettings { get; private set; }
+        /// <summary>
+        /// (Get) List of <paramref name="ChannelSetting"/> describing settings of a particular analog
+        /// channel. This list is saved to disk and loaded when new connection to hardware is established.
+        /// Channels are configured by these settings.
+        /// </summary>
+        public ChannelSettingsCollection ChannelSettings { get; private set; }
 
         #endregion
 
@@ -138,7 +128,7 @@ namespace MTS.Admin
             }
         }
 
-        #region SettingsWindow Events
+        #region Settings
 
         private void settingsWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -174,24 +164,14 @@ namespace MTS.Admin
             // make visible settings part for currently selected protocol
             showProtocolSettings(protocols.SelectedItem.ToString().ToLower());
 
-            // SONDE
-            xPosition = HWSettings.Default.SondeXPosition;
-            yPosition = HWSettings.Default.SondeYPosition;
-            zPosition = HWSettings.Default.SondeZPosition;
+            // CALIBRETOR
+            xPosition = HWSettings.Default.CalibretorX;
+            yPosition = HWSettings.Default.CalibretorY;
+            zPosition = HWSettings.Default.CalibretorZ;
             xyDistance.Value = (decimal)(int)(yPosition.Y - xPosition.Y);
             yzDistance.Value = (decimal)(int)(Math.Sqrt(Math.Pow(yPosition.Y - zPosition.Y, 2) + Math.Pow(zPosition.X, 2)));
             xzDistance.Value = (decimal)(int)(Math.Sqrt(Math.Pow(zPosition.Y, 2) + Math.Pow(zPosition.X, 2)));
-            updateSondsPositions();
-
-
-            // register handlers for any change in application settings
-            //ethercatSettings.taskName.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            //ethercatSettings.configFile.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            //modbusSettings.ipAddress.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            //modbusSettings.port.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            //modbusSettings.configFile.TextChanged += new TextChangedEventHandler(textBox_TextChanged);
-            //protocols.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
-            //printers.SelectionChanged += new SelectionChangedEventHandler(comboBox_SelectionChanged);
+            updateCalibretorsPositions();
 
             tabControl.Items.CurrentChanging += new System.ComponentModel.CurrentChangingEventHandler(tabControl_CurrentChanging);
 
@@ -211,51 +191,20 @@ namespace MTS.Admin
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
             // load channels configuration file to memory
-            XElement root = XElement.Load(Settings.Default.GetChannelsConfigPath());
-            ChannelSettings = new List<ChannelSetting>();
 
-            try
-            {
-                foreach (XElement channel in root.Elements(ChannelElem))
-                {
-                    string id = channel.Attribute(IdAttr).Value;
-                    ChannelSetting chs = new ChannelSetting(id);
+            // catch exception
+            ChannelSettings = HWSettings.Default.LoadChannelSettings();
 
-                    chs.Name = channel.Element(NameElem).Value;
-                    chs.Description = channel.Element(DescriptionElem).Value;
-                    chs.RawLow = int.Parse(channel.Element(RawLowElem).Value);
-                    chs.RawHigh = int.Parse(channel.Element(RawHighElem).Value);
-                    chs.RealLow = double.Parse(channel.Element(RealLowElem).Value);
-                    chs.RealHigh = double.Parse(channel.Element(RealHighElem).Value);
-
-                    ChannelSettings.Add(chs);
-                }
-                RaisePropertyChanged("ChannelSettings");
-            }
-            catch
-            {
-            }
+            RaisePropertyChanged("ChannelSettings");
         }
 
         private void saveChannelSettings()
         {
-            string path = Settings.Default.GetChannelsConfigPath();
-            XElement root = new XElement(ChannelsElem);
-            foreach (var item in ChannelSettings)
-            {
-                XElement channel = new XElement(ChannelElem);
-                channel.Add(new XAttribute(IdAttr, item.Id));
-                channel.Add(new XElement(NameElem, item.Name));
-                channel.Add(new XElement(DescriptionElem, item.Description));
-                channel.Add(new XElement(RawLowElem, item.RawLow));
-                channel.Add(new XElement(RawHighElem, item.RawHigh));
-                channel.Add(new XElement(RealLowElem, item.RealLow));
-                channel.Add(new XElement(RealHighElem, item.RealHigh));
-
-                root.Add(channel);
-            }
-            root.Save(path);
+            // catch exception
+            HWSettings.Default.SaveChannelSettings(ChannelSettings);
         }
+
+        //private void loadSonde
 
         #endregion
 
@@ -316,15 +265,11 @@ namespace MTS.Admin
                 saveProtocolSettings(prot.ToLower());
             }
 
-            // SONDE
+            // CALIBRETOR
             HWSettings.Default.XYDistance = (double)xyDistance.Value;
             HWSettings.Default.YZDistance = (double)yzDistance.Value;
             HWSettings.Default.XZDistance = (double)xzDistance.Value;
-            caltulateSondePositions((double)xyDistance.Value, (double)yzDistance.Value, (double)xzDistance.Value);            
-            // this is not necessary and should be recalculated when setting distances between sonds
-            HWSettings.Default.SondeXPosition = xPosition;
-            HWSettings.Default.SondeYPosition = yPosition;
-            HWSettings.Default.SondeZPosition = zPosition;
+            caltulateCalibratorsPositions((double)xyDistance.Value, (double)yzDistance.Value, (double)xzDistance.Value);
 
             HWSettings.Default.Save();            
             Settings.Default.Save();
@@ -443,7 +388,7 @@ namespace MTS.Admin
         private Point3D yPosition;
         private Point3D zPosition;
 
-        private void caltulateSondePositions(double xy, double yz, double xz)
+        private void caltulateCalibratorsPositions(double xy, double yz, double xz)
         {
             double cosRes = ((xy * xy) + (xz * xz) - (yz * yz)) / (2 * xy * xz);
             double beta = Math.Acos(cosRes);
@@ -458,23 +403,29 @@ namespace MTS.Admin
             zPosition.X = Math.Sin(beta) * xz;
         }
 
-        private void updateSondsPositions()
+        private void updateCalibretorsPositions()
         {
-            caltulateSondePositions((double)xyDistance.Value, (double)yzDistance.Value, (double)xzDistance.Value);
+            caltulateCalibratorsPositions((double)xyDistance.Value, (double)yzDistance.Value, (double)xzDistance.Value);
 
-            sondeX.SetValue(Canvas.LeftProperty, xPosition.X);
-            sondeX.SetValue(Canvas.BottomProperty, xPosition.Y);
+            calibretorX.SetValue(Canvas.LeftProperty, xPosition.X);
+            calibretorX.SetValue(Canvas.BottomProperty, xPosition.Y);
 
-            sondeY.SetValue(Canvas.LeftProperty, yPosition.X);
-            sondeY.SetValue(Canvas.BottomProperty, yPosition.Y);
+            calibretorY.SetValue(Canvas.LeftProperty, yPosition.X);
+            calibretorY.SetValue(Canvas.BottomProperty, yPosition.Y);
 
-            sondeZ.SetValue(Canvas.LeftProperty, zPosition.X);
-            sondeZ.SetValue(Canvas.BottomProperty, zPosition.Y);
+            calibretorZ.SetValue(Canvas.LeftProperty, zPosition.X);
+            calibretorZ.SetValue(Canvas.BottomProperty, zPosition.Y);
         }
 
+        /// <summary>
+        /// This method is called when any distace between two calibretors change. We will recalculate the
+        /// calibretors positions in 2D space and display it to user.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void distance_ValueChanged(object sender, RoutedEventArgs e)
         {
-            updateSondsPositions();
+            updateCalibretorsPositions();
         }
 
         #endregion

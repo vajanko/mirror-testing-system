@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Media.Media3D;
+using MTS.IO.Settings;
 
 namespace MTS.IO 
 {
@@ -14,6 +16,11 @@ namespace MTS.IO
         /// Instance of layer that is resposible for communication with hardware
         /// </summary>
         private IModule module;
+
+        /// <summary>
+        /// Collection of setting for all analog channels. This includes raw/real low/high vlaues
+        /// </summary>
+        private ChannelSettingsCollection settings;
 
         #region IModule Members
 
@@ -48,60 +55,37 @@ namespace MTS.IO
 
             // setting channels propety here is only temporary a will be changed in the future
 
-            // analog inputs
+            //// analog inputs - also initialize its settings raw/real low/high values
             DistanceX = (IAnalogInput)module.GetChannelByName("DistanceX");
-            DistanceX.RawLow = 0;
-            DistanceX.RawHigh = 4095;
-            DistanceX.RealLow = 0;
-            DistanceX.RealHigh = 100;
+            initializeChannel(DistanceX, settings.GetSetting("DistanceX"));
+
             DistanceY = (IAnalogInput)module.GetChannelByName("DistanceY");
-            DistanceY.RawLow = 0;
-            DistanceY.RawHigh = 4095;
-            DistanceY.RealLow = 0;
-            DistanceY.RealHigh = 100;
+            initializeChannel(DistanceY, settings.GetSetting("DistanceY"));
+
             DistanceZ = (IAnalogInput)module.GetChannelByName("DistanceZ");
-            DistanceZ.RawLow = 0;
-            DistanceZ.RawHigh = 4095;
-            DistanceZ.RealLow = 0;
-            DistanceZ.RealHigh = 100;
+            initializeChannel(DistanceZ, settings.GetSetting("DistanceZ"));
 
             PowerfoldCurrent = (IAnalogInput)module.GetChannelByName("PowerfoldCurrent");
-            PowerfoldCurrent.RawLow = 0;
-            PowerfoldCurrent.RawHigh = 4095;
-            PowerfoldCurrent.RealLow = 0;
-            PowerfoldCurrent.RealHigh = 4000;
+            initializeChannel(PowerfoldCurrent, settings.GetSetting("PowerfoldCurrent"));
+
             HeatingFoilCurrent = (IAnalogInput)module.GetChannelByName("HeatingFoilCurrent");
-            HeatingFoilCurrent.RawLow = 0;
-            HeatingFoilCurrent.RawHigh = 4095;
-            HeatingFoilCurrent.RealLow = 0;
-            HeatingFoilCurrent.RealHigh = 4000;
+            initializeChannel(HeatingFoilCurrent, settings.GetSetting("HeatingFoilCurrent"));
+
             VerticalActuatorCurrent = (IAnalogInput)module.GetChannelByName("VerticalActuatorCurrent");
-            VerticalActuatorCurrent.RawLow = 0;
-            VerticalActuatorCurrent.RawHigh = 4095;
-            VerticalActuatorCurrent.RealLow = 0;
-            VerticalActuatorCurrent.RealHigh = 2000;
+            initializeChannel(VerticalActuatorCurrent, settings.GetSetting("VerticalActuatorCurrent"));
+
             HorizontalActuatorCurrent = (IAnalogInput)module.GetChannelByName("HorizontalActuatorCurrent");
-            HorizontalActuatorCurrent.RawLow = 0;
-            HorizontalActuatorCurrent.RawHigh = 4095;
-            HorizontalActuatorCurrent.RealLow = 0;
-            HorizontalActuatorCurrent.RealHigh = 2000;
+            initializeChannel(HorizontalActuatorCurrent, settings.GetSetting("HorizontalActuatorCurrent"));
+
             DirectionLightCurrent = (IAnalogInput)module.GetChannelByName("DirectionLightCurrent");
-            DirectionLightCurrent.RawLow = 0;
-            DirectionLightCurrent.RawHigh = 4095;
-            DirectionLightCurrent.RealLow = 0;
-            DirectionLightCurrent.RealHigh = 4000;
+            initializeChannel(DirectionLightCurrent, settings.GetSetting("DirectionLightCurrent"));
 
             PowerSupplyVoltage1 = (IAnalogInput)module.GetChannelByName("PowerSupplyVoltage1");
-            PowerSupplyVoltage1.RawLow = 0;
-            PowerSupplyVoltage1.RawHigh = 4095;
-            PowerSupplyVoltage1.RealLow = 0;
-            PowerSupplyVoltage1.RealHigh = 10;
+            initializeChannel(PowerSupplyVoltage1, settings.GetSetting("PowerSupplyVoltage1"));
+
             PowerSupplyVoltage2 = (IAnalogInput)module.GetChannelByName("PowerSupplyVoltage2");
-            PowerSupplyVoltage2.RawLow = 0;
-            PowerSupplyVoltage2.RawHigh = 4095;
-            PowerSupplyVoltage2.RealLow = 0;
-            PowerSupplyVoltage2.RealHigh = 10;
-            // analog inputs
+            initializeChannel(PowerSupplyVoltage2, settings.GetSetting("PowerSupplyVoltage2"));
+            //// analog inputs
 
             // digital inputs
             IsDistanceSensorUp = (IDigitalInput)module.GetChannelByName("IsDistanceSensorUp");
@@ -240,6 +224,14 @@ namespace MTS.IO
         }
 
         #endregion
+
+        private void initializeChannel(IAnalogInput channel, ChannelSetting setting)
+        {
+            channel.RawLow = setting.RawLow;
+            channel.RawHigh = setting.RawHigh;
+            channel.RealLow = setting.RealLow;
+            channel.RealHigh = setting.RealHigh;
+        }        
 
         #region Public methods
 
@@ -482,6 +474,33 @@ namespace MTS.IO
             return getPlaneNormal(PointX, PointY, PointZ);
         }
 
+        /// <summary>
+        /// This method should be called when channels for measuring mirror rotation will be used.
+        /// It initialize setting which come from hardware settings and should be configured by user.
+        /// Their are necessary for correct measurement of mirror glass rotation.
+        /// </summary>
+        /// <param name="zeroPlaneNormal">Normal of plane which is considered to be a default position. 
+        /// In this position mirror is centred</param>
+        /// <param name="calibratorX">Position of X calibrator in 2D space. Z coordinate of thie structure 
+        /// is ignored</param>
+        /// <param name="calibratorY">Position of Y calibrator in 2D space. Z coordinate of thie structure
+        /// is ignored</param>
+        /// <param name="calibratorZ">Position of Z calibrator in 2D space. Z coordinate of thie structure
+        /// is ignored</param>
+        public void InitializeCalibratorsSettings(Vector3D zeroPlaneNormal, Point3D calibratorX,
+            Point3D calibratorY, Point3D calibratorZ)
+        {
+            // Normal of plane which is considered to be a default position. In this position
+            // mirror is centred
+            this.ZeroPlaneNormal = zeroPlaneNormal;
+            // These setting comes from application settings
+            // X and Y coordinates of these points are positions of measuring sonds
+            // Z cooridnates are distances of the mirror surface
+            this.PointX = calibratorX;
+            this.PointY = calibratorY;
+            this.PointZ = calibratorZ;
+        }
+
         #endregion
 
         #endregion
@@ -599,18 +618,11 @@ namespace MTS.IO
         /// </summary>
         /// <param name="module">Impelmentation of <typeparamref name="IModule"/> for a particular
         /// protocol, such as EtherCAT or Modbus TCP/IP (...)</param>
-        public Channels(IModule module)
+        /// <param name="settings">Collection of setting for all analog channels</param>
+        public Channels(IModule module, ChannelSettingsCollection settings)
         {
             this.module = module;
-
-            // These setting comes from application settings
-            // X and Y coordinates of these points are positions of measuring sonds
-            // Z cooridnates are distances of the mirror surface
-            //PointX = HWSettings.Default.SondeXPosition;
-            //PointY = HWSettings.Default.SondeYPosition;
-            //PointZ = HWSettings.Default.SondeZPosition;
-            // normal of plane we are going to center to
-            //ZeroPlaneNormal = HWSettings.Default.ZeroPlaneNormal;
+            this.settings = settings;
         }
 
         #endregion
