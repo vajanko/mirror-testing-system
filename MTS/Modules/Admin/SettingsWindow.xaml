@@ -133,9 +133,9 @@
                                         <Setter Property="Fill" Value="Red"/>
                                     </Style>                                    
                                 </Canvas.Resources>
-                                <Ellipse ToolTip="Sonde X" x:Name="sondeX"/>
-                                <Ellipse ToolTip="Sonde Y" x:Name="sondeY"/>
-                                <Ellipse ToolTip="Sonde Z" x:Name="sondeZ"/>
+                                <Ellipse ToolTip="Calibretor X" x:Name="calibretorX"/>
+                                <Ellipse ToolTip="Calibretor Y" x:Name="calibretorY"/>
+                                <Ellipse ToolTip="Calibretor Z" x:Name="calibretorZ"/>
                             </Canvas>
                         </Border>
                     </Grid>
@@ -163,7 +163,7 @@
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}" DockPanel.Dock="Top">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type local:ChannelSetting}">
+                            <DataTemplate DataType="{x:Type io_set:ChannelSetting}" xmlns:io_set="clr-namespace:MTS.IO.Settings;assembly=IO">
                                 <Border Margin="5" BorderBrush="White" BorderThickness="1">
                                     <StackPanel>
                                         <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>

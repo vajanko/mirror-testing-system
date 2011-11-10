@@ -52,11 +52,23 @@ namespace MTS
         /// <param name="args">An array of object to write using format</param>
         static public void Log(string format, params object[] args)
         {
-            DateTime date = DateTime.Now;
-            // save logs in format: Y.M.D H:M:S
-            System.IO.File.AppendAllText(Settings.Default.LogFile,
-                string.Format("{0}.{1}.{2} {3}:{4}:{5}\t{6}\n", date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second,
-                string.Format(format, args)));
+            // only save logs if log file exists, this mehtod should not throw exception
+            if (canLog)
+            {
+                try
+                {
+                    DateTime date = DateTime.Now;
+                    // save logs in format: Y.M.D H:M:S
+                    System.IO.File.AppendAllText(Settings.Default.LogFile,
+                        string.Format("{0}.{1}.{2} {3}:{4}:{5}\t{6}\n", date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second,
+                        string.Format(format, args)));
+                }
+                catch
+                {   // if anythig other happens, switch logging of, so program will run normally
+                    // if here an exception if thrown, it must be really somethig bad
+                    canLog = false;
+                }
+            }
         }
 
         /// <summary>
@@ -68,6 +80,20 @@ namespace MTS
         {
             textBox.AppendText(text + "\n");
             textBox.ScrollToEnd();              // added lines are always visible
+        }
+
+        static Output()
+        {
+            canLog = File.Exists(Settings.Default.LogFile);
+            Settings.Default.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Default_PropertyChanged);
+        }
+        static private bool canLog = false;
+        static void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "LogFile")
+            {
+                canLog = File.Exists(Settings.Default.LogFile);
+            }
         }
     }
 }

@@ -123,6 +123,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ExceptionManager.cs" />
     <Compile Include="Classes\Unit.cs" />
     <Compile Include="Controls\Converters\BoolNegationConverter.cs" />
     <Compile Include="Controls\Converters\DoubleAmplifierConverter.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Modules\Admin\CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Admin\ChannelSetting.cs" />
     <Compile Include="Modules\Admin\EthercatSettings.xaml.cs">
       <DependentUpon>EthercatSettings.xaml</DependentUpon>
     </Compile>
@@ -257,17 +257,17 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IO\IO.csproj">
-      <Project>{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}</Project>
-      <Name>IO</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\icons\viewData.png" />
     <Resource Include="Resources\icons\viewTester.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\viewSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IO\IO.csproj">
+      <Project>{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}</Project>
+      <Name>IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\Data\" />

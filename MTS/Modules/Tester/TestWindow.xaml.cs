@@ -19,6 +19,7 @@ using MTS.Editor;
 using MTS.Properties;
 using MTS.IO;
 using MTS.IO.Module;
+using MTS.IO.Settings;
 
 using AvalonDock;
 
@@ -316,7 +317,6 @@ namespace MTS.TesterModule
                     ParamStatusMessage = "Loaded";
             }
         }
-
         /// <summary>
         /// Connect the device. This method initialize the connection and will cyclicaly watch for
         /// hardware changes
@@ -473,7 +473,13 @@ namespace MTS.TesterModule
                 default: module = new ECModule(Settings.Default.EthercatTaskName); break;
             }
 
-            Channels channels = new Channels(module);
+            ChannelSettingsCollection settings;
+            // this method will handle all exceptions
+            if (!loadChannelSettings(out settings))
+                return null;    // setting for channels could not be loaded -> could not created channels
+            
+
+            Channels channels = new Channels(module, settings);
             // use configuration file from Settings
             // when loading file - an exception may be thrown
             try
@@ -497,6 +503,36 @@ namespace MTS.TesterModule
 
             return channels;
         }
+
+        private bool loadChannelSettings(out ChannelSettingsCollection settings)
+        {
+            settings = null;
+            // get path where configuration setting for analog channels are stored
+            string path = Settings.Default.GetChannelsConfigPath();
+            try
+            {
+                // load settings of analog channels from configuration path saved in settgins
+                settings = HWSettings.Default.LoadChannelSettings(path);
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+
+            }
+            catch (System.IO.IOException ex)
+            {
+                showError(ex, "Config error", "Configuration file for analog channels could not be loaded");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                showError(ex, "Config error",
+                    "Configuration file for analog channels may be corrupted, ", path);
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Create a new connection with given channels and return value indicating if it was successfull.
         /// This method will handle all exceptions!
@@ -510,10 +546,10 @@ namespace MTS.TesterModule
 
             try
             {
-                // initialize each channel and channels properites
-                channels.Initialize();
                 // establish a new connection
                 channels.Connect();
+                // initialize each channel and channels properites
+                channels.Initialize();
             }
             catch (Exception ex)
             {
@@ -543,6 +579,28 @@ namespace MTS.TesterModule
             channels.AllowPowerSupply.PropertyChanged += new PropertyChangedEventHandler(allowPowerSupplyChanged);
             channels.IsPowerSupplyOff.PropertyChanged += new PropertyChangedEventHandler(isPowerSupplyOnChanged);
         }
+
+        #region Error Handling
+
+        private void showError(Exception ex, string caption, string message)
+        {
+            MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
+            Output.Log(message);
+        }
+        private void showError(Exception ex, string message)
+        {
+            showError(ex, "Error", message);
+        }
+        private void showError(Exception ex, string caption, string format, params object[] args)
+        {
+            showError(ex, caption, string.Format(format, args));
+        }
+        private void showError(Exception ex, string format, params object[] args)
+        {
+            showError(ex, string.Format(format, args));
+        }
+
+        #endregion
 
         #region Channels Events
 
@@ -626,15 +684,15 @@ namespace MTS.TesterModule
         // test
 
         /// <summary>
-        /// Position in the 3D space of the surface which position is measured by sonde X
+        /// Position in the 3D space of the surface which position is measured by calibretor X
         /// </summary>
         protected Point3D PointX;
         /// <summary>
-        /// Position in the 3D space of the surface which position is measured by sonde Y
+        /// Position in the 3D space of the surface which position is measured by calibretor Y
         /// </summary>
         protected Point3D PointY;
         /// <summary>
-        /// Position in the 3D space of the surface which position is measured by sonde Z
+        /// Position in the 3D space of the surface which position is measured by calibretor Z
         /// </summary>
         protected Point3D PointZ;
 
@@ -666,9 +724,9 @@ namespace MTS.TesterModule
             DeviceStatusMessage = "Disconnected";
 
             // load hardware settings
-            PointX = HWSettings.Default.SondeXPosition;
-            PointY = HWSettings.Default.SondeYPosition;
-            PointZ = HWSettings.Default.SondeZPosition;
+            PointX = HWSettings.Default.CalibretorX;
+            PointY = HWSettings.Default.CalibretorY;
+            PointZ = HWSettings.Default.CalibretorZ;
 
             ZeroPlaneNormal = HWSettings.Default.ZeroPlaneNormal;
         }
