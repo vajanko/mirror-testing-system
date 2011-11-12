@@ -13,7 +13,7 @@ namespace MTS.Properties
     //  The PropertyChanged event is raised after a setting's value is changed.
     //  The SettingsLoaded event is raised after the setting values are loaded.
     //  The SettingsSaving event is raised before the setting values are saved.
-    internal sealed partial class HWSettings {
+    public sealed partial class HWSettings {
         
         public HWSettings() {
             // To add event handlers for saving and changing settings, uncomment the lines below:
@@ -94,12 +94,12 @@ namespace MTS.Properties
         /// <param name="path">Absolute path to file where configuration settings for analog channels are
         /// saved</param>
         /// <returns>Collection of settings for analog channels loaded from a file</returns>
-        public ChannelSettingsCollection LoadChannelSettings(string path)
+        public ChannelSettings LoadChannelSettings(string path)
         {
             // load channels configuration file to memory
             XElement root = XElement.Load(path);
 
-            ChannelSettingsCollection settings = new ChannelSettingsCollection();
+            ChannelSettings settings = new ChannelSettings();
 
             try
             {
@@ -115,7 +115,8 @@ namespace MTS.Properties
                     chs.RealLow = double.Parse(channel.Element(RealLowElem).Value);
                     chs.RealHigh = double.Parse(channel.Element(RealHighElem).Value);
 
-                    settings.AddSetting(chs);
+                    settings.Add(chs);
+                    //settings.AddSetting(chs);
                 }
             }
             catch
@@ -125,12 +126,12 @@ namespace MTS.Properties
             return settings;
         }
 
-        public void SaveChannelSettings(ChannelSettingsCollection settings)
+        public void SaveChannelSettings(ChannelSettings settings)
         {
             string path = Settings.Default.GetChannelsConfigPath();
             XElement root = new XElement(ChannelsElem);
 
-            foreach (var item in settings)
+            foreach (ChannelSetting item in settings)
             {
                 XElement channel = new XElement(ChannelElem);
                 channel.Add(new XAttribute(IdAttr, item.Id));

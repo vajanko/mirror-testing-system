@@ -36,13 +36,6 @@ namespace MTS.Admin
 
         private readonly string[] protocolTypes = new string[] { "EtherCAT", "Modbus", "Dummy" };
 
-        /// <summary>
-        /// (Get) List of <paramref name="ChannelSetting"/> describing settings of a particular analog
-        /// channel. This list is saved to disk and loaded when new connection to hardware is established.
-        /// Channels are configured by these settings.
-        /// </summary>
-        public ChannelSettingsCollection ChannelSettings { get; private set; }
-
         #endregion
 
         #region Properties
@@ -70,6 +63,21 @@ namespace MTS.Admin
         public string DisplayTitle
         {
             get { return Saved ? "Settings" : "Settings*"; }
+        }
+
+        private ChannelSettings _channelSettings;
+        /// <summary>
+        /// (Get) List of <paramref name="ChannelSetting"/> describing settings of a particular analog
+        /// channel. This list is saved in application settings. 
+        /// </summary>
+        public ChannelSettings ChannelSettings
+        {
+            get { return _channelSettings; }
+            private set
+            {
+                _channelSettings = value;
+                RaisePropertyChanged("ChannelSettings");
+            }
         }
 
         #endregion
@@ -130,11 +138,6 @@ namespace MTS.Admin
 
         #region Settings
 
-        private void settingsWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-           
-        }
-
         private void settingsWindow_Initialized(object sender, EventArgs e)
         {
             // load application settings
@@ -164,7 +167,7 @@ namespace MTS.Admin
             // make visible settings part for currently selected protocol
             showProtocolSettings(protocols.SelectedItem.ToString().ToLower());
 
-            // CALIBRETOR
+            // CALIBRETOR - remove this
             xPosition = HWSettings.Default.CalibretorX;
             yPosition = HWSettings.Default.CalibretorY;
             zPosition = HWSettings.Default.CalibretorZ;
@@ -172,6 +175,8 @@ namespace MTS.Admin
             yzDistance.Value = (decimal)(int)(Math.Sqrt(Math.Pow(yPosition.Y - zPosition.Y, 2) + Math.Pow(zPosition.X, 2)));
             xzDistance.Value = (decimal)(int)(Math.Sqrt(Math.Pow(zPosition.Y, 2) + Math.Pow(zPosition.X, 2)));
             updateCalibretorsPositions();
+
+            ChannelSettings = HWSettings.Default.ChannelSettings;
 
             tabControl.Items.CurrentChanging += new System.ComponentModel.CurrentChangingEventHandler(tabControl_CurrentChanging);
 
@@ -187,24 +192,6 @@ namespace MTS.Admin
             if (!Saved)
                 e.Cancel = !askToClose();  // ask user to discard changes and cancel event if he has not agreed
         }
-
-        private void TabItem_Loaded(object sender, RoutedEventArgs e)
-        {
-            // load channels configuration file to memory
-
-            // catch exception
-            ChannelSettings = HWSettings.Default.LoadChannelSettings();
-
-            RaisePropertyChanged("ChannelSettings");
-        }
-
-        private void saveChannelSettings()
-        {
-            // catch exception
-            HWSettings.Default.SaveChannelSettings(ChannelSettings);
-        }
-
-        //private void loadSonde
 
         #endregion
 
@@ -273,8 +260,6 @@ namespace MTS.Admin
 
             HWSettings.Default.Save();            
             Settings.Default.Save();
-
-            saveChannelSettings();
 
             Saved = true;
         }

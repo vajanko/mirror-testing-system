@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MTS.Properties {
+namespace MTS.IO.Settings {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -90,34 +90,47 @@ namespace MTS.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfChannelSetting xmlns:xsi=\"http:/" +
             "/www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema" +
             "\">\r\n  <ChannelSetting>\r\n    <Id>distanceX</Id>\r\n    <Name>Distance Sensor X</Nam" +
-            "e>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow>100</RealL" +
-            "ow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <I" +
-            "d>distanceY</Id>\r\n    <Name>Distance Sensor Y</Name>\r\n    <RawLow>4095</RawLow>\r" +
-            "\n    <RawHigh>0</RawHigh>\r\n    <RealLow>100</RealLow>\r\n    <RealHigh>0</RealHigh" +
-            ">\r\n  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <Id>distanceZ</Id>\r\n    <Name>Di" +
-            "stance Sensor Z</Name>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n   " +
-            " <RealLow>100</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <Cha" +
-            "nnelSetting>\r\n    <Id>powerfoldCurrent</Id>\r\n    <Name>Powerfold Name</Name>\r\n  " +
-            "  <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow>4000</RealLow>\r\n" +
-            "    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <Id>hea" +
-            "tingFoilCurrent</Id>\r\n    <Name>Heating Foil Current</Name>\r\n    <RawLow>4095</R" +
-            "awLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow>4000</RealLow>\r\n    <RealHigh>0</" +
-            "RealHigh>\r\n  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <Id>verticalActuatorCurr" +
-            "ent</Id>\r\n    <Name>Vertical ActuatorCurrent</Name>\r\n    <RawLow>4095</RawLow>\r\n" +
-            "    <RawHigh>0</RawHigh>\r\n    <RealLow>2000</RealLow>\r\n    <RealHigh>0</RealHigh" +
-            ">\r\n  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <Id>horizontalActuatorCurrent</I" +
-            "d>\r\n    <Name>Horizontal Actuator Current</Name>\r\n    <RawLow>4095</RawLow>\r\n   " +
-            " <RawHigh>0</RawHigh>\r\n    <RealLow>2000</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n" +
-            "  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <Id>directionLightCurrent</Id>\r\n   " +
-            " <Name>Direction Light Current</Name>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0" +
-            "</RawHigh>\r\n    <RealLow>2000</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </Channel" +
-            "Setting>\r\n  <ChannelSetting>\r\n    <Id>powerSupplyVoltage1</Id>\r\n    <Name>Power " +
-            "Supply Voltage 1</Name>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n  " +
-            "  <RealLow>10</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <Cha" +
-            "nnelSetting>\r\n    <Id>powerSupplyVoltage2</Id>\r\n    <Name>Power Supply Voltage 2" +
-            "</Name>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow>10</R" +
-            "ealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n</ArrayOfChannelSettin" +
-            "g>")]
+            "e>\r\n    <Description>Settings for calibretor X that is measuring distance from m" +
+            "irror glass</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n" +
+            "    <RealLow>100</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <" +
+            "ChannelSetting>\r\n    <Id>distanceY</Id>\r\n    <Name>Distance Sensor Y</Name>\r\n   " +
+            " <Description>Settings for calibretor Y that is measuring distance from mirror g" +
+            "lass</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <Re" +
+            "alLow>100</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <Channel" +
+            "Setting>\r\n    <Id>distanceZ</Id>\r\n    <Name>Distance Sensor Z</Name>\r\n    <Descr" +
+            "iption>Settings for calibretor Z that is measuring distance from mirror glass</D" +
+            "escription>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow>1" +
+            "00</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <ChannelSetting" +
+            ">\r\n    <Id>powerfoldCurrent</Id>\r\n    <Name>Powerfold Current</Name>\r\n    <Descr" +
+            "iption>Settings for amphermeter that is measuring current of powerfold actuator<" +
+            "/Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow" +
+            ">4000</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <ChannelSett" +
+            "ing>\r\n    <Id>heatingFoilCurrent</Id>\r\n    <Name>Heating Foil Current</Name>\r\n  " +
+            "  <Description>Settings for amphermeter that is measuring current in heating foi" +
+            "l</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <RealL" +
+            "ow>4000</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <ChannelSe" +
+            "tting>\r\n    <Id>verticalActuatorCurrent</Id>\r\n    <Name>Vertical ActuatorCurrent" +
+            "</Name>\r\n    <Description>Settings for amphermeter that is measuring current of " +
+            "actuator moveing mirror glass vertically</Description>\r\n    <RawLow>4095</RawLow" +
+            ">\r\n    <RawHigh>0</RawHigh>\r\n    <RealLow>2000</RealLow>\r\n    <RealHigh>0</RealH" +
+            "igh>\r\n  </ChannelSetting>\r\n  <ChannelSetting>\r\n    <Id>horizontalActuatorCurrent" +
+            "</Id>\r\n    <Name>Horizontal Actuator Current</Name>\r\n    <Description>Settings f" +
+            "or amphermeter that is measuring current of actuator moveing mirror glass horizo" +
+            "ntaly</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r\n    <R" +
+            "ealLow>2000</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n  <Chann" +
+            "elSetting>\r\n    <Id>directionLightCurrent</Id>\r\n    <Name>Direction Light Curren" +
+            "t</Name>\r\n    <Description>Settings of amphermeter that is measuring direction l" +
+            "ight current</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawHigh>\r" +
+            "\n    <RealLow>2000</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>\r\n " +
+            " <ChannelSetting>\r\n    <Id>powerSupplyVoltage1</Id>\r\n    <Name>Power Supply Volt" +
+            "age 1</Name>\r\n    <Description>Settings for voltmeter that is meausring voltage " +
+            "of power supply 1</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</RawH" +
+            "igh>\r\n    <RealLow>10</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetting>" +
+            "\r\n  <ChannelSetting>\r\n    <Id>powerSupplyVoltage2</Id>\r\n    <Name>Power Supply V" +
+            "oltage 2</Name>\r\n    <Description>Settings for voltmeter that is meausring volta" +
+            "ge of power supply 2</Description>\r\n    <RawLow>4095</RawLow>\r\n    <RawHigh>0</R" +
+            "awHigh>\r\n    <RealLow>10</RealLow>\r\n    <RealHigh>0</RealHigh>\r\n  </ChannelSetti" +
+            "ng>\r\n</ArrayOfChannelSetting>")]
         public global::MTS.IO.Settings.ChannelSettings ChannelSettings {
             get {
                 return ((global::MTS.IO.Settings.ChannelSettings)(this["ChannelSettings"]));

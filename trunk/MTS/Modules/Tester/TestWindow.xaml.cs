@@ -17,6 +17,7 @@ using System.Timers;
 
 using MTS.Editor;
 using MTS.Properties;
+using MTS.Utils;
 using MTS.IO;
 using MTS.IO.Module;
 using MTS.IO.Settings;
@@ -439,18 +440,22 @@ namespace MTS.TesterModule
             // at this moment: channels are created and configuration is loaded, connection is established
 
             try
-            {   
+            {
                 // initialize handler that will be executed when some channel value change
                 bindChannels(channels);
             }
-            catch
+            catch (Exception ex)
             {
+                // show error windows to user and log this exception
+                ExceptionManager.ShowError(ex);
+                // channels could not be initialized
                 success = false;
-                MessageBox.Show("An error occured while configurating device connection. Check device configuration file:\n"
-                    + Settings.Default.EthercatConfigFile, "Device error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                //MessageBox.Show("An error occured while configurating device connection. Check device configuration file:\n"
+                //    + Settings.Default.EthercatConfigFile, "Device error", MessageBoxButton.OK, MessageBoxImage.Error);
                 // write log file
-                Output.Log("Failed to initialize channels. Probably one of them is missing in configuration file: {0}",
-                    Settings.Default.EthercatConfigFile);
+                //Logger.Log("Failed to initialize channels. Probably one of them is missing in configuration file: {0}",
+                //    Settings.Default.EthercatConfigFile);
             }
             // return value indicating if this method was successfull
             return success;
@@ -473,12 +478,10 @@ namespace MTS.TesterModule
                 default: module = new ECModule(Settings.Default.EthercatTaskName); break;
             }
 
-            ChannelSettingsCollection settings;
-            // this method will handle all exceptions
-            if (!loadChannelSettings(out settings))
-                return null;    // setting for channels could not be loaded -> could not created channels
-            
+            // load channel settings from hardware settings file
+            ChannelSettings settings = HWSettings.Default.ChannelSettings;          
 
+            // create just instace of channel collection, without any initialization or connection
             Channels channels = new Channels(module, settings);
             // use configuration file from Settings
             // when loading file - an exception may be thrown
@@ -504,34 +507,34 @@ namespace MTS.TesterModule
             return channels;
         }
 
-        private bool loadChannelSettings(out ChannelSettingsCollection settings)
-        {
-            settings = null;
-            // get path where configuration setting for analog channels are stored
-            string path = Settings.Default.GetChannelsConfigPath();
-            try
-            {
-                // load settings of analog channels from configuration path saved in settgins
-                settings = HWSettings.Default.LoadChannelSettings(path);
-            }
-            catch (System.IO.FileNotFoundException ex)
-            {
+        //private bool loadChannelSettings(out ChannelSettings settings)
+        //{
+        //    settings = null;
+        //    // get path where configuration setting for analog channels are stored
+        //    string path = Settings.Default.GetChannelsConfigPath();
+        //    try
+        //    {
+        //        // load settings of analog channels from configuration path saved in settgins
+        //        settings = HWSettings.Default.LoadChannelSettings(path);
+        //    }
+        //    catch (System.IO.FileNotFoundException ex)
+        //    {
 
-            }
-            catch (System.IO.IOException ex)
-            {
-                showError(ex, "Config error", "Configuration file for analog channels could not be loaded");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                showError(ex, "Config error",
-                    "Configuration file for analog channels may be corrupted, ", path);
-                return false;
-            }
+        //    }
+        //    catch (System.IO.IOException ex)
+        //    {
+        //        showError(ex, "Config error", "Configuration file for analog channels could not be loaded");
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        showError(ex, "Config error",
+        //            "Configuration file for analog channels may be corrupted, ", path);
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         /// <summary>
         /// Create a new connection with given channels and return value indicating if it was successfull.
@@ -585,7 +588,7 @@ namespace MTS.TesterModule
         private void showError(Exception ex, string caption, string message)
         {
             MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
-            Output.Log(message);
+            Logger.Log(message);
         }
         private void showError(Exception ex, string message)
         {

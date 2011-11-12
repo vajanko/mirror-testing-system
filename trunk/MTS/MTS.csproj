@@ -109,6 +109,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Utils\ErrorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,8 +127,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\ExceptionManager.cs" />
-    <Compile Include="Classes\Unit.cs" />
+    <Compile Include="Utils\Errors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Errors.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\ExceptionManager.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\Unit.cs" />
     <Compile Include="Controls\Converters\BoolNegationConverter.cs" />
     <Compile Include="Controls\Converters\DoubleAmplifierConverter.cs" />
     <Compile Include="Controls\Converters\DoubleToPointCollection.cs" />
@@ -141,14 +154,6 @@
     </Compile>
     <Compile Include="Modules\Admin\ModbusSettings.xaml.cs">
       <DependentUpon>ModbusSettings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\HWSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Settings\HWSettings.Designer.cs">
-      <DependentUpon>HWSettings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Modules\Admin\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -187,8 +192,8 @@
     <Compile Include="Modules\Tester\TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\MTSCommands.cs" />
-    <Compile Include="Classes\Output.cs" />
+    <Compile Include="Utils\MTSCommands.cs" />
+    <Compile Include="Utils\Output.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -208,15 +213,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Utils\Errors.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="app.config">
       <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
     </None>
     <None Include="Modules\Admin\analog_channels.dtd" />
-    <None Include="Settings\HWSettings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>HWSettings.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
-    </None>
     <None Include="Modules\Editor\template.dtd" />
     <None Include="Modules\Editor\test.dtd" />
     <None Include="Properties\Settings.settings">
@@ -268,6 +272,30 @@
       <Project>{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}</Project>
       <Name>IO</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exclamation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\server_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_error.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\Data\" />

@@ -29,24 +29,13 @@ namespace MTS
 
         #region Menu Events
 
-        private void menuClick_New(object sender, RoutedEventArgs e)
-        {
-        }
-        private void menuClick_Open(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void menuClick_Save(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void menuClick_SaveAs(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void menuClick_Print(object sender, RoutedEventArgs e)
-        {
-
+        private void menuClick_Error(object sender, RoutedEventArgs e)
+        {   // for debugging
+            MTS.Utils.ErrorWindow wnd = new MTS.Utils.ErrorWindow();
+            wnd.Title = MTS.Utils.Errors.FileErrorTitle;
+            wnd.Message = "Error message";
+            wnd.ErrorIcon = MTS.Utils.Errors.FileErrorIcon;
+            wnd.ShowDialog();
         }
         private void menuClick_Exit(object sender, RoutedEventArgs e)
         {
