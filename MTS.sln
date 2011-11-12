@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTS", "MTS\MTS.csproj", "{C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "IO\IO.csproj", "{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSSimulator", "MTSSimulator\MTSSimulator.csproj", "{DE4CF0E5-D65D-492B-96E6-0649B251870F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}.Release|x86.ActiveCfg = Release|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DE4CF0E5-D65D-492B-96E6-0649B251870F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

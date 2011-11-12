@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using MTS.IO.Channel;
 using MTS.IO.Address;
 
@@ -9,7 +11,7 @@ namespace MTS.IO.Module
     public sealed class DummyModule : IModule
     {
         /// <summary>
-        /// True if module is connected
+        /// True if module is Listening
         /// </summary>
         public bool IsConnected { get; set; }
         /// <summary>
@@ -17,6 +19,8 @@ namespace MTS.IO.Module
         /// </summary>
         private Dictionary<string, IChannel> channels = new Dictionary<string, IChannel>();
         private System.Timers.Timer timer = new System.Timers.Timer();
+
+        Socket master;
 
         #region IModule Members
 
@@ -128,7 +132,13 @@ namespace MTS.IO.Module
 
         public void Connect()
         {
-            IsConnected = true;
+            try
+            {
+                master = new Socket(IPAddress.Loopback.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                master.Connect(new IPEndPoint(IPAddress.Loopback, 1234));
+                IsConnected = true;
+            }
+            catch { IsConnected = false; }            
         }
 
         /// <summary>
@@ -145,105 +155,11 @@ namespace MTS.IO.Module
         /// </summary>
         public void UpdateInputs()
         {
-            // lock/unlock
-            if (LockWeak.Value)
-            {
-                IsLocked.SetValue(true);
-                IsOldLocked.SetValue(true);
-            }
-            if (UnlockStrong.Value)
-            {
-                IsLocked.SetValue(false);
-                IsOldLocked.SetValue(false);
-            }
+            NetworkStream stream = new NetworkStream(master);
+            StreamWriter writer = new StreamWriter(stream);
+            writer.WriteLine("read");
 
-            // moveing distance sensors
-            if (MoveDistanceSensorUp.Value && !MoveDistanceSensorDown.Value)
-            {
-                IsDistanceSensorUp.SetValue(true);
-                IsDistanceSensorDown.SetValue(false);
-            }
-            if (MoveDistanceSensorDown.Value && !MoveDistanceSensorUp.Value)
-            {
-                IsDistanceSensorUp.SetValue(false);
-                IsDistanceSensorDown.SetValue(true);
-            }
-            // movement
-            if (IsDistanceSensorUp.Value)
-            {
-                const int step = 1;
-                // down
-                if (MoveMirrorVertical.Value && !MoveMirrorReverse.Value)
-                {
-                    if (DistanceX.Value > DistanceX.RawLow)
-                        DistanceX.SetValue(DistanceX.Value - step);
-                    
-                }// up
-                else if (MoveMirrorHorizontal.Value && MoveMirrorReverse.Value)
-                {
-                    if (DistanceX.Value < DistanceX.RawHigh)
-                        DistanceX.SetValue(DistanceX.Value + step);
-                }//right
-                else if (MoveMirrorHorizontal.Value && !MoveMirrorReverse.Value)
-                {
-                    if (DistanceY.Value < DistanceY.RawHigh)
-                        DistanceY.SetValue(DistanceY.Value + step);
-                }//left
-                else if (MoveMirrorVertical.Value && MoveMirrorReverse.Value)
-                {
-                    if (DistanceY.Value > DistanceY.RawLow)
-                        DistanceY.SetValue(DistanceY.Value - step);
-                }
-            }
-
-            // pull-off
-            if (MoveSuckerUp.Value && !MoveSuckerDown.Value)
-            {
-                IsSuckerUp.SetValue(true);
-                IsSuckerDown.SetValue(false);
-            }
-            else if (!MoveSuckerUp.Value && MoveSuckerDown.Value)
-            {
-                IsSuckerUp.SetValue(false);
-                IsSuckerDown.SetValue(true);
-            }
-            if (IsSuckerUp.Value)
-            {
-                if (SuckOn.Value)
-                    IsVacuum.SetValue(true);
-                if (BlowOn.Value)
-                    IsVacuum.SetValue(false);                
-            }
-
-            // heating is on
-            if (HeatingFoilOn.Value)
-                HeatingFoilCurrent.SetValue((uint)gen.Next(4095));
-            else HeatingFoilCurrent.SetValue(0);
-            // vertical acuator is on
-            if (MoveMirrorVertical.Value)
-                VerticalActuatorCurrent.SetValue((uint)gen.Next(4095));
-            else VerticalActuatorCurrent.SetValue(0);
-            // horizontal acutarot is on
-            if (MoveMirrorHorizontal.Value)
-                HorizontalActuatorCurrent.SetValue((uint)gen.Next(4095));
-            else HorizontalActuatorCurrent.SetValue(0);
-            // blinker is on
-            if (DirectionLightOn.Value)
-                DirectionLightCurrent.SetValue((uint)gen.Next(4095));
-            else DirectionLightCurrent.SetValue(0);
-
-            if (FoldPowerfold.Value && !UnfoldPowerfold.Value)
-                PowerfoldCurrent.SetValue((uint)gen.Next(4095));
-            else if (FoldPowerfold.Value && UnfoldPowerfold.Value)
-                PowerfoldCurrent.SetValue((uint)gen.Next(2048));
-            else PowerfoldCurrent.SetValue(0);
-
-            // power supply
-            if (!IsPowerSupplyOff.Value)
-            {
-                PowerSupplyVoltage1.SetValue((uint)gen.Next(4095));
-                PowerSupplyVoltage2.SetValue((uint)gen.Next(4095));
-            }
+            
         }
 
         /// <summary>
@@ -342,111 +258,6 @@ namespace MTS.IO.Module
             // close file - release resources
             reader.Close();
         }
-
-        //public void LoadConfiguration(string filename)
-        //{
-        //    // heating foil
-        //    HeatingFoilOn = new DummyDigitalOutput() { Name = "HeatingFoilOn" };
-        //    channels.Add("HeatingFoilOn", HeatingFoilOn);
-        //    HeatingFoilCurrent = new DummyAnalogInput() { Name = "HeatingFoilCurrent" };
-        //    HeatingFoilCurrent.RawHigh = ushort.MaxValue;
-        //    HeatingFoilCurrent.RealHigh = 100;
-        //    channels.Add("HeatingFoilCurrent", HeatingFoilCurrent);
-
-        //    // blinker
-        //    DirectionLightOn = new DummyDigitalOutput() { Name = "DirectionLightOn" };
-        //    channels.Add("DirectionLightOn", DirectionLightOn);
-        //    DirectionLightCurrent = new DummyAnalogInput() { Name = "DirectionLightCurrent" };
-        //    channels.Add("DirectionLightCurrent", DirectionLightCurrent);
-
-        //    // powerfold
-        //    PowerFoldUnfoldedPositionSensor1 = new DummyDigitalInput() { Name = "PowerFoldUnfoldedPositionSensor1" };
-        //    channels.Add("PowerFoldUnfoldedPositionSensor1", PowerFoldUnfoldedPositionSensor1);
-        //    PowerFoldUnfoldedPositionSensor2 = new DummyDigitalInput() { Name = "PowerFoldUnfoldedPositionSensor2" };
-        //    channels.Add("PowerFoldUnfoldedPositionSensor2", PowerFoldUnfoldedPositionSensor2);
-        //    PowerFoldFoldedPositionSensor = new DummyDigitalInput() { Name = "PowerFoldFoldedPositionSensor" };
-        //    channels.Add("PowerFoldFoldedPositionSensor", PowerFoldFoldedPositionSensor);
-        //    PowerfoldCurrent = new DummyAnalogInput() { Name = "PowerfoldCurrent" };
-        //    channels.Add("PowerfoldCurrent", PowerfoldCurrent);
-        //    FoldPowerfold = new DummyDigitalOutput() { Name = "FoldPowerfold" };
-        //    channels.Add("FoldPowerfold", FoldPowerfold);
-        //    UnfoldPowerfold = new DummyDigitalOutput() { Name = "UnfoldPowerfold" };
-        //    channels.Add("UnfoldPowerfold", UnfoldPowerfold);
-
-        //    IsPowerSupplyOn = new DummyDigitalInput() { Name = "IsPowerSupplyOn" };
-        //    channels.Add("IsPowerSupplyOn", IsPowerSupplyOn);
-        //    IsDistanceSensorUp = new DummyDigitalInput() { Name = "IsDistanceSensorUp" };
-        //    channels.Add("IsDistanceSensorUp", IsDistanceSensorUp);
-        //    IsDistanceSensorDown = new DummyDigitalInput() { Name = "IsDistanceSensorDown" };
-        //    channels.Add("IsDistanceSensorDown", IsDistanceSensorDown);
-        //    IsSuckerUp = new DummyDigitalInput() { Name = "IsSuckerUp" };
-        //    channels.Add("IsSuckerUp", IsSuckerUp);
-        //    IsSuckerDown = new DummyDigitalInput() { Name = "IsSuckerDown" };
-        //    channels.Add("IsSuckerDown", IsSuckerDown);
-        //    IsStartPressed = new DummyDigitalInput() { Name = "StartButton" };
-        //    channels.Add("StartButton", IsStartPressed);
-
-        //    // mirror movement
-        //    VerticalActuatorCurrent = new DummyAnalogInput() { Name = "VerticalActuatorCurrent" };
-        //    VerticalActuatorCurrent.RawHigh = ushort.MaxValue;
-        //    VerticalActuatorCurrent.RealHigh = 100;
-        //    channels.Add("VerticalActuatorCurrent", VerticalActuatorCurrent);
-        //    HorizontalActuatorCurrent = new DummyAnalogInput() { Name = "HorizontalActuatorCurrent" };
-        //    HorizontalActuatorCurrent.RawHigh = ushort.MaxValue;
-        //    HorizontalActuatorCurrent.RealHigh = 100;
-        //    channels.Add("HorizontalActuatorCurrent", HorizontalActuatorCurrent);
-
-        //    PowerSupplyVoltage1 = new DummyAnalogInput() { Name = "PowerSupplyVoltage1" };
-        //    channels.Add("PowerSupplyVoltage1", PowerSupplyVoltage1);
-        //    PowerSupplyVoltage2 = new DummyAnalogInput() { Name = "PowerSupplyVoltage2" };
-        //    channels.Add("PowerSupplyVoltage2", PowerSupplyVoltage2);
-        //    IsStartPressed = new DummyDigitalInput() { Name = "IsStartPressed" };
-        //    channels.Add("IsStartPressed", IsStartPressed);
-
-        //    DistanceX = new DummyAnalogInput() { Name = "DistanceX" };
-        //    channels.Add("DistanceX", DistanceX);
-        //    DistanceY = new DummyAnalogInput() { Name = "DistanceY" };
-        //    channels.Add("DistanceY", DistanceY);
-        //    DistanceZ = new DummyAnalogInput() { Name = "DistanceZ" };
-        //    channels.Add("DistanceZ", DistanceZ);
-        //    MoveMirrorVertical = new DummyDigitalOutput() { Name = "MoveMirrorVertical" };
-        //    channels.Add("MoveMirrorVertical", MoveMirrorVertical);
-        //    MoveMirrorHorizontal = new DummyDigitalOutput() { Name = "MoveMirrorHorizontal" };
-        //    channels.Add("MoveMirrorLeft", MoveMirrorHorizontal);
-        //    MoveMirrorReverse = new DummyDigitalOutput() { Name = "MoveMirrorReverse" };
-        //    channels.Add("MoveMirrorReverse", MoveMirrorReverse);
-
-        //    AllowMirrorMovement = new DummyDigitalOutput() { Name = "AllowMirrorMovement" };
-        //    channels.Add("AllowMirrorMovement", AllowMirrorMovement);
-        //    LockWeak = new DummyDigitalOutput() { Name = "LockWeak" };
-        //    channels.Add("LockWeak", LockWeak);
-        //    UnlockWeak = new DummyDigitalOutput() { Name = "UnlockWeak" };
-        //    channels.Add("UnlockWeak", UnlockWeak);
-        //    MoveDistanceSensorUp = new DummyDigitalOutput() { Name = "MoveDistanceSensorUp" };
-        //    channels.Add("MoveDistanceSensorUp", MoveDistanceSensorUp);
-        //    MoveDistanceSensorDown = new DummyDigitalOutput() { Name = "MoveDistanceSensorDown" };
-        //    channels.Add("MoveDistanceSensorDown", MoveDistanceSensorDown);
-        //    MoveSuckerUp = new DummyDigitalOutput() { Name = "MoveSuckerUp" };
-        //    channels.Add("MoveSuckerUp", MoveSuckerUp);
-        //    MoveSuckerDown = new DummyDigitalOutput() { Name = "MoveSuckerDown" };
-        //    channels.Add("MoveSuckerDown", MoveSuckerDown);
-        //    SuckOn = new DummyDigitalOutput() { Name = "SuckOn" };
-        //    channels.Add("SuckOn", SuckOn);
-
-        //    AllowPowerSupply = new DummyDigitalOutput() { Name = "AllowPowerSupply" };
-        //    channels.Add("AllowPowerSupply", AllowPowerSupply);
-        //    LockStrong = new DummyDigitalOutput() { Name = "LockStrong" };
-        //    channels.Add("LockStrong", LockStrong);
-        //    UnlockStrong = new DummyDigitalOutput() { Name = "UnlockStrong" };
-        //    channels.Add("UnlockStrong", UnlockStrong);
-        //    GreenLightOn = new DummyDigitalOutput() { Name = "GreenLightOn" };
-        //    channels.Add("GreenLightOn", GreenLightOn);
-        //    RedLightOn = new DummyDigitalOutput() { Name = "RedLightOn" };
-        //    channels.Add("RedLightOn", RedLightOn);
-
-        //    BuzzerOn = new DummyDigitalOutput() { Name = "BuzzerOn" };
-        //    channels.Add("BuzzerOn", BuzzerOn);
-        //}
 
         #endregion
 
@@ -565,6 +376,15 @@ namespace MTS.IO.Module
         public IAnalogInput PowerSupplyVoltage2 { get; set; }
 
         #endregion
+
+        #endregion
+
+        #region IEnumerable Members
+
+        public System.Collections.IEnumerator GetEnumerator()
+        {
+            return inputs.GetEnumerator();
+        }
 
         #endregion
     }

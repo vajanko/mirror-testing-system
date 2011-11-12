@@ -175,7 +175,7 @@ namespace MTS.TesterModule
 
         private bool isDeviceConnected = false;
         /// <summary>
-        /// (Get/Set) True if device is connected
+        /// (Get/Set) True if device is Listening
         /// </summary>
         public bool IsDeviceConnected
         {
@@ -327,7 +327,7 @@ namespace MTS.TesterModule
             if (initializeHardware(out channels))
             {   // initialization was successfull
                 IsDeviceConnected = true;
-                //DeviceStatusMessage = "Device connected";
+                //DeviceStatusMessage = "Device Listening";
                 Output.WriteLine("Device connected successfully");
                 DeviceStatusMessage = "Connected";
             }
@@ -350,7 +350,7 @@ namespace MTS.TesterModule
         /// </summary>
         private void startClick(object sender, RoutedEventArgs e)
         {
-            // prevent to start shift when device is not connected
+            // prevent to start shift when device is not Listening
             if (!IsDeviceConnected) return;
 
             // prevent from starting shift multiple times (too dangerous)
