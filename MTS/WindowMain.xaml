@@ -48,16 +48,17 @@
                     <Setter Property="Header" Value="{Binding Command.Text, RelativeSource={RelativeSource self}}"/>
                 </Style>
             </Menu.Resources>
-            <MenuItem Header="File">
+            <MenuItem Header="_File">
                 <MenuItem Command="New"/>   <!-- File Commands for Editor -->
                 <MenuItem Command="Open"/>
                 <MenuItem Command="Close"/>
                 <MenuItem Command="Save"/>
                 <MenuItem Command="SaveAs"/>
+                <MenuItem Header="Error" Click="menuClick_Error"/>
                 <Separator/>
-                <MenuItem Header="Exit" Click="menuClick_Exit"/>
+                <MenuItem Header="E_xit" Click="menuClick_Exit"/>
             </MenuItem>
-            <MenuItem Header="Edit">
+            <MenuItem Header="_Edit">
                 <MenuItem Command="Undo"/>  <!-- General edit Commands -->
                 <MenuItem Command="Redo"/>
                 <Separator/>
@@ -66,17 +67,17 @@
                 <MenuItem Command="Paste"/>
                 <MenuItem Command="Delete"/>
             </MenuItem>
-            <MenuItem Header="View">        <!-- Application commands - display windows -->
+            <MenuItem Header="_View">        <!-- Application commands - display windows -->
                 <MenuItem Command="{x:Static local:MTSCommands.ViewTester}"/>
                 <MenuItem Command="{x:Static local:MTSCommands.ViewSettings}"/>
                 <MenuItem Command="{x:Static local:MTSCommands.ViewData}"/>
             </MenuItem>
-            <MenuItem Header="Option">
+            <MenuItem Header="_Option">
                 <MenuItem Header="Log off"/>
             </MenuItem>
-            <MenuItem Header="Help">
+            <MenuItem Header="_Help">
                 <MenuItem Command="Help"/>
-                <MenuItem Header="About ..."/>
+                <MenuItem Header="_About ..."/>
             </MenuItem>
         </Menu>
         <!-- ToolBars -->

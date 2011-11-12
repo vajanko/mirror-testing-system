@@ -20,7 +20,7 @@ namespace MTS.IO
         /// <summary>
         /// Collection of setting for all analog channels. This includes raw/real low/high vlaues
         /// </summary>
-        private ChannelSettingsCollection settings;
+        private ChannelSettings settings;
 
         #region IModule Members
 
@@ -629,7 +629,7 @@ namespace MTS.IO
         /// <param name="module">Impelmentation of <typeparamref name="IModule"/> for a particular
         /// protocol, such as EtherCAT or Modbus TCP/IP (...)</param>
         /// <param name="settings">Collection of setting for all analog channels</param>
-        public Channels(IModule module, ChannelSettingsCollection settings)
+        public Channels(IModule module, ChannelSettings settings)
         {
             this.module = module;
             this.settings = settings;

@@ -1,20 +1,40 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Design;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Configuration;
 
 namespace MTS.IO.Settings
 {
     public class ChannelSetting
     {
-        public string Id { get; private set; }
+        [Category("Channel")]
+        [DisplayName("Id")]
+        public string Id { get; set; }
 
+        [Category("Channel")]
+        [DisplayName("Name")]
         public string Name { get; set; }
+
+        [Category("Channel")]
+        [DisplayName("Description")]
         public string Description { get; set; }
+
+        [Category("Channel")]
+        [DisplayName("RawLow")]
         public int RawLow { get; set; }
+
+        [Category("Channel")]
+        [DisplayName("RawHigh")]
         public int RawHigh { get; set; }
+
+        [Category("Channel")]
+        [DisplayName("RealLow")]
         public double RealLow { get; set; }
+
+        [Category("Channel")]
+        [DisplayName("RealHigh")]
         public double RealHigh { get; set; }
 
         #region Constructors
@@ -28,38 +48,49 @@ namespace MTS.IO.Settings
         #endregion
     }
 
-    public class ChannelSettingsCollection : IEnumerable<ChannelSetting>
+    public class ChannelSettings : CollectionBase //, IEnumerable<ChannelSetting>
     {
-        private Dictionary<string, ChannelSetting> settings = new Dictionary<string, ChannelSetting>();
+        public ChannelSetting this[int index]
+        {
+            get { return (ChannelSetting)List[index]; }
+        }
+        public void Add(ChannelSetting channel)
+        {
+            List.Add(channel);
+        }
+        public void Remove(ChannelSetting channel)
+        {
+            List.Remove(channel);
+        }
 
         public ChannelSetting GetSetting(string channelName)
         {
-            return settings[channelName];
+            foreach (ChannelSetting channel in List)
+                if (channel.Name == channelName)
+                    return channel;
+            return null;
         }
-        public void AddSetting(ChannelSetting setting)
+
+        public ChannelSettings() { }
+    }
+
+    public class ChannelCollectionEditor : CollectionEditor
+    {
+        public ChannelCollectionEditor(Type type)
+            : base(type)
         {
-            settings[setting.Name] = setting;
         }
 
-        #region IEnumerable<ChannelSetting> Members
-
-        public IEnumerator<ChannelSetting> GetEnumerator()
+        protected override string GetDisplayText(object value)
         {
-            return settings.Values.GetEnumerator();
+            ChannelSetting item = null;
+            item = value as ChannelSetting;
+
+            if (item != null)
+                return base.GetDisplayText(string.Format("{0}: {1}-{2} {3}-{4}", item.Name,
+                    item.RawLow, item.RawHigh, item.RealLow, item.RealHigh));
+            else return "not channel setting";
         }
-
-        #endregion
-
-        #region IEnumerable Members
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return settings.Values.GetEnumerator();
-        }
-
-        #endregion
-
-        public ChannelSettingsCollection() { }
     }
 }
 

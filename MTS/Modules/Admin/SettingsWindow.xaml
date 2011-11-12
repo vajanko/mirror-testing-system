@@ -7,7 +7,7 @@
     xmlns:main="clr-namespace:MTS"
     xmlns:local="clr-namespace:MTS.Admin"
     Title="{Binding DisplayTitle, RelativeSource={RelativeSource self}}" x:Name="root"
-    Loaded="settingsWindow_Loaded" Initialized="settingsWindow_Initialized" 
+    Initialized="settingsWindow_Initialized" 
     Closing="settingsWindow_Closing"
     >
     <ScrollViewer VerticalScrollBarVisibility="Visible">
@@ -33,7 +33,7 @@
                             <Setter Property="Decimals" Value="0"/>
                             <Setter Property="MinValue" Value="0"/>
                             <Setter Property="MaxValue" Value="300"/>
-                            <Setter Property="MinWidth" Value="100"/>
+                            <Setter Property="MaxWidth" Value="80"/>
                             <Setter Property="Unit" Value="{x:Static main:Units.Milimeters}"/>
                             <Setter Property="HorizontalAlignment" Value="Left"/>
                             <!-- whenever any UpDownButton value change setting state come to unsaved -->
@@ -150,13 +150,14 @@
                     <Label Style="{StaticResource sectionHeaderStyle}">Existing operators</Label>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Channels" Loaded="TabItem_Loaded">
+            <TabItem Header="Channels">
                 <TabItem.Resources>
                     <Style TargetType="{x:Type ctrl:UpDownButton}">
                         <Setter Property="MinValue" Value="0"/>
                         <Setter Property="MaxValue" Value="40000"/>
                         <Setter Property="Decimals" Value="0"/>
-                        <Setter Property="MinWidth" Value="100"/>
+                        <Setter Property="MinWidth" Value="60"/>
+                        <Setter Property="MaxWidth" Value="80"/>
                         <EventSetter Event="ValueChanged" Handler="upDownButton_ValueChanged"/>
                     </Style>
                 </TabItem.Resources>
@@ -166,13 +167,8 @@
                             <DataTemplate DataType="{x:Type io_set:ChannelSetting}" xmlns:io_set="clr-namespace:MTS.IO.Settings;assembly=IO">
                                 <Border Margin="5" BorderBrush="White" BorderThickness="1">
                                     <StackPanel>
-                                        <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}"/>
+                                        <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}" ToolTip="{Binding Description}"/>
                                         <Grid>
-                                            <Grid.Resources>
-                                                <Style TargetType="{x:Type Label}">
-                                                    <Setter Property="ToolTip" Value="{Binding Description}"/>
-                                                </Style>
-                                            </Grid.Resources>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="auto"/>
@@ -184,7 +180,7 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
-                                            <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" 
+                                            <ctrl:UpDownButton Grid.Row="0" Grid.Column="1"
                                                                Value="{Binding RawLow, Mode=TwoWay}"/>
 
                                             <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>

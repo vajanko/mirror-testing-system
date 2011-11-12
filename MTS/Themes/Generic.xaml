@@ -9,7 +9,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl:UpDownButton}">
-                    <DockPanel Background="{TemplateBinding Background}" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <DockPanel Background="{TemplateBinding Background}" VerticalAlignment="Center">
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                             <StackPanel.Resources>
                                 <Style TargetType="Button">
@@ -19,7 +19,7 @@
                                     <Setter Property="Fill" Value="Black"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
                                 <RepeatButton x:Name="PART_upButton">
                                     <Polygon Points="0,4 8,4 4,0"/>
                                 </RepeatButton>
