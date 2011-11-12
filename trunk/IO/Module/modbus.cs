@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace ModbusTCP
+namespace MTS.IO.Module
 {
     /// <summary>
     /// Modbus TCP common driver class. This class implements a modbus TCP master driver.
@@ -57,7 +57,7 @@ namespace ModbusTCP
         public const byte excSlaveIsBusy = 6;
         /// <summary>Constant for exception gate path unavailable.</summary>
         public const byte excGatePathUnavailable = 10;
-        /// <summary>Constant for exception not connected.</summary>
+        /// <summary>Constant for exception not Listening.</summary>
         public const byte excExceptionNotConnected = 253;
         /// <summary>Constant for exception connection lost.</summary>
         public const byte excExceptionConnectionLost = 254;
@@ -73,6 +73,7 @@ namespace ModbusTCP
         private static ushort _timeout = 500;
         private static ushort _refresh = 10;
         private static bool _connected = false;
+        private static bool _listening = false;
 
         private Socket tcpAsyCl;
         private byte[] tcpAsyClBuffer = new byte[2048];
@@ -113,6 +114,11 @@ namespace ModbusTCP
         public bool connected
         {
             get { return _connected; }
+        }
+
+        public bool listening
+        {
+            get { return _listening; }
         }
 
         // ------------------------------------------------------------------------
@@ -163,6 +169,36 @@ namespace ModbusTCP
             catch (System.IO.IOException error)
             {
                 _connected = false;
+                throw (error);
+            }
+        }
+
+        public void listen(IPAddress ip, ushort port)
+        {
+            try
+            {
+                // ----------------------------------------------------------------
+                // Connect asynchronous client
+                tcpAsyCl = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                tcpAsyCl.Bind(new IPEndPoint(ip, port));
+                //tcpAsyCl.Connect(new IPEndPoint(ip, port));
+                tcpAsyCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, _timeout);
+                tcpAsyCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _timeout);
+                tcpAsyCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, 1);
+                // ----------------------------------------------------------------
+                // Connect synchronous client
+                //tcpSynCl = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                //tcpSynCl.Connect(new IPEndPoint(ip, port));
+                //tcpSynCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, _timeout);
+                //tcpSynCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _timeout);
+                //tcpSynCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, 1);
+
+                tcpAsyCl.Listen(1);
+                _listening = true;
+            }
+            catch (System.IO.IOException error)
+            {
+                _listening = false;
                 throw (error);
             }
         }

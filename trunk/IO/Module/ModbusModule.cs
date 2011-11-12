@@ -237,13 +237,22 @@ namespace MTS.IO.Module
 
         private bool isConnected;
         /// <summary>
-        /// (Get) Value indicating that this module is connected to remote hardware
+        /// (Get) Value indicating that this module is Listening to remote hardware
         /// </summary>
         public bool IsConnected
         {
             get { return isConnected; }
             private set { isConnected = value; }
         }
+
+        #region IEnumerable Members
+
+        public System.Collections.IEnumerator GetEnumerator()
+        {
+            return inputs.GetEnumerator();
+        }
+
+        #endregion
 
         #endregion
 

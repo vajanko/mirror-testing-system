@@ -4,7 +4,7 @@
     /// Abstract layer for accessing particular remote hardware module
     /// Module contains several channels digital or analog, input or output
     /// </summary>
-    public interface IModule
+    public interface IModule : System.Collections.IEnumerable
     {
         /// <summary>
         /// Load configuration of channels form file. At this time connection must not be established
@@ -12,7 +12,7 @@
         /// <param name="filename">Path to file where configuration of channels is stored</param>
         void LoadConfiguration(string filename);
 
-         /// <summary>
+        /// <summary>
         /// Create a new connection between local computer and some hardware component. At the beginning of
         /// the communication this method must be called.
         /// </summary>
@@ -52,7 +52,7 @@
         IChannel GetChannelByName(string name);
 
         /// <summary>
-        /// (Get) Value indicating that this module is connected to remote hardware
+        /// (Get) Value indicating that this module is Listening to remote hardware
         /// </summary>
         bool IsConnected { get; }
     }

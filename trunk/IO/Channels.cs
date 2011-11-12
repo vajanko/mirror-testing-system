@@ -211,7 +211,7 @@ namespace MTS.IO
             return module.GetChannelByName(name);
         }
         /// <summary>
-        /// (Get) Value indicating that this module is connected to remote hardware
+        /// (Get) Value indicating that this module is Listening to remote hardware
         /// </summary>
         public bool IsConnected { get { return module.IsConnected; } }
 
@@ -222,6 +222,16 @@ namespace MTS.IO
         {
             throw new NotImplementedException("Method which switch all ouputs to safe state is not implemented yet!");
         }
+
+
+        #region IEnumerable Members
+
+        public System.Collections.IEnumerator GetEnumerator()
+        {
+            return module.GetEnumerator();
+        }
+
+        #endregion
 
         #endregion
 
