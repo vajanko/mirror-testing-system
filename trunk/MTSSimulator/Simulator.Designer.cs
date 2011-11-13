@@ -42,16 +42,16 @@
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.powerfoldMax = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.powerfoldMin = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.spiralCurrentMax = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
+            this.spiralCurrentMin = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
@@ -65,12 +65,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerfoldMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerfoldMin)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMin)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
@@ -146,7 +146,7 @@
             this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Location = new System.Drawing.Point(367, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(219, 100);
+            this.groupBox1.Size = new System.Drawing.Size(264, 100);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Powerfold";
@@ -157,9 +157,9 @@
             this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.label5);
             this.groupBox5.Controls.Add(this.numericUpDown4);
-            this.groupBox5.Location = new System.Drawing.Point(103, 19);
+            this.groupBox5.Location = new System.Drawing.Point(131, 19);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(110, 75);
+            this.groupBox5.Size = new System.Drawing.Size(127, 75);
             this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Time";
@@ -168,7 +168,7 @@
             // 
             this.numericUpDown3.Location = new System.Drawing.Point(57, 48);
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown3.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown3.TabIndex = 1;
             // 
             // label4
@@ -193,28 +193,38 @@
             // 
             this.numericUpDown4.Location = new System.Drawing.Point(57, 23);
             this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown4.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown4.TabIndex = 0;
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.numericUpDown2);
+            this.groupBox4.Controls.Add(this.powerfoldMax);
             this.groupBox4.Controls.Add(this.label3);
             this.groupBox4.Controls.Add(this.label2);
-            this.groupBox4.Controls.Add(this.numericUpDown1);
+            this.groupBox4.Controls.Add(this.powerfoldMin);
             this.groupBox4.Location = new System.Drawing.Point(6, 19);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(91, 75);
+            this.groupBox4.Size = new System.Drawing.Size(119, 75);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Current";
             // 
-            // numericUpDown2
+            // powerfoldMax
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(39, 48);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown2.TabIndex = 1;
+            this.powerfoldMax.Location = new System.Drawing.Point(39, 48);
+            this.powerfoldMax.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.powerfoldMax.Name = "powerfoldMax";
+            this.powerfoldMax.Size = new System.Drawing.Size(74, 20);
+            this.powerfoldMax.TabIndex = 1;
+            this.powerfoldMax.Value = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
             // 
             // label3
             // 
@@ -234,12 +244,17 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Min:";
             // 
-            // numericUpDown1
+            // powerfoldMin
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(39, 23);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown1.TabIndex = 0;
+            this.powerfoldMin.Location = new System.Drawing.Point(39, 23);
+            this.powerfoldMin.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.powerfoldMin.Name = "powerfoldMin";
+            this.powerfoldMin.Size = new System.Drawing.Size(74, 20);
+            this.powerfoldMin.TabIndex = 0;
             // 
             // groupBox2
             // 
@@ -253,23 +268,33 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.numericUpDown5);
+            this.groupBox6.Controls.Add(this.spiralCurrentMax);
             this.groupBox6.Controls.Add(this.label6);
             this.groupBox6.Controls.Add(this.label7);
-            this.groupBox6.Controls.Add(this.numericUpDown6);
+            this.groupBox6.Controls.Add(this.spiralCurrentMin);
             this.groupBox6.Location = new System.Drawing.Point(6, 19);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(91, 75);
+            this.groupBox6.Size = new System.Drawing.Size(119, 75);
             this.groupBox6.TabIndex = 4;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Current";
             // 
-            // numericUpDown5
+            // spiralCurrentMax
             // 
-            this.numericUpDown5.Location = new System.Drawing.Point(39, 48);
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown5.TabIndex = 1;
+            this.spiralCurrentMax.Location = new System.Drawing.Point(39, 48);
+            this.spiralCurrentMax.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.spiralCurrentMax.Name = "spiralCurrentMax";
+            this.spiralCurrentMax.Size = new System.Drawing.Size(74, 20);
+            this.spiralCurrentMax.TabIndex = 1;
+            this.spiralCurrentMax.Value = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
             // 
             // label6
             // 
@@ -289,12 +314,17 @@
             this.label7.TabIndex = 2;
             this.label7.Text = "Min:";
             // 
-            // numericUpDown6
+            // spiralCurrentMin
             // 
-            this.numericUpDown6.Location = new System.Drawing.Point(39, 23);
-            this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown6.TabIndex = 0;
+            this.spiralCurrentMin.Location = new System.Drawing.Point(39, 23);
+            this.spiralCurrentMin.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.spiralCurrentMin.Name = "spiralCurrentMin";
+            this.spiralCurrentMin.Size = new System.Drawing.Size(74, 20);
+            this.spiralCurrentMin.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -314,7 +344,7 @@
             this.groupBox7.Controls.Add(this.numericUpDown8);
             this.groupBox7.Location = new System.Drawing.Point(6, 18);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(91, 75);
+            this.groupBox7.Size = new System.Drawing.Size(119, 75);
             this.groupBox7.TabIndex = 5;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Current";
@@ -322,9 +352,19 @@
             // numericUpDown7
             // 
             this.numericUpDown7.Location = new System.Drawing.Point(39, 48);
+            this.numericUpDown7.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
             this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown7.Size = new System.Drawing.Size(74, 20);
             this.numericUpDown7.TabIndex = 1;
+            this.numericUpDown7.Value = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
             // 
             // label8
             // 
@@ -347,8 +387,13 @@
             // numericUpDown8
             // 
             this.numericUpDown8.Location = new System.Drawing.Point(39, 23);
+            this.numericUpDown8.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
             this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown8.Size = new System.Drawing.Size(74, 20);
             this.numericUpDown8.TabIndex = 0;
             // 
             // button1
@@ -397,13 +442,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerfoldMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerfoldMin)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMin)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
@@ -428,8 +473,8 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown powerfoldMax;
+        private System.Windows.Forms.NumericUpDown powerfoldMin;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.Label label4;
@@ -437,10 +482,10 @@
         private System.Windows.Forms.NumericUpDown numericUpDown4;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.NumericUpDown numericUpDown5;
+        private System.Windows.Forms.NumericUpDown spiralCurrentMax;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.NumericUpDown numericUpDown6;
+        private System.Windows.Forms.NumericUpDown spiralCurrentMin;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.NumericUpDown numericUpDown7;
         private System.Windows.Forms.Label label8;

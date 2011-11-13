@@ -223,6 +223,15 @@ namespace MTS.TesterModule
             while (Remained > 0)
             {
                 Output.WriteLine("Test sequence {0} started", Finished + 1);
+
+                // debug
+                while (true)
+                {
+                    Thread.Sleep(400);
+                    channels.UpdateInputs();
+                }
+                continue;
+
                 // create scheduler with tasks to be executed
                 scheduler = createScheduler(channels, tests);
 

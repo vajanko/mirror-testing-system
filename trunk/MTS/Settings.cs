@@ -65,6 +65,19 @@ namespace MTS.Properties {
             return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
         }
 
+        public string GetProtocolConfigPath()
+        {
+            string protocolConfig;
+            switch (this.Protocol.ToLower())
+            {
+                case "ethercat": protocolConfig = this.EthercatConfigFile; break;
+                case "modbus": protocolConfig = this.ModbusConfigFile; break;
+                case "dummy": protocolConfig = this.ModbusConfigFile; break;
+                default: protocolConfig = this.EthercatConfigFile; break;
+            }
+            return Path.Combine(GetConfigDirectory(), protocolConfig);
+        }
+
         /// <summary>
         /// Create an open file dialog that will handle opening of caonfiguration file
         /// </summary>

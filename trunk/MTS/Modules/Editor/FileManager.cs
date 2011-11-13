@@ -190,16 +190,12 @@ namespace MTS.Editor
         /// test by user, its default values and values that are displayed in user interface such as 
         /// description of name of current parameter.
         /// Throws exception if xml is in incorrect format
-        /// Exceptions:
-        /// System.ArgumentNullException:
-        /// System.FormatException:
-        /// System.OverflowException:
-        /// System.NotSupportedException:
         /// </summary>
         /// <param name="tmplParam">Xml element that contains properties of <paramref name="ParamValue"/>
         /// in string format</param>
         /// <returns>A new instance of <paramref name="ParamValue"/> (or type derived from it) created
         /// from xml description</returns>
+        /// <exception cref="System.FormatException">Format of input file is not recognized</exception>
         private static ParamValue getParamInstance(XElement tmplParam)
         {
             // even if user may add values in his/her culture, template of testing parameters
