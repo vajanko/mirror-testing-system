@@ -292,13 +292,16 @@ namespace MTS.TesterModule
                         TestValue test = Tests.GetTest(TestCollection.Info);
 
                         StringParam param = test.GetParam<StringParam>(TestValue.PartNumber);
-                        partNumber.Content = param.StringValue;
+                        if (param != null)
+                            partNumber.Content = param.StringValue;
 
                         param = test.GetParam<StringParam>(TestValue.SupplierName);
-                        supplierName.Content = param.StringValue;
+                        if (param != null)
+                            supplierName.Content = param.StringValue;
 
                         param = test.GetParam<StringParam>(TestValue.DescriptionId);
-                        description.Content = param.StringValue;
+                        if (param != null)
+                            description.Content = param.StringValue;
 
                         paramFile.Content = filename;
                     }
@@ -468,14 +471,23 @@ namespace MTS.TesterModule
         private Channels createChannels()
         {
             IModule module;
+            string configPath = Settings.Default.GetProtocolConfigPath();
 
             // determine which module to use
             switch (Settings.Default.Protocol)
             {
-                case "Beckhoff": module = new ECModule(Settings.Default.EthercatTaskName); break;
-                case "Moxa": module = new ModbusModule(Settings.Default.ModbusIpAddress, Settings.Default.ModbusPort); break;
-                case "Dummy": module = new DummyModule(); break;    // this is for debugging only
-                default: module = new ECModule(Settings.Default.EthercatTaskName); break;
+                case "EtherCAT": 
+                    module = new ECModule(Settings.Default.EthercatTaskName);
+                    break;
+                case "Modbus": 
+                    module = new ModbusModule(Settings.Default.ModbusIpAddress, Settings.Default.ModbusPort);
+                    break;
+                case "Dummy": 
+                    module = new DummyModule();
+                    break;    // this is for debugging only
+                default: 
+                    module = new ECModule(Settings.Default.EthercatTaskName);
+                    break;
             }
 
             // load channel settings from hardware settings file
@@ -487,7 +499,7 @@ namespace MTS.TesterModule
             // when loading file - an exception may be thrown
             try
             {   // get absolute path from relative one
-                channels.LoadConfiguration(Settings.Default.EthercatConfigFile);
+                channels.LoadConfiguration(configPath);
             }
             catch (System.IO.IOException ex)
             {   // file exception

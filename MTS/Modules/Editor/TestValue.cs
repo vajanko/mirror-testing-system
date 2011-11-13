@@ -23,6 +23,7 @@ namespace MTS.Editor
         public const string SupplierName = "SupplierName";
         public const string SupplierCode = "SupplierCode";
         public const string PartNumber = "PartNumber";
+        //public const string Description = "Description";
         public const string DescriptionId = "Description";
         public const string Weight = "Weight";
         public const string Orientation = "Orientation";

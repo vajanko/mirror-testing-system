@@ -20,125 +20,130 @@ namespace MTS.IO.Module
         private Dictionary<string, IChannel> channels = new Dictionary<string, IChannel>();
         private System.Timers.Timer timer = new System.Timers.Timer();
 
-        Socket master;
+        TcpClient master;
 
         #region IModule Members
 
         public void Initialize()
         {
             // analog inputs
-            DistanceX = (IAnalogInput)GetChannelByName("DistanceX");
-            DistanceX.SetValue(1200);
-            DistanceY = (IAnalogInput)GetChannelByName("DistanceY");
-            DistanceY.SetValue(1200);
-            DistanceZ = (IAnalogInput)GetChannelByName("DistanceZ");
-            DistanceZ.SetValue(1200);
+            //DistanceX = (IAnalogInput)GetChannelByName("DistanceX");
+            //DistanceX.SetValue(1200);
+            //DistanceY = (IAnalogInput)GetChannelByName("DistanceY");
+            //DistanceY.SetValue(1200);
+            //DistanceZ = (IAnalogInput)GetChannelByName("DistanceZ");
+            //DistanceZ.SetValue(1200);
 
-            PowerfoldCurrent = (IAnalogInput)GetChannelByName("PowerfoldCurrent");
-            HeatingFoilCurrent = (IAnalogInput)GetChannelByName("HeatingFoilCurrent");
-            VerticalActuatorCurrent = (IAnalogInput)GetChannelByName("VerticalActuatorCurrent");
-            HorizontalActuatorCurrent = (IAnalogInput)GetChannelByName("HorizontalActuatorCurrent");
-            DirectionLightCurrent = (IAnalogInput)GetChannelByName("DirectionLightCurrent");
+            //PowerfoldCurrent = (IAnalogInput)GetChannelByName("PowerfoldCurrent");
+            //HeatingFoilCurrent = (IAnalogInput)GetChannelByName("HeatingFoilCurrent");
+            //VerticalActuatorCurrent = (IAnalogInput)GetChannelByName("VerticalActuatorCurrent");
+            //HorizontalActuatorCurrent = (IAnalogInput)GetChannelByName("HorizontalActuatorCurrent");
+            //DirectionLightCurrent = (IAnalogInput)GetChannelByName("DirectionLightCurrent");
 
-            PowerSupplyVoltage1 = (IAnalogInput)GetChannelByName("PowerSupplyVoltage1");
-            PowerSupplyVoltage2 = (IAnalogInput)GetChannelByName("PowerSupplyVoltage2");
-            // analog inputs
+            //PowerSupplyVoltage1 = (IAnalogInput)GetChannelByName("PowerSupplyVoltage1");
+            //PowerSupplyVoltage2 = (IAnalogInput)GetChannelByName("PowerSupplyVoltage2");
+            //// analog inputs
 
-            // digital inputs
-            IsDistanceSensorUp = (IDigitalInput)GetChannelByName("IsDistanceSensorUp");
-            IsDistanceSensorDown = (IDigitalInput)GetChannelByName("IsDistanceSensorDown");
-            IsSuckerUp = (IDigitalInput)GetChannelByName("IsSuckerUp");
-            IsSuckerDown = (IDigitalInput)GetChannelByName("IsSuckerDown");
-            IsVacuum = (IDigitalInput)GetChannelByName("IsVacuum");
-            IsLeftRubberPresent = (IDigitalInput)GetChannelByName("IsLeftRubberPresent");
+            //// digital inputs
+            //IsDistanceSensorUp = (IDigitalInput)GetChannelByName("IsDistanceSensorUp");
+            //IsDistanceSensorDown = (IDigitalInput)GetChannelByName("IsDistanceSensorDown");
+            //IsSuckerUp = (IDigitalInput)GetChannelByName("IsSuckerUp");
+            //IsSuckerDown = (IDigitalInput)GetChannelByName("IsSuckerDown");
+            //IsVacuum = (IDigitalInput)GetChannelByName("IsVacuum");
+            //IsLeftRubberPresent = (IDigitalInput)GetChannelByName("IsLeftRubberPresent");
 
-            IsPowerfoldDown = (IDigitalInput)GetChannelByName("IsPowerfoldDown");
-            IsPowerfoldUp = (IDigitalInput)GetChannelByName("IsPowerfoldUp");
-            IsOldPowerfoldUp = (IDigitalInput)GetChannelByName("IsOldPowerfoldUp");
-            IsRightRubberPresent = (IDigitalInput)GetChannelByName("IsRightRubberPresent");
+            //IsPowerfoldDown = (IDigitalInput)GetChannelByName("IsPowerfoldDown");
+            //IsPowerfoldUp = (IDigitalInput)GetChannelByName("IsPowerfoldUp");
+            //IsOldPowerfoldUp = (IDigitalInput)GetChannelByName("IsOldPowerfoldUp");
+            //IsRightRubberPresent = (IDigitalInput)GetChannelByName("IsRightRubberPresent");
 
-            IsLeftMirror = (IDigitalInput)GetChannelByName("IsLeftMirror");
-            IsOldMirror = (IDigitalInput)GetChannelByName("IsOldMirror");
-            IsOldPowerfoldDown = (IDigitalInput)GetChannelByName("IsOldPowerfoldDown");
-            IsStartPressed = (IDigitalInput)GetChannelByName("IsStartPressed");
-            IsAckPressed = (IDigitalInput)GetChannelByName("IsAckPressed");
+            //IsLeftMirror = (IDigitalInput)GetChannelByName("IsLeftMirror");
+            //IsOldMirror = (IDigitalInput)GetChannelByName("IsOldMirror");
+            //IsOldPowerfoldDown = (IDigitalInput)GetChannelByName("IsOldPowerfoldDown");
+            //IsStartPressed = (IDigitalInput)GetChannelByName("IsStartPressed");
+            //IsAckPressed = (IDigitalInput)GetChannelByName("IsAckPressed");
 
-            IsLocked = (IDigitalInput)GetChannelByName("IsLocked");
-            IsOldLocked = (IDigitalInput)GetChannelByName("IsOldLocked");
-            // digital inputs
+            //IsLocked = (IDigitalInput)GetChannelByName("IsLocked");
+            //IsOldLocked = (IDigitalInput)GetChannelByName("IsOldLocked");
+            //// digital inputs
 
-            // digital outputs
-            AllowMirrorMovement = (IDigitalOutput)GetChannelByName("AllowMirrorMovement");
-            MoveMirrorVertical = (IDigitalOutput)GetChannelByName("MoveMirrorVertical");
-            MoveMirrorHorizontal = (IDigitalOutput)GetChannelByName("MoveMirrorHorizontal");
-            MoveMirrorReverse = (IDigitalOutput)GetChannelByName("MoveMirrorReverse");
-            FoldPowerfold = (IDigitalOutput)GetChannelByName("FoldPowerfold");
-            UnfoldPowerfold = (IDigitalOutput)GetChannelByName("UnfoldPowerfold");
-            HeatingFoilOn = (IDigitalOutput)GetChannelByName("HeatingFoilOn");
-            DirectionLightOn = (IDigitalOutput)GetChannelByName("DirectionLightOn");
+            //// digital outputs
+            //AllowMirrorMovement = (IDigitalOutput)GetChannelByName("AllowMirrorMovement");
+            //MoveMirrorVertical = (IDigitalOutput)GetChannelByName("MoveMirrorVertical");
+            //MoveMirrorHorizontal = (IDigitalOutput)GetChannelByName("MoveMirrorHorizontal");
+            //MoveMirrorReverse = (IDigitalOutput)GetChannelByName("MoveMirrorReverse");
+            //FoldPowerfold = (IDigitalOutput)GetChannelByName("FoldPowerfold");
+            //UnfoldPowerfold = (IDigitalOutput)GetChannelByName("UnfoldPowerfold");
+            //HeatingFoilOn = (IDigitalOutput)GetChannelByName("HeatingFoilOn");
+            //DirectionLightOn = (IDigitalOutput)GetChannelByName("DirectionLightOn");
 
-            LockWeak = (IDigitalOutput)GetChannelByName("LockWeak");
-            UnlockWeak = (IDigitalOutput)GetChannelByName("UnlockWeak");
-            MoveDistanceSensorUp = (IDigitalOutput)GetChannelByName("MoveDistanceSensorUp");
-            MoveDistanceSensorDown = (IDigitalOutput)GetChannelByName("MoveDistanceSensorDown");
-            MoveSuckerUp = (IDigitalOutput)GetChannelByName("MoveSuckerUp");
-            MoveSuckerDown = (IDigitalOutput)GetChannelByName("MoveSuckerDown");
-            SuckOn = (IDigitalOutput)GetChannelByName("SuckOn");
-            BlowOn = (IDigitalOutput)GetChannelByName("BlowOn");
+            //LockWeak = (IDigitalOutput)GetChannelByName("LockWeak");
+            //UnlockWeak = (IDigitalOutput)GetChannelByName("UnlockWeak");
+            //MoveDistanceSensorUp = (IDigitalOutput)GetChannelByName("MoveDistanceSensorUp");
+            //MoveDistanceSensorDown = (IDigitalOutput)GetChannelByName("MoveDistanceSensorDown");
+            //MoveSuckerUp = (IDigitalOutput)GetChannelByName("MoveSuckerUp");
+            //MoveSuckerDown = (IDigitalOutput)GetChannelByName("MoveSuckerDown");
+            //SuckOn = (IDigitalOutput)GetChannelByName("SuckOn");
+            //BlowOn = (IDigitalOutput)GetChannelByName("BlowOn");
 
-            AllowPowerSupply = (IDigitalOutput)GetChannelByName("AllowPowerSupply");
-            LockStrong = (IDigitalOutput)GetChannelByName("LockStrong");
-            UnlockStrong = (IDigitalOutput)GetChannelByName("UnlockStrong");
-            GreenLightOn = (IDigitalOutput)GetChannelByName("GreenLightOn");
-            RedLightOn = (IDigitalOutput)GetChannelByName("RedLightOn");
-            BuzzerOn = (IDigitalOutput)GetChannelByName("BuzzerOn");
+            //AllowPowerSupply = (IDigitalOutput)GetChannelByName("AllowPowerSupply");
+            //LockStrong = (IDigitalOutput)GetChannelByName("LockStrong");
+            //UnlockStrong = (IDigitalOutput)GetChannelByName("UnlockStrong");
+            //GreenLightOn = (IDigitalOutput)GetChannelByName("GreenLightOn");
+            //RedLightOn = (IDigitalOutput)GetChannelByName("RedLightOn");
+            //BuzzerOn = (IDigitalOutput)GetChannelByName("BuzzerOn");
 
-            // digital outputs
+            //// digital outputs
 
-            // ???
-            TestingDeviceOpened = (IDigitalInput)GetChannelByName("TestingDeviceOpened");
-            TestingDeviceClosed = (IDigitalInput)GetChannelByName("TestingDeviceClosed");
-            ErrorAcknButton = (IDigitalInput)GetChannelByName("ErrorAcknButton");
-
-
-            // powerfold
-            PowerFoldUnfoldedPositionSensor1 = (IDigitalInput)GetChannelByName("PowerFoldUnfoldedPositionSensor1");
-            PowerFoldUnfoldedPositionSensor2 = (IDigitalInput)GetChannelByName("PowerFoldUnfoldedPositionSensor2");
-            PowerFoldFoldedPositionSensor = (IDigitalInput)GetChannelByName("PowerFoldFoldedPositionSensor");
+            //// ???
+            //TestingDeviceOpened = (IDigitalInput)GetChannelByName("TestingDeviceOpened");
+            //TestingDeviceClosed = (IDigitalInput)GetChannelByName("TestingDeviceClosed");
+            //ErrorAcknButton = (IDigitalInput)GetChannelByName("ErrorAcknButton");
 
 
-            HeatingFoilSignSensor = (IDigitalInput)GetChannelByName("HeatingFoilSignSensor");
+            //// powerfold
+            //PowerFoldUnfoldedPositionSensor1 = (IDigitalInput)GetChannelByName("PowerFoldUnfoldedPositionSensor1");
+            //PowerFoldUnfoldedPositionSensor2 = (IDigitalInput)GetChannelByName("PowerFoldUnfoldedPositionSensor2");
+            //PowerFoldFoldedPositionSensor = (IDigitalInput)GetChannelByName("PowerFoldFoldedPositionSensor");
 
-            SensorHeadOut = (IDigitalInput)GetChannelByName("SensorHeadOut");
-            SensorHeadIn = (IDigitalInput)GetChannelByName("SensorHeadIn");
-            InsCheck1 = (IDigitalInput)GetChannelByName("InsCheck1");
-            InsCheck2 = (IDigitalInput)GetChannelByName("InsCheck2");
-            InsCheck3 = (IDigitalInput)GetChannelByName("InsCheck3");
-            InsCheck4 = (IDigitalInput)GetChannelByName("InsCheck4");
-            InsCheck5 = (IDigitalInput)GetChannelByName("InsCheck5");
-            InsCheck6 = (IDigitalInput)GetChannelByName("InsCheck6");
-            InsCheck7 = (IDigitalInput)GetChannelByName("InsCheck7");
-            InsCheck8 = (IDigitalInput)GetChannelByName("InsCheck8");
-            InsCheck9 = (IDigitalInput)GetChannelByName("InsCheck9");
-            InsCheck10 = (IDigitalInput)GetChannelByName("InsCheck10");
-            InsCheck11 = (IDigitalInput)GetChannelByName("InsCheck11");
-            InsCheck12 = (IDigitalInput)GetChannelByName("InsCheck12");
-            InsCheck13 = (IDigitalInput)GetChannelByName("InsCheck13");
-            InsCheck14 = (IDigitalInput)GetChannelByName("InsCheck14");
-            InsCheck15 = (IDigitalInput)GetChannelByName("InsCheck15");
-            InsCheck16 = (IDigitalInput)GetChannelByName("InsCheck16");
-            IsPowerSupplyOff = (IDigitalInput)GetChannelByName("IsPowerSupplyOff");
+
+            //HeatingFoilSignSensor = (IDigitalInput)GetChannelByName("HeatingFoilSignSensor");
+
+            //SensorHeadOut = (IDigitalInput)GetChannelByName("SensorHeadOut");
+            //SensorHeadIn = (IDigitalInput)GetChannelByName("SensorHeadIn");
+            //InsCheck1 = (IDigitalInput)GetChannelByName("InsCheck1");
+            //InsCheck2 = (IDigitalInput)GetChannelByName("InsCheck2");
+            //InsCheck3 = (IDigitalInput)GetChannelByName("InsCheck3");
+            //InsCheck4 = (IDigitalInput)GetChannelByName("InsCheck4");
+            //InsCheck5 = (IDigitalInput)GetChannelByName("InsCheck5");
+            //InsCheck6 = (IDigitalInput)GetChannelByName("InsCheck6");
+            //InsCheck7 = (IDigitalInput)GetChannelByName("InsCheck7");
+            //InsCheck8 = (IDigitalInput)GetChannelByName("InsCheck8");
+            //InsCheck9 = (IDigitalInput)GetChannelByName("InsCheck9");
+            //InsCheck10 = (IDigitalInput)GetChannelByName("InsCheck10");
+            //InsCheck11 = (IDigitalInput)GetChannelByName("InsCheck11");
+            //InsCheck12 = (IDigitalInput)GetChannelByName("InsCheck12");
+            //InsCheck13 = (IDigitalInput)GetChannelByName("InsCheck13");
+            //InsCheck14 = (IDigitalInput)GetChannelByName("InsCheck14");
+            //InsCheck15 = (IDigitalInput)GetChannelByName("InsCheck15");
+            //InsCheck16 = (IDigitalInput)GetChannelByName("InsCheck16");
+            //IsPowerSupplyOff = (IDigitalInput)GetChannelByName("IsPowerSupplyOff");
         }
 
         public void Connect()
         {
             try
             {
-                master = new Socket(IPAddress.Loopback.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                master = new TcpClient();
+                //new Socket(IPAddress.Loopback.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 master.Connect(new IPEndPoint(IPAddress.Loopback, 1234));
                 IsConnected = true;
             }
-            catch { IsConnected = false; }            
+            catch
+            {
+                IsConnected = false;
+                throw;  // re-throw this exceptino
+            }
         }
 
         /// <summary>
@@ -155,11 +160,27 @@ namespace MTS.IO.Module
         /// </summary>
         public void UpdateInputs()
         {
-            NetworkStream stream = new NetworkStream(master);
+           // read command (write)
+            NetworkStream stream = master.GetStream();
             StreamWriter writer = new StreamWriter(stream);
             writer.WriteLine("read");
+            writer.Flush();
 
-            
+            // wait for response (read)
+            StreamReader reader = new StreamReader(stream);
+            string line;
+            while ((line = reader.ReadLine()) != "end")
+            {
+                string[] tmp = line.Split(':');
+                if (tmp.Length > 1)
+                {
+                    string name = tmp[0];
+                    string value = tmp[1];
+                    IChannel channel = this.GetChannelByName(name);
+                    if (channel != null)
+                        channel.ValueBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(value);
+                }
+            }
         }
 
         /// <summary>
@@ -172,6 +193,8 @@ namespace MTS.IO.Module
 
         public void Disconnect()
         {
+            if (master != null)
+                master.Close();
             IsConnected = false;
         }
 

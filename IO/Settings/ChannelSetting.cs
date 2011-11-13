@@ -65,8 +65,9 @@ namespace MTS.IO.Settings
 
         public ChannelSetting GetSetting(string channelName)
         {
+            channelName = channelName.ToLower();
             foreach (ChannelSetting channel in List)
-                if (channel.Name == channelName)
+                if (channel.Id.ToLower() == channelName)
                     return channel;
             return null;
         }

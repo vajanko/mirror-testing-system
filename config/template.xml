@@ -4,7 +4,7 @@
   <test id="Info">
     <name>Information</name>
     <group>Informative Settings</group>
-    <description></description>
+    <description>This setting will not be used for testing.</description>
     <param id="orientation">
       <name>Orientation</name>
       <description></description>
@@ -15,10 +15,28 @@
         <value>Right</value>
       </values>
     </param>
+    <param id="partNumber">
+      <name>Part Number</name>
+      <description></description>
+      <type>string</type>
+      <value></value>
+    </param>
+    <param id="supplierName">
+      <name>Supplier Name</name>
+      <description></description>
+      <type>string</type>
+      <value></value>      
+    </param>
+    <param id="description">
+      <name>Description</name>
+      <description></description>
+      <type>string</type>
+      <value></value>
+    </param>
   </test>
   <test id="TravelEast">
-    <name>Travel east</name>
-    <group>Travel tests</group>
+    <name>Travel East</name>
+    <group>Travel Tests</group>
     <description></description>
     <param id="MinAngle">
       <name>Min angle</name>
@@ -51,7 +69,7 @@
 
   <test id="Powerfold">
     <name>Powerfold</name>
-    <group>Current tests</group>
+    <group>Current Tests</group>
     <description></description>
     <param id="Presence">
       <name>Test presence</name>
@@ -87,4 +105,101 @@
       <unit type="seconds"/>
     </param>
   </test>
+
+  <test id="HeatingFoil">
+    <name>Heating Foil</name>
+    <group>Current Tests</group>
+    <description></description>
+    <param id="Presence">
+      <name>Test presence</name>
+      <description></description>
+      <type>bool</type>
+      <value>true</value>      
+    </param>
+    <param id="MinCurrent">
+      <name>Min Current</name>
+      <description></description>
+      <type>int</type>
+      <value>100</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max Current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="TestingTime">
+      <name>Testing Time</name>
+      <description></description>
+      <type>double</type>
+      <value>2.5</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="miliseconds"/>
+    </param>
+  </test>
+
+  <test id="DirectionLight">
+    <name>Direction Light</name>
+    <group>Current Tests</group>
+    <description></description>
+    <param id="Presence">
+      <name>Test presence</name>
+      <description></description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+    <param id="MinCurrent">
+      <name>Min Current</name>
+      <description></description>
+      <type>int</type>
+      <value>100</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max Current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="BlinksCount">
+      <name>Number of Blinks</name>
+      <description></description>
+      <type>int</type>
+      <value>2</value>
+      <min>1</min>
+      <max>10</max>
+      <unit type="none"/>
+    </param>
+    <param id="LightingTime">
+      <name>Lighting Time</name>
+      <description></description>
+      <type>double</type>
+      <value>1.5</value>
+      <min>0</min>
+      <max>5</max>
+      <unit type="seconds"/>
+    </param>
+    <param id="BreakTime">
+      <name>Break Time</name>
+      <description></description>
+      <type>double</type>
+      <value>1.5</value>
+      <min>0</min>
+      <max>5</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+        
 </tests>

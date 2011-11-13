@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MTS.IO.Settings" GeneratedClassName="HWSettings">
   <Profiles />
   <Settings>
-    <Setting Name="ZeroPlaneNormal" GenerateDefaultValueInCode="false" Type="System.Windows.Media.Media3D.Vector3D" Scope="User">
-      <Value Profile="(Default)">0,0,0</Value>
-    </Setting>
     <Setting Name="XYDistance" Description="Distance of X and Y sondes. Sonds are measuring distance between them and mirror glass" Type="System.Double" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
@@ -18,7 +15,7 @@
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfChannelSetting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;distanceX&lt;/Id&gt;
+    &lt;Id&gt;DistanceX&lt;/Id&gt;
     &lt;Name&gt;Distance Sensor X&lt;/Name&gt;
     &lt;Description&gt;Settings for calibretor X that is measuring distance from mirror glass&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -27,7 +24,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;distanceY&lt;/Id&gt;
+    &lt;Id&gt;DistanceY&lt;/Id&gt;
     &lt;Name&gt;Distance Sensor Y&lt;/Name&gt;
     &lt;Description&gt;Settings for calibretor Y that is measuring distance from mirror glass&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -36,7 +33,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;distanceZ&lt;/Id&gt;
+    &lt;Id&gt;DistanceZ&lt;/Id&gt;
     &lt;Name&gt;Distance Sensor Z&lt;/Name&gt;
     &lt;Description&gt;Settings for calibretor Z that is measuring distance from mirror glass&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -45,7 +42,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;powerfoldCurrent&lt;/Id&gt;
+    &lt;Id&gt;PowerfoldCurrent&lt;/Id&gt;
     &lt;Name&gt;Powerfold Current&lt;/Name&gt;
     &lt;Description&gt;Settings for amphermeter that is measuring current of powerfold actuator&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -54,7 +51,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;heatingFoilCurrent&lt;/Id&gt;
+    &lt;Id&gt;HeatingFoilCurrent&lt;/Id&gt;
     &lt;Name&gt;Heating Foil Current&lt;/Name&gt;
     &lt;Description&gt;Settings for amphermeter that is measuring current in heating foil&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -63,7 +60,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;verticalActuatorCurrent&lt;/Id&gt;
+    &lt;Id&gt;VerticalActuatorCurrent&lt;/Id&gt;
     &lt;Name&gt;Vertical ActuatorCurrent&lt;/Name&gt;
     &lt;Description&gt;Settings for amphermeter that is measuring current of actuator moveing mirror glass vertically&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -72,7 +69,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;horizontalActuatorCurrent&lt;/Id&gt;
+    &lt;Id&gt;HorizontalActuatorCurrent&lt;/Id&gt;
     &lt;Name&gt;Horizontal Actuator Current&lt;/Name&gt;
     &lt;Description&gt;Settings for amphermeter that is measuring current of actuator moveing mirror glass horizontaly&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -81,7 +78,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;directionLightCurrent&lt;/Id&gt;
+    &lt;Id&gt;DirectionLightCurrent&lt;/Id&gt;
     &lt;Name&gt;Direction Light Current&lt;/Name&gt;
     &lt;Description&gt;Settings of amphermeter that is measuring direction light current&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -90,7 +87,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;powerSupplyVoltage1&lt;/Id&gt;
+    &lt;Id&gt;PowerSupplyVoltage1&lt;/Id&gt;
     &lt;Name&gt;Power Supply Voltage 1&lt;/Name&gt;
     &lt;Description&gt;Settings for voltmeter that is meausring voltage of power supply 1&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -99,7 +96,7 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
   &lt;ChannelSetting&gt;
-    &lt;Id&gt;powerSupplyVoltage2&lt;/Id&gt;
+    &lt;Id&gt;PowerSupplyVoltage2&lt;/Id&gt;
     &lt;Name&gt;Power Supply Voltage 2&lt;/Name&gt;
     &lt;Description&gt;Settings for voltmeter that is meausring voltage of power supply 2&lt;/Description&gt;
     &lt;RawLow&gt;4095&lt;/RawLow&gt;
@@ -108,6 +105,9 @@
     &lt;RealHigh&gt;0&lt;/RealHigh&gt;
   &lt;/ChannelSetting&gt;
 &lt;/ArrayOfChannelSetting&gt;</Value>
+    </Setting>
+    <Setting Name="ZeroPlaneNormal" Type="System.Windows.Media.Media3D.Vector3D" Scope="User">
+      <Value Profile="(Default)">0,0,0</Value>
     </Setting>
   </Settings>
 </SettingsFile>
