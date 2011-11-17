@@ -171,10 +171,13 @@ namespace MTS.TesterModule
             // add for providing basic steps to start executing test
             // this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
             // close device
-            scheduler.AddInitSequence();
+            //scheduler.AddInitSequence();
 
             // wait for start
-            //scheduler.AddWaitForStart();
+            scheduler.AddWaitForStart();
+
+            scheduler.Initialize();
+            return scheduler;
 
             // rubber test
             scheduler.AddRubberTest(tests);
@@ -224,14 +227,6 @@ namespace MTS.TesterModule
             {
                 Output.WriteLine("Test sequence {0} started", Finished + 1);
 
-                // debug
-                while (true)
-                {
-                    Thread.Sleep(400);
-                    channels.UpdateInputs();
-                }
-                continue;
-
                 // create scheduler with tasks to be executed
                 scheduler = createScheduler(channels, tests);
 
@@ -273,6 +268,7 @@ namespace MTS.TesterModule
             Output.WriteLine("Result: " + msg);
             // switch light (green or red) on
             channels.UpdateOutputs();
+            Thread.Sleep(1000);
         }
 
         #endregion

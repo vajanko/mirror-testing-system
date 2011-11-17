@@ -30,14 +30,13 @@ namespace MTS.Simulator
 
         public void Listen(IPAddress ip, int port)
         {
+            if (running) return;
+
             slave = new TcpListener(port);
             timer = new System.Timers.Timer(100);
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
             timer.Start();
             running = true;
-
-            //Socket slave = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            //slave.Bind(new IPEndPoint(ip, port));
 
             // create a new thread for listeninng incomming connections
             listenerThread = new Thread(new ParameterizedThreadStart(loop));
@@ -52,6 +51,7 @@ namespace MTS.Simulator
 
         public void Disconnect()
         {
+            running = false;
             timer.Stop();
             slave.Stop();
             foreach (Thread t in threads)
@@ -105,37 +105,57 @@ namespace MTS.Simulator
 
         public void respond()
         {
-            if (master != null)
+            if (master == null) return;
+ 
+            NetworkStream stream = master.GetStream();
+            StreamReader reader = new StreamReader(stream);
+            StreamWriter writer = new StreamWriter(stream);
+            while (true)
             {
-
-                NetworkStream stream = master.GetStream();
-                StreamReader reader = new StreamReader(stream);
-                StreamWriter writer = new StreamWriter(stream);
-                while (true)
+                try
                 {
-                    try
-                    {
-                        string command = reader.ReadLine();
+                    string command = reader.ReadLine();
 
-                        if (command == "read")
+                    // read command from master
+                    if (command == "read")
+                    {
+                        // lock channels because multiple thread may access it
+                        lock (module)
                         {
-                            // lock channels
-                            lock (module)
+                            foreach (IChannel channel in module)
                             {
-                                foreach (IChannel channel in module)
+                                writer.Write("{0}:{1}\n", channel.Name, 
+                                    ASCIIEncoding.ASCII.GetString(channel.ValueBytes));
+                            }
+                        }
+                        writer.WriteLine("end");
+                        writer.Flush();
+                    }
+                    // write command from master
+                    else if (command == "write")
+                    {   // lock channels because multiple thread may access it
+                        // read channels that should be writed
+                        string line;
+                        while ((line = reader.ReadLine()) != "end")
+                        {
+                            string[] tmp = line.Split(':');
+                            if (tmp.Length > 1)
+                            {
+                                string name = tmp[0];
+                                string value = tmp[1];
+                                lock (module)
                                 {
-                                    writer.Write("{0}:{1}\n", channel.Name, System.Text.ASCIIEncoding.ASCII.GetString(channel.ValueBytes));
+                                    IChannel channel = module.GetChannelByName(name);
+                                    if (channel != null)
+                                        channel.ValueBytes = ASCIIEncoding.ASCII.GetBytes(value);
                                 }
-                                writer.WriteLine("end");
-                                //stream.Flush();
-                                writer.Flush();
                             }
                         }
                     }
-                    catch
-                    {
-                        break;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    break;
                 }
             }
         }
