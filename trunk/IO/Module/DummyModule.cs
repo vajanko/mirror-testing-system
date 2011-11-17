@@ -160,7 +160,7 @@ namespace MTS.IO.Module
         /// </summary>
         public void UpdateInputs()
         {
-           // read command (write)
+           // read command
             NetworkStream stream = master.GetStream();
             StreamWriter writer = new StreamWriter(stream);
             writer.WriteLine("read");
@@ -188,7 +188,21 @@ namespace MTS.IO.Module
         /// </summary>
         public void UpdateOutputs()
         {
-            // nothig to write bacause there is no remote hardware
+            // write command
+            NetworkStream stream = master.GetStream();
+            StreamWriter writer = new StreamWriter(stream);
+
+            // send write command
+            writer.WriteLine("write");
+            // write all !!! output !!! channels to stream
+            foreach (IChannel channel in this.outputs)
+            {
+                writer.Write("{0}:{1}\n", channel.Name,
+                    System.Text.ASCIIEncoding.ASCII.GetString(channel.ValueBytes));
+            }
+            // closing command
+            writer.WriteLine("end");
+            writer.Flush();
         }
 
         public void Disconnect()

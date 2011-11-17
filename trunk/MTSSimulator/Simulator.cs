@@ -25,6 +25,11 @@ namespace MTS.Simulator
             channels = new Channels(new DummyModule(), HWSettings.Default.ChannelSettings);
             channels.LoadConfiguration("dummyConfig.csv");
             channels.Initialize();
+
+            tester1.IsRedLightOn = false;
+            tester1.IsGreenLightOn = false;
+            tester1.IsPowerSupplyOn = false;
+            tester1.IsStartPressed = false;
         }
 
         #region Device status
@@ -55,8 +60,33 @@ namespace MTS.Simulator
                 isPowerOn = value;
                 if (value) powerButton.Text = "Off";
                 else powerButton.Text = "On";
-                if (channels != null && channels.IsPowerSupplyOff != null)
-                    channels.IsPowerSupplyOff.SetValue(!isPowerOn);
+
+                if (channels != null)
+                {
+                    lock (channels)
+                    {
+                        if (channels.IsPowerSupplyOff != null)
+                            channels.IsPowerSupplyOff.SetValue(!isPowerOn);
+                    }
+                }
+            }
+        }
+
+        private bool isStartPressed = false;
+        public bool IsStartPressed
+        {
+            get { return isStartPressed; }
+            set
+            {
+                isStartPressed = value;
+                if (channels != null)
+                {
+                    lock (channels)
+                    {
+                        if (channels.IsStartPressed != null)
+                            channels.IsStartPressed.SetValue(isStartPressed);
+                    }
+                }
             }
         }
 
@@ -69,10 +99,17 @@ namespace MTS.Simulator
 
         #endregion
 
+        private void startButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            IsStartPressed = true;
+        }
+        private void startButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            IsStartPressed = false;
+        }
         private void closeDeviceButton_Click(object sender, EventArgs e)
         {
-            if (IsClosed)
-                IsClosed = false;
+            if (IsClosed) IsClosed = false;
             else IsClosed = true;
         }
         private void powerButton_Click(object sender, EventArgs e)
@@ -86,27 +123,47 @@ namespace MTS.Simulator
         {
             slave = new Slave(channels);
             slave.Update += new Action(slave_Update);
-            // debug
-            channels.FoldPowerfold.SetValue(true);
-            channels.HeatingFoilOn.SetValue(true);
-            channels.AllowPowerSupply.SetValue(true);
 
             IsPowerOn = false;      // power supply is off
+
+            // initialize tester values
+            updateTester();
 
             slave.Listen(System.Net.IPAddress.Loopback, 1234);
         }
 
+        void updateTester()
+        {
+            tester1.Dispatcher.Invoke(new Action(updateTesterChannels));
+        }
+        void updateTesterChannels()
+        {
+            tester1.IsGreenLightOn = channels.GreenLightOn.Value;
+            tester1.IsRedLightOn = channels.RedLightOn.Value;
+            tester1.IsPowerSupplyOn = !channels.IsPowerSupplyOff.Value;
+            tester1.IsStartPressed = channels.IsStartPressed.Value;
+        }
+
         void slave_Update()
         {
-            if (channels.FoldPowerfold.Value)
-                channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
-            else if (channels.UnfoldPowerfold.Value)
-                channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
+            lock (channels)
+            {
+                // "swtich off" power supply if it is not allowed
+                if (!channels.AllowPowerSupply.Value)
+                    channels.IsPowerSupplyOff.SetValue(true);
 
-            if (channels.HeatingFoilOn.Value)
-                channels.HeatingFoilCurrent.SetValue((uint)gen.Next((int)spiralCurrentMin.Value, (int)spiralCurrentMax.Value));
+                if (channels.FoldPowerfold.Value)
+                    channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
+                else if (channels.UnfoldPowerfold.Value)
+                    channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
 
-            if (channels.DirectionLightOn.Value) ;
+                if (channels.HeatingFoilOn.Value)
+                    channels.HeatingFoilCurrent.SetValue((uint)gen.Next((int)spiralCurrentMin.Value, (int)spiralCurrentMax.Value));
+
+                if (channels.DirectionLightOn.Value) ;
+
+                updateTester();
+            }
         }
 
         private void disconnectButton_Click(object sender, EventArgs e)

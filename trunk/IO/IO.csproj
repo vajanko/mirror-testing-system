@@ -70,6 +70,12 @@
     <Compile Include="Module\ModbusSlot.cs" />
     <Compile Include="Module\Mxio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Settings\ChannelSetting.cs" />
     <Compile Include="Settings\HWSettings.cs" />
     <Compile Include="Settings\HWSettings.Designer.cs">
@@ -80,6 +86,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Settings\HWSettings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>HWSettings.Designer.cs</LastGenOutput>

@@ -30,11 +30,9 @@
         {
             this.startButton = new System.Windows.Forms.Button();
             this.errorButton = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.insertMirrorButton = new System.Windows.Forms.Button();
             this.closeDeviceButton = new System.Windows.Forms.Button();
             this.powerButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
@@ -60,6 +58,19 @@
             this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.tester1 = new MTS.Simulator.Tester();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -75,70 +86,61 @@
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
+            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox11.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             this.SuspendLayout();
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(12, 403);
+            this.startButton.Location = new System.Drawing.Point(9, 19);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(75, 23);
+            this.startButton.Size = new System.Drawing.Size(63, 23);
             this.startButton.TabIndex = 0;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.startButton_MouseDown);
+            this.startButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.startButton_MouseUp);
             // 
             // errorButton
             // 
-            this.errorButton.Location = new System.Drawing.Point(93, 403);
+            this.errorButton.Location = new System.Drawing.Point(9, 48);
             this.errorButton.Name = "errorButton";
-            this.errorButton.Size = new System.Drawing.Size(75, 23);
+            this.errorButton.Size = new System.Drawing.Size(63, 23);
             this.errorButton.TabIndex = 1;
-            this.errorButton.Text = "Error ack";
+            this.errorButton.Text = "ErrorAck";
             this.errorButton.UseVisualStyleBackColor = true;
-            // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(12, 12);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(349, 224);
-            this.panel1.TabIndex = 2;
             // 
             // insertMirrorButton
             // 
-            this.insertMirrorButton.Location = new System.Drawing.Point(174, 374);
+            this.insertMirrorButton.Location = new System.Drawing.Point(15, 446);
             this.insertMirrorButton.Name = "insertMirrorButton";
-            this.insertMirrorButton.Size = new System.Drawing.Size(89, 23);
+            this.insertMirrorButton.Size = new System.Drawing.Size(84, 23);
             this.insertMirrorButton.TabIndex = 3;
-            this.insertMirrorButton.Text = "Insert mirror";
+            this.insertMirrorButton.Text = "Insert Mirror";
             this.insertMirrorButton.UseVisualStyleBackColor = true;
             // 
             // closeDeviceButton
             // 
-            this.closeDeviceButton.Location = new System.Drawing.Point(174, 403);
+            this.closeDeviceButton.Location = new System.Drawing.Point(6, 48);
             this.closeDeviceButton.Name = "closeDeviceButton";
-            this.closeDeviceButton.Size = new System.Drawing.Size(89, 23);
+            this.closeDeviceButton.Size = new System.Drawing.Size(70, 23);
             this.closeDeviceButton.TabIndex = 4;
-            this.closeDeviceButton.Text = "Close device";
+            this.closeDeviceButton.Text = "Close";
             this.closeDeviceButton.UseVisualStyleBackColor = true;
             this.closeDeviceButton.Click += new System.EventHandler(this.closeDeviceButton_Click);
             // 
             // powerButton
             // 
-            this.powerButton.Location = new System.Drawing.Point(93, 374);
+            this.powerButton.Location = new System.Drawing.Point(6, 48);
             this.powerButton.Name = "powerButton";
             this.powerButton.Size = new System.Drawing.Size(75, 23);
             this.powerButton.TabIndex = 5;
-            this.powerButton.Text = "Off";
+            this.powerButton.Text = "Switch Off";
             this.powerButton.UseVisualStyleBackColor = true;
             this.powerButton.Click += new System.EventHandler(this.powerButton_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 379);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Power supply:";
             // 
             // groupBox1
             // 
@@ -398,7 +400,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(302, 374);
+            this.button1.Location = new System.Drawing.Point(542, 523);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 10;
@@ -408,7 +410,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(302, 403);
+            this.button2.Location = new System.Drawing.Point(623, 523);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -416,23 +418,149 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.radioButton2);
+            this.groupBox8.Controls.Add(this.radioButton1);
+            this.groupBox8.Location = new System.Drawing.Point(15, 374);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(84, 66);
+            this.groupBox8.TabIndex = 13;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Mirror Type";
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(6, 42);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(47, 17);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "New";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(6, 19);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(41, 17);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Old";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.radioButton3);
+            this.groupBox9.Controls.Add(this.radioButton4);
+            this.groupBox9.Location = new System.Drawing.Point(105, 374);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(80, 66);
+            this.groupBox9.TabIndex = 14;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Orientation";
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(6, 42);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(50, 17);
+            this.radioButton3.TabIndex = 1;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Right";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(6, 19);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(43, 17);
+            this.radioButton4.TabIndex = 0;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "Left";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.startButton);
+            this.groupBox10.Controls.Add(this.errorButton);
+            this.groupBox10.Location = new System.Drawing.Point(15, 475);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(84, 80);
+            this.groupBox10.TabIndex = 15;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Buttons";
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.button3);
+            this.groupBox11.Controls.Add(this.powerButton);
+            this.groupBox11.Location = new System.Drawing.Point(105, 475);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(93, 80);
+            this.groupBox11.TabIndex = 16;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Power Supply";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(6, 19);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "Switch On";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.button4);
+            this.groupBox12.Controls.Add(this.closeDeviceButton);
+            this.groupBox12.Location = new System.Drawing.Point(204, 475);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(85, 80);
+            this.groupBox12.TabIndex = 17;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Device";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(6, 19);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(70, 23);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Open";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // elementHost1
+            // 
+            this.elementHost1.Location = new System.Drawing.Point(15, 12);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(346, 356);
+            this.elementHost1.TabIndex = 18;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.tester1;
+            // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(709, 438);
+            this.ClientSize = new System.Drawing.Size(709, 559);
+            this.Controls.Add(this.elementHost1);
+            this.Controls.Add(this.groupBox12);
+            this.Controls.Add(this.groupBox11);
+            this.Controls.Add(this.groupBox10);
+            this.Controls.Add(this.groupBox9);
+            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.powerButton);
-            this.Controls.Add(this.closeDeviceButton);
             this.Controls.Add(this.insertMirrorButton);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.errorButton);
-            this.Controls.Add(this.startButton);
             this.Name = "Simulator";
             this.Text = "MTS Simulator";
             this.groupBox1.ResumeLayout(false);
@@ -454,8 +582,14 @@
             this.groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox12.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -463,11 +597,9 @@
 
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button errorButton;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button insertMirrorButton;
         private System.Windows.Forms.Button closeDeviceButton;
         private System.Windows.Forms.Button powerButton;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -493,6 +625,19 @@
         private System.Windows.Forms.NumericUpDown numericUpDown8;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private Tester tester1;
     }
 }
 
