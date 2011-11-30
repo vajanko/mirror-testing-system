@@ -17,12 +17,14 @@ using System.Data.Entity.Infrastructure;
 
 using AvalonDock;
 
+using MTS.Controls;
+
 namespace MTS.Data
 {
     /// <summary>
     /// Interaction logic for DataWindow.xaml
     /// </summary>
-    public partial class DataWindow : DocumentContent
+    public partial class DataWindow : DocumentItem 
     {
         public void Load()
         {
@@ -43,26 +45,26 @@ namespace MTS.Data
 
         private void suppliersGrid_Initialized(object sender, EventArgs e)
         {
-            DataGrid grid = sender as DataGrid;
-            if (grid != null)
-            {
-                using (MTSContext context = new MTSContext())
-                {
-                    grid.ItemsSource = context.Suppliers.ToList();
-                }
-            }
+            //DataGrid grid = sender as DataGrid;
+            //if (grid != null)
+            //{
+            //    using (MTSContext context = new MTSContext())
+            //    {
+            //        grid.ItemsSource = context.Suppliers.ToList();
+            //    }
+            //}
         }
 
         private void mirrorsGrid_Initialized(object sender, EventArgs e)
         {            
-            DataGrid grid = sender as DataGrid;
-            if (grid != null)
-            {
-                using (MTSContext context = new MTSContext())
-                {
-                    grid.ItemsSource = context.Mirrors.Include(m => m.Supplier).ToList();
-                }
-            }
+            //DataGrid grid = sender as DataGrid;
+            //if (grid != null)
+            //{
+            //    using (MTSContext context = new MTSContext())
+            //    {
+            //        grid.ItemsSource = context.Mirrors.Include(m => m.Supplier).ToList();
+            //    }
+            //}
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

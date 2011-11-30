@@ -1,11 +1,12 @@
-﻿<ad:DocumentContent x:Class="MTS.Data.DataWindow"
+﻿<ctrl:DocumentItem x:Class="MTS.Data.DataWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
     xmlns:ctrl="clr-namespace:MTS.Controls"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-    xmlns:data="clr-namespace:MTS.Data;assembly=MTS.Data" Title="Data">
+    xmlns:data="clr-namespace:MTS.Data;assembly=MTS.Data" 
+                   Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}" ItemId="Data" x:Name="root">
     <ScrollViewer VerticalScrollBarVisibility="Visible">
         <TabControl>
             <TabItem Header="Suppliers" Initialized="suppliersGrid_Initialized">
@@ -61,4 +62,4 @@
             </TabItem>
         </TabControl>
     </ScrollViewer>
-</ad:DocumentContent>
+</ctrl:DocumentItem>
