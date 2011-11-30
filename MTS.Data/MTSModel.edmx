@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MTS.Data.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="MTSDataStoreContainer">
+          <EntitySet Name="Mirror" EntityType="MTS.Data.Store.Mirror" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Supplier" EntityType="MTS.Data.Store.Supplier" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="fk_supplier_id" Association="MTS.Data.Store.fk_supplier_id">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="Mirror" EntitySet="Mirror" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Mirror">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SerialNumber" Type="char" Nullable="false" MaxLength="15" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="20" />
+          <Property Name="Street" Type="nvarchar" MaxLength="20" />
+          <Property Name="Number" Type="int" />
+          <Property Name="Zip" Type="int" />
+          <Property Name="State" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="fk_supplier_id">
+          <End Role="Supplier" Type="MTS.Data.Store.Supplier" Multiplicity="1" />
+          <End Role="Mirror" Type="MTS.Data.Store.Mirror" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Mirror">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MTS.Data" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="MTSContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Mirrors" EntityType="MTS.Data.Mirror" />
+          <EntitySet Name="Suppliers" EntityType="MTS.Data.Supplier" />
+          <AssociationSet Name="fk_supplier_id" Association="MTS.Data.fk_supplier_id">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Mirror" EntitySet="Mirrors" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Mirror">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SerialNumber" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Supplier" Relationship="MTS.Data.fk_supplier_id" FromRole="Mirror" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Street" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Number" Type="Int32" />
+          <Property Name="Zip" Type="Int32" />
+          <Property Name="State" Type="String" MaxLength="30" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Mirrors" Relationship="MTS.Data.fk_supplier_id" FromRole="Supplier" ToRole="Mirror" />
+        </EntityType>
+        <Association Name="fk_supplier_id">
+          <End Role="Supplier" Type="MTS.Data.Supplier" Multiplicity="1" />
+          <End Role="Mirror" Type="MTS.Data.Mirror" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Mirror">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MTSDataStoreContainer" CdmEntityContainer="MTSContext">
+          <EntitySetMapping Name="Mirrors"><EntityTypeMapping TypeName="MTS.Data.Mirror"><MappingFragment StoreEntitySet="Mirror">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Description" ColumnName="Description" />
+            <ScalarProperty Name="Type" ColumnName="Type" />
+            <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Suppliers"><EntityTypeMapping TypeName="MTS.Data.Supplier"><MappingFragment StoreEntitySet="Supplier">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+            <ScalarProperty Name="City" ColumnName="City" />
+            <ScalarProperty Name="Street" ColumnName="Street" />
+            <ScalarProperty Name="Number" ColumnName="Number" />
+            <ScalarProperty Name="Zip" ColumnName="Zip" />
+            <ScalarProperty Name="State" ColumnName="State" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MTSModel">
+        <EntityTypeShape EntityType="MTS.Data.Mirror" Width="1.5" PointX="3" PointY="1" Height="2.0853483072916665" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTS.Data.Supplier" Width="1.5" PointX="0.75" PointY="0.875" Height="2.2496956380208335" IsExpanded="true" />
+        <AssociationConnector Association="MTS.Data.fk_supplier_id" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.0426741536458333" />
+          <ConnectorPoint PointX="3" PointY="2.0426741536458333" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
