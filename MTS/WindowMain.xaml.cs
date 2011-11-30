@@ -92,7 +92,7 @@ namespace MTS
                 foreach (DocumentContent content in filePane.Items)
                 {
                     file = (content as TestFile);   // only chceck TestFile
-                    if (file != null && file.FilePath == filename)
+                    if (file != null && file.ItemId == filename)
                     {   // file is already opened - do not open it again, but show it to the user
                         file.Activate();
                         return;
@@ -139,7 +139,7 @@ namespace MTS
             // filePane exists so get its active document (tab), it must be a TestFile
             var file = getActiveTestFile();
             // file exists, it is a test file and is not saved
-            e.CanExecute = (file != null) && (!file.Saved);
+            e.CanExecute = (file != null) && (!file.IsSaved);
             e.Handled = true;
         }
         private void saveExecuted(object sender, ExecutedRoutedEventArgs e)

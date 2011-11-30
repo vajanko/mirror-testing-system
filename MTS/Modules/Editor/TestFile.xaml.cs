@@ -17,43 +17,16 @@ using AvalonDock;
 
 using Microsoft.Win32;
 
+using MTS.Controls;
+
 namespace MTS.Editor
 {
     /// <summary>
     /// Interaction logic for TestFile.xaml
     /// </summary>
-    public partial class TestFile : DocumentContent
+    public partial class TestFile : DocumentItem
     {
-        #region Constants
-
-        /// <summary>
-        /// Constant string "DisplayFileName"
-        /// </summary>
-        public const string DisplayFileNameString = "DisplayFileName";
-
-        /// <summary>
-        /// Extension that is added at the end of file name, when file has been changed and is not saved
-        /// </summary>
-        private const string notSavedExtension = "*";
-        
-        #endregion
-
         #region Properties
-
-        private bool saved; // use this property when do not want to raise PropertyChanged event
-        /// <summary>
-        /// (Get) When true document content is saved. Notice that when false, document content could be only
-        /// changed or the file does not exists yet.
-        /// </summary>
-        public bool Saved
-        {
-            get { return saved; }
-            protected set
-            {
-                saved = value;  // when document is unsaved a standard star is displayed at the top of document
-                RaisePropertyChanged(DisplayFileNameString);    // add or remove star in displayed string
-            }
-        }
 
         /// <summary>
         /// (Get) When true file where document content is stored exists, but it must not be saved.
@@ -63,38 +36,6 @@ namespace MTS.Editor
         {
             get;
             protected set;
-        }
-
-        private string filePath;
-        /// <summary>
-        /// (Get) Aboslute path to the file where document content is stored. When file does not exists yet,
-        /// <paramref name="FilePath"/> is set to generated filename
-        /// </summary>
-        public string FilePath
-        {
-            get { return filePath; }
-            protected set
-            {
-                filePath = value;   // when filePath is changed (generated filename change to real path or SaveAs
-                // command is executed) also string displayer at the top of the document will change
-                RaisePropertyChanged(DisplayFileNameString);
-            }
-        }
-        /// <summary>
-        /// (Get) Name of the file where docmunent content is stored or generated name when file does not exist yet.
-        /// This string is displayed at the top of the document (optionaly with star when file is not saved).
-        /// </summary>
-        public string FileName
-        {   // when file does not exist yet, FilePath contains generated file name
-            get { return Exists ? System.IO.Path.GetFileName(FilePath) : FilePath; }
-        }
-        /// <summary>
-        /// (Get) Same as <paramref name="FileName"/> but star (*) is added at the end when file
-        /// is not saved.
-        /// </summary>
-        public string DisplayFileName
-        {
-            get { return Saved ? FileName : FileName + notSavedExtension; }
         }
 
         #endregion
@@ -157,7 +98,11 @@ namespace MTS.Editor
         public void New()
         {
             // create new unsaved file
-            Saved = false;
+            IsSaved = false;
+
+            //// create new unsaved file
+            //Saved = false;
+
             // which does not exists
             Exists = false;
             // fill with default collection
@@ -167,15 +112,16 @@ namespace MTS.Editor
             // register method that is called when any property is changed
             Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
             // newly created file gets some unic name
-            FilePath = FileManager.GetNewName();
+            ItemId = FileManager.GetNewName();
+            //FilePath = FileManager.GetNewName();
 
-            Output.WriteLine("New file (" + FilePath + ") created.");
+            Output.WriteLine("New file \"" + ItemId + "\" created.");
         }
         // This method is called whenever any of test parameters change
         private void TestFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (Saved)  // this raises an event - only change if necessary
-                Saved = false;
+            if (IsSaved)  // this raises an event - only change if necessary
+                IsSaved = false;
         }
 
         /// <summary>
@@ -191,12 +137,12 @@ namespace MTS.Editor
             createTestView(Tests);
             // this handler will be executed when any of test property or test parameter property change
             // so we will be notified when file is not saved
-            Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
-            saved = true;       // setting this properties does not raise an event
+            Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);            
             Exists = true;
-            FilePath = path;    // here an event is raised - displayed name is changed
 
-            Output.WriteLine("Opened file " + FilePath);
+            ItemId = path;      // here an event is raised - displayed name is changed 
+
+            Output.WriteLine("Opened file " + path);
         }
         /// <summary>
         /// Save file to a new location. Even if file is already saved, ask user for a new location.
@@ -208,24 +154,29 @@ namespace MTS.Editor
             // When overwriting some existing file, FileManager will ask user if it is OK
             FileManager.SaveFile(path, Tests);
             Exists = true;
-            saved = true;   // FilePath will raise an event (so do not use Saved=true;)
 
-            Output.WriteLine("File " + FilePath + " saved as " + path);
+            Output.WriteLine("File \"" + path + "\" saved as " + path);
 
-            FilePath = path;
+            ItemId = path;
+            IsSaved = true;
         }
+
+        #endregion
+
+        #region Overrided Methods
+
         /// <summary>
         /// Save file to its location (overwrite old version). If file is not saved yet, ask user for a location
         /// </summary>
-        public void Save()
+        public override void Save()
         {
             // do not access HDD if not necessary
-            if (Saved) return;
+            if (IsSaved) return;
 
             if (Exists) // file already exists - only will be overwritten
             {
-                FileManager.SaveFile(FilePath, Tests);
-                Saved = true;   // event raised
+                FileManager.SaveFile(ItemId, Tests);
+                base.Save();    // event raised
             }
             else       // file does not exists yet - we need to ask user where to store the file
             {
@@ -235,39 +186,24 @@ namespace MTS.Editor
                 // file name entered - save the file
                 if (dialog.ShowDialog() == true)
                     SaveAs(dialog.FileName);    // saveing first time
-            }
+            }            
         }
 
-        #endregion
-
-        #region Overrided Methods
-
         /// <summary>
-        /// Imediatelly close file with testing parameters, but ask user if file is not saved
+        /// This implementation of convertion method gets the filename of path which is stored in 
+        /// <see cref="ItemId"/> property
         /// </summary>
-        /// <returns>True if DocumentContent is should be removed</returns>
-        public override bool Close()
+        /// <param name="id">Absolute path to filename</param>
+        /// <param name="saved">Value indicating whether file is saved</param>
+        /// <returns>Filename (optional asterix if file is not saved) file dispalyed in this item</returns>
+        protected override string ConvertIdToTitle(string id, bool saved)
         {
-            // This method is called when right button is pressed and "close" from the popup menu selected
-            // check if file is saved so we it could be closed safely
-            if (!Saved)
+            if (id != null)
             {
-                // file is not saved - ask user what to do
-                var result = MessageBox.Show("File \"" + FileName + "\" is not saved. Save changes?", "File not saved!",
-                    MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes);
-
-                if (result == MessageBoxResult.Cancel)      // user changed his opinion
-                    return false;       // cancel closing document
-                else if (result == MessageBoxResult.Yes)    // user wants to save changes
-                    Save();     // if does not exist - ask for path where to save
-
-                // if result is No - document will be closed
-                // even if result is Yes - document will be closed                
+                id = System.IO.Path.GetFileName(id);
+                return base.ConvertIdToTitle(id, saved);
             }
-
-            Output.WriteLine("File " + FilePath + " closed");
-
-            return base.Close();    // document is closed always, only if Calcel was pressed
+            return id;
         }
 
         #endregion

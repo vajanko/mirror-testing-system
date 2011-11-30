@@ -181,6 +181,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\Converters\IdToTitleConverter.cs" />
+    <Compile Include="Controls\DocumentTab.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -1,11 +1,11 @@
-﻿<ad:DocumentContent x:Class="MTS.Editor.TestFile"
+﻿<ctrl:DocumentItem x:Class="MTS.Editor.TestFile"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
     xmlns:ctrl="clr-namespace:MTS.Controls"
     xmlns:ed="clr-namespace:MTS.Editor"
-    Height="400" Width="400" Name="root" Title="{Binding DisplayFileName, RelativeSource={RelativeSource self}}">
+    Height="400" Width="400" x:Name="root" Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}">
 
     <DockPanel LastChildFill="True">
         <ListBox ItemsSource="{Binding Tests}" DisplayMemberPath="Name" DockPanel.Dock="Left"/>
@@ -134,4 +134,4 @@
         </ScrollViewer>
     </DockPanel>
 
-</ad:DocumentContent>
+</ctrl:DocumentItem>
