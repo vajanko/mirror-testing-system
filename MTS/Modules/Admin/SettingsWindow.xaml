@@ -164,7 +164,7 @@
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}" DockPanel.Dock="Top">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type io_set:ChannelSetting}" xmlns:io_set="clr-namespace:MTS.IO.Settings;assembly=IO">
+                            <DataTemplate DataType="{x:Type io_set:ChannelSetting}" xmlns:io_set="clr-namespace:MTS.IO;assembly=IO">
                                 <Border Margin="5" BorderBrush="White" BorderThickness="1">
                                     <StackPanel>
                                         <Label Style="{StaticResource sectionHeaderStyle}" Content="{Binding Name}" ToolTip="{Binding Description}"/>

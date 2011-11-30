@@ -14,6 +14,7 @@ using Microsoft.Win32;
 using MTS.Controls;
 using MTS.Editor;
 using MTS.Admin;
+using MTS.Data;
 using MTS.TesterModule;
 
 using AvalonDock;
@@ -251,7 +252,6 @@ namespace MTS
                 e.CanExecute = true;
             }
         }
-
         private void viewSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var tab = new SettingsWindow(); // create new settings window
@@ -262,13 +262,15 @@ namespace MTS
         // viewData
         private void viewDataCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = true;
             e.Handled = true;
         }
 
         private void viewDataExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            
+            var tab = new DataWindow();
+            filePane.Items.Add(tab);
+            filePane.SelectedItem = tab;
         }
 
         #endregion

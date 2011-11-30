@@ -59,11 +59,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.isNewMirror = new System.Windows.Forms.RadioButton();
+            this.isOldMirror = new System.Windows.Forms.RadioButton();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.isRightMirror = new System.Windows.Forms.RadioButton();
+            this.isLeftMirror = new System.Windows.Forms.RadioButton();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.button3 = new System.Windows.Forms.Button();
@@ -71,6 +71,18 @@
             this.button4 = new System.Windows.Forms.Button();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.tester1 = new MTS.Simulator.Tester();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.unlockButton = new System.Windows.Forms.Button();
+            this.lockButton = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.unlockTime = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lockTime = new System.Windows.Forms.NumericUpDown();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.timerState = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.timerElapsed = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -91,6 +103,10 @@
             this.groupBox10.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.groupBox12.SuspendLayout();
+            this.groupBox13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.unlockTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lockTime)).BeginInit();
+            this.groupBox14.SuspendLayout();
             this.SuspendLayout();
             // 
             // startButton
@@ -146,7 +162,7 @@
             // 
             this.groupBox1.Controls.Add(this.groupBox5);
             this.groupBox1.Controls.Add(this.groupBox4);
-            this.groupBox1.Location = new System.Drawing.Point(367, 12);
+            this.groupBox1.Location = new System.Drawing.Point(373, 204);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(264, 100);
             this.groupBox1.TabIndex = 7;
@@ -168,10 +184,12 @@
             // 
             // numericUpDown3
             // 
+            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "UnfoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown3.Location = new System.Drawing.Point(57, 48);
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown3.TabIndex = 1;
+            this.numericUpDown3.Value = global::MTS.Simulator.Properties.Settings.Default.UnfoldingTime;
             // 
             // label4
             // 
@@ -193,10 +211,12 @@
             // 
             // numericUpDown4
             // 
+            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "FoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown4.Location = new System.Drawing.Point(57, 23);
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(64, 20);
             this.numericUpDown4.TabIndex = 0;
+            this.numericUpDown4.Value = global::MTS.Simulator.Properties.Settings.Default.FoldingTime;
             // 
             // groupBox4
             // 
@@ -213,6 +233,7 @@
             // 
             // powerfoldMax
             // 
+            this.powerfoldMax.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "PowerfoldMaxCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.powerfoldMax.Location = new System.Drawing.Point(39, 48);
             this.powerfoldMax.Maximum = new decimal(new int[] {
             4000,
@@ -222,11 +243,7 @@
             this.powerfoldMax.Name = "powerfoldMax";
             this.powerfoldMax.Size = new System.Drawing.Size(74, 20);
             this.powerfoldMax.TabIndex = 1;
-            this.powerfoldMax.Value = new decimal(new int[] {
-            4000,
-            0,
-            0,
-            0});
+            this.powerfoldMax.Value = global::MTS.Simulator.Properties.Settings.Default.PowerfoldMaxCurrent;
             // 
             // label3
             // 
@@ -248,6 +265,7 @@
             // 
             // powerfoldMin
             // 
+            this.powerfoldMin.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "PowerfoldMinCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.powerfoldMin.Location = new System.Drawing.Point(39, 23);
             this.powerfoldMin.Maximum = new decimal(new int[] {
             4000,
@@ -257,13 +275,14 @@
             this.powerfoldMin.Name = "powerfoldMin";
             this.powerfoldMin.Size = new System.Drawing.Size(74, 20);
             this.powerfoldMin.TabIndex = 0;
+            this.powerfoldMin.Value = global::MTS.Simulator.Properties.Settings.Default.PowerfoldMinCurrent;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.groupBox6);
-            this.groupBox2.Location = new System.Drawing.Point(367, 118);
+            this.groupBox2.Location = new System.Drawing.Point(373, 95);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(219, 100);
+            this.groupBox2.Size = new System.Drawing.Size(264, 100);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Spiral";
@@ -283,6 +302,7 @@
             // 
             // spiralCurrentMax
             // 
+            this.spiralCurrentMax.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "SpiralMaxCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.spiralCurrentMax.Location = new System.Drawing.Point(39, 48);
             this.spiralCurrentMax.Maximum = new decimal(new int[] {
             4000,
@@ -292,11 +312,7 @@
             this.spiralCurrentMax.Name = "spiralCurrentMax";
             this.spiralCurrentMax.Size = new System.Drawing.Size(74, 20);
             this.spiralCurrentMax.TabIndex = 1;
-            this.spiralCurrentMax.Value = new decimal(new int[] {
-            4000,
-            0,
-            0,
-            0});
+            this.spiralCurrentMax.Value = global::MTS.Simulator.Properties.Settings.Default.SpiralMaxCurrent;
             // 
             // label6
             // 
@@ -318,6 +334,7 @@
             // 
             // spiralCurrentMin
             // 
+            this.spiralCurrentMin.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "SpiralMinCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.spiralCurrentMin.Location = new System.Drawing.Point(39, 23);
             this.spiralCurrentMin.Maximum = new decimal(new int[] {
             4000,
@@ -327,13 +344,14 @@
             this.spiralCurrentMin.Name = "spiralCurrentMin";
             this.spiralCurrentMin.Size = new System.Drawing.Size(74, 20);
             this.spiralCurrentMin.TabIndex = 0;
+            this.spiralCurrentMin.Value = global::MTS.Simulator.Properties.Settings.Default.SpiralMinCurrent;
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.groupBox7);
-            this.groupBox3.Location = new System.Drawing.Point(367, 224);
+            this.groupBox3.Location = new System.Drawing.Point(373, 310);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(219, 100);
+            this.groupBox3.Size = new System.Drawing.Size(264, 100);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Direction light";
@@ -353,6 +371,7 @@
             // 
             // numericUpDown7
             // 
+            this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "BlinkerMaxCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown7.Location = new System.Drawing.Point(39, 48);
             this.numericUpDown7.Maximum = new decimal(new int[] {
             4000,
@@ -362,11 +381,7 @@
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(74, 20);
             this.numericUpDown7.TabIndex = 1;
-            this.numericUpDown7.Value = new decimal(new int[] {
-            4000,
-            0,
-            0,
-            0});
+            this.numericUpDown7.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMaxCurrent;
             // 
             // label8
             // 
@@ -388,6 +403,7 @@
             // 
             // numericUpDown8
             // 
+            this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "BlinkerMinCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.numericUpDown8.Location = new System.Drawing.Point(39, 23);
             this.numericUpDown8.Maximum = new decimal(new int[] {
             4000,
@@ -397,6 +413,7 @@
             this.numericUpDown8.Name = "numericUpDown8";
             this.numericUpDown8.Size = new System.Drawing.Size(74, 20);
             this.numericUpDown8.TabIndex = 0;
+            this.numericUpDown8.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMinCurrent;
             // 
             // button1
             // 
@@ -420,8 +437,8 @@
             // 
             // groupBox8
             // 
-            this.groupBox8.Controls.Add(this.radioButton2);
-            this.groupBox8.Controls.Add(this.radioButton1);
+            this.groupBox8.Controls.Add(this.isNewMirror);
+            this.groupBox8.Controls.Add(this.isOldMirror);
             this.groupBox8.Location = new System.Drawing.Point(15, 374);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(84, 66);
@@ -429,32 +446,34 @@
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Mirror Type";
             // 
-            // radioButton2
+            // isNewMirror
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 42);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(47, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "New";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.isNewMirror.AutoSize = true;
+            this.isNewMirror.Location = new System.Drawing.Point(6, 42);
+            this.isNewMirror.Name = "isNewMirror";
+            this.isNewMirror.Size = new System.Drawing.Size(47, 17);
+            this.isNewMirror.TabIndex = 1;
+            this.isNewMirror.TabStop = true;
+            this.isNewMirror.Text = "New";
+            this.isNewMirror.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // isOldMirror
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(41, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Old";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.isOldMirror.AutoSize = true;
+            this.isOldMirror.Checked = true;
+            this.isOldMirror.Location = new System.Drawing.Point(6, 19);
+            this.isOldMirror.Name = "isOldMirror";
+            this.isOldMirror.Size = new System.Drawing.Size(41, 17);
+            this.isOldMirror.TabIndex = 0;
+            this.isOldMirror.TabStop = true;
+            this.isOldMirror.Text = "Old";
+            this.isOldMirror.UseVisualStyleBackColor = true;
+            this.isOldMirror.CheckedChanged += new System.EventHandler(this.isOldMirror_CheckedChanged);
             // 
             // groupBox9
             // 
-            this.groupBox9.Controls.Add(this.radioButton3);
-            this.groupBox9.Controls.Add(this.radioButton4);
+            this.groupBox9.Controls.Add(this.isRightMirror);
+            this.groupBox9.Controls.Add(this.isLeftMirror);
             this.groupBox9.Location = new System.Drawing.Point(105, 374);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(80, 66);
@@ -462,27 +481,29 @@
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Orientation";
             // 
-            // radioButton3
+            // isRightMirror
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(6, 42);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(50, 17);
-            this.radioButton3.TabIndex = 1;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Right";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.isRightMirror.AutoSize = true;
+            this.isRightMirror.Location = new System.Drawing.Point(6, 42);
+            this.isRightMirror.Name = "isRightMirror";
+            this.isRightMirror.Size = new System.Drawing.Size(50, 17);
+            this.isRightMirror.TabIndex = 1;
+            this.isRightMirror.TabStop = true;
+            this.isRightMirror.Text = "Right";
+            this.isRightMirror.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // isLeftMirror
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(6, 19);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(43, 17);
-            this.radioButton4.TabIndex = 0;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Left";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.isLeftMirror.AutoSize = true;
+            this.isLeftMirror.Checked = true;
+            this.isLeftMirror.Location = new System.Drawing.Point(6, 19);
+            this.isLeftMirror.Name = "isLeftMirror";
+            this.isLeftMirror.Size = new System.Drawing.Size(43, 17);
+            this.isLeftMirror.TabIndex = 0;
+            this.isLeftMirror.TabStop = true;
+            this.isLeftMirror.Text = "Left";
+            this.isLeftMirror.UseVisualStyleBackColor = true;
+            this.isLeftMirror.CheckedChanged += new System.EventHandler(this.isLeftMirror_CheckedChanged);
             // 
             // groupBox10
             // 
@@ -544,11 +565,141 @@
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.tester1;
             // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.unlockButton);
+            this.groupBox13.Controls.Add(this.lockButton);
+            this.groupBox13.Controls.Add(this.label10);
+            this.groupBox13.Controls.Add(this.unlockTime);
+            this.groupBox13.Controls.Add(this.label1);
+            this.groupBox13.Controls.Add(this.lockTime);
+            this.groupBox13.Location = new System.Drawing.Point(373, 12);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(264, 77);
+            this.groupBox13.TabIndex = 19;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Lock/Unlock";
+            // 
+            // unlockButton
+            // 
+            this.unlockButton.Location = new System.Drawing.Point(156, 43);
+            this.unlockButton.Name = "unlockButton";
+            this.unlockButton.Size = new System.Drawing.Size(72, 22);
+            this.unlockButton.TabIndex = 8;
+            this.unlockButton.Text = "Unlock";
+            this.unlockButton.UseVisualStyleBackColor = true;
+            // 
+            // lockButton
+            // 
+            this.lockButton.Location = new System.Drawing.Point(156, 17);
+            this.lockButton.Name = "lockButton";
+            this.lockButton.Size = new System.Drawing.Size(72, 22);
+            this.lockButton.TabIndex = 7;
+            this.lockButton.Text = "Lock";
+            this.lockButton.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(12, 48);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(66, 13);
+            this.label10.TabIndex = 6;
+            this.label10.Text = "Unlock time:";
+            // 
+            // unlockTime
+            // 
+            this.unlockTime.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "UnlockTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.unlockTime.Location = new System.Drawing.Point(86, 46);
+            this.unlockTime.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.unlockTime.Name = "unlockTime";
+            this.unlockTime.Size = new System.Drawing.Size(64, 20);
+            this.unlockTime.TabIndex = 5;
+            this.unlockTime.Value = global::MTS.Simulator.Properties.Settings.Default.UnlockTime;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Lock time:";
+            // 
+            // lockTime
+            // 
+            this.lockTime.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "LockTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.lockTime.Location = new System.Drawing.Point(86, 20);
+            this.lockTime.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.lockTime.Name = "lockTime";
+            this.lockTime.Size = new System.Drawing.Size(64, 20);
+            this.lockTime.TabIndex = 3;
+            this.lockTime.Value = global::MTS.Simulator.Properties.Settings.Default.LockTime;
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.timerElapsed);
+            this.groupBox14.Controls.Add(this.label12);
+            this.groupBox14.Controls.Add(this.timerState);
+            this.groupBox14.Controls.Add(this.label11);
+            this.groupBox14.Location = new System.Drawing.Point(191, 376);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(170, 64);
+            this.groupBox14.TabIndex = 20;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Timer";
+            // 
+            // timerState
+            // 
+            this.timerState.AutoSize = true;
+            this.timerState.Location = new System.Drawing.Point(61, 21);
+            this.timerState.Name = "timerState";
+            this.timerState.Size = new System.Drawing.Size(61, 13);
+            this.timerState.TabIndex = 1;
+            this.timerState.Text = "Timer State";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 21);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(35, 13);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "State:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(10, 42);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(48, 13);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "Elapsed:";
+            // 
+            // timerElapsed
+            // 
+            this.timerElapsed.AutoSize = true;
+            this.timerElapsed.Location = new System.Drawing.Point(61, 42);
+            this.timerElapsed.Name = "timerElapsed";
+            this.timerElapsed.Size = new System.Drawing.Size(67, 13);
+            this.timerElapsed.TabIndex = 3;
+            this.timerElapsed.Text = "Elapsed time";
+            // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(709, 559);
+            this.ClientSize = new System.Drawing.Size(779, 568);
+            this.Controls.Add(this.groupBox14);
+            this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.elementHost1);
             this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox11);
@@ -589,6 +740,12 @@
             this.groupBox10.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
             this.groupBox12.ResumeLayout(false);
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.unlockTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lockTime)).EndInit();
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -626,11 +783,11 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton isNewMirror;
+        private System.Windows.Forms.RadioButton isOldMirror;
         private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton isRightMirror;
+        private System.Windows.Forms.RadioButton isLeftMirror;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Button button3;
@@ -638,6 +795,18 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private Tester tester1;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown unlockTime;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown lockTime;
+        private System.Windows.Forms.Button unlockButton;
+        private System.Windows.Forms.Button lockButton;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.Label timerState;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label timerElapsed;
+        private System.Windows.Forms.Label label12;
     }
 }
 

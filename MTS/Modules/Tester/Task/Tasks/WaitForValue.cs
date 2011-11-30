@@ -26,6 +26,7 @@ namespace MTS.TesterModule
             {
                 case ExState.Initializing:  // start to check for a value
                     exState = ExState.Measuring;
+                    Output.WriteLine("Waiting for {0} to be {1}", Name, value);
                     break;
                 case ExState.Measuring:     // wait for expected value on a particular channel
                     if (channel.Value == value)

@@ -18,7 +18,7 @@ using AvalonDock;
 using Microsoft.Win32;
 
 using MTS.Properties;
-using MTS.IO.Settings;
+using MTS.IO;
 
 namespace MTS.Admin
 {

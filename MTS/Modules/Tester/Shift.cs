@@ -171,16 +171,16 @@ namespace MTS.TesterModule
             // add for providing basic steps to start executing test
             // this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
             // close device
-            //scheduler.AddInitSequence();
+            scheduler.AddInitSequence();
 
             // wait for start
             scheduler.AddWaitForStart();
 
-            scheduler.Initialize();
-            return scheduler;
-
             // rubber test
             scheduler.AddRubberTest(tests);
+
+            scheduler.Initialize();
+            return scheduler;
 
             // wait for start
             scheduler.AddWaitForStart();

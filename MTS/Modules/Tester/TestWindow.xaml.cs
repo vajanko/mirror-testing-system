@@ -20,7 +20,6 @@ using MTS.Properties;
 using MTS.Utils;
 using MTS.IO;
 using MTS.IO.Module;
-using MTS.IO.Settings;
 
 using AvalonDock;
 

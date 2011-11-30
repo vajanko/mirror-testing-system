@@ -32,6 +32,8 @@ namespace MTS.TesterModule
             {
                 case ExState.Initializing:
                     exState = ExState.Finalizing;
+                    for (int i = 0; i < outChannels.Count; i++)
+                        Output.WriteLine("Setting {0} to\t{1}", outChannels[i].Name, outValues[i]);
                     break;
                 case ExState.Finalizing:
                     for (int i = 0; i < outChannels.Count; i++)
