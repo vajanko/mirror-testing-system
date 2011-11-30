@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using MTS.IO;
 using MTS.IO.Module;
-using MTS.IO.Settings;
 
 
 namespace MTS.Simulator
@@ -26,10 +25,10 @@ namespace MTS.Simulator
             channels.LoadConfiguration("dummyConfig.csv");
             channels.Initialize();
 
-            tester1.IsRedLightOn = false;
-            tester1.IsGreenLightOn = false;
-            tester1.IsPowerSupplyOn = false;
-            tester1.IsStartPressed = false;
+            //tester1.IsRedLightOn = false;
+            //tester1.IsGreenLightOn = false;
+            //tester1.IsPowerSupplyOn = false;
+            //tester1.IsStartPressed = false;
         }
 
         #region Device status
@@ -124,7 +123,8 @@ namespace MTS.Simulator
             slave = new Slave(channels);
             slave.Update += new Action(slave_Update);
 
-            IsPowerOn = false;      // power supply is off
+            // set default values to channels
+            initializeChannels();
 
             // initialize tester values
             updateTester();
@@ -132,18 +132,52 @@ namespace MTS.Simulator
             slave.Listen(System.Net.IPAddress.Loopback, 1234);
         }
 
+        private void initializeChannels()
+        {
+            lock (channels)
+            {
+                channels.AllowPowerSupply.SetValue(false);
+                channels.AllowMirrorMovement.SetValue(false);
+                channels.IsOldMirror.SetValue(isOldMirror.Checked);
+                channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
+                channels.IsLocked.SetValue(false);
+                channels.IsOldLocked.SetValue(false);
+            }
+        }
+
+
         void updateTester()
         {
             tester1.Dispatcher.Invoke(new Action(updateTesterChannels));
         }
         void updateTesterChannels()
-        {
+        {   // this method is executed on GUI thread
             tester1.IsGreenLightOn = channels.GreenLightOn.Value;
             tester1.IsRedLightOn = channels.RedLightOn.Value;
             tester1.IsPowerSupplyOn = !channels.IsPowerSupplyOff.Value;
             tester1.IsStartPressed = channels.IsStartPressed.Value;
+
+            if (measuring)
+            {
+                timerState.Text = "Measuring";
+                timerElapsed.Text = elapsedTime().ToString("{0:2}");
+            }
+            else
+                timerState.Text = "Not measuring";
         }
 
+        private bool measuring = false;
+        private DateTime time;
+        private void startTimer()
+        {
+            measuring = true;
+            time = DateTime.Now;
+        }
+        private double elapsedTime() { return (DateTime.Now - time).TotalMilliseconds; }
+        private void stopTimer()
+        {
+            measuring = false;
+        }
         void slave_Update()
         {
             lock (channels)
@@ -151,6 +185,19 @@ namespace MTS.Simulator
                 // "swtich off" power supply if it is not allowed
                 if (!channels.AllowPowerSupply.Value)
                     channels.IsPowerSupplyOff.SetValue(true);
+
+                // open device
+                if (!channels.LockStrong.Value && !channels.LockWeak.Value &&
+                    channels.UnlockStrong.Value && channels.UnlockWeak.Value)
+                {
+                    unlock();
+                }
+                // close device
+                else if (!channels.LockStrong.Value && !channels.UnlockWeak.Value
+                    && !channels.UnlockStrong.Value && channels.LockWeak.Value)
+                {
+                    lockWeak();
+                }
 
                 if (channels.FoldPowerfold.Value)
                     channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
@@ -166,9 +213,70 @@ namespace MTS.Simulator
             }
         }
 
+        private void unlock()
+        {
+            if (!measuring)
+            {
+                if (channels.IsOldMirror.Value && !channels.IsOldLocked.Value)
+                    return; // already unlocked
+                else if (!channels.IsOldMirror.Value && !channels.IsLocked.Value)
+                    return; // already unlocked
+                startTimer();
+            }
+            else if (elapsedTime() >= (double)unlockTime.Value)
+            {
+                if (channels.IsOldMirror.Value)
+                    channels.IsOldLocked.SetValue(false);
+                else
+                    channels.IsLocked.SetValue(false);
+                stopTimer();
+            }
+        }
+        private void lockWeak()
+        {
+            if (!measuring)
+            {
+                if (channels.IsOldMirror.Value && channels.IsOldLocked.Value)
+                    return; // already locked
+                else if (!channels.IsOldMirror.Value && channels.IsLocked.Value)
+                    return; // already locked
+                startTimer();
+            }
+            else if (elapsedTime() >= (double)unlockTime.Value)
+            {
+                if (channels.IsOldMirror.Value)
+                    channels.IsOldLocked.SetValue(true);
+                else
+                    channels.IsLocked.SetValue(true);
+                stopTimer();
+            }
+        }
+
         private void disconnectButton_Click(object sender, EventArgs e)
         {
-            slave.Disconnect();
+            if (slave != null)
+                slave.Disconnect();
+        }
+
+        private void isOldMirror_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.IsOldMirror.SetValue(isOldMirror.Checked);
+                }
+            }
+        }
+        private void isLeftMirror_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
+                }
+            }
         }
     }
 }

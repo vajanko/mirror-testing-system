@@ -13,11 +13,11 @@
             <GradientStop Offset="1" Color="DarkGreen"/>
         </RadialGradientBrush>
         <RadialGradientBrush x:Key="onRedBrush">
-            <GradientStop Offset="0" Color="Red"/>
+            <GradientStop Offset="0" Color="Pink"/>
             <GradientStop Offset="1" Color="DarkRed"/>
         </RadialGradientBrush>
         <RadialGradientBrush x:Key="offRedBrush">
-            <GradientStop Offset="0" Color="Pink"/>
+            <GradientStop Offset="0" Color="Red"/>
             <GradientStop Offset="1" Color="DarkRed"/>
         </RadialGradientBrush>
     </UserControl.Resources>

@@ -22,6 +22,7 @@ namespace MTS.TesterModule
             {
                 case ExState.Initializing:
                     exState = ExState.Finalizing;
+                    Output.WriteLine("Setting {0} to {1}", Name, value);
                     break;
                 case ExState.Finalizing:
                     channel.Value = value;

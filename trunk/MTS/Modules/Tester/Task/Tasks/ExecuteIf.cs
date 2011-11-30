@@ -40,17 +40,23 @@ namespace MTS.TesterModule
             switch (exState)
             {
                 case ExState.Initializing:
+                    Output.WriteLine("Condition: if ({0} == {1})", conditionChannel.Name,
+                        conditionValue);
                     if (conditionChannel.Value == conditionValue)
                         exState = ExState.StateA;
                     else 
                         exState = ExState.StateB;
                     break;
                 case ExState.StateA:
+                    Output.WriteLine("Changing to task {0}", thenTask.Name);
                     scheduler.ChangeTask(this, thenTask);
                     break;
                 case ExState.StateB:
                     if (elseTask != null)
+                    {
+                        Output.WriteLine("Changing to task {0}", elseTask.Name);
                         scheduler.ChangeTask(this, elseTask);
+                    }
                     else
                         exState = ExState.Finalizing;
                     break;

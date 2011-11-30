@@ -3,7 +3,6 @@
 using System.Windows.Media.Media3D;
 
 using MTS.IO;
-using MTS.IO.Settings;
 using MTS.Properties;
 
 namespace MTS.TesterModule

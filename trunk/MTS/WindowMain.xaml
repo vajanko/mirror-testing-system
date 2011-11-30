@@ -133,7 +133,7 @@
                     </ad:DockablePane>
                     <!-- Center panel - Documents -->
                     <ad:DocumentPane x:Name="filePane">
-                        <!-- add documents here -->                        
+                        <!-- add documents here -->
                     </ad:DocumentPane>
                 </ad:ResizingPanel>
                 <!-- Bottom panel - Output -->
