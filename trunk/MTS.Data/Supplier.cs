@@ -25,7 +25,7 @@ namespace MTS.Data
         public string Street { get; set; }
         public Nullable<int> Number { get; set; }
         public Nullable<int> Zip { get; set; }
-        public string State { get; set; }
+        public string STATE { get; set; }
     
         public virtual ICollection<Mirror> Mirrors { get; set; }
     }

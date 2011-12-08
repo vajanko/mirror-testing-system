@@ -12,21 +12,20 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class Mirror
+    public partial class Operator
     {
-        public Mirror()
+        public Operator()
         {
             this.Shifts = new HashSet<Shift>();
         }
     
         public int Id { get; set; }
-        public string SerialNumber { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int SupplierId { get; set; }
-        public int TYPE { get; set; }
+        public string Surname { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public Nullable<byte> Type { get; set; }
     
-        public virtual Supplier Supplier { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }
     }
     

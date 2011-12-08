@@ -14,25 +14,28 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Drawing.Printing;
+using System.Security.Cryptography;
 using AvalonDock;
 using Microsoft.Win32;
 
 using MTS.Properties;
+using MTS.Controls;
 using MTS.IO;
+using MTS.Data;
 
 namespace MTS.Admin
 {
     /// <summary>
     /// Interaction logic for AdminWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : DocumentContent
+    public partial class SettingsWindow : DocumentItem
     {
         #region Constants
 
         /// <summary>
         /// Constant string "DisplayTitle"
         /// </summary>
-        public const string DisplayTitleString = "DisplayTitle";
+        public const string ChannelSettingsString = "ChannelSettings";
 
         private readonly string[] protocolTypes = new string[] { "EtherCAT", "Modbus", "Dummy" };
 
@@ -42,28 +45,28 @@ namespace MTS.Admin
 
         public string[] ProtocolTypes { get { return protocolTypes; } }
 
-        private bool saved; // use this property when do not want to raise PropertyChanged event
-        /// <summary>
-        /// (Get) When true document content is saved. Notice that when false, document content could be only
-        /// changed or the file does not exists yet.
-        /// </summary>
-        public bool Saved
-        {
-            get { return saved; }
-            protected set
-            {
-                saved = value;  // when document is unsaved a standard star is displayed at the top of document
-                RaisePropertyChanged(DisplayTitleString);    // add or remove star in displayed string
-            }
-        }
-        /// <summary>
-        /// (Get) Title of application settings tab. When some setting is changed an star (*) is
-        /// added at the end of title. 
-        /// </summary>
-        public string DisplayTitle
-        {
-            get { return Saved ? "Settings" : "Settings*"; }
-        }
+        //private bool saved; // use this property when do not want to raise PropertyChanged event
+        ///// <summary>
+        ///// (Get) When true document content is saved. Notice that when false, document content could be only
+        ///// changed or the file does not exists yet.
+        ///// </summary>
+        //public bool Saved
+        //{
+        //    get { return saved; }
+        //    protected set
+        //    {
+        //        saved = value;  // when document is unsaved a standard star is displayed at the top of document
+        //        RaisePropertyChanged(DisplayTitleString);    // add or remove star in displayed string
+        //    }
+        //}
+        ///// <summary>
+        ///// (Get) Title of application settings tab. When some setting is changed an star (*) is
+        ///// added at the end of title. 
+        ///// </summary>
+        //public string DisplayTitle
+        //{
+        //    get { return Saved ? "Settings" : "Settings*"; }
+        //}
 
         private ChannelSettings _channelSettings;
         /// <summary>
@@ -76,7 +79,7 @@ namespace MTS.Admin
             private set
             {
                 _channelSettings = value;
-                RaisePropertyChanged("ChannelSettings");
+                RaisePropertyChanged(ChannelSettingsString);
             }
         }
 
@@ -100,41 +103,26 @@ namespace MTS.Admin
         /// <param name="e"></param>
         private void Default_SettingsSaving(object sender, System.ComponentModel.CancelEventArgs e)
         {   // this will change DisplayTitle property - star at the end of title is removed 
-            Saved = true;
+            IsSaved = true;
         }
 
         void upDownButton_ValueChanged(object sender, RoutedEventArgs e)
         {   // this will change DisplayTitle property - a start is added at the end
             if (sender is Controls.UpDownButton)
-                Saved = false;
+                IsSaved = false;
         }
         void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {   // this will change DisplayTitle property - a start is added at the end
             if (sender is TextBox)
-                Saved = false;
+                IsSaved = false;
         }
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   // this will change DisplayTitle property - a star is added at the end
             if (e.Source is ComboBox)
-                Saved = false;
+                IsSaved = false;
         }
 
         #endregion
-
-        void tabControl_CurrentChanging(object sender, System.ComponentModel.CurrentChangingEventArgs e)
-        {
-            if (!Saved)
-            {
-                bool close = askToClose();
-                if (!close && e.IsCancelable)
-                {
-                    e.Cancel = true;
-                    var tab = ((System.ComponentModel.ICollectionView)sender);
-                    if (tab != null)
-                        tabControl.SelectedItem = tab.CurrentItem;
-                }
-            }
-        }
 
         #region Settings
 
@@ -176,55 +164,26 @@ namespace MTS.Admin
             xzDistance.Value = (decimal)(int)(Math.Sqrt(Math.Pow(zPosition.Y, 2) + Math.Pow(zPosition.X, 2)));
             updateCalibretorsPositions();
 
-            ChannelSettings = HWSettings.Default.ChannelSettings;
-
-            tabControl.Items.CurrentChanging += new System.ComponentModel.CurrentChangingEventHandler(tabControl_CurrentChanging);
+            ChannelSettings = HWSettings.Default.ChannelSettings;            
 
             // register handler for application setting saving event
             Settings.Default.SettingsSaving += new System.Configuration.SettingsSavingEventHandler(Default_SettingsSaving);
 
             // remove start from title, when settings are just loaded
-            Saved = true;
-        }
-
-        private void settingsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {   // check if there are some unsaved values
-            if (!Saved)
-                e.Cancel = !askToClose();  // ask user to discard changes and cancel event if he has not agreed
+            IsSaved = true;
         }
 
         #endregion
-
-        /// <summary>
-        /// Ask user to discard unsaved changes in settings. Return true if settings can be closed.
-        /// This means that user agree with discarding changes or he already saved his changes
-        /// </summary>
-        /// <returns>True if setting can be closed</returns>
-        private bool askToClose()
-        {
-            var result = MessageBox.Show("Some application settings are not save. Do you want to save changes?",
-                            "Unsaved Settings",
-                            MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
-            switch (result)
-            {
-                case MessageBoxResult.Yes: apply_Click(this, null);    // simulate apply click event
-                    return true;    // can be closed
-                case MessageBoxResult.No: Saved = true; // pretend that evrythig is ok (this will discard)
-                    return true;    // can be closed
-                default: return false;    // no saveing, no closing
-            }
-        }
 
         #region Button Clicks
 
         private void calibrate_Click(object sender, RoutedEventArgs e)
         {
-            
             CalibrationWindow form = new CalibrationWindow();
 
             if (form.ShowDialog() == true)      // calibration finished successfully
             {   // show calibrated values to user (do not save yet)
-                Saved = false;      // calibration values has been changed
+                IsSaved = false;      // calibration values has been changed
             }
         }
 
@@ -261,7 +220,7 @@ namespace MTS.Admin
             HWSettings.Default.Save();            
             Settings.Default.Save();
 
-            Saved = true;
+            IsSaved = true;
         }
 
         private void ethercatSettings_BrowseClick(object sender, RoutedEventArgs e)
@@ -415,6 +374,31 @@ namespace MTS.Admin
 
         #endregion
 
+        #region Operators
+
+        private void operatorsGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataGrid grid = sender as DataGrid;
+            if (grid != null)
+            {
+                using (Data.MTSContext context = new Data.MTSContext())
+                {
+                    updateOperatorsGrid(context);
+                }
+            }
+        }
+
+        #region Data Handling
+
+        private void updateOperatorsGrid(Data.MTSContext context)
+        {
+            operators.ItemsSource = context.Operators.ToList();
+        }
+
+        #endregion
+
+        #endregion
+
         #region Constructors
 
         public SettingsWindow()
@@ -423,5 +407,46 @@ namespace MTS.Admin
         }
 
         #endregion
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void addOperator_Click(object sender, RoutedEventArgs e)
+        {
+            EditOperatorWindow dialog = new Data.EditOperatorWindow();
+
+            if (dialog.ShowDialog() == true)
+            {
+                dialog.Password.MakeReadOnly();
+                SHA512 hash = new SHA512CryptoServiceProvider();
+                hash.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(dialog.Password.ToString()));
+
+                using (MTSContext context = new MTSContext())
+                {
+                    // try to add new operator to collection of operators
+                    
+                    try
+                    {
+                        context.Operators.Add(new Operator()
+                        {
+                            Login = dialog.Login,
+                            Name = dialog.OperatorName,
+                            Surname = dialog.OperatorSurname,
+                            Type = (byte)dialog.Type,
+                            Password = ASCIIEncoding.ASCII.GetString(hash.Hash)
+                        });
+
+                        context.SaveChanges();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not be added");
+                    }
+                    updateOperatorsGrid(context);
+                }
+            }
+        }
     }
 }

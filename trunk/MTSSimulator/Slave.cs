@@ -32,7 +32,7 @@ namespace MTS.Simulator
         {
             if (running) return;
 
-            slave = new TcpListener(port);
+            slave = new TcpListener(ip, port);
             timer = new System.Timers.Timer(100);
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
             timer.Start();

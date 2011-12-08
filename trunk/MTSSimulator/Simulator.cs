@@ -24,11 +24,6 @@ namespace MTS.Simulator
             channels = new Channels(new DummyModule(), HWSettings.Default.ChannelSettings);
             channels.LoadConfiguration("dummyConfig.csv");
             channels.Initialize();
-
-            //tester1.IsRedLightOn = false;
-            //tester1.IsGreenLightOn = false;
-            //tester1.IsPowerSupplyOn = false;
-            //tester1.IsStartPressed = false;
         }
 
         #region Device status
@@ -156,6 +151,10 @@ namespace MTS.Simulator
             tester1.IsRedLightOn = channels.RedLightOn.Value;
             tester1.IsPowerSupplyOn = !channels.IsPowerSupplyOff.Value;
             tester1.IsStartPressed = channels.IsStartPressed.Value;
+            if (channels.IsOldMirror.Value)
+                tester1.IsDeviceOpened = !channels.IsOldLocked.Value;
+            else
+                tester1.IsDeviceOpened = !channels.IsLocked.Value;
 
             if (measuring)
             {
@@ -163,7 +162,9 @@ namespace MTS.Simulator
                 timerElapsed.Text = elapsedTime().ToString("{0:2}");
             }
             else
+            {
                 timerState.Text = "Not measuring";
+            }
         }
 
         private bool measuring = false;
@@ -189,33 +190,34 @@ namespace MTS.Simulator
                 // open device
                 if (!channels.LockStrong.Value && !channels.LockWeak.Value &&
                     channels.UnlockStrong.Value && channels.UnlockWeak.Value)
-                {
                     unlock();
-                }
                 // close device
                 else if (!channels.LockStrong.Value && !channels.UnlockWeak.Value
                     && !channels.UnlockStrong.Value && channels.LockWeak.Value)
-                {
                     lockWeak();
-                }
 
+                // simulate powerfold current
                 if (channels.FoldPowerfold.Value)
                     channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
                 else if (channels.UnfoldPowerfold.Value)
                     channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
 
+                // simulate heating foil current
                 if (channels.HeatingFoilOn.Value)
                     channels.HeatingFoilCurrent.SetValue((uint)gen.Next((int)spiralCurrentMin.Value, (int)spiralCurrentMax.Value));
 
-                if (channels.DirectionLightOn.Value) ;
+                // simulate direction light current
+                if (channels.DirectionLightOn.Value)
+                    channels.DirectionLightCurrent.SetValue((uint)gen.Next((int)directionLightCurrentMin.Value, (int)directionLightCurrentMax.Value));
 
+                // update user interface
                 updateTester();
             }
         }
 
         private void unlock()
         {
-            if (!measuring)
+            if (!measuring) // time is not being measured
             {
                 if (channels.IsOldMirror.Value && !channels.IsOldLocked.Value)
                     return; // already unlocked
@@ -252,12 +254,6 @@ namespace MTS.Simulator
             }
         }
 
-        private void disconnectButton_Click(object sender, EventArgs e)
-        {
-            if (slave != null)
-                slave.Disconnect();
-        }
-
         private void isOldMirror_CheckedChanged(object sender, EventArgs e)
         {
             if (channels != null)
@@ -275,6 +271,75 @@ namespace MTS.Simulator
                 lock (channels)
                 {
                     channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
+                }
+            }
+        }
+
+        private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            if (slave != null)
+                slave.Disconnect();
+        }
+
+        private void lockButton_Click(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.LockStrong.SetValue(false);
+                    channels.LockWeak.SetValue(true);
+                    channels.UnlockStrong.SetValue(false);
+                    channels.UnlockWeak.SetValue(false);
+                }
+            }
+        }
+
+        private void unlockButton_Click(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.LockStrong.SetValue(false);
+                    channels.LockWeak.SetValue(false);
+                    channels.UnlockStrong.SetValue(true);
+                    channels.UnlockWeak.SetValue(true);
+                }
+            }
+        }
+
+        private void insertMirrorButton_Click(object sender, EventArgs e)
+        {
+            if (tester1.IsDeviceOpened)
+                tester1.IsMirrorInserted = true;
+        }
+
+        private void removeMirrorButton_Click(object sender, EventArgs e)
+        {
+            if (tester1.IsDeviceOpened)
+                tester1.IsMirrorInserted = false;
+        }
+
+        private void leftRubber_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    if (channels.IsLeftRubberPresent != null)
+                        channels.IsLeftRubberPresent.SetValue(leftRubber.Checked);
+                }
+            }
+        }
+        private void rightRubber_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    if (channels.IsRightRubberPresent != null)
+                        channels.IsRightRubberPresent.SetValue(rightRubber.Checked);
                 }
             }
         }

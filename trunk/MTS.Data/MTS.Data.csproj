@@ -78,8 +78,33 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MTSModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Operator.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OperatorType.cs" />
+    <Compile Include="Param.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ParamOutput.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shift.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Supplier.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Test.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestOutput.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestParam.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestShift.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

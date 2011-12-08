@@ -5,7 +5,7 @@
     <Application.Resources>
         <!-- Setup style for all windows in this aplication -->
         <Style TargetType="{x:Type Window}">
-            <Setter Property="Background" Value="#A2BBF7"/>
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
             <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
             <Setter Property="ResizeMode" Value="CanResizeWithGrip"/>
         </Style>

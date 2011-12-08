@@ -71,11 +71,17 @@ namespace MTS.Utils
             InitializeComponent();            
         }
         public ErrorWindow(string title, string message)
+            : this()
         {
             ErrorTitle = title;
             Message = message;
         }
 
         #endregion
+
+        private void okButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+        }
     }
 }

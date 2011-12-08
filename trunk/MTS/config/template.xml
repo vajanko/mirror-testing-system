@@ -3,6 +3,7 @@
 <!DOCTYPE tests SYSTEM "template.dtd">
 
 <tests>
+  <!-- Informative parameters about test collection -->
   <test id="Info">
     <name>Information</name>
     <group>Informative Settings</group>
@@ -36,6 +37,24 @@
       <value></value>
     </param>
   </test>
+  
+  <!-- Tear test -->
+  <test id="TearTest" enabled="true">
+    <name>Tear Glass Test</name>
+    <group>Other</group>
+    <description></description>
+    <param id="TestingTime">
+      <name>Testing Time</name>
+      <description>Time of glass tearing out</description>
+      <type>double</type>
+      <value>2.5</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="miliseconds"/>
+    </param>
+  </test>        
+  
+  <!-- Travel tests -->
   <test id="TravelEast">
     <name>Travel East</name>
     <group>Travel Tests</group>
@@ -68,7 +87,104 @@
       <unit type="miliseconds"/>
     </param>
   </test>
+  <test id="TravelWest">
+    <name>Travel West</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type>double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type>int</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+  </test>
+  <test id="TravelSouth">
+    <name>Travel South</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type>double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type>int</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+  </test>
+  <test id="TravelNorth">
+    <name>Travel North</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type>double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type>int</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type>int</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+  </test>
 
+  <!-- Current tests -->
   <test id="Powerfold">
     <name>Powerfold</name>
     <group>Current Tests</group>
@@ -107,7 +223,6 @@
       <unit type="seconds"/>
     </param>
   </test>
-
   <test id="HeatingFoil">
     <name>Heating Foil</name>
     <group>Current Tests</group>
@@ -146,7 +261,6 @@
       <unit type="miliseconds"/>
     </param>
   </test>
-
   <test id="DirectionLight">
     <name>Direction Light</name>
     <group>Current Tests</group>
@@ -201,6 +315,30 @@
       <min>0</min>
       <max>5</max>
       <unit type="seconds"/>
+    </param>
+  </test>
+  
+  <!-- Presence test -->
+  <test id="Rubber">
+    <name>Rubber</name>
+    <group>Presence Tests</group>
+    <description>Test presence of rubber</description>
+    <param id="Presence">
+      <name>Is present</name>
+      <description>If enabled rubber should be present</description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+  </test>
+  <test id="MirrorGlass">
+    <name>Mirror Glass</name>
+    <group>Presence Tests</group>
+    <description>Test presence of mirror glass</description>
+    <param id="Presence">
+      <name>Is present</name>
+      <description>If enabled mirror glass should be present</description>
+      <type>bool</type>
+      <value>true</value>
     </param>
   </test>
         

@@ -4,7 +4,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition MinWidth="100" MaxWidth="200"/>
+            <ColumnDefinition MinWidth="50"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -13,10 +13,10 @@
         </Grid.RowDefinitions>
         
         <Label Grid.Row="0" Grid.Column="0">Task name:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" x:Name="taskName" Width="100" HorizontalAlignment="Left"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="taskName"/>
         
         <Label Grid.Row="1" Grid.Column="0">Config file:</Label>
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="configFile"/>
-        <Button Grid.Row="1" Grid.Column="2" x:Name="browseButton">Browse ...</Button>
+        <Button Grid.Row="1" Grid.Column="2" Padding="3,0" x:Name="browseButton">Browse ...</Button>
     </Grid>
 </UserControl>

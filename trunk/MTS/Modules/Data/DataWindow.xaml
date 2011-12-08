@@ -8,7 +8,8 @@
     xmlns:data="clr-namespace:MTS.Data;assembly=MTS.Data" 
                    Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}" ItemId="Data" x:Name="root">
     <ScrollViewer VerticalScrollBarVisibility="Visible">
-        <TabControl>
+        <StackPanel>
+            <TabControl>
             <TabItem Header="Suppliers" Initialized="suppliersGrid_Initialized">
                 <StackPanel>
                     <DataGrid ItemsSource="{Binding Suppliers}" x:Name="grid" SelectionMode="Single" SelectionUnit="FullRow"
@@ -61,5 +62,6 @@
                 </ad:ResizingPanel>
             </TabItem>
         </TabControl>
+        </StackPanel>
     </ScrollViewer>
 </ctrl:DocumentItem>
