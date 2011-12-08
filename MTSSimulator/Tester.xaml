@@ -41,6 +41,63 @@
             <local:Light ToolTip="Start button control" IsOn="{Binding IsStartPressed, ElementName=root}"/>
         </StackPanel>
         
+        <Rectangle Width="50" Height="10" Fill="Silver" Canvas.Left="125" Canvas.Top="120" x:Name="rec">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Style.Triggers>
+                        <DataTrigger  Binding="{Binding IsDeviceOpened, ElementName=root}" Value="true">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="169" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="120" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+            <Rectangle.Triggers>
+                <!--<DataTrigger  Binding="{Binding IsEnabled, RelativeSource={RelativeSource self}}" Value="true">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation From="120" To="150" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>-->
+                <!--<EventTrigger RoutedEvent="Rectangle.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation From="150" To="120" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>-->
+            </Rectangle.Triggers>
+        </Rectangle>
+
+        <Path Fill="Black" Canvas.Left="118" Canvas.Top="185" x:Name="mirror" Visibility="Hidden">
+            <Path.RenderTransform>
+                <RotateTransform Angle="180" CenterX="25" CenterY="10" />
+            </Path.RenderTransform>
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure IsFilled="True" StartPoint="0,5" >
+                        <PolyBezierSegment Points="5,35 32,35 40,5"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+
+
         <Border Canvas.Top="200" Canvas.Left="50" BorderThickness="2" 
                 BorderBrush="Gray" Width="200" Height="100">
         </Border>

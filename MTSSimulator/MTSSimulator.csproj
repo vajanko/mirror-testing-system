@@ -46,6 +46,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -117,6 +118,10 @@
     <ProjectReference Include="..\MTS.IO\MTS.IO.csproj">
       <Project>{F97F01D8-FF45-4879-A3C9-1326AB3E66CA}</Project>
       <Name>MTS.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS\MTS.csproj">
+      <Project>{C186DE23-9AF7-4C5D-8328-7E00AE2AC4FF}</Project>
+      <Name>MTS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

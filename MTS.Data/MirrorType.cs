@@ -1,12 +1,12 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MTS.Data
 {
     public class MirrorType
     {
+        #region Properties
+
         /// <summary>
         /// (Get/Set) Unic id of mirror type. This value is usually saved to database
         /// </summary>
@@ -24,16 +24,18 @@ namespace MTS.Data
         /// <summary>
         /// Name of mirror type
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Mirror type string (could be used in combobox)</returns>
         public override string ToString()
         {
             return Name;
         }
 
+        #endregion
+
         #region Constructors
 
         /// <summary>
-        /// Create a new instance of <paramref name="MirrorType"/> class, which describes particular properties
+        /// Create a new instance of <see name="MirrorType"/> class, which describes particular properties
         /// of mirror
         /// </summary>
         /// <param name="id">Unic id of mirror type. This value is usually saved to database</param>

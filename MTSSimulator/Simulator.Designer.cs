@@ -35,10 +35,10 @@
             this.powerButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.unfoldingTime = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.foldingTime = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.powerfoldMax = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -52,10 +52,10 @@
             this.spiralCurrentMin = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+            this.directionLightCurrentMax = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+            this.directionLightCurrentMin = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -69,8 +69,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.button4 = new System.Windows.Forms.Button();
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.tester1 = new MTS.Simulator.Tester();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.unlockButton = new System.Windows.Forms.Button();
             this.lockButton = new System.Windows.Forms.Button();
@@ -79,14 +77,20 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lockTime = new System.Windows.Forms.NumericUpDown();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.timerElapsed = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.timerState = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.timerElapsed = new System.Windows.Forms.Label();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.tester1 = new MTS.Simulator.Tester();
+            this.removeMirrorButton = new System.Windows.Forms.Button();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.rightRubber = new System.Windows.Forms.CheckBox();
+            this.leftRubber = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.foldingTime)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.powerfoldMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.powerfoldMin)).BeginInit();
@@ -96,8 +100,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMin)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.directionLightCurrentMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.directionLightCurrentMin)).BeginInit();
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox10.SuspendLayout();
@@ -107,6 +111,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.unlockTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lockTime)).BeginInit();
             this.groupBox14.SuspendLayout();
+            this.groupBox15.SuspendLayout();
             this.SuspendLayout();
             // 
             // startButton
@@ -137,6 +142,7 @@
             this.insertMirrorButton.TabIndex = 3;
             this.insertMirrorButton.Text = "Insert Mirror";
             this.insertMirrorButton.UseVisualStyleBackColor = true;
+            this.insertMirrorButton.Click += new System.EventHandler(this.insertMirrorButton_Click);
             // 
             // closeDeviceButton
             // 
@@ -171,10 +177,10 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.numericUpDown3);
+            this.groupBox5.Controls.Add(this.unfoldingTime);
             this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.label5);
-            this.groupBox5.Controls.Add(this.numericUpDown4);
+            this.groupBox5.Controls.Add(this.foldingTime);
             this.groupBox5.Location = new System.Drawing.Point(131, 19);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(127, 75);
@@ -182,14 +188,14 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Time";
             // 
-            // numericUpDown3
+            // unfoldingTime
             // 
-            this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "UnfoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown3.Location = new System.Drawing.Point(57, 48);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(64, 20);
-            this.numericUpDown3.TabIndex = 1;
-            this.numericUpDown3.Value = global::MTS.Simulator.Properties.Settings.Default.UnfoldingTime;
+            this.unfoldingTime.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "UnfoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.unfoldingTime.Location = new System.Drawing.Point(57, 48);
+            this.unfoldingTime.Name = "unfoldingTime";
+            this.unfoldingTime.Size = new System.Drawing.Size(64, 20);
+            this.unfoldingTime.TabIndex = 1;
+            this.unfoldingTime.Value = global::MTS.Simulator.Properties.Settings.Default.UnfoldingTime;
             // 
             // label4
             // 
@@ -209,14 +215,14 @@
             this.label5.TabIndex = 2;
             this.label5.Text = "Fold:";
             // 
-            // numericUpDown4
+            // foldingTime
             // 
-            this.numericUpDown4.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "FoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown4.Location = new System.Drawing.Point(57, 23);
-            this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(64, 20);
-            this.numericUpDown4.TabIndex = 0;
-            this.numericUpDown4.Value = global::MTS.Simulator.Properties.Settings.Default.FoldingTime;
+            this.foldingTime.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "FoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.foldingTime.Location = new System.Drawing.Point(57, 23);
+            this.foldingTime.Name = "foldingTime";
+            this.foldingTime.Size = new System.Drawing.Size(64, 20);
+            this.foldingTime.TabIndex = 0;
+            this.foldingTime.Value = global::MTS.Simulator.Properties.Settings.Default.FoldingTime;
             // 
             // groupBox4
             // 
@@ -358,10 +364,10 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.numericUpDown7);
+            this.groupBox7.Controls.Add(this.directionLightCurrentMax);
             this.groupBox7.Controls.Add(this.label8);
             this.groupBox7.Controls.Add(this.label9);
-            this.groupBox7.Controls.Add(this.numericUpDown8);
+            this.groupBox7.Controls.Add(this.directionLightCurrentMin);
             this.groupBox7.Location = new System.Drawing.Point(6, 18);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(119, 75);
@@ -369,19 +375,19 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Current";
             // 
-            // numericUpDown7
+            // directionLightCurrentMax
             // 
-            this.numericUpDown7.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "BlinkerMaxCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown7.Location = new System.Drawing.Point(39, 48);
-            this.numericUpDown7.Maximum = new decimal(new int[] {
+            this.directionLightCurrentMax.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "BlinkerMaxCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.directionLightCurrentMax.Location = new System.Drawing.Point(39, 48);
+            this.directionLightCurrentMax.Maximum = new decimal(new int[] {
             4000,
             0,
             0,
             0});
-            this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(74, 20);
-            this.numericUpDown7.TabIndex = 1;
-            this.numericUpDown7.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMaxCurrent;
+            this.directionLightCurrentMax.Name = "directionLightCurrentMax";
+            this.directionLightCurrentMax.Size = new System.Drawing.Size(74, 20);
+            this.directionLightCurrentMax.TabIndex = 1;
+            this.directionLightCurrentMax.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMaxCurrent;
             // 
             // label8
             // 
@@ -401,19 +407,19 @@
             this.label9.TabIndex = 2;
             this.label9.Text = "Min:";
             // 
-            // numericUpDown8
+            // directionLightCurrentMin
             // 
-            this.numericUpDown8.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "BlinkerMinCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.numericUpDown8.Location = new System.Drawing.Point(39, 23);
-            this.numericUpDown8.Maximum = new decimal(new int[] {
+            this.directionLightCurrentMin.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "BlinkerMinCurrent", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.directionLightCurrentMin.Location = new System.Drawing.Point(39, 23);
+            this.directionLightCurrentMin.Maximum = new decimal(new int[] {
             4000,
             0,
             0,
             0});
-            this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(74, 20);
-            this.numericUpDown8.TabIndex = 0;
-            this.numericUpDown8.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMinCurrent;
+            this.directionLightCurrentMin.Name = "directionLightCurrentMin";
+            this.directionLightCurrentMin.Size = new System.Drawing.Size(74, 20);
+            this.directionLightCurrentMin.TabIndex = 0;
+            this.directionLightCurrentMin.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMinCurrent;
             // 
             // button1
             // 
@@ -556,15 +562,6 @@
             this.button4.Text = "Open";
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // elementHost1
-            // 
-            this.elementHost1.Location = new System.Drawing.Point(15, 12);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(346, 356);
-            this.elementHost1.TabIndex = 18;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.tester1;
-            // 
             // groupBox13
             // 
             this.groupBox13.Controls.Add(this.unlockButton);
@@ -588,6 +585,7 @@
             this.unlockButton.TabIndex = 8;
             this.unlockButton.Text = "Unlock";
             this.unlockButton.UseVisualStyleBackColor = true;
+            this.unlockButton.Click += new System.EventHandler(this.unlockButton_Click);
             // 
             // lockButton
             // 
@@ -597,6 +595,7 @@
             this.lockButton.TabIndex = 7;
             this.lockButton.Text = "Lock";
             this.lockButton.UseVisualStyleBackColor = true;
+            this.lockButton.Click += new System.EventHandler(this.lockButton_Click);
             // 
             // label10
             // 
@@ -650,12 +649,30 @@
             this.groupBox14.Controls.Add(this.label12);
             this.groupBox14.Controls.Add(this.timerState);
             this.groupBox14.Controls.Add(this.label11);
-            this.groupBox14.Location = new System.Drawing.Point(191, 376);
+            this.groupBox14.Location = new System.Drawing.Point(379, 416);
             this.groupBox14.Name = "groupBox14";
             this.groupBox14.Size = new System.Drawing.Size(170, 64);
             this.groupBox14.TabIndex = 20;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Timer";
+            // 
+            // timerElapsed
+            // 
+            this.timerElapsed.AutoSize = true;
+            this.timerElapsed.Location = new System.Drawing.Point(61, 42);
+            this.timerElapsed.Name = "timerElapsed";
+            this.timerElapsed.Size = new System.Drawing.Size(67, 13);
+            this.timerElapsed.TabIndex = 3;
+            this.timerElapsed.Text = "Elapsed time";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(10, 42);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(48, 13);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "Elapsed:";
             // 
             // timerState
             // 
@@ -675,29 +692,67 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "State:";
             // 
-            // label12
+            // elementHost1
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(10, 42);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(48, 13);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "Elapsed:";
+            this.elementHost1.BackColor = System.Drawing.Color.White;
+            this.elementHost1.BackColorTransparent = true;
+            this.elementHost1.Location = new System.Drawing.Point(15, 12);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(346, 356);
+            this.elementHost1.TabIndex = 18;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.tester1;
             // 
-            // timerElapsed
+            // removeMirrorButton
             // 
-            this.timerElapsed.AutoSize = true;
-            this.timerElapsed.Location = new System.Drawing.Point(61, 42);
-            this.timerElapsed.Name = "timerElapsed";
-            this.timerElapsed.Size = new System.Drawing.Size(67, 13);
-            this.timerElapsed.TabIndex = 3;
-            this.timerElapsed.Text = "Elapsed time";
+            this.removeMirrorButton.Location = new System.Drawing.Point(105, 446);
+            this.removeMirrorButton.Name = "removeMirrorButton";
+            this.removeMirrorButton.Size = new System.Drawing.Size(93, 23);
+            this.removeMirrorButton.TabIndex = 21;
+            this.removeMirrorButton.Text = "Remove Mirror";
+            this.removeMirrorButton.UseVisualStyleBackColor = true;
+            this.removeMirrorButton.Click += new System.EventHandler(this.removeMirrorButton_Click);
+            // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.rightRubber);
+            this.groupBox15.Controls.Add(this.leftRubber);
+            this.groupBox15.Location = new System.Drawing.Point(191, 374);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(170, 66);
+            this.groupBox15.TabIndex = 22;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Rubber";
+            // 
+            // rightRubber
+            // 
+            this.rightRubber.AutoSize = true;
+            this.rightRubber.Location = new System.Drawing.Point(9, 42);
+            this.rightRubber.Name = "rightRubber";
+            this.rightRubber.Size = new System.Drawing.Size(51, 17);
+            this.rightRubber.TabIndex = 1;
+            this.rightRubber.Text = "Right";
+            this.rightRubber.UseVisualStyleBackColor = true;
+            this.rightRubber.CheckedChanged += new System.EventHandler(this.rightRubber_CheckedChanged);
+            // 
+            // leftRubber
+            // 
+            this.leftRubber.AutoSize = true;
+            this.leftRubber.Location = new System.Drawing.Point(9, 19);
+            this.leftRubber.Name = "leftRubber";
+            this.leftRubber.Size = new System.Drawing.Size(44, 17);
+            this.leftRubber.TabIndex = 0;
+            this.leftRubber.Text = "Left";
+            this.leftRubber.UseVisualStyleBackColor = true;
+            this.leftRubber.CheckedChanged += new System.EventHandler(this.leftRubber_CheckedChanged);
             // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 568);
+            this.Controls.Add(this.groupBox15);
+            this.Controls.Add(this.removeMirrorButton);
             this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.elementHost1);
@@ -717,8 +772,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.foldingTime)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.powerfoldMax)).EndInit();
@@ -731,8 +786,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.directionLightCurrentMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.directionLightCurrentMin)).EndInit();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.groupBox9.ResumeLayout(false);
@@ -746,6 +801,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.lockTime)).EndInit();
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -765,10 +822,10 @@
         private System.Windows.Forms.NumericUpDown powerfoldMax;
         private System.Windows.Forms.NumericUpDown powerfoldMin;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown unfoldingTime;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown numericUpDown4;
+        private System.Windows.Forms.NumericUpDown foldingTime;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.NumericUpDown spiralCurrentMax;
@@ -776,10 +833,10 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown spiralCurrentMin;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.NumericUpDown numericUpDown7;
+        private System.Windows.Forms.NumericUpDown directionLightCurrentMax;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.NumericUpDown numericUpDown8;
+        private System.Windows.Forms.NumericUpDown directionLightCurrentMin;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox8;
@@ -794,7 +851,6 @@
         private System.Windows.Forms.GroupBox groupBox12;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private Tester tester1;
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown unlockTime;
@@ -807,6 +863,11 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label timerElapsed;
         private System.Windows.Forms.Label label12;
+        private Tester tester1;
+        private System.Windows.Forms.Button removeMirrorButton;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.CheckBox rightRubber;
+        private System.Windows.Forms.CheckBox leftRubber;
     }
 }
 

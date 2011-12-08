@@ -307,36 +307,92 @@ namespace MTS.Editor
 
             try     // catch exception while reading xml file - any mistake in input file
             {       // will be represented as an error in file format and would not be loaded                
-                foreach (XElement test in fileRoot.Elements(TestElem))
+                foreach (XElement tmplTest in tmplRoot.Elements(TestElem))
                 {
-                    // get test id attribute
-                    string testId = test.Attribute(IdAttr).Value;
-                    // in template file (with this id) find aditional test properties
-                    XElement tmplTest = tmplRoot.Elements(TestElem)
+                    // create instance of test from template test (do not consider test parameters)
+                    TestValue tv = getTestInstance(tmplTest);
+                    // get template test id attribute
+                    string testId = tmplTest.Attribute(IdAttr).Value;
+                    // in test file find test element with this id attribute (all other test elements that are
+                    // not contained in template will be ignored)
+                    XElement test = fileRoot.Elements(TestElem)
                         .FirstOrDefault(el => el.Attribute(IdAttr).Value == testId);
 
-                    TestValue tv = getTestInstance(tmplTest);
-                    // enable or disable this test
+                    // if file doest not contain test element from template (older version) - must be added
+                    if (test == null)
+                    {
+                        // get value indicating if test should be enabled by default
+                        XAttribute enabAttr = tmplTest.Attribute(EnabledAttr);
+                        string enabled = enabAttr == null ? "false" : enabAttr.Value;
+
+                        // add test to file without any attributes
+                        test = new XElement(TestElem,
+                            new XAttribute(IdAttr, testId),
+                            new XAttribute(EnabledAttr, enabled));
+                    }
                     tv.Enabled = bool.Parse(test.Attribute(EnabledElem).Value);
 
-                    foreach (XElement param in test.Elements(ParamElem))
+                    foreach (XElement tmplParam in tmplTest.Elements(ParamElem))
                     {
-                        // get param id attribute
-                        string paramId = param.Attribute(IdAttr).Value;
-                        // in template test element find aditional param properties
-                        XElement tmplParam = tmplTest.Elements(ParamElem)
-                            .FirstOrDefault(pr => pr.Attribute(IdAttr).Value == paramId);
-
                         // create an parameter instace acording its properties in xml template
                         ParamValue pv = getParamInstance(tmplParam);
-                        // initialize its value
-                        pv.ValueFromString(param.Value);
+                        // get template param id attribute
+                        string paramId = tmplParam.Attribute(IdAttr).Value;
+                        // in test file find element with this id attribute (all other param elements that are
+                        // not contained in template will be ignored). When this test is not included in file
+                        // it is created just now and it does not have any parameters - all will be added
+                        XElement param = test.Elements(ParamElem)
+                            .FirstOrDefault(pr => pr.Attribute(IdAttr).Value == paramId);
+
+                        // string representation of parameter value
+                        string value;
+
+                        // parameter is not defined in file (test) - add its default value from template
+                        if (param == null)
+                            value = tmplParam.Element(ValueElem).Value;
+                        else
+                            value = param.Value;    // use value from file
+                        
+                        // initialize value of parameter
+                        pv.ValueFromString(value);
                         // add created parameter to test instance
                         tv.AddParam(pv.Id, pv);
                     }
 
                     tc.AddTest(testId, tv);
                 }
+
+
+                //foreach (XElement test in fileRoot.Elements(TestElem))
+                //{
+                //    // get test id attribute
+                //    string testId = test.Attribute(IdAttr).Value;
+                //    // in template file (with this id) find aditional test properties
+                //    XElement tmplTest = tmplRoot.Elements(TestElem)
+                //        .FirstOrDefault(el => el.Attribute(IdAttr).Value == testId);
+
+                //    TestValue tv = getTestInstance(tmplTest);
+                //    // enable or disable this test
+                //    tv.Enabled = bool.Parse(test.Attribute(EnabledElem).Value);
+
+                //    foreach (XElement param in test.Elements(ParamElem))
+                //    {
+                //        // get param id attribute
+                //        string paramId = param.Attribute(IdAttr).Value;
+                //        // in template test element find aditional param properties
+                //        XElement tmplParam = tmplTest.Elements(ParamElem)
+                //            .FirstOrDefault(pr => pr.Attribute(IdAttr).Value == paramId);
+
+                //        // create an parameter instace acording its properties in xml template
+                //        ParamValue pv = getParamInstance(tmplParam);
+                //        // initialize its value
+                //        pv.ValueFromString(param.Value);
+                //        // add created parameter to test instance
+                //        tv.AddParam(pv.Id, pv);
+                //    }
+
+                //    tc.AddTest(testId, tv);
+                //}
             }
             catch (Exception ex)
             {   // file could not be dederialized - it is an unkown format
@@ -410,7 +466,8 @@ namespace MTS.Editor
                 throw new FileNotFoundException("Template file does not exists. Check application configuration.");
 
             // load template file - root element is <tests>
-            XElement tmplRoot = XElement.Load(templatePath);
+            XDocument template = XDocument.Load(templatePath);
+            XElement tmplRoot = template.Root;
 
             // create a new empty instance of test collection
             TestCollection tc = new TestCollection();

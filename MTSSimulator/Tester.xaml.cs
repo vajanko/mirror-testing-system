@@ -126,9 +126,38 @@ namespace MTS.Simulator
 
         #endregion
 
+        #region IsDeviceOpened Property
 
+        static public readonly DependencyProperty IsDeviceOpenedProperty =
+            DependencyProperty.Register("IsDeviceOpened", typeof(bool), typeof(Tester),
+            new PropertyMetadata(trueConst));
+
+        /// <summary>
+        /// (Get/Set DP)
+        /// </summary>
+        public bool IsDeviceOpened
+        {
+            get { return (bool)GetValue(IsDeviceOpenedProperty); }
+            set { SetValue(IsDeviceOpenedProperty, value); }
+        }
 
         #endregion
+
+        #endregion
+
+        private bool isMirrorInserted = false;
+        public bool IsMirrorInserted
+        {
+            get { return isMirrorInserted; }
+            set {
+                isMirrorInserted = value;
+                if (value)
+                    mirror.Visibility = System.Windows.Visibility.Visible;
+                else
+                    mirror.Visibility = System.Windows.Visibility.Hidden;
+            }
+
+        }
 
 
         public Tester()

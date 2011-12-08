@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Text;
+using System.Globalization;
 
 namespace MTS.Editor
 {
@@ -17,8 +18,14 @@ namespace MTS.Editor
         /// </summary>
         public object Value { get; protected set; }
 
-
-        public virtual string ValueToString() { return Value.ToString(); }
+        /// <summary>
+        /// Convert parameter value to string representation using invariant culture info
+        /// </summary>
+        /// <returns></returns>
+        public virtual string ValueToString()
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}", Value);
+        }
 
         public abstract void ValueFromString(string value);
 
@@ -57,7 +64,7 @@ namespace MTS.Editor
         public override void ValueFromString(string value)
         {
             // throw an exception if value is not in correct format
-            Value = int.Parse(value);
+            Value = int.Parse(value, CultureInfo.InvariantCulture);
         }
 
         #region Constructors
@@ -95,7 +102,8 @@ namespace MTS.Editor
         public override void ValueFromString(string value)
         {
             // throw an exception if value is not in correct format
-            Value = double.Parse(value, System.Globalization.NumberStyles.Float);
+            Value = double.Parse(value, System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
         }
 
         #region Constructors

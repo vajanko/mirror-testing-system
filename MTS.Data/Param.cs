@@ -12,22 +12,22 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class Mirror
+    public partial class Param
     {
-        public Mirror()
+        public Param()
         {
-            this.Shifts = new HashSet<Shift>();
+            this.ParamOutputs = new HashSet<ParamOutput>();
+            this.TestParams = new HashSet<TestParam>();
         }
     
         public int Id { get; set; }
-        public string SerialNumber { get; set; }
+        public int TestId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int SupplierId { get; set; }
-        public int TYPE { get; set; }
+        public string Value { get; set; }
     
-        public virtual Supplier Supplier { get; set; }
-        public virtual ICollection<Shift> Shifts { get; set; }
+        public virtual Test Test { get; set; }
+        public virtual ICollection<ParamOutput> ParamOutputs { get; set; }
+        public virtual ICollection<TestParam> TestParams { get; set; }
     }
     
 }

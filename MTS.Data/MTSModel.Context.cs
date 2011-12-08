@@ -27,5 +27,13 @@ namespace MTS.Data
     
         public DbSet<Mirror> Mirrors { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Operator> Operators { get; set; }
+        public DbSet<Param> Params { get; set; }
+        public DbSet<ParamOutput> ParamOutputs { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<TestOutput> TestOutputs { get; set; }
+        public DbSet<TestParam> TestParams { get; set; }
+        public DbSet<TestShift> TestShifts { get; set; }
     }
 }
