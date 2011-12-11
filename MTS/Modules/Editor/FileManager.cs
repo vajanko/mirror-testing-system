@@ -289,7 +289,7 @@ namespace MTS.Editor
         /// Throws an exception if given path does not exists or file is in incorrect format or currupted
         /// </summary>
         /// <param name="path">Path to file to read</param>
-        /// <returns>Collection of <paramref name="TestValue"/> readed from given file</returns>
+        /// <returns>Collection of <paramref name="TestValue"/> instances readed from given file</returns>
         public static TestCollection ReadFile(string path)
         {
             // notice that TestValue and ParamValue instaces do not know anythig about file format
@@ -361,38 +361,6 @@ namespace MTS.Editor
 
                     tc.AddTest(testId, tv);
                 }
-
-
-                //foreach (XElement test in fileRoot.Elements(TestElem))
-                //{
-                //    // get test id attribute
-                //    string testId = test.Attribute(IdAttr).Value;
-                //    // in template file (with this id) find aditional test properties
-                //    XElement tmplTest = tmplRoot.Elements(TestElem)
-                //        .FirstOrDefault(el => el.Attribute(IdAttr).Value == testId);
-
-                //    TestValue tv = getTestInstance(tmplTest);
-                //    // enable or disable this test
-                //    tv.Enabled = bool.Parse(test.Attribute(EnabledElem).Value);
-
-                //    foreach (XElement param in test.Elements(ParamElem))
-                //    {
-                //        // get param id attribute
-                //        string paramId = param.Attribute(IdAttr).Value;
-                //        // in template test element find aditional param properties
-                //        XElement tmplParam = tmplTest.Elements(ParamElem)
-                //            .FirstOrDefault(pr => pr.Attribute(IdAttr).Value == paramId);
-
-                //        // create an parameter instace acording its properties in xml template
-                //        ParamValue pv = getParamInstance(tmplParam);
-                //        // initialize its value
-                //        pv.ValueFromString(param.Value);
-                //        // add created parameter to test instance
-                //        tv.AddParam(pv.Id, pv);
-                //    }
-
-                //    tc.AddTest(testId, tv);
-                //}
             }
             catch (Exception ex)
             {   // file could not be dederialized - it is an unkown format

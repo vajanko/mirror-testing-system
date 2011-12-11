@@ -34,7 +34,7 @@ namespace MTS.TesterModule
                     break;
                 case ExState.Unfolding:                          // check current while unfolding
                     measureCurrent(time, channels.PowerfoldCurrent);
-                    if (channels.IsFolded())
+                    if (channels.IsUnfolded())
                     {
                         channels.StartFolding();                 // stop unfolding and start to fold
                         exState = ExState.Folding;               // switch to next state
@@ -42,7 +42,7 @@ namespace MTS.TesterModule
                     break;
                 case ExState.Folding:                            // check current while folding
                     measureCurrent(time, channels.PowerfoldCurrent);
-                    if (channels.IsUnfolded())
+                    if (channels.IsFolded())
                         exState = ExState.Finalizing;            // switch to next state
                     break;
                 case ExState.Finalizing:

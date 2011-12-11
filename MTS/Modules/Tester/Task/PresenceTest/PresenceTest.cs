@@ -26,6 +26,7 @@ namespace MTS.TesterModule
                 Finish(time, TaskState.Passed);
             else
                 Finish(time, TaskState.Failed);
+            Output.WriteLine("{0} result: {1}", Name, state);
         }
 
         #region Constructors
