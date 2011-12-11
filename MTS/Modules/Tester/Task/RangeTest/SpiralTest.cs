@@ -11,9 +11,10 @@ namespace MTS.TesterModule
         #region Private fields
 
         /// <summary>
-        /// Required duration in miliseconds of spiral to be swtiched on during this test
+        /// Required duration in seconds of spiral to be swtiched on during this test
         /// </summary>
-        private int testingTime;
+        private double testingTime;
+        private TimeSpan start;
 
         #endregion
 
@@ -30,11 +31,12 @@ namespace MTS.TesterModule
                     minMeasuredCurrent = double.MaxValue;                   // initialize max and min
                     maxMeasuredCurrent = double.MinValue;                   // measured values
                     channels.HeatingFoilOn.SwitchOn();                      // switch on spiral
+                    start = time;                                           // start measuring time
                     exState = ExState.Measuring;                            // go to next state
                     break;
                 case ExState.Measuring:
                     measureCurrent(time, channels.HeatingFoilCurrent);      // measure spiral current
-                    if (Duration.TotalMilliseconds > testingTime)           // if testing time elapsed
+                    if ((time- start).TotalSeconds > testingTime)           // if testing time elapsed
                         exState = ExState.Finalizing;                       // go to next state
                     break;
                 case ExState.Finalizing:
@@ -57,9 +59,9 @@ namespace MTS.TesterModule
             : base(channels, testParam) 
         {
             // from test parameters get TestingTime item
-            IntParam iValue = testParam.GetParam<IntParam>(TestValue.TestingTime);
-            if (iValue != null)     // it must be of type int
-                testingTime = iValue.IntValue;
+            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
+            if (dValue != null)     // it must be of type int
+                testingTime = dValue.DoubleValue;
         }
 
         #endregion

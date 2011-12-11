@@ -28,9 +28,10 @@ namespace MTS.Editor
         public const string Weight = "Weight";
         public const string Orientation = "Orientation";
 
-        public const string LighteningTime = "LighteningTime";
+        // direction light
+        public const string LighteningTime = "LightingTime";
         public const string BreakTime = "BreakTime";
-        public const string BlinkCount = "BlinkCount";
+        public const string BlinkCount = "BlinksCount";
 
         public const string TestingTime = "TestingTime";
 

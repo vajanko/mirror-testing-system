@@ -16,10 +16,11 @@ namespace MTS.Simulator
     {
         private Channels channels;
 
+        #region Constructors
+
         public Simulator()
         {
             InitializeComponent();
-            initializeDevice();
 
             channels = new Channels(new DummyModule(), HWSettings.Default.ChannelSettings);
             channels.LoadConfiguration("dummyConfig.csv");
@@ -27,93 +28,12 @@ namespace MTS.Simulator
 
             foldTimer.Interval = (double)foldingTime.Value;
             unfoldTimer.Interval = (double)unfoldingTime.Value;
-        }
-
-        #region Device status
-
-        private bool isClosed = false;
-        public bool IsClosed
-        {
-            get { return isClosed; }
-            private set
-            {
-                isClosed = value;
-                if (value) closeDeviceButton.Text = "Open device";
-                else closeDeviceButton.Text = "Close device";
-            }
-        }
-        public bool IsOpened
-        {
-            get { return !IsClosed; }
-            set { IsClosed = !value; }
-        }
-        
-        private bool isPowerOn = false;
-        public bool IsPowerOn
-        {
-            get { return isPowerOn; }
-            private set
-            {
-                isPowerOn = value;
-                if (value) powerButton.Text = "Off";
-                else powerButton.Text = "On";
-
-                if (channels != null)
-                {
-                    lock (channels)
-                    {
-                        if (channels.IsPowerSupplyOff != null)
-                            channels.IsPowerSupplyOff.SetValue(!isPowerOn);
-                    }
-                }
-            }
-        }
-
-        private bool isStartPressed = false;
-        public bool IsStartPressed
-        {
-            get { return isStartPressed; }
-            set
-            {
-                isStartPressed = value;
-                if (channels != null)
-                {
-                    lock (channels)
-                    {
-                        if (channels.IsStartPressed != null)
-                            channels.IsStartPressed.SetValue(isStartPressed);
-                    }
-                }
-            }
-        }
-
-
-        private void initializeDevice()
-        {
-            IsClosed = false;
-            IsPowerOn = false;
+            lockTimer.Interval = (double)lockTime.Value;
+            unlockTimer.Interval = (double)unlockTime.Value;
         }
 
         #endregion
 
-        private void startButton_MouseDown(object sender, MouseEventArgs e)
-        {
-            IsStartPressed = true;
-        }
-        private void startButton_MouseUp(object sender, MouseEventArgs e)
-        {
-            IsStartPressed = false;
-        }
-        private void closeDeviceButton_Click(object sender, EventArgs e)
-        {
-            if (IsClosed) IsClosed = false;
-            else IsClosed = true;
-        }
-        private void powerButton_Click(object sender, EventArgs e)
-        {
-            if (IsPowerOn) IsPowerOn = false;
-            else IsPowerOn = true;
-        }
         Slave slave;
         Random gen = new Random();
         private void listenButton_Click(object sender, EventArgs e)
@@ -129,79 +49,71 @@ namespace MTS.Simulator
 
             slave.Listen(System.Net.IPAddress.Loopback, 1234);
         }
+        private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            if (slave != null)
+                slave.Disconnect();
+        }
+        private void Simulator_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            slave.Disconnect();
+        }
 
         private void initializeChannels()
         {
-            lock (channels)
+            if (channels != null)
             {
-                channels.AllowPowerSupply.SetValue(false);
-                channels.AllowMirrorMovement.SetValue(false);
-                channels.IsOldMirror.SetValue(isOldMirror.Checked);
-                channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
-                channels.IsLocked.SetValue(false);
-                channels.IsOldLocked.SetValue(false);
-                channels.IsLeftRubberPresent.SetValue(leftRubber.Checked);
-                channels.IsRightRubberPresent.SetValue(rightRubber.Checked);
+                lock (channels)
+                {
+                    channels.AllowPowerSupply.SetValue(false);
+                    channels.AllowMirrorMovement.SetValue(false);
+                    channels.IsOldMirror.SetValue(isOldMirror.Checked);
+                    channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
+                    channels.IsLocked.SetValue(false);
+                    channels.IsOldLocked.SetValue(false);
+                    channels.IsLeftRubberPresent.SetValue(leftRubber.Checked);
+                    channels.IsRightRubberPresent.SetValue(rightRubber.Checked);
+                    channels.IsPowerSupplyOff.SetValue(powerOff.Checked);
+                }
             }
         }
 
 
         void updateTester()
         {
-            tester1.Dispatcher.Invoke(new Action(updateTesterChannels));
+            tester1.Dispatcher.BeginInvoke(new Action(updateTesterChannels));
         }
         void updateTesterChannels()
         {   // this method is executed on GUI thread
-            tester1.IsGreenLightOn = channels.GreenLightOn.Value;
-            tester1.IsRedLightOn = channels.RedLightOn.Value;
-            tester1.IsPowerSupplyOn = !channels.IsPowerSupplyOff.Value;
-            tester1.IsStartPressed = channels.IsStartPressed.Value;
-            if (channels.IsOldMirror.Value)
-                tester1.IsDeviceOpened = !channels.IsOldLocked.Value;
-            else
-                tester1.IsDeviceOpened = !channels.IsLocked.Value;
-
-            if (measuring)
+            if (channels != null)
             {
-                timerState.Text = "Measuring";
-                timerElapsed.Text = elapsedTime().ToString("{0:2}");
-            }
-            else
-            {
-                timerState.Text = "Not measuring";
+                lock (channels)
+                {
+                    tester1.IsGreenLightOn = channels.GreenLightOn.Value;
+                    tester1.IsRedLightOn = channels.RedLightOn.Value;
+                    tester1.IsPowerSupplyOn = !channels.IsPowerSupplyOff.Value;
+                    tester1.IsStartPressed = channels.IsStartPressed.Value;
+                    if (lockTimer.Running)
+                        tester1.IsDeviceOpened = false;
+                    else if (unlockTimer.Running)
+                        tester1.IsDeviceOpened = true;
+                }
             }
         }
 
-        private bool measuring = false;
-        private DateTime time;
-        private void startTimer()
-        {
-            measuring = true;
-            time = DateTime.Now;
-        }
-        private double elapsedTime() { return (DateTime.Now - time).TotalMilliseconds; }
-        private void stopTimer()
-        {
-            measuring = false;
-        }
         private Timer foldTimer = new Timer();
         private Timer unfoldTimer = new Timer();
+        private Timer lockTimer = new Timer();
+        private Timer unlockTimer = new Timer();
         void slave_Update()
         {
             lock (channels)
             {
                 // "switch off" power supply if it is not allowed
-                if (!channels.AllowPowerSupply.Value)
-                    channels.IsPowerSupplyOff.SetValue(true);
+                //if (!channels.AllowPowerSupply.Value)
+                //    channels.IsPowerSupplyOff.SetValue(true);
 
-                // open device
-                if (!channels.LockStrong.Value && !channels.LockWeak.Value &&
-                    channels.UnlockStrong.Value && channels.UnlockWeak.Value)
-                    unlock();
-                // close device
-                else if (!channels.LockStrong.Value && !channels.UnlockWeak.Value
-                    && !channels.UnlockStrong.Value && channels.LockWeak.Value)
-                    lockWeak();
+                simulateLockUnlock();
 
                 simulatePowerFoldCurrent();
 
@@ -209,11 +121,30 @@ namespace MTS.Simulator
 
                 simulateDirectionLightCurrent();
 
+                simulateMirrorMovement();
+
                 // update user interface
                 updateTester();
             }
         }
 
+        private void simulateLockUnlock()
+        {
+            // open device
+            if (!channels.LockStrong.Value && !channels.LockWeak.Value &&
+                channels.UnlockStrong.Value && channels.UnlockWeak.Value
+                && channels.IsClosed())
+            {
+                unlock();
+            }
+            // close device
+            else if (!channels.LockStrong.Value && !channels.UnlockWeak.Value
+                && !channels.UnlockStrong.Value && channels.LockWeak.Value
+                && !channels.IsClosed())
+            {
+                lockWeak();
+            }
+        }
         private void simulatePowerFoldCurrent()
         {
             // simulate powerfold current
@@ -252,43 +183,83 @@ namespace MTS.Simulator
             else
                 channels.DirectionLightCurrent.SetValue(0);
         }
+        private void simulateMirrorMovement()
+        {
+            simulateDistanceSensors();
+
+            simulateActuators();
+
+            if (channels.IsMirrorMoveingUp)
+            {
+                channels.DistanceX.SetValue(80);
+            }
+            else if (channels.IsMirrorMoveingDown)
+            {
+            }
+            else if (channels.IsMirrorMoveingLeft)
+            {
+            }
+            else if (channels.IsMirrorMoveingRight)
+            {
+
+            }
+        }
+        private void simulateDistanceSensors()
+        {
+            if (channels.MoveDistanceSensorUp.Value)
+                channels.IsDistanceSensorUp.SetValue(true);
+            else
+                channels.IsDistanceSensorUp.SetValue(false);
+
+            if (channels.MoveDistanceSensorDown.Value)
+                channels.IsDistanceSensorDown.SetValue(true);
+            else
+                channels.IsDistanceSensorDown.SetValue(false);
+        }
+        private void simulateActuators()
+        {
+            if (channels.MoveMirrorHorizontal.Value)
+                channels.HorizontalActuatorCurrent.SetValue((uint)gen.Next(0, 500));
+            if (channels.MoveMirrorVertical.Value)
+                channels.VerticalActuatorCurrent.SetValue((uint)gen.Next(0, 500));
+        }
 
         private void unlock()
         {
-            if (!measuring) // time is not being measured
-            {
-                if (channels.IsOldMirror.Value && !channels.IsOldLocked.Value)
-                    return; // already unlocked
-                else if (!channels.IsOldMirror.Value && !channels.IsLocked.Value)
-                    return; // already unlocked
-                startTimer();
-            }
-            else if (elapsedTime() >= (double)unlockTime.Value)
+            //if (!unlockTimer.Running)
+            //{
+            //    if (channels.IsOldMirror.Value && !channels.IsOldLocked.Value)
+            //        return; // already unlocked
+            //    else if (!channels.IsOldMirror.Value && !channels.IsLocked.Value)
+            //        return; // already unlocked
+            //}
+
+            if (unlockTimer.Finished(DateTime.Now))
             {
                 if (channels.IsOldMirror.Value)
                     channels.IsOldLocked.SetValue(false);
                 else
                     channels.IsLocked.SetValue(false);
-                stopTimer();
+                unlockTimer.Initialize();
             }
         }
         private void lockWeak()
         {
-            if (!measuring)
-            {
-                if (channels.IsOldMirror.Value && channels.IsOldLocked.Value)
-                    return; // already locked
-                else if (!channels.IsOldMirror.Value && channels.IsLocked.Value)
-                    return; // already locked
-                startTimer();
-            }
-            else if (elapsedTime() >= (double)unlockTime.Value)
+            //if (!lockTimer.Running)
+            //{
+            //    if (channels.IsOldMirror.Value && channels.IsOldLocked.Value)
+            //        return; // already locked
+            //    else if (!channels.IsOldMirror.Value && channels.IsLocked.Value)
+            //        return; // already locked
+            //}
+
+            if (lockTimer.Finished(DateTime.Now))
             {
                 if (channels.IsOldMirror.Value)
                     channels.IsOldLocked.SetValue(true);
                 else
                     channels.IsLocked.SetValue(true);
-                stopTimer();
+                lockTimer.Initialize();
             }
         }
 
@@ -307,31 +278,40 @@ namespace MTS.Simulator
             channels.IsPowerfoldUp.SetValue(true);
         }
 
-        private void isOldMirror_CheckedChanged(object sender, EventArgs e)
+        #region Forms Events
+
+        #region Button Clicks
+
+        private void startButton_MouseDown(object sender, MouseEventArgs e)
         {
             if (channels != null)
             {
                 lock (channels)
                 {
-                    channels.IsOldMirror.SetValue(isOldMirror.Checked);
+                    channels.IsStartPressed.SetValue(true);
                 }
             }
         }
-        private void isLeftMirror_CheckedChanged(object sender, EventArgs e)
+        private void startButton_MouseUp(object sender, MouseEventArgs e)
         {
             if (channels != null)
             {
                 lock (channels)
                 {
-                    channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
+                    channels.IsStartPressed.SetValue(false);
                 }
             }
         }
 
-        private void disconnectButton_Click(object sender, EventArgs e)
+        private void insertMirrorButton_Click(object sender, EventArgs e)
         {
-            if (slave != null)
-                slave.Disconnect();
+            if (tester1.IsDeviceOpened)
+                tester1.IsMirrorInserted = true;
+        }
+        private void removeMirrorButton_Click(object sender, EventArgs e)
+        {
+            if (tester1.IsDeviceOpened)
+                tester1.IsMirrorInserted = false;
         }
 
         private void lockButton_Click(object sender, EventArgs e)
@@ -346,8 +326,8 @@ namespace MTS.Simulator
                     channels.UnlockWeak.SetValue(false);
                 }
             }
+            lockTimer.Initialize();
         }
-
         private void unlockButton_Click(object sender, EventArgs e)
         {
             if (channels != null)
@@ -360,19 +340,33 @@ namespace MTS.Simulator
                     channels.UnlockWeak.SetValue(true);
                 }
             }
+            unlockTimer.Initialize();
         }
 
-        private void insertMirrorButton_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Numeric Value Changed
+
+        private void lockTime_ValueChanged(object sender, EventArgs e)
         {
-            if (tester1.IsDeviceOpened)
-                tester1.IsMirrorInserted = true;
+            lockTimer.Interval = (double)lockTime.Value;
+        }
+        private void unlockTime_ValueChanged(object sender, EventArgs e)
+        {
+            unlockTimer.Interval = (double)unlockTime.Value;
+        }
+        private void foldingTime_ValueChanged(object sender, EventArgs e)
+        {
+            foldTimer.Interval = (double)foldingTime.Value;
+        }
+        private void unfoldingTime_ValueChanged(object sender, EventArgs e)
+        {
+            unfoldTimer.Interval = (double)unfoldingTime.Value;
         }
 
-        private void removeMirrorButton_Click(object sender, EventArgs e)
-        {
-            if (tester1.IsDeviceOpened)
-                tester1.IsMirrorInserted = false;
-        }
+        #endregion
+
+        #region Check/Unceck
 
         private void leftRubber_CheckedChanged(object sender, EventArgs e)
         {
@@ -396,5 +390,45 @@ namespace MTS.Simulator
                 }
             }
         }
+
+        private void isOldMirror_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.IsOldMirror.SetValue(isOldMirror.Checked);
+                }
+            }
+        }
+        private void isLeftMirror_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
+                }
+            }
+        }
+
+        private void powerOff_CheckedChanged(object sender, EventArgs e)
+        {
+            if (channels != null)
+            {
+                lock (channels)
+                {
+                    channels.IsPowerSupplyOff.SetValue(powerOff.Checked);
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+
+
+
     }
 }

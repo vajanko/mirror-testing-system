@@ -182,7 +182,7 @@ namespace MTS.TesterModule
             //// wait for start
             //scheduler.AddWaitForStart();
             //// add tests of mirror movement
-            //scheduler.AddTravelTests(tests);
+            scheduler.AddTravelTests(tests);
 
             //// wait for start
             //scheduler.AddWaitForStart();
@@ -195,12 +195,12 @@ namespace MTS.TesterModule
             scheduler.AddTask(new PowerfoldTest(channels, tests.GetTest(TestCollection.Powerfold)));
 
             // wait for start
-            scheduler.AddWaitForStart();
+            //scheduler.AddWaitForStart();
             // test blinker
             scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.DirectionLight)));
 
             // wait for start
-            scheduler.AddWaitForStart();
+            //scheduler.AddWaitForStart();
             // test spiral
             scheduler.AddTask(new SpiralTest(channels, tests.GetTest(TestCollection.Heating)));
 
