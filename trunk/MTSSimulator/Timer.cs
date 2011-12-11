@@ -11,6 +11,8 @@ namespace MTS.Simulator
         private bool isFirstCall = true;
         private DateTime start;
 
+        public bool Running { get { return !isFirstCall; } }
+
         public void Initialize()
         {
             isFirstCall = true;

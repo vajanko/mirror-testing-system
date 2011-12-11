@@ -246,7 +246,66 @@ namespace MTS.IO
 
         #region Public methods
 
+        #region Lock/Unlock
+
+        /// <summary>
+        /// Get value indicating if device is closed (locked). This value depends on mirror type
+        /// (old or new)
+        /// </summary>
+        /// <returns>Value indicating if device is closed</returns>
+        public bool IsClosed()
+        {
+            return IsOldMirror.Value ? IsOldLocked.Value : IsLocked.Value;
+        }
+
+        #endregion
+
         #region Mirror glass
+
+        /// <summary>
+        /// (Get) Value indicating whether mirror glass is moveing up
+        /// </summary>
+        public bool IsMirrorMoveingUp
+        {
+            get
+            {
+                return !MoveMirrorVertical.Value && MoveMirrorReverse.Value &&
+                    MoveMirrorHorizontal.Value;
+            }
+        }
+        /// <summary>
+        /// (Get) Value indicating whether mirror glass is moveing down
+        /// </summary>
+        public bool IsMirrorMoveingDown
+        {
+            get
+            {
+                return MoveMirrorVertical.Value && !MoveMirrorReverse.Value &&
+                    !MoveMirrorHorizontal.Value;
+            }
+        }
+        /// <summary>
+        /// (Get) Value indicating whether mirror glass is moveing left
+        /// </summary>
+        public bool IsMirrorMoveingLeft
+        {
+            get
+            {
+                return MoveMirrorVertical.Value && MoveMirrorReverse.Value &&
+                    !MoveMirrorHorizontal.Value;
+            }
+        }
+        /// <summary>
+        /// (Get) Value indicating whether mirror glass is moveing right
+        /// </summary>
+        public bool IsMirrorMoveingRight
+        {
+            get
+            {
+                return !MoveMirrorVertical.Value && !MoveMirrorReverse.Value &&
+                    MoveMirrorHorizontal.Value;
+            }
+        }
 
         /// <summary>
         /// Start to move up mirror glass
@@ -271,18 +330,18 @@ namespace MTS.IO
         /// </summary>
         public void MoveMirrorLeft()
         {
-            MoveMirrorHorizontal.Value = false;
-            MoveMirrorReverse.Value = true;
             MoveMirrorVertical.Value = true;
+            MoveMirrorReverse.Value = true;            
+            MoveMirrorHorizontal.Value = false;
         }
         /// <summary>
         /// Start to move right mirror glass
         /// </summary>
         public void MoveMirrorRight()
         {
-            MoveMirrorHorizontal.Value = true;
-            MoveMirrorReverse.Value = false;
             MoveMirrorVertical.Value = false;
+            MoveMirrorReverse.Value = false;
+            MoveMirrorHorizontal.Value = true;
         }
         /// <summary>
         /// Stop moveing of mirror glass

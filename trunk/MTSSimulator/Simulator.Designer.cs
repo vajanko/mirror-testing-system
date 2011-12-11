@@ -31,8 +31,6 @@
             this.startButton = new System.Windows.Forms.Button();
             this.errorButton = new System.Windows.Forms.Button();
             this.insertMirrorButton = new System.Windows.Forms.Button();
-            this.closeDeviceButton = new System.Windows.Forms.Button();
-            this.powerButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.unfoldingTime = new System.Windows.Forms.NumericUpDown();
@@ -66,9 +64,8 @@
             this.isLeftMirror = new System.Windows.Forms.RadioButton();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.powerOff = new System.Windows.Forms.RadioButton();
+            this.powerOn = new System.Windows.Forms.RadioButton();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.unlockButton = new System.Windows.Forms.Button();
             this.lockButton = new System.Windows.Forms.Button();
@@ -76,17 +73,13 @@
             this.unlockTime = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.lockTime = new System.Windows.Forms.NumericUpDown();
-            this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.timerElapsed = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.timerState = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.removeMirrorButton = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.rightRubber = new System.Windows.Forms.CheckBox();
             this.leftRubber = new System.Windows.Forms.CheckBox();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.tester1 = new MTS.Simulator.Tester();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).BeginInit();
@@ -106,12 +99,11 @@
             this.groupBox9.SuspendLayout();
             this.groupBox10.SuspendLayout();
             this.groupBox11.SuspendLayout();
-            this.groupBox12.SuspendLayout();
             this.groupBox13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unlockTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lockTime)).BeginInit();
-            this.groupBox14.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             this.SuspendLayout();
             // 
             // startButton
@@ -136,33 +128,13 @@
             // 
             // insertMirrorButton
             // 
-            this.insertMirrorButton.Location = new System.Drawing.Point(15, 446);
+            this.insertMirrorButton.Location = new System.Drawing.Point(9, 19);
             this.insertMirrorButton.Name = "insertMirrorButton";
-            this.insertMirrorButton.Size = new System.Drawing.Size(84, 23);
+            this.insertMirrorButton.Size = new System.Drawing.Size(63, 23);
             this.insertMirrorButton.TabIndex = 3;
-            this.insertMirrorButton.Text = "Insert Mirror";
+            this.insertMirrorButton.Text = "Insert";
             this.insertMirrorButton.UseVisualStyleBackColor = true;
             this.insertMirrorButton.Click += new System.EventHandler(this.insertMirrorButton_Click);
-            // 
-            // closeDeviceButton
-            // 
-            this.closeDeviceButton.Location = new System.Drawing.Point(6, 48);
-            this.closeDeviceButton.Name = "closeDeviceButton";
-            this.closeDeviceButton.Size = new System.Drawing.Size(70, 23);
-            this.closeDeviceButton.TabIndex = 4;
-            this.closeDeviceButton.Text = "Close";
-            this.closeDeviceButton.UseVisualStyleBackColor = true;
-            this.closeDeviceButton.Click += new System.EventHandler(this.closeDeviceButton_Click);
-            // 
-            // powerButton
-            // 
-            this.powerButton.Location = new System.Drawing.Point(6, 48);
-            this.powerButton.Name = "powerButton";
-            this.powerButton.Size = new System.Drawing.Size(75, 23);
-            this.powerButton.TabIndex = 5;
-            this.powerButton.Text = "Switch Off";
-            this.powerButton.UseVisualStyleBackColor = true;
-            this.powerButton.Click += new System.EventHandler(this.powerButton_Click);
             // 
             // groupBox1
             // 
@@ -201,6 +173,7 @@
             this.unfoldingTime.Size = new System.Drawing.Size(64, 20);
             this.unfoldingTime.TabIndex = 1;
             this.unfoldingTime.Value = global::MTS.Simulator.Properties.Settings.Default.UnfoldingTime;
+            this.unfoldingTime.ValueChanged += new System.EventHandler(this.unfoldingTime_ValueChanged);
             // 
             // label4
             // 
@@ -233,6 +206,7 @@
             this.foldingTime.Size = new System.Drawing.Size(64, 20);
             this.foldingTime.TabIndex = 0;
             this.foldingTime.Value = global::MTS.Simulator.Properties.Settings.Default.FoldingTime;
+            this.foldingTime.ValueChanged += new System.EventHandler(this.foldingTime_ValueChanged);
             // 
             // groupBox4
             // 
@@ -455,7 +429,7 @@
             // 
             this.groupBox8.Controls.Add(this.isNewMirror);
             this.groupBox8.Controls.Add(this.isOldMirror);
-            this.groupBox8.Location = new System.Drawing.Point(15, 374);
+            this.groupBox8.Location = new System.Drawing.Point(78, 374);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(84, 66);
             this.groupBox8.TabIndex = 13;
@@ -490,7 +464,7 @@
             // 
             this.groupBox9.Controls.Add(this.isRightMirror);
             this.groupBox9.Controls.Add(this.isLeftMirror);
-            this.groupBox9.Location = new System.Drawing.Point(105, 374);
+            this.groupBox9.Location = new System.Drawing.Point(168, 374);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(80, 66);
             this.groupBox9.TabIndex = 14;
@@ -525,7 +499,7 @@
             // 
             this.groupBox10.Controls.Add(this.startButton);
             this.groupBox10.Controls.Add(this.errorButton);
-            this.groupBox10.Location = new System.Drawing.Point(15, 475);
+            this.groupBox10.Location = new System.Drawing.Point(97, 447);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(84, 80);
             this.groupBox10.TabIndex = 15;
@@ -534,43 +508,37 @@
             // 
             // groupBox11
             // 
-            this.groupBox11.Controls.Add(this.button3);
-            this.groupBox11.Controls.Add(this.powerButton);
-            this.groupBox11.Location = new System.Drawing.Point(105, 475);
+            this.groupBox11.Controls.Add(this.powerOff);
+            this.groupBox11.Controls.Add(this.powerOn);
+            this.groupBox11.Location = new System.Drawing.Point(15, 374);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(93, 80);
+            this.groupBox11.Size = new System.Drawing.Size(57, 66);
             this.groupBox11.TabIndex = 16;
             this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Power Supply";
+            this.groupBox11.Text = "Power";
             // 
-            // button3
+            // powerOff
             // 
-            this.button3.Location = new System.Drawing.Point(6, 19);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 6;
-            this.button3.Text = "Switch On";
-            this.button3.UseVisualStyleBackColor = true;
+            this.powerOff.AutoSize = true;
+            this.powerOff.Checked = true;
+            this.powerOff.Location = new System.Drawing.Point(6, 41);
+            this.powerOff.Name = "powerOff";
+            this.powerOff.Size = new System.Drawing.Size(39, 17);
+            this.powerOff.TabIndex = 8;
+            this.powerOff.TabStop = true;
+            this.powerOff.Text = "Off";
+            this.powerOff.UseVisualStyleBackColor = true;
+            this.powerOff.CheckedChanged += new System.EventHandler(this.powerOff_CheckedChanged);
             // 
-            // groupBox12
+            // powerOn
             // 
-            this.groupBox12.Controls.Add(this.button4);
-            this.groupBox12.Controls.Add(this.closeDeviceButton);
-            this.groupBox12.Location = new System.Drawing.Point(204, 475);
-            this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(85, 80);
-            this.groupBox12.TabIndex = 17;
-            this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Device";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(6, 19);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(70, 23);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Open";
-            this.button4.UseVisualStyleBackColor = true;
+            this.powerOn.AutoSize = true;
+            this.powerOn.Location = new System.Drawing.Point(6, 18);
+            this.powerOn.Name = "powerOn";
+            this.powerOn.Size = new System.Drawing.Size(39, 17);
+            this.powerOn.TabIndex = 7;
+            this.powerOn.Text = "On";
+            this.powerOn.UseVisualStyleBackColor = true;
             // 
             // groupBox13
             // 
@@ -629,6 +597,7 @@
             this.unlockTime.Size = new System.Drawing.Size(64, 20);
             this.unlockTime.TabIndex = 5;
             this.unlockTime.Value = global::MTS.Simulator.Properties.Settings.Default.UnlockTime;
+            this.unlockTime.ValueChanged += new System.EventHandler(this.unlockTime_ValueChanged);
             // 
             // label1
             // 
@@ -652,63 +621,15 @@
             this.lockTime.Size = new System.Drawing.Size(64, 20);
             this.lockTime.TabIndex = 3;
             this.lockTime.Value = global::MTS.Simulator.Properties.Settings.Default.LockTime;
-            // 
-            // groupBox14
-            // 
-            this.groupBox14.Controls.Add(this.timerElapsed);
-            this.groupBox14.Controls.Add(this.label12);
-            this.groupBox14.Controls.Add(this.timerState);
-            this.groupBox14.Controls.Add(this.label11);
-            this.groupBox14.Location = new System.Drawing.Point(379, 416);
-            this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(170, 64);
-            this.groupBox14.TabIndex = 20;
-            this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "Timer";
-            // 
-            // timerElapsed
-            // 
-            this.timerElapsed.AutoSize = true;
-            this.timerElapsed.Location = new System.Drawing.Point(61, 42);
-            this.timerElapsed.Name = "timerElapsed";
-            this.timerElapsed.Size = new System.Drawing.Size(67, 13);
-            this.timerElapsed.TabIndex = 3;
-            this.timerElapsed.Text = "Elapsed time";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(10, 42);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(48, 13);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "Elapsed:";
-            // 
-            // timerState
-            // 
-            this.timerState.AutoSize = true;
-            this.timerState.Location = new System.Drawing.Point(61, 21);
-            this.timerState.Name = "timerState";
-            this.timerState.Size = new System.Drawing.Size(61, 13);
-            this.timerState.TabIndex = 1;
-            this.timerState.Text = "Timer State";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 21);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(35, 13);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "State:";
+            this.lockTime.ValueChanged += new System.EventHandler(this.lockTime_ValueChanged);
             // 
             // removeMirrorButton
             // 
-            this.removeMirrorButton.Location = new System.Drawing.Point(105, 446);
+            this.removeMirrorButton.Location = new System.Drawing.Point(9, 48);
             this.removeMirrorButton.Name = "removeMirrorButton";
-            this.removeMirrorButton.Size = new System.Drawing.Size(93, 23);
+            this.removeMirrorButton.Size = new System.Drawing.Size(63, 23);
             this.removeMirrorButton.TabIndex = 21;
-            this.removeMirrorButton.Text = "Remove Mirror";
+            this.removeMirrorButton.Text = "Remove";
             this.removeMirrorButton.UseVisualStyleBackColor = true;
             this.removeMirrorButton.Click += new System.EventHandler(this.removeMirrorButton_Click);
             // 
@@ -716,9 +637,9 @@
             // 
             this.groupBox15.Controls.Add(this.rightRubber);
             this.groupBox15.Controls.Add(this.leftRubber);
-            this.groupBox15.Location = new System.Drawing.Point(191, 374);
+            this.groupBox15.Location = new System.Drawing.Point(254, 374);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(170, 66);
+            this.groupBox15.Size = new System.Drawing.Size(74, 66);
             this.groupBox15.TabIndex = 22;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Rubber";
@@ -760,17 +681,26 @@
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.tester1;
             // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.insertMirrorButton);
+            this.groupBox12.Controls.Add(this.removeMirrorButton);
+            this.groupBox12.Location = new System.Drawing.Point(12, 446);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(79, 81);
+            this.groupBox12.TabIndex = 23;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Mirror";
+            // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 568);
+            this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox15);
-            this.Controls.Add(this.removeMirrorButton);
-            this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.elementHost1);
-            this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox9);
@@ -780,9 +710,9 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.insertMirrorButton);
             this.Name = "Simulator";
             this.Text = "MTS Simulator";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Simulator_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
@@ -808,15 +738,14 @@
             this.groupBox9.PerformLayout();
             this.groupBox10.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
-            this.groupBox12.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unlockTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lockTime)).EndInit();
-            this.groupBox14.ResumeLayout(false);
-            this.groupBox14.PerformLayout();
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
+            this.groupBox12.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -826,8 +755,6 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button errorButton;
         private System.Windows.Forms.Button insertMirrorButton;
-        private System.Windows.Forms.Button closeDeviceButton;
-        private System.Windows.Forms.Button powerButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -861,9 +788,6 @@
         private System.Windows.Forms.RadioButton isLeftMirror;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.Label label10;
@@ -872,16 +796,14 @@
         private System.Windows.Forms.NumericUpDown lockTime;
         private System.Windows.Forms.Button unlockButton;
         private System.Windows.Forms.Button lockButton;
-        private System.Windows.Forms.GroupBox groupBox14;
-        private System.Windows.Forms.Label timerState;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label timerElapsed;
-        private System.Windows.Forms.Label label12;
         private Tester tester1;
         private System.Windows.Forms.Button removeMirrorButton;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.CheckBox rightRubber;
         private System.Windows.Forms.CheckBox leftRubber;
+        private System.Windows.Forms.RadioButton powerOff;
+        private System.Windows.Forms.RadioButton powerOn;
+        private System.Windows.Forms.GroupBox groupBox12;
     }
 }
 
