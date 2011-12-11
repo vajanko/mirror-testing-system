@@ -81,12 +81,12 @@
             this.label12 = new System.Windows.Forms.Label();
             this.timerState = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.tester1 = new MTS.Simulator.Tester();
             this.removeMirrorButton = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.rightRubber = new System.Windows.Forms.CheckBox();
             this.leftRubber = new System.Windows.Forms.CheckBox();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.tester1 = new MTS.Simulator.Tester();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).BeginInit();
@@ -192,6 +192,11 @@
             // 
             this.unfoldingTime.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "UnfoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.unfoldingTime.Location = new System.Drawing.Point(57, 48);
+            this.unfoldingTime.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
             this.unfoldingTime.Name = "unfoldingTime";
             this.unfoldingTime.Size = new System.Drawing.Size(64, 20);
             this.unfoldingTime.TabIndex = 1;
@@ -219,6 +224,11 @@
             // 
             this.foldingTime.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MTS.Simulator.Properties.Settings.Default, "FoldingTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.foldingTime.Location = new System.Drawing.Point(57, 23);
+            this.foldingTime.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
             this.foldingTime.Name = "foldingTime";
             this.foldingTime.Size = new System.Drawing.Size(64, 20);
             this.foldingTime.TabIndex = 0;
@@ -692,17 +702,6 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "State:";
             // 
-            // elementHost1
-            // 
-            this.elementHost1.BackColor = System.Drawing.Color.White;
-            this.elementHost1.BackColorTransparent = true;
-            this.elementHost1.Location = new System.Drawing.Point(15, 12);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(346, 356);
-            this.elementHost1.TabIndex = 18;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.tester1;
-            // 
             // removeMirrorButton
             // 
             this.removeMirrorButton.Location = new System.Drawing.Point(105, 446);
@@ -727,6 +726,8 @@
             // rightRubber
             // 
             this.rightRubber.AutoSize = true;
+            this.rightRubber.Checked = global::MTS.Simulator.Properties.Settings.Default.RightRubber;
+            this.rightRubber.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MTS.Simulator.Properties.Settings.Default, "RightRubber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.rightRubber.Location = new System.Drawing.Point(9, 42);
             this.rightRubber.Name = "rightRubber";
             this.rightRubber.Size = new System.Drawing.Size(51, 17);
@@ -738,6 +739,8 @@
             // leftRubber
             // 
             this.leftRubber.AutoSize = true;
+            this.leftRubber.Checked = global::MTS.Simulator.Properties.Settings.Default.LeftRubber;
+            this.leftRubber.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MTS.Simulator.Properties.Settings.Default, "LeftRubber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.leftRubber.Location = new System.Drawing.Point(9, 19);
             this.leftRubber.Name = "leftRubber";
             this.leftRubber.Size = new System.Drawing.Size(44, 17);
@@ -745,6 +748,17 @@
             this.leftRubber.Text = "Left";
             this.leftRubber.UseVisualStyleBackColor = true;
             this.leftRubber.CheckedChanged += new System.EventHandler(this.leftRubber_CheckedChanged);
+            // 
+            // elementHost1
+            // 
+            this.elementHost1.BackColor = System.Drawing.Color.White;
+            this.elementHost1.BackColorTransparent = true;
+            this.elementHost1.Location = new System.Drawing.Point(15, 12);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(346, 356);
+            this.elementHost1.TabIndex = 18;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.tester1;
             // 
             // Simulator
             // 

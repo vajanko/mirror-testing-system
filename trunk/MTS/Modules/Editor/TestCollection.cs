@@ -19,8 +19,8 @@ namespace MTS.Editor
         public const string TravelSouth = "TravelSouth";
         public const string TravelNorth = "TravelNorth";
         public const string Powerfold = "Powerfold";
-        public const string Blinker = "Blinker";
-        public const string Spiral = "Spiral";
+        public const string DirectionLight = "DirectionLight";
+        public const string Heating = "HeatingFoil";
         public const string Pulloff = "Pulloff";
         public const string Rubber = "Rubber";
 

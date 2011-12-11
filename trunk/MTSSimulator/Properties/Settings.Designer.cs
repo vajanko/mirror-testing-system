@@ -49,7 +49,7 @@ namespace MTS.Simulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public decimal FoldingTime {
             get {
                 return ((decimal)(this["FoldingTime"]));
@@ -61,7 +61,7 @@ namespace MTS.Simulator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public decimal UnfoldingTime {
             get {
                 return ((decimal)(this["UnfoldingTime"]));
@@ -140,6 +140,30 @@ namespace MTS.Simulator.Properties {
             }
             set {
                 this["UnlockTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LeftRubber {
+            get {
+                return ((bool)(this["LeftRubber"]));
+            }
+            set {
+                this["LeftRubber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RightRubber {
+            get {
+                return ((bool)(this["RightRubber"]));
+            }
+            set {
+                this["RightRubber"] = value;
             }
         }
     }

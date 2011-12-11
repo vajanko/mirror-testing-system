@@ -84,11 +84,11 @@ namespace MTS.TesterModule
             // from test parameters get LighteningTime item
             IntParam iValue = testParam.GetParam<IntParam>(TestValue.LighteningTime);
             if (iValue != null)     // it must be of type int
-                lightingTime = iValue.IntValue;
+                lightingTime = iValue.IntValue * 1000;
             // from test parameters get BreakTime item
             iValue = testParam.GetParam<IntParam>(TestValue.BreakTime);
             if (iValue != null)     // it must be of type int
-                breakTime = iValue.IntValue;
+                breakTime = iValue.IntValue * 1000;
             // from test parameters get BLINK_COUNT item
             iValue = testParam.GetParam<IntParam>(TestValue.BlinkCount);
             if (iValue != null)     // it must be of type int

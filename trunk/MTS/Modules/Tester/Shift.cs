@@ -174,38 +174,35 @@ namespace MTS.TesterModule
             scheduler.AddInitSequence();
 
             // wait for start
-            scheduler.AddWaitForStart();
+            //scheduler.AddWaitForStart();
 
             // rubber test
             scheduler.AddRubberTest(tests);
 
-            scheduler.Initialize();
-            return scheduler;
+            //// wait for start
+            //scheduler.AddWaitForStart();
+            //// add tests of mirror movement
+            //scheduler.AddTravelTests(tests);
+
+            //// wait for start
+            //scheduler.AddWaitForStart();
+            //// pull-off test
+            //scheduler.AddPulloffTest(tests);
 
             // wait for start
-            scheduler.AddWaitForStart();
-            // add tests of mirror movement
-            scheduler.AddTravelTests(tests);
-
-            // wait for start
-            scheduler.AddWaitForStart();
-            // pull-off test
-            scheduler.AddPulloffTest(tests);
-
-            // wait for start
-            scheduler.AddWaitForStart();
+            //scheduler.AddWaitForStart();
             // test powerfold
             scheduler.AddTask(new PowerfoldTest(channels, tests.GetTest(TestCollection.Powerfold)));
 
             // wait for start
             scheduler.AddWaitForStart();
             // test blinker
-            scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.Blinker)));
+            scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.DirectionLight)));
 
             // wait for start
             scheduler.AddWaitForStart();
             // test spiral
-            scheduler.AddTask(new SpiralTest(channels, tests.GetTest(TestCollection.Spiral)));
+            scheduler.AddTask(new SpiralTest(channels, tests.GetTest(TestCollection.Heating)));
 
             // open device
             scheduler.AddOpenDevice();

@@ -9,10 +9,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="FoldingTime" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="UnfoldingTime" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="SpiralMinCurrent" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -31,6 +31,12 @@
     </Setting>
     <Setting Name="UnlockTime" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1000</Value>
+    </Setting>
+    <Setting Name="LeftRubber" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="RightRubber" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

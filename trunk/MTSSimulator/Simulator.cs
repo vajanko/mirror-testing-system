@@ -24,6 +24,9 @@ namespace MTS.Simulator
             channels = new Channels(new DummyModule(), HWSettings.Default.ChannelSettings);
             channels.LoadConfiguration("dummyConfig.csv");
             channels.Initialize();
+
+            foldTimer.Interval = (double)foldingTime.Value;
+            unfoldTimer.Interval = (double)unfoldingTime.Value;
         }
 
         #region Device status
@@ -137,6 +140,8 @@ namespace MTS.Simulator
                 channels.IsLeftMirror.SetValue(isLeftMirror.Checked);
                 channels.IsLocked.SetValue(false);
                 channels.IsOldLocked.SetValue(false);
+                channels.IsLeftRubberPresent.SetValue(leftRubber.Checked);
+                channels.IsRightRubberPresent.SetValue(rightRubber.Checked);
             }
         }
 
@@ -179,11 +184,13 @@ namespace MTS.Simulator
         {
             measuring = false;
         }
+        private Timer foldTimer = new Timer();
+        private Timer unfoldTimer = new Timer();
         void slave_Update()
         {
             lock (channels)
             {
-                // "swtich off" power supply if it is not allowed
+                // "switch off" power supply if it is not allowed
                 if (!channels.AllowPowerSupply.Value)
                     channels.IsPowerSupplyOff.SetValue(true);
 
@@ -196,23 +203,54 @@ namespace MTS.Simulator
                     && !channels.UnlockStrong.Value && channels.LockWeak.Value)
                     lockWeak();
 
-                // simulate powerfold current
-                if (channels.FoldPowerfold.Value)
-                    channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
-                else if (channels.UnfoldPowerfold.Value)
-                    channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
+                simulatePowerFoldCurrent();
 
-                // simulate heating foil current
-                if (channels.HeatingFoilOn.Value)
-                    channels.HeatingFoilCurrent.SetValue((uint)gen.Next((int)spiralCurrentMin.Value, (int)spiralCurrentMax.Value));
+                simulateHeatingFoilCurrent();
 
-                // simulate direction light current
-                if (channels.DirectionLightOn.Value)
-                    channels.DirectionLightCurrent.SetValue((uint)gen.Next((int)directionLightCurrentMin.Value, (int)directionLightCurrentMax.Value));
+                simulateDirectionLightCurrent();
 
                 // update user interface
                 updateTester();
             }
+        }
+
+        private void simulatePowerFoldCurrent()
+        {
+            // simulate powerfold current
+            if (channels.FoldPowerfold.Value)
+            {
+                unfoldTimer.Initialize();
+                if (foldTimer.Finished(DateTime.Now))
+                    setIsFolded();
+
+                channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
+            }
+            else if (channels.UnfoldPowerfold.Value)
+            {
+                foldTimer.Initialize();
+                if (unfoldTimer.Finished(DateTime.Now))
+                    setIsUnfolded();
+
+                channels.PowerfoldCurrent.SetValue((uint)gen.Next((int)powerfoldMin.Value, (int)powerfoldMax.Value));
+            }
+            else
+            {
+                channels.PowerfoldCurrent.SetValue(0);
+            }
+        }
+        private void simulateHeatingFoilCurrent()
+        {
+            if (channels.HeatingFoilOn.Value)
+                channels.HeatingFoilCurrent.SetValue((uint)gen.Next((int)spiralCurrentMin.Value, (int)spiralCurrentMax.Value));
+            else
+                channels.HeatingFoilCurrent.SetValue(0);
+        }
+        private void simulateDirectionLightCurrent()
+        {
+            if (channels.DirectionLightOn.Value)
+                channels.DirectionLightCurrent.SetValue((uint)gen.Next((int)directionLightCurrentMin.Value, (int)directionLightCurrentMax.Value));
+            else
+                channels.DirectionLightCurrent.SetValue(0);
         }
 
         private void unlock()
@@ -252,6 +290,21 @@ namespace MTS.Simulator
                     channels.IsLocked.SetValue(true);
                 stopTimer();
             }
+        }
+
+        private void setIsFolded()
+        {
+            channels.IsPowerfoldDown.SetValue(true);
+            channels.IsOldPowerfoldDown.SetValue(true);
+            channels.IsOldPowerfoldUp.SetValue(false);
+            channels.IsPowerfoldUp.SetValue(false);
+        }
+        private void setIsUnfolded()
+        {
+            channels.IsPowerfoldDown.SetValue(false);
+            channels.IsOldPowerfoldDown.SetValue(false);
+            channels.IsOldPowerfoldUp.SetValue(true);
+            channels.IsPowerfoldUp.SetValue(true);
         }
 
         private void isOldMirror_CheckedChanged(object sender, EventArgs e)
