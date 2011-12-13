@@ -4,6 +4,7 @@ using System.Windows.Media.Media3D;
 
 using MTS.IO;
 using MTS.Properties;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -13,26 +14,26 @@ namespace MTS.TesterModule
         /// Read distances, caluculate zero plane normal and save this setting
         /// </summary>
         /// <param name="time"></param>
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:
                     StartWatch(time);
-                    exState = ExState.Measuring;
+                    goTo(ExState.Measuring);
                     break;
                 case ExState.Measuring:
-                    HWSettings.Default.ZeroPlaneNormal = channels.GetMirrorNormal();                    
+                    HWSettings.Default.ZeroPlaneNormal = channels.GetMirrorNormal();
                     if (TimeElapsed(time) > 1000)
-                        exState = ExState.Finalizing;
+                        goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
                     HWSettings.Default.Save();
                     HWSettings.Default.Reload();
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
                     break;
             }
         }

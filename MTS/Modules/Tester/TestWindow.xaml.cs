@@ -494,6 +494,10 @@ namespace MTS.TesterModule
 
             // create just instace of channel collection, without any initialization or connection
             Channels channels = new Channels(module, settings);
+            // initialize calibraetors positions
+            channels.InitializeCalibratorsSettings(HWSettings.Default.ZeroPlaneNormal,
+                HWSettings.Default.CalibretorX, HWSettings.Default.CalibretorY, HWSettings.Default.CalibretorZ);
+
             // use configuration file from Settings
             // when loading file - an exception may be thrown
             try
@@ -678,20 +682,23 @@ namespace MTS.TesterModule
         }
         private void setRotation()
         {
-            PointX.Z = channels.DistanceX.RealValue;
-            PointY.Z = channels.DistanceY.RealValue;
-            PointZ.Z = channels.DistanceZ.RealValue;
-            Vector3D mirrorNormal = getPlaneNormal(PointX, PointY, PointZ);
-            Vector3D axis = Vector3D.CrossProduct(ZeroPlaneNormal, mirrorNormal);
+            //PointX.Z = channels.DistanceX.RealValue;
+            //PointY.Z = channels.DistanceY.RealValue;
+            //PointZ.Z = channels.DistanceZ.RealValue;
+            //Vector3D mirrorNormal = getPlaneNormal(PointX, PointY, PointZ);
+            //Vector3D axis = Vector3D.CrossProduct(ZeroPlaneNormal, mirrorNormal);
 
-            mirrorView.RotationAxis = axis;
-            mirrorView.RotationAngle = Vector3D.AngleBetween(mirrorNormal, ZeroPlaneNormal);
+            mirrorView.RotationAxis = channels.GetRotationAxis();
+                //axis;
+            mirrorView.RotationAngle = channels.GetRotationAngle();
+                //Vector3D.AngleBetween(mirrorNormal, ZeroPlaneNormal);
 
-            double vertical = mirrorView.RotationAngle * Math.Cos(Vector3D.AngleBetween(axis, new Vector3D(1, 0, 0)) / 180 * Math.PI);
-            double horizontal = mirrorView.RotationAngle * Math.Cos(Vector3D.AngleBetween(axis, new Vector3D(0, 1, 0)) / 180 * Math.PI);
+            //double vertical = mirrorView.RotationAngle * Math.Cos(Vector3D.AngleBetween(axis, new Vector3D(1, 0, 0)) / 180 * Math.PI);
+            //double horizontal = mirrorView.RotationAngle * Math.Cos(Vector3D.AngleBetween(axis, new Vector3D(0, 1, 0)) / 180 * Math.PI);
 
-            mirrorView.HorizontalAngle = horizontal;
-            mirrorView.VerticalAngle = vertical;
+            mirrorView.HorizontalAngle = channels.GetHorizontalAngle();
+            mirrorView.VerticalAngle = channels.GetVerticalAngle();
+                //vertical;
 
         }
 

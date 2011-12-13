@@ -3,6 +3,7 @@ using System.Windows.Media.Media3D;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -44,7 +45,7 @@ namespace MTS.TesterModule
             exState = getExecutionState(centerDir);
         }
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             double ver = channels.GetVerticalAngle();
             double hor = channels.GetHorizontalAngle();
@@ -53,6 +54,7 @@ namespace MTS.TesterModule
             {
                 case ExState.Initializing:
                     setupCenter(ver, hor);
+                    Output.WriteLine("Centering ... Center direction: {0}", centerDir);
                     break;
                 case ExState.MoveingUp:
                     if (ver <= 0)
@@ -64,17 +66,19 @@ namespace MTS.TesterModule
                     break;
                 case ExState.MoveingLeft:
                     if (hor >= 0)
-                        Finish(time, TaskState.Completed);
+                        goTo(ExState.Finalizing);
                     break;
                 case ExState.MoveingRight:
                     if (hor <= 0)
-                        Finish(time, TaskState.Completed);
+                        goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
+                    Output.WriteLine("Cenetered!");
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
+                    Output.WriteLine("Centering aborted!");
                     break;
             }
         }

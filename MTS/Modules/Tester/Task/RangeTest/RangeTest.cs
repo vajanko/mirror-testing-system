@@ -2,6 +2,7 @@
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -39,9 +40,8 @@ namespace MTS.TesterModule
         /// <summary>
         /// Check if current is inside required range
         /// </summary>
-        /// <param name="time">Time of calling this method</param>
         /// <param name="channel">Channel to measure current on</param>
-        protected void measureCurrent(TimeSpan time, IAnalogInput channel)
+        protected void measureCurrent(IAnalogInput channel)
         {
             // value of current measured on current channel
             double measuredCurrent = channel.RealValue;
@@ -53,15 +53,30 @@ namespace MTS.TesterModule
                 minMeasuredCurrent = measuredCurrent;
         }
         /// <summary>
-        /// Get the final state of this task: Passed if everythig is OK, Failed otherwise
+        /// Get the final state of this task: Completed if everythig is OK, Failed otherwise
         /// </summary>
-        protected TaskState getTaskState()
+        protected override TaskResultCode getResultCode()
         {
-            if (maxMeasuredCurrent > MaxCurrent ||
-                minMeasuredCurrent < MinCurrent)
-                return TaskState.Failed;
-            else return TaskState.Passed;
-        }        
+            if (exState == ExState.Aborting)
+                return TaskResultCode.Aborted;
+            else if (maxMeasuredCurrent > MaxCurrent || minMeasuredCurrent < MinCurrent)
+                return TaskResultCode.Failed;
+            else
+                return TaskResultCode.Completed;
+        }
+        protected override TaskResult getResult()
+        {
+            TestResult result = base.getResult() as TestResult;
+
+            // add parameter results
+            if (result != null)
+            {
+                result.Params.Add(new ParamResult(TestValue.MinCurrent, minMeasuredCurrent));
+                result.Params.Add(new ParamResult(TestValue.MaxCurrent, maxMeasuredCurrent));
+            }
+
+            return result;
+        }
 
         #region Constructors
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MTS.IO;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -15,23 +16,23 @@ namespace MTS.TesterModule
         /// Check if enought time has elapsed and finish this task fi so
         /// </summary>
         /// <param name="time">Time of calling this method</param>
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:  // start to measure time
                     StartWatch(time);
-                    exState = ExState.Measuring;
+                    goTo(ExState.Measuring);
                     break;
                 case ExState.Measuring:     // just wait for required time and finish
                     if (TimeElapsed(time) > miliseconds)
-                        exState = ExState.Finalizing;
+                        goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
                     break;
             }
         }

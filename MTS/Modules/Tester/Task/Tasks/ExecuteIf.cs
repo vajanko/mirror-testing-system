@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MTS.IO;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -35,17 +36,14 @@ namespace MTS.TesterModule
         /// Check for value on condition channel and executed apropriate task
         /// </summary>
         /// <param name="time">Time of calling this method</param>
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:
                     Output.WriteLine("Condition: if ({0} == {1})", conditionChannel.Name,
                         conditionValue);
-                    if (conditionChannel.Value == conditionValue)
-                        exState = ExState.StateA;
-                    else 
-                        exState = ExState.StateB;
+                    goTo(conditionChannel.Value == conditionValue ? ExState.StateA : ExState.StateB);
                     break;
                 case ExState.StateA:
                     Output.WriteLine("Changing to task {0}", thenTask.Name);
@@ -58,13 +56,13 @@ namespace MTS.TesterModule
                         scheduler.ChangeTask(this, elseTask);
                     }
                     else
-                        exState = ExState.Finalizing;
+                        goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
                     break;
             }
         }

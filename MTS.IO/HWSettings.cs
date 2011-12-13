@@ -19,6 +19,13 @@ namespace MTS.IO {
             //
             // this.SettingsSaving += this.SettingsSavingEventHandler;
             //
+
+            this.SettingsLoaded += new System.Configuration.SettingsLoadedEventHandler(HWSettings_SettingsLoaded);
+        }
+
+        void HWSettings_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
+        {
+            calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
         }
         
         private void HWSettingsChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
@@ -28,7 +35,6 @@ namespace MTS.IO {
         private void HWSettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
             // Add code to handle the SettingsSaving event here.
         }
-
 
         #region Calibretors
 

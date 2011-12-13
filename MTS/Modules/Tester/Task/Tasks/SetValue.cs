@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MTS.IO;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -16,7 +17,7 @@ namespace MTS.TesterModule
         /// </summary>
         private bool value;
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
@@ -26,10 +27,10 @@ namespace MTS.TesterModule
                     break;
                 case ExState.Finalizing:
                     channel.Value = value;
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
                     break;
             }
         }

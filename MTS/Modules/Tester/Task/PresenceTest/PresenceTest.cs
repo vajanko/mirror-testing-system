@@ -2,6 +2,7 @@
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -20,13 +21,14 @@ namespace MTS.TesterModule
         /// Check for presence of particular mirror component
         /// </summary>
         /// <param name="time">Time of calling this method</param>
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             if (PresenceChannel.Value == shouldBePresent)
-                Finish(time, TaskState.Passed);
+                resultCode = TaskResultCode.Completed;
             else
-                Finish(time, TaskState.Failed);
-            Output.WriteLine("{0} result: {1}", Name, state);
+                resultCode = TaskResultCode.Failed;
+
+            Finish(time);
         }
 
         #region Constructors

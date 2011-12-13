@@ -56,7 +56,8 @@ namespace MTS.Simulator
         }
         private void Simulator_FormClosing(object sender, FormClosingEventArgs e)
         {
-            slave.Disconnect();
+            if (slave != null)
+                slave.Disconnect();
         }
 
         private void initializeChannels()
@@ -74,6 +75,9 @@ namespace MTS.Simulator
                     channels.IsLeftRubberPresent.SetValue(leftRubber.Checked);
                     channels.IsRightRubberPresent.SetValue(rightRubber.Checked);
                     channels.IsPowerSupplyOff.SetValue(powerOff.Checked);
+                    channels.DistanceX.SetValue(2200);
+                    channels.DistanceY.SetValue(2000);
+                    channels.DistanceZ.SetValue(1800);
                 }
             }
         }
@@ -191,17 +195,19 @@ namespace MTS.Simulator
 
             if (channels.IsMirrorMoveingUp)
             {
-                channels.DistanceX.SetValue(80);
+                channels.DistanceY.SetValue(channels.DistanceY.Value - 10);
             }
             else if (channels.IsMirrorMoveingDown)
             {
+                channels.DistanceY.SetValue(channels.DistanceY.Value + 10);
             }
             else if (channels.IsMirrorMoveingLeft)
             {
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 10);
             }
             else if (channels.IsMirrorMoveingRight)
             {
-
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 10);
             }
         }
         private void simulateDistanceSensors()
@@ -220,8 +226,13 @@ namespace MTS.Simulator
         {
             if (channels.MoveMirrorHorizontal.Value)
                 channels.HorizontalActuatorCurrent.SetValue((uint)gen.Next(0, 500));
+            else
+                channels.HorizontalActuatorCurrent.SetValue(0);
+
             if (channels.MoveMirrorVertical.Value)
                 channels.VerticalActuatorCurrent.SetValue((uint)gen.Next(0, 500));
+            else
+                channels.VerticalActuatorCurrent.SetValue(0);
         }
 
         private void unlock()
