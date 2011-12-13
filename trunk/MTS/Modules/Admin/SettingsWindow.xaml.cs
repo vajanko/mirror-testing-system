@@ -392,7 +392,7 @@ namespace MTS.Admin
 
         private void updateOperatorsGrid(Data.MTSContext context)
         {
-            operators.ItemsSource = context.Operators.ToList();
+            //operators.ItemsSource = context.Operators.ToList();
         }
 
         #endregion

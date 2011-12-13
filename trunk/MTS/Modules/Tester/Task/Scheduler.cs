@@ -5,6 +5,7 @@ using System.Text;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -353,7 +354,7 @@ namespace MTS.TesterModule
             toExecute.RemoveFirst();
             // initialize channels
         }
-        public void UpdateOutputs(TimeSpan time)
+        public void UpdateOutputs(DateTime time)
         {
             // begin execute all prepared tasks and add them to executing colletion
             foreach (Task task in prepared)
@@ -378,7 +379,7 @@ namespace MTS.TesterModule
         /// Update all executing tasks
         /// </summary>
         /// <param name="time">Time at moment of calling this method</param>
-        public void Update(TimeSpan time)
+        public void Update(DateTime time)
         {
             // update input channels - values that are going to be read by executing tasks
             channels.UpdateInputs();
@@ -396,7 +397,7 @@ namespace MTS.TesterModule
         {
             bool ret = true;
             foreach (TaskResult result in results)
-                if (result != null && result.State == TaskState.Failed)
+                if (result != null && result.ResultCode == TaskResultCode.Completed)
                     ret = false;
             return ret;
         }

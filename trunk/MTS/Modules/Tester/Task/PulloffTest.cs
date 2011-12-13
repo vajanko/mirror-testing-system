@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -25,30 +26,21 @@ namespace MTS.TesterModule
         /// </summary>
         private int testingTime = 0;
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:
-                    testingTime = 0;                // initialize variables
-                    finalState = TaskState.Passed;  // change if glass is pulled-off
+                    testingTime = 0;                // initialize variables                    
 
-                    if (channels.IsSuckerUp.Value)
-                    {                               // if sucker disk is already up
-                        channels.StartSucking();    // suck air to create vacuum
-                        exState = ExState.Sucking;  // this state will wait for vacuum
-                    }
-                    else
-                    {                               // sucker disk is not up yet
-                        channels.SuckerUp();        // start to move it up first
-                        exState = ExState.MoveingUp;
-                    }
+                    channels.SuckerUp();            // start to move sucker disk up
+                    goTo(ExState.MoveingUp);
                     break;
                 case ExState.MoveingUp:
                     if (channels.IsSuckerUp.Value)
                     {                               // sucker disk is already up
                         channels.StartSucking();    // suck air to create vacuum
-                        exState = ExState.Sucking;
+                        goTo(ExState.Sucking);
                     }                               // otherwise sucker disk is not yet up
                     break;
                 case ExState.Sucking:
@@ -57,6 +49,7 @@ namespace MTS.TesterModule
                         channels.StopAir();         // stop sucking air
                         channels.SuckerDown();      // move sucker disk down
                         StartWatch(time);           // measure time
+                        goTo(ExState.MoveingDown);
                     }                               // otherwise there is no vacuum yet
                     break;
                 case ExState.MoveingDown:           // this is actually required testing
@@ -64,14 +57,13 @@ namespace MTS.TesterModule
 
                     if (channels.IsSuckerDown.Value)
                     {                               // glass has been pulled off
-                        finalState = TaskState.Failed;
-                        exState = ExState.Finalizing;
+                        goTo(ExState.Finalizing);
                     }
                     else if (TimeElapsed(time) > testingTime)
                     {   // enought time has elapsed, remove sucker disk from mirror
                         channels.StartBlowing();    // first vacuum must be removed
                         channels.SuckerUp();        // stop to pull-off and wait for vacuum to be removed
-                        exState = ExState.Blowing;  // wait for vacuum to be removed
+                        goTo(ExState.Blowing);      // wait for vacuum to be removed
                     }                               // otherwise pull-off test is being executed
                     break;
                 case ExState.Blowing:
@@ -79,17 +71,18 @@ namespace MTS.TesterModule
                     {                               // vacuum is already removed
                         channels.StopAir();         // stop blowing air
                         channels.SuckerDown();      // remove sucker disk from mirror glass
-                        exState = ExState.Finalizing;
+                        goTo(ExState.Finalizing);
                     }                               // otherwise vacuum is not removed yet
                     break;
 
                 case ExState.Finalizing:            // just wait for sucker disk to be down
                     if (channels.IsSuckerDown.Value)
-                        Finish(time, getFinalState());
+                        Finish(time, getResult(TaskResultCode.Completed));
                     break;
                 case ExState.Aborting:              // something bad has happened - aborting test
-                    Finish(time, TaskState.Aborted);// without resolving current state of hardware
-                    break;                          // may be sucker disk is still on the mirror
+                    // without resolving current state of hardware, may be sucker disk is still on the mirror
+                    Finish(time, getResult(TaskResultCode.Aborted));
+                    break;
             }
         }
 

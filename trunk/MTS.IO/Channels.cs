@@ -506,12 +506,14 @@ namespace MTS.IO
 
         public double GetRotationAngle()
         {
-            // read distance values
-            PointX.Z = DistanceX.RealValue;
-            PointY.Z = DistanceY.RealValue;
-            PointZ.Z = DistanceZ.RealValue;
+            return Vector3D.AngleBetween(GetMirrorNormal(), ZeroPlaneNormal);
 
-            return Vector3D.AngleBetween(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal);
+            //// read distance values
+            //PointX.Z = DistanceX.RealValue;
+            //PointY.Z = DistanceY.RealValue;
+            //PointZ.Z = DistanceZ.RealValue;
+
+            //return Vector3D.AngleBetween(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal);
         }
 
         /// <summary>
@@ -520,7 +522,8 @@ namespace MTS.IO
         /// </summary>
         public Vector3D GetRotationAxis()
         {
-            return Vector3D.CrossProduct(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal);
+            return Vector3D.CrossProduct(GetMirrorNormal(), ZeroPlaneNormal);
+            //return Vector3D.CrossProduct(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal);
         }
 
         public double GetHorizontalAngle()
@@ -538,6 +541,7 @@ namespace MTS.IO
         /// <returns>Normal vector of mirror glass surface</returns>
         public Vector3D GetMirrorNormal()
         {
+            // read distance values
             PointX.Z = DistanceX.RealValue;
             PointY.Z = DistanceY.RealValue;
             PointZ.Z = DistanceZ.RealValue;

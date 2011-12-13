@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -21,9 +22,6 @@ namespace MTS.TesterModule
         /// otherwise not.
         /// </summary>
         protected bool Enabled { get; private set; }
-
-        protected TaskState finalState;
-        protected virtual TaskState getFinalState() { return finalState; }
 
         #region Constructors
 

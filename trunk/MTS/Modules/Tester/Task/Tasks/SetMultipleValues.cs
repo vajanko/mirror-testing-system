@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MTS.IO;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -26,22 +27,22 @@ namespace MTS.TesterModule
             outValues.Add(value);
         }
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:
-                    exState = ExState.Finalizing;
+                    goTo(ExState.Finalizing);
                     for (int i = 0; i < outChannels.Count; i++)
                         Output.WriteLine("Setting {0} to\t{1}", outChannels[i].Name, outValues[i]);
                     break;
                 case ExState.Finalizing:
                     for (int i = 0; i < outChannels.Count; i++)
                         outChannels[i].Value = outValues[i];
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
                     break;
             }
         }

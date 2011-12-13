@@ -3,6 +3,7 @@ using System.Windows.Media.Media3D;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -19,7 +20,7 @@ namespace MTS.TesterModule
 
         #endregion
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             // In this case, if max time elapsed, task has to be aborted. The final position has not been reached,
             // but we already know that this is a bed pieace
@@ -34,23 +35,23 @@ namespace MTS.TesterModule
                     actuatorChannel = travelDirection.IsHorizontal() ?
                         channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
                         channels.VerticalActuatorCurrent;           // depends on which direction we are moveing in
-                    exState = ExState.Measuring;                    // swtich to next state
+                    goTo(ExState.Measuring);                        // swtich to next state
+                    Output.WriteLine("Moveing in direction: {0}", travelDirection);
                     break;
                 case ExState.Measuring:
                     measureCurrent(time, actuatorChannel);          // measure current
                     angleAchieved = channels.GetRotationAngle();    // measure angle
                     if (angleAchieved > minAngle)                   // final position reached
-                        exState = ExState.Finalizing;               // finish
+                        goTo(ExState.Finalizing);                   // finish
                     break;
                 case ExState.Finalizing:
                     channels.StopMirror();                          // stop moveing mirror glass
-                    exState = ExState.None;                         // stop to update this test
-                    Finish(time, getTaskState());                   // finish with apropriate state
+                    Finish(time);                                   //
+                    Output.WriteLine("Stop moveing");
                     break;
                 case ExState.Aborting:
                     channels.StopMirror();                          // stop moveing mirror glass
-                    exState = ExState.None;                         // stop to update this test
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);                                   //
                     break;
             }
         }

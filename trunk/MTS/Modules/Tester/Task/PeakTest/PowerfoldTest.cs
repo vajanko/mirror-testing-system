@@ -2,6 +2,7 @@
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -16,7 +17,7 @@ namespace MTS.TesterModule
 
         #endregion
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             // In this case, if max time elapsed, task has to be aborted. If folding is running too long
             // it means that there is some problem with the acutator - Test will be aborted and folding
@@ -30,30 +31,28 @@ namespace MTS.TesterModule
             {
                 case ExState.Initializing:
                     channels.StartUnfolding();                   // start to unfold
-                    exState = ExState.Unfolding;                 // switch to next state
+                    goTo(ExState.Unfolding);                     // switch to next state
                     break;
                 case ExState.Unfolding:                          // check current while unfolding
                     measureCurrent(time, channels.PowerfoldCurrent);
                     if (channels.IsUnfolded())
                     {
                         channels.StartFolding();                 // stop unfolding and start to fold
-                        exState = ExState.Folding;               // switch to next state
+                        goTo(ExState.Folding);                   // switch to next state
                     }
                     break;
                 case ExState.Folding:                            // check current while folding
                     measureCurrent(time, channels.PowerfoldCurrent);
                     if (channels.IsFolded())
-                        exState = ExState.Finalizing;            // switch to next state
+                        goTo(ExState.Finalizing);                // switch to next state
                     break;
                 case ExState.Finalizing:
                     channels.StopPowerfold();                    // for sure - switch off actuator
-                    Finish(time, getTaskState());                // raise events, save state
-                    exState = ExState.None;                      // stop to update this test
+                    Finish(time);
                     break;
                 case ExState.Aborting:
                     channels.StopPowerfold();                    // for sure - swtitch off actuator
-                    Finish(time, TaskState.Aborted);             // raise events, save state
-                    exState = ExState.None;                      // stop to update this test
+                    Finish(time);
                     break;
             }
         }

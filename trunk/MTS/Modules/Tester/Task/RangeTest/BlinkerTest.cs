@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -33,7 +34,7 @@ namespace MTS.TesterModule
 
         #endregion
 
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
@@ -41,37 +42,39 @@ namespace MTS.TesterModule
                     maxMeasuredCurrent = double.MinValue;                   // initialize max and min
                     minMeasuredCurrent = double.MaxValue;                   // measured values
                     channels.DirectionLightOn.SwitchOn();                   // switch on direction light
-                    blinkerOn = time;                                       // save time of light on
-                    exState = ExState.BlinkerOn;                            // go to next state
+                    StartWatch(time);                                       // start measuring time of light on
+                    goTo(ExState.BlinkerOn);                                // go to next state
                     Output.WriteLine("Switchig direction light on");
                     break;
                 case ExState.BlinkerOn:   // measure current
-                    measureCurrent(time, channels.DirectionLightCurrent);   // measure current
-                    if ((time - blinkerOn).TotalSeconds > lightingTime)// if lighting time elapsed
+                    measureCurrent(channels.DirectionLightCurrent);         // measure current
+                    if (TimeElapsed(time) >= lightingTime)                   // if lighting time elapsed
                     {
                         channels.DirectionLightOn.SwitchOff();              // switch off light
-                        blinkerOff = time;                                  // save time of light off
+                        StartWatch(time);                                   // start to measure time of light off
                         blinksCount--;                                      // decrease one lighting period
-                        exState = (blinksCount <= 0) ?                      // if no more periods should be executed
-                            ExState.Finalizing : ExState.BlinkerOff;        // finish this test. otherwise switch
+                        goTo(blinksCount <= 0 ? ExState.Finalizing : ExState.BlinkerOff);
                         if (exState == ExState.BlinkerOff)
                             Output.WriteLine("Switching direction light off");
                     }                                                       // off blinker
                     break;
                 case ExState.BlinkerOff:  // do not measure current
-                    if ((time - blinkerOff).TotalSeconds > breakTime)  // if break time elapsed
+                    if (TimeElapsed(time) >= breakTime)                     // if break time elapsed
                     {
                         channels.DirectionLightOn.SwitchOn();               // switch on light
-                        blinkerOn = time;                                   // save time of lihgt on
-                        exState = ExState.BlinkerOn;                        // go to next state
+                        StartWatch(time);                                   // start to measure time of light on
+                        goTo(ExState.BlinkerOn);
                         Output.WriteLine("Switchig direction light on");
                     }   // after blinker is off always come a period when blinker is on
                     break;
                 case ExState.Finalizing:
                     channels.DirectionLightOn.SwitchOff();                  // switch off light
-                    Finish(time, getTaskState());                           // finish test with right result
-                    exState = ExState.None;                                 // do not update this task any more
+                    Finish(time);                                           // finish and do not update any more
                     Output.WriteLine("Switching direction light off");
+                    break;
+                case ExState.Aborting:
+                    channels.DirectionLightOn.SwitchOff();
+                    Finish(time);
                     break;
             }
         }
@@ -89,11 +92,11 @@ namespace MTS.TesterModule
             // from test parameters get LighteningTime item
             DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.LighteningTime);
             if (dValue != null)     // it must be of type int
-                lightingTime = dValue.DoubleValue;
+                lightingTime = dValue.DoubleValue * 1000;   // convert to miliseconds
             // from test parameters get BreakTime item
             dValue = testParam.GetParam<DoubleParam>(TestValue.BreakTime);
             if (dValue != null)     // it must be of type int
-                breakTime = dValue.DoubleValue;
+                breakTime = dValue.DoubleValue * 1000;      // convert to miliseconds
             // from test parameters get BlinksTime item
             IntParam iValue = testParam.GetParam<IntParam>(TestValue.BlinkCount);
             if (dValue != null)     // it must be of type int

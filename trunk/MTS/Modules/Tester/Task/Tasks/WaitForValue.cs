@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MTS.IO;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -20,12 +21,12 @@ namespace MTS.TesterModule
         /// Check if particular channel has required value and finish this task if so
         /// </summary>
         /// <param name="time">Time of calling this method</param>
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:  // start to check for a value
-                    exState = ExState.Measuring;
+                    goTo(ExState.Measuring);
                     Output.WriteLine("Waiting for {0} to be {1}", Name, value);
                     break;
                 case ExState.Measuring:     // wait for expected value on a particular channel
@@ -33,10 +34,10 @@ namespace MTS.TesterModule
                         exState = ExState.Finalizing;
                     break;
                 case ExState.Finalizing:
-                    Finish(time, TaskState.Completed);
+                    Finish(time);
                     break;
                 case ExState.Aborting:
-                    Finish(time, TaskState.Aborted);
+                    Finish(time);
                     break;
             }
 

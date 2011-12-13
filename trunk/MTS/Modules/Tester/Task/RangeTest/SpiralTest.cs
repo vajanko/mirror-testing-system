@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester.Result;
 
 namespace MTS.TesterModule
 {
@@ -14,7 +15,7 @@ namespace MTS.TesterModule
         /// Required duration in seconds of spiral to be swtiched on during this test
         /// </summary>
         private double testingTime;
-        private TimeSpan start;
+        //private TimeSpan start;
 
         #endregion
 
@@ -23,26 +24,29 @@ namespace MTS.TesterModule
         /// logic of the test excution is provided.
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        public override void Update(TimeSpan time)
+        public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:
-                    minMeasuredCurrent = double.MaxValue;                   // initialize max and min
-                    maxMeasuredCurrent = double.MinValue;                   // measured values
-                    channels.HeatingFoilOn.SwitchOn();                      // switch on spiral
-                    start = time;                                           // start measuring time
-                    exState = ExState.Measuring;                            // go to next state
+                    minMeasuredCurrent = double.MaxValue;             // initialize max and min
+                    maxMeasuredCurrent = double.MinValue;             // measured values
+                    channels.HeatingFoilOn.SwitchOn();                // switch on spiral
+                    StartWatch(time);                                 // start measuring time                                      
+                    goTo(ExState.Measuring);                          // start measuring
                     break;
                 case ExState.Measuring:
-                    measureCurrent(time, channels.HeatingFoilCurrent);      // measure spiral current
-                    if ((time- start).TotalSeconds > testingTime)           // if testing time elapsed
-                        exState = ExState.Finalizing;                       // go to next state
+                    measureCurrent(channels.HeatingFoilCurrent);      // measure spiral current
+                    if (TimeElapsed(time) > testingTime)              // if testing time elapsed
+                        goTo(ExState.Finalizing);                     // go to next state                     
                     break;
                 case ExState.Finalizing:
-                    channels.HeatingFoilOn.SwitchOff();                     // swtich off spiral
-                    Finish(time, getTaskState());                           // set result state
-                    exState = ExState.None;                                 // stop to update this test
+                    channels.HeatingFoilOn.SwitchOff();               // swtich off spiral
+                    Finish(time);                                     //
+                    break;
+                case ExState.Aborting:
+                    channels.HeatingFoilOn.SwitchOff();               // swtich off spiral
+                    Finish(time);
                     break;
             }
         }

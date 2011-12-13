@@ -6,6 +6,7 @@ using System.Threading;
 
 using MTS.IO;
 using MTS.Editor;
+using System.Diagnostics;
 
 namespace MTS.TesterModule
 {
@@ -217,7 +218,9 @@ namespace MTS.TesterModule
 
         private void executeLoop()
         {
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            Stopwatch watch = new Stopwatch();
+            DateTime time = DateTime.Now;       // time of updating scheduler
+
             Output.WriteLine("Execution loop started!");
             watch.Start();
             while (Remained > 0)
@@ -230,8 +233,9 @@ namespace MTS.TesterModule
                 while (!scheduler.IsFinished)
                 {
                     Thread.Sleep(50);   // for presentation purpose only
-                    scheduler.UpdateOutputs(watch.Elapsed);
-                    scheduler.Update(watch.Elapsed);
+                    time += watch.Elapsed;  // current time
+                    scheduler.UpdateOutputs(time);
+                    scheduler.Update(time);
                 }
                 Output.WriteLine("Test sequence {0} finished", Finished + 1);
 

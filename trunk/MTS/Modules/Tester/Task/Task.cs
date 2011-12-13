@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using MTS.IO;
+using MTS.Tester.Result;
 
 
 namespace MTS.TesterModule
@@ -19,14 +20,21 @@ namespace MTS.TesterModule
     /// </summary>
     public abstract class Task
     {
+        #region Fields
+
         /// <summary>
         /// Collection of channels from communication with remote hardware. This colleciton is regulary
         /// updated in a loop. New values are writed to remote hardware memory and values from hardware
         /// are writed to this collection
         /// </summary>
         protected Channels channels;
-        protected TaskState state;
-        protected TaskResult result = new TaskResult();
+
+        /// <summary>
+        /// Value describing result state of this task
+        /// </summary>
+        protected TaskResultCode resultCode;
+
+        #endregion
 
         #region Properties
 
@@ -35,17 +43,9 @@ namespace MTS.TesterModule
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// (Get) True if task has been finished corectly - is completed
-        /// </summary>
-        public bool IsCompleted { get { return state == TaskState.Completed; } }
-        /// <summary>
-        /// (Get) True if task is running (BeginExecute method was called)
-        /// </summary>
-        public bool IsRunning { get { return state == TaskState.Running; } }
-        /// <summary>
         /// (Get) Time when task has been started
         /// </summary>
-        public TimeSpan BeginTime
+        public DateTime Begin
         {
             get;
             protected set;
@@ -54,7 +54,7 @@ namespace MTS.TesterModule
         /// (Get) Time of last task's unfinished state. When task is not finished yet, value is the time of last
         /// Update() call
         /// </summary>
-        public TimeSpan EndTime
+        public DateTime End
         {
             get;
             protected set;
@@ -62,7 +62,7 @@ namespace MTS.TesterModule
         /// <summary>
         /// (Get) Time of task duration
         /// </summary>
-        public TimeSpan Duration { get { return EndTime.Subtract(BeginTime); } }
+        public TimeSpan Duration { get { return End.Subtract(Begin); } }
 
         #endregion
 
@@ -74,10 +74,10 @@ namespace MTS.TesterModule
         /// <summary>
         /// Raise task executed event
         /// </summary>
-        protected void RaiseTaskExecuted()
+        protected void RaiseTaskExecuted(TaskResult result)
         {
             if (TaskExecuted != null)
-                TaskExecuted(this, new TaskExecutedEventArgs(result, EndTime));
+                TaskExecuted(this, new TaskExecutedEventArgs(result));
         }
 
         #region Task Execution
@@ -87,12 +87,11 @@ namespace MTS.TesterModule
         /// by calling this initialization method
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        public void Initialize(TimeSpan time)
+        public void Initialize(DateTime time)
         {
             // any task can be reused just by calling this initialization method
             exState = ExState.Initializing;     // this makes the task reusable
-            BeginTime = time;
-            state = TaskState.Running;
+            Begin = time;
         }
 
         /// <summary>
@@ -100,24 +99,37 @@ namespace MTS.TesterModule
         /// is cyclically called and performs task execution.
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        public virtual void Update(TimeSpan time)
+        public virtual void Update(DateTime time)
         {
-            EndTime = time;     // last time updated
+            End = time;     // last time updated
         }
         /// <summary>
         /// This method is called only once and initialize task result data.
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        /// <param name="state">State of task at the end of execution</param>
-        public void Finish(TimeSpan time, TaskState state)
+        public void Finish(DateTime time)
         {
-            EndTime = time;
-            this.state = state;
-            result.State = this.state;
-            result.Duration = this.Duration;
-            RaiseTaskExecuted();
+            End = time;
+            RaiseTaskExecuted(getResult()); // notify that task has been executed
+            exState = ExState.None;         // prevent to do anythig else
+        }
 
-            exState = ExState.None;     // prevnet to do anithig else
+        protected void chCode(TaskResultCode resultCode)
+        {
+            this.resultCode = resultCode;
+        }
+        protected virtual TaskResultCode getResultCode()
+        {
+            return resultCode;
+        }
+        protected virtual TaskResult getResult()
+        {
+            return new TaskResult()
+            {
+                ResultCode = getResultCode(),
+                Begin = this.Begin,
+                End = this.End,
+            };
         }
 
         #endregion
@@ -214,23 +226,32 @@ namespace MTS.TesterModule
             None
         }
 
+        /// <summary>
+        /// Change execution state of this task to given one
+        /// </summary>
+        /// <param name="state"></param>
+        protected void goTo(ExState state)
+        {
+            exState = state;
+        }
+
         #endregion
 
         #region Time Measurement
 
-        private TimeSpan start;
+        private DateTime start;
         /// <summary>
         /// Start to measure time from now. This method is usually used by some test that need to
         /// measure intervals between two states
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
-        protected void StartWatch(TimeSpan time) { start = time; }
+        protected void StartWatch(DateTime time) { start = time; }
         /// <summary>
         /// Calculate time elapsed since time measurement has been started
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
         /// <returns>Time elapsed since StartWatch has been called</returns>
-        protected double TimeElapsed(TimeSpan time) { return (time - start).TotalMilliseconds; }
+        protected double TimeElapsed(DateTime time) { return (time - start).TotalMilliseconds; }
 
         #endregion
 
@@ -241,92 +262,10 @@ namespace MTS.TesterModule
         /// </summary>
         /// <param name="channels">Instance of channels collection for communication with hardware</param>
         public Task(Channels channels)
-        {
-            state = TaskState.NotExecuted;  // task has not been executed yet
+        {            
             this.channels = channels;       // channels are used for communication with HW
         }
 
         #endregion
-    }
-
-    public class TaskExecutedEventArgs : EventArgs
-    {
-        public TaskState State
-        {
-            get { return Result.State; }
-        }
-
-        public TaskResult Result
-        {
-            get;
-            protected set;
-        }
-
-        public TimeSpan EndTime
-        {
-            get;
-            protected set;
-        }
-
-        public TaskExecutedEventArgs(TaskResult result, TimeSpan endTime)
-        {
-            Result = result;
-            EndTime = endTime;
-        }
-    }
-
-    /// <summary>
-    /// Describes current state of any task
-    /// </summary>
-    public enum TaskState
-    {
-        /// <summary>
-        /// Task has not been executed yet
-        /// </summary>
-        NotExecuted,
-        /// <summary>
-        /// Task is running at this time
-        /// </summary>
-        Running,
-        /// <summary>
-        /// Task has been aborted by some external force
-        /// </summary>
-        Aborted,
-        /// <summary>
-        /// Task has been executed and is completed
-        /// </summary>
-        Completed,
-        /// <summary>
-        /// Task has been executed correctly. This value is used only for test tasks
-        /// </summary>
-        Passed,
-        /// <summary>
-        /// Task has not been executed correctly and error has been found. This value is used only for test tasks
-        /// </summary>
-        Failed
-    }
-
-    /// <summary>
-    /// Describes result of any task. Result is generated when task has been finished (corectly
-    /// or aborted)
-    /// </summary>
-    public class TaskResult
-    {
-        /// <summary>
-        /// (Get/Set) State of task.
-        /// </summary>
-        public TaskState State { get; set; }
-
-        /// <summary>
-        /// (Get/Set) Duration of executed task
-        /// </summary>
-        public TimeSpan Duration { get; set; }
-    }
-    /// <summary>
-    /// Describes result of test task. This result also contains testing parameters used for this test task
-    /// </summary>
-    public class TestTaskResult : TaskResult
-    {
-        
     }
 }
