@@ -57,7 +57,7 @@ namespace MTS.TesterModule
         /// </summary>
         protected override TaskResultCode getResultCode()
         {
-            if (exState == ExState.Aborting)
+            if (exState == ExState.Aborting)    // execution state is aborting - so result is aborted
                 return TaskResultCode.Aborted;
             else if (maxMeasuredCurrent > MaxCurrent || minMeasuredCurrent < MinCurrent)
                 return TaskResultCode.Failed;
@@ -66,7 +66,7 @@ namespace MTS.TesterModule
         }
         protected override TaskResult getResult()
         {
-            TestResult result = base.getResult() as TestResult;
+            TaskResult result = base.getResult();
 
             // add parameter results
             if (result != null)

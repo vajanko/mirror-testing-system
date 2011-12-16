@@ -189,11 +189,11 @@ namespace MTS.IO.Module
         }
 
         /// <summary>
-        /// Read all input and write all output channels
+        /// Write all ouput and read all input channels (in this order)
         /// </summary>
         public void Update()
         {
-            UpdateOutputs();
+            UpdateOutputs();    // this order must be fixed
             UpdateInputs();
         }
         /// <summary>

@@ -77,11 +77,11 @@ namespace MTS.TesterModule
 
                 case ExState.Finalizing:            // just wait for sucker disk to be down
                     if (channels.IsSuckerDown.Value)
-                        Finish(time, getResult(TaskResultCode.Completed));
+                        Finish(time);
                     break;
                 case ExState.Aborting:              // something bad has happened - aborting test
                     // without resolving current state of hardware, may be sucker disk is still on the mirror
-                    Finish(time, getResult(TaskResultCode.Aborted));
+                    Finish(time);
                     break;
             }
         }

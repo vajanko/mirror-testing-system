@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Text;
 using System.Globalization;
+using MTS.Data.Types;
 
 namespace MTS.Editor
 {
@@ -26,8 +27,8 @@ namespace MTS.Editor
         {
             return string.Format(CultureInfo.InvariantCulture, "{0}", Value);
         }
-
         public abstract void ValueFromString(string value);
+        public abstract ParamType ValueType();
 
         #region Constructors
 
@@ -65,6 +66,10 @@ namespace MTS.Editor
         {
             // throw an exception if value is not in correct format
             Value = int.Parse(value, CultureInfo.InvariantCulture);
+        }
+        public override ParamType ValueType()
+        {
+            return ParamType.Int;
         }
 
         #region Constructors
@@ -105,6 +110,10 @@ namespace MTS.Editor
             Value = double.Parse(value, System.Globalization.NumberStyles.Float,
                 System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
         }
+        public override ParamType ValueType()
+        {
+            return ParamType.Double;
+        }
 
         #region Constructors
 
@@ -131,6 +140,10 @@ namespace MTS.Editor
             // throw an exception if value is not in correct format
             Value = bool.Parse(value);
         }
+        public override ParamType ValueType()
+        {
+            return ParamType.Bool;
+        }
 
         #region Constructors
 
@@ -156,6 +169,10 @@ namespace MTS.Editor
         {
             // nothing to parse
             Value = value;
+        }
+        public override ParamType ValueType()
+        {
+            return ParamType.String;
         }
 
         #region Constructors
@@ -200,7 +217,11 @@ namespace MTS.Editor
             SelectedIndex = int.Parse(value);
             // if index is too large, throw an exception
             if (Values.Length < SelectedIndex)
-                throw new ArgumentOutOfRangeException(SelectedIndexString, "Argument is grater than maximu possible value");
+                throw new ArgumentOutOfRangeException(SelectedIndexString, "Argument is grater than maxium possible value");
+        }
+        public override ParamType ValueType()
+        {
+            return ParamType.Enum;
         }
 
         #region Constructors

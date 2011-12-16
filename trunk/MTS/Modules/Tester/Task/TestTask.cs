@@ -29,6 +29,7 @@ namespace MTS.TesterModule
         {
             this.testParam = testParam;
             Name = testParam.Name;
+            Id = testParam.Id;
             Enabled = testParam.Enabled;
         }
 

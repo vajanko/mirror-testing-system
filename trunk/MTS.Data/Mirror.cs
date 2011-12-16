@@ -24,7 +24,7 @@ namespace MTS.Data
         public string Name { get; set; }
         public string Description { get; set; }
         public int SupplierId { get; set; }
-        public int TYPE { get; set; }
+        public byte Type { get; set; }
     
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<Shift> Shifts { get; set; }

@@ -88,11 +88,11 @@
             <PasswordBox Grid.Column="1" Grid.Row="4" Height="20" x:Name="confirmPasswordBox"/>
         
             <Label Grid.Column="0" Grid.Row="5">Group:</Label>
-            <ComboBox Grid.Column="1" Grid.Row="5" x:Name="typeBox" Height="20" SelectedIndex="0">
+            <ComboBox Grid.Column="1" Grid.Row="5" x:Name="typeBox" Height="20" SelectedIndex="0" xmlns:dt="clr-namespace:MTS.Data.Types;assembly=MTS.Data">
                 <ComboBox.Items>
-                    <data:OperatorTypeClass Id="{x:Static data:OperatorType.Admin}" Name="Admin" 
+                    <dt:OperatorTypeClass Id="{x:Static dt:OperatorType.Admin}" Name="Admin" 
                         Description="Administrator of the application. May add, remove and modify operator accounts and change application settings"/>
-                    <data:OperatorTypeClass Id="{x:Static data:OperatorType.User}" Name="User"
+                    <dt:OperatorTypeClass Id="{x:Static dt:OperatorType.User}" Name="User"
                         Description="User of the application. Can not add, remove ro modify operator accounts and change some application settings"/>
                 </ComboBox.Items>
             </ComboBox>

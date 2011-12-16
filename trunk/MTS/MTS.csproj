@@ -204,7 +204,6 @@
     <Compile Include="Modules\Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Modules\Tester\Result\TaskResult.cs" />
     <Compile Include="Modules\Tester\Result\TaskResultCode.cs" />
-    <Compile Include="Modules\Tester\Result\TestResult.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>

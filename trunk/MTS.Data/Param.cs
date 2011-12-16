@@ -21,11 +21,10 @@ namespace MTS.Data
         }
     
         public int Id { get; set; }
-        public int TestId { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
+        public byte Type { get; set; }
     
-        public virtual Test Test { get; set; }
         public virtual ICollection<ParamOutput> ParamOutputs { get; set; }
         public virtual ICollection<TestParam> TestParams { get; set; }
     }
