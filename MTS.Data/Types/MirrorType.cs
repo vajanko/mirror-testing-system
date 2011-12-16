@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MTS.Data
+namespace MTS.Data.Types
 {
     public class MirrorType
     {

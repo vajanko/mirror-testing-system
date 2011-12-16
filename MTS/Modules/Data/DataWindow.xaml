@@ -10,58 +10,58 @@
     <ScrollViewer VerticalScrollBarVisibility="Visible">
         <StackPanel>
             <TabControl>
-            <TabItem Header="Suppliers" Initialized="suppliersGrid_Initialized">
-                <StackPanel>
-                    <DataGrid ItemsSource="{Binding Suppliers}" x:Name="grid" SelectionMode="Single" SelectionUnit="FullRow"
+                <TabItem Header="Suppliers" Initialized="suppliersGrid_Initialized">
+                    <StackPanel>
+                        <DataGrid ItemsSource="{Binding Suppliers}" x:Name="grid" SelectionMode="Single" SelectionUnit="FullRow"
                               CanUserResizeColumns="True" CanUserSortColumns="True" CanUserAddRows="True" CanUserDeleteRows="True"
                               Initialized="suppliersGrid_Initialized"  AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Company Name" Binding="{Binding CompanyName}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="City" Binding="{Binding City}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Street" Binding="{Binding Street}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Number" Binding="{Binding Number}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Mirrors">
-                <StackPanel>
-                    <Button Content="Save" Click="Button_Click" MinWidth="80" HorizontalAlignment="Left"/>
-                    <DataGrid ItemsSource="{Binding Mirrors}" SelectionMode="Single"  SelectionUnit="CellOrRowHeader"
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Company Name" Binding="{Binding CompanyName}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="City" Binding="{Binding City}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Street" Binding="{Binding Street}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Number" Binding="{Binding Number}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Mirrors">
+                    <StackPanel>
+                        <Button Content="Save" Click="Button_Click" MinWidth="80" HorizontalAlignment="Left"/>
+                        <DataGrid ItemsSource="{Binding Mirrors}" SelectionMode="Single"  SelectionUnit="CellOrRowHeader"
                               CanUserResizeColumns="True" CanUserSortColumns="True" CanUserAddRows="True" CanUserDeleteRows="True"
-                              AutoGenerateColumns="False" Initialized="mirrorsGrid_Initialized" x:Name="mirrorsGrid">
-                        <DataGrid.Resources>
-                            <col:ArrayList x:Key="mirrorTypes" Capacity="4">
-                                <data:MirrorType Id="0" Name="Left left-handed"/>
-                                <data:MirrorType Id="1" Name="Left right-handed"/>
-                                <data:MirrorType Id="2" Name="Right left-handed"/>
-                                <data:MirrorType Id="3" Name="Right right-handed"/>
-                            </col:ArrayList>
-                            
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <!--<DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}"></DataGridTextColumn>-->
-                            <DataGridTextColumn Header="Mirror" Binding="{Binding Name}"></DataGridTextColumn>
-                            <DataGridComboBoxColumn Header="Type" ItemsSource="{StaticResource mirrorTypes}"
+                              AutoGenerateColumns="False" Initialized="mirrorsGrid_Initialized" x:Name="mirrorsGrid" xmlns:dt="clr-namespace:MTS.Data.Types;assembly=MTS.Data">
+                            <DataGrid.Resources>
+                                <col:ArrayList x:Key="mirrorTypes" Capacity="4">
+                                    <dt:MirrorType Id="0" Name="Left left-handed"/>
+                                    <dt:MirrorType Id="1" Name="Left right-handed"/>
+                                    <dt:MirrorType Id="2" Name="Right left-handed"/>
+                                    <dt:MirrorType Id="3" Name="Right right-handed"/>
+                                </col:ArrayList>
+
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <!--<DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding Id}"></DataGridTextColumn>-->
+                                <DataGridTextColumn Header="Mirror" Binding="{Binding Name}"></DataGridTextColumn>
+                                <DataGridComboBoxColumn Header="Type" ItemsSource="{StaticResource mirrorTypes}"
                                                     DisplayMemberPath="Name" SelectedValuePath="Id" 
                                                     SelectedValueBinding="{Binding Type}">
-                            </DataGridComboBoxColumn>
-                            <!--<DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.CompanyName}"></DataGridTextColumn>-->
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="test">
-                <ad:ResizingPanel>
-                    <ad:DockablePane ad:ResizingPanel.ResizeWidth="30">
-                        <ad:DockableContent Title="test">
-                            <Button Width="100" Height="100"/>
-                        </ad:DockableContent>
-                    </ad:DockablePane>
-                </ad:ResizingPanel>
-            </TabItem>
-        </TabControl>
+                                </DataGridComboBoxColumn>
+                                <!--<DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.CompanyName}"></DataGridTextColumn>-->
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="test">
+                    <ad:ResizingPanel>
+                        <ad:DockablePane ad:ResizingPanel.ResizeWidth="30">
+                            <ad:DockableContent Title="test">
+                                <Button Width="100" Height="100"/>
+                            </ad:DockableContent>
+                        </ad:DockablePane>
+                    </ad:ResizingPanel>
+                </TabItem>
+            </TabControl>
         </StackPanel>
     </ScrollViewer>
 </ctrl:DocumentItem>

@@ -20,10 +20,6 @@
             <End Role="Supplier" EntitySet="Supplier" />
             <End Role="Mirror" EntitySet="Mirror" />
           </AssociationSet>
-          <AssociationSet Name="fk_param_testId" Association="MTS.Data.Store.fk_param_testId">
-            <End Role="Test" EntitySet="Test" />
-            <End Role="Param" EntitySet="Param" />
-          </AssociationSet>
           <AssociationSet Name="fk_paramOutput_paramId" Association="MTS.Data.Store.fk_paramOutput_paramId">
             <End Role="Param" EntitySet="Param" />
             <End Role="ParamOutput" EntitySet="ParamOutput" />
@@ -69,8 +65,8 @@
           <Property Name="SerialNumber" Type="char" Nullable="false" MaxLength="15" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
-          <Property Name="TYPE" Type="int" Nullable="false" />
           <Property Name="SupplierId" Type="int" Nullable="false" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Operator">
           <Key>
@@ -88,9 +84,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="TestId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="25" />
           <Property Name="Value" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Type" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="ParamOutput">
           <Key>
@@ -121,7 +117,7 @@
           <Property Name="Street" Type="nvarchar" MaxLength="20" />
           <Property Name="Number" Type="int" />
           <Property Name="Zip" Type="int" />
-          <Property Name="STATE" Type="nvarchar" MaxLength="30" />
+          <Property Name="State" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -163,18 +159,6 @@
             </Principal>
             <Dependent Role="Mirror">
               <PropertyRef Name="SupplierId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_param_testId">
-          <End Role="Test" Type="MTS.Data.Store.Test" Multiplicity="1" />
-          <End Role="Param" Type="MTS.Data.Store.Param" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Param">
-              <PropertyRef Name="TestId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -313,10 +297,6 @@
             <End Role="Operator" EntitySet="Operators" />
             <End Role="Shift" EntitySet="Shifts" />
           </AssociationSet>
-          <AssociationSet Name="fk_param_testId" Association="MTS.Data.fk_param_testId">
-            <End Role="Test" EntitySet="Tests" />
-            <End Role="Param" EntitySet="Params" />
-          </AssociationSet>
           <AssociationSet Name="fk_paramOutput_paramId" Association="MTS.Data.fk_paramOutput_paramId">
             <End Role="Param" EntitySet="Params" />
             <End Role="ParamOutput" EntitySet="ParamOutputs" />
@@ -356,8 +336,8 @@
           <Property Name="Description" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="SupplierId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Supplier" Relationship="MTS.Data.fk_supplier_id" FromRole="Mirror" ToRole="Supplier" />
-          <Property Type="Int32" Name="TYPE" Nullable="false" />
           <NavigationProperty Name="Shifts" Relationship="MTS.Data.fk_shift_mirrorId" FromRole="Mirror" ToRole="Shift" />
+          <Property Type="Byte" Name="Type" Nullable="false" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -370,7 +350,7 @@
           <Property Name="Number" Type="Int32" />
           <Property Name="Zip" Type="Int32" />
           <NavigationProperty Name="Mirrors" Relationship="MTS.Data.fk_supplier_id" FromRole="Supplier" ToRole="Mirror" />
-          <Property Type="String" Name="STATE" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="State" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="fk_supplier_id">
           <End Role="Supplier" Type="MTS.Data.Supplier" Multiplicity="1" />
@@ -393,20 +373,19 @@
           <Property Type="String" Name="Surname" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Login" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Password" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="Byte" Name="Type" />
           <NavigationProperty Name="Shifts" Relationship="MTS.Data.fk_shift_operatorId" FromRole="Operator" ToRole="Shift" />
+          <Property Type="Byte" Name="Type" Nullable="false" />
         </EntityType>
         <EntityType Name="Param">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="TestId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Value" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Test" Relationship="MTS.Data.fk_param_testId" FromRole="Param" ToRole="Test" />
           <NavigationProperty Name="ParamOutputs" Relationship="MTS.Data.fk_paramOutput_paramId" FromRole="Param" ToRole="ParamOutput" />
           <NavigationProperty Name="TestParams" Relationship="MTS.Data.fk_testParam_paramId" FromRole="Param" ToRole="TestParam" />
+          <Property Type="Byte" Name="Type" Nullable="false" />
         </EntityType>
         <EntityType Name="ParamOutput">
           <Key>
@@ -439,7 +418,6 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Params" Relationship="MTS.Data.fk_param_testId" FromRole="Test" ToRole="Param" />
           <NavigationProperty Name="TestShifts" Relationship="MTS.Data.fk_testExec_testId" FromRole="Test" ToRole="TestShift" />
           <NavigationProperty Name="TestParams" Relationship="MTS.Data.fk_testParam_testId" FromRole="Test" ToRole="TestParam" />
         </EntityType>
@@ -494,18 +472,6 @@
             </Principal>
             <Dependent Role="Shift">
               <PropertyRef Name="OperatorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_param_testId">
-          <End Type="MTS.Data.Test" Role="Test" Multiplicity="1" />
-          <End Type="MTS.Data.Param" Role="Param" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Param">
-              <PropertyRef Name="TestId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -600,7 +566,7 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MTSDataStoreContainer" CdmEntityContainer="MTSContext">
           <EntitySetMapping Name="Mirrors"><EntityTypeMapping TypeName="MTS.Data.Mirror"><MappingFragment StoreEntitySet="Mirror">
-            <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -608,7 +574,7 @@
             <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Suppliers"><EntityTypeMapping TypeName="MTS.Data.Supplier"><MappingFragment StoreEntitySet="Supplier">
-            <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
             <ScalarProperty Name="City" ColumnName="City" />
@@ -631,9 +597,9 @@
           <EntitySetMapping Name="Params">
             <EntityTypeMapping TypeName="MTS.Data.Param">
               <MappingFragment StoreEntitySet="Param">
+                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="TestId" ColumnName="TestId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -716,14 +682,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="MTSModel" ZoomLevel="95">
-        <EntityTypeShape EntityType="MTS.Data.Mirror" Width="1.5" PointX="3" PointY="0.5" Height="2.2496956380208331" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTS.Data.Mirror" Width="1.5" PointX="3" PointY="0.5" Height="2.0853483072916665" IsExpanded="true" />
         <EntityTypeShape EntityType="MTS.Data.Supplier" Width="1.5" PointX="0.5" PointY="0.5" Height="2.2496956380208339" IsExpanded="true" />
         <AssociationConnector Association="MTS.Data.fk_supplier_id" ManuallyRouted="false">
-          <ConnectorPoint PointX="2" PointY="1.6248478190104165" />
-          <ConnectorPoint PointX="3" PointY="1.6248478190104165" />
+          <ConnectorPoint PointX="2" PointY="1.5426741536458333" />
+          <ConnectorPoint PointX="3" PointY="1.5426741536458333" />
         </AssociationConnector>
         <EntityTypeShape EntityType="MTS.Data.Operator" Width="1.5" PointX="0.5" PointY="3.625" Height="2.0853483072916665" />
-        <EntityTypeShape EntityType="MTS.Data.Param" Width="1.5" PointX="5.25" PointY="6.75" Height="2.0853483072916665" />
+        <EntityTypeShape EntityType="MTS.Data.Param" Width="1.5" PointX="5.25" PointY="6.75" Height="1.9210009765624996" />
         <EntityTypeShape EntityType="MTS.Data.ParamOutput" Width="1.5" PointX="5.25" PointY="3.625" Height="1.9210009765624996" />
         <EntityTypeShape EntityType="MTS.Data.Shift" Width="1.5" PointX="3" PointY="3.375" Height="2.4140429687499996" />
         <EntityTypeShape EntityType="MTS.Data.Test" Width="1.5" PointX="0.5" PointY="9" Height="1.7566536458333317" />
@@ -731,17 +697,12 @@
         <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="3.125" PointY="6.75" Height="1.7566536458333317" />
         <EntityTypeShape EntityType="MTS.Data.TestShift" Width="1.5" PointX="0.5" PointY="6.25" Height="1.7566536458333317" />
         <AssociationConnector Association="MTS.Data.fk_shift_mirrorId" >
-          <ConnectorPoint PointX="3.75" PointY="2.7496956380208331" />
+          <ConnectorPoint PointX="3.75" PointY="2.5853483072916665" />
           <ConnectorPoint PointX="3.75" PointY="3.375" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_shift_operatorId" >
           <ConnectorPoint PointX="2" PointY="4.6676741536458337" />
           <ConnectorPoint PointX="3" PointY="4.6676741536458337" />
-        </AssociationConnector>
-        <AssociationConnector Association="MTS.Data.fk_param_testId" >
-          <ConnectorPoint PointX="2" PointY="10.12420344205729" />
-          <ConnectorPoint PointX="6" PointY="10.12420344205729" />
-          <ConnectorPoint PointX="6" PointY="8.8353483072916674" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_paramOutput_paramId" >
           <ConnectorPoint PointX="6" PointY="6.75" />

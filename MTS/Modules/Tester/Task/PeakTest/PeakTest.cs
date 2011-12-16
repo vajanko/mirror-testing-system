@@ -64,7 +64,7 @@ namespace MTS.TesterModule
 
         protected override TaskResult getResult()
         {
-            TestResult result = base.getResult() as TestResult;
+            TaskResult result = base.getResult();
 
             if (result != null)
             {

@@ -434,7 +434,6 @@ namespace MTS.Admin
                             Login = dialog.Login,
                             Name = dialog.OperatorName,
                             Surname = dialog.OperatorSurname,
-                            Type = (byte)dialog.Type,
                             Password = ASCIIEncoding.ASCII.GetString(hash.Hash)
                         });
 

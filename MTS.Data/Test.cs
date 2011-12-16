@@ -16,7 +16,6 @@ namespace MTS.Data
     {
         public Test()
         {
-            this.Params = new HashSet<Param>();
             this.TestShifts = new HashSet<TestShift>();
             this.TestParams = new HashSet<TestParam>();
         }
@@ -24,7 +23,6 @@ namespace MTS.Data
         public int Id { get; set; }
         public string Name { get; set; }
     
-        public virtual ICollection<Param> Params { get; set; }
         public virtual ICollection<TestShift> TestShifts { get; set; }
         public virtual ICollection<TestParam> TestParams { get; set; }
     }

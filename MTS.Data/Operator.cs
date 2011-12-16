@@ -24,7 +24,7 @@ namespace MTS.Data
         public string Surname { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public Nullable<byte> Type { get; set; }
+        public byte Type { get; set; }
     
         public virtual ICollection<Shift> Shifts { get; set; }
     }

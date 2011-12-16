@@ -39,6 +39,10 @@ namespace MTS.TesterModule
         #region Properties
 
         /// <summary>
+        /// (Get/Set) Unique string identifier
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
         /// (Get/Set) Name or short description of this task
         /// </summary>
         public string Name { get; set; }
@@ -124,7 +128,8 @@ namespace MTS.TesterModule
         }
         protected virtual TaskResult getResult()
         {
-            return new TaskResult()
+            // for test this is test name (unique identifier)
+            return new TaskResult(this.Id)
             {
                 ResultCode = getResultCode(),
                 Begin = this.Begin,

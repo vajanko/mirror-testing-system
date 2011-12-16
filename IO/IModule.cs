@@ -25,7 +25,7 @@
         void Initialize();
 
         /// <summary>
-        /// Read all input and write all output channels
+        /// Write all ouput and read all input channels (in this order)
         /// </summary>
         void Update();
 

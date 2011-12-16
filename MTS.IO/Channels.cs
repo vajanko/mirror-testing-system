@@ -174,7 +174,7 @@ namespace MTS.IO
             IsPowerSupplyOff = (IDigitalInput)module.GetChannelByName("IsPowerSupplyOff");
         }
         /// <summary>
-        /// Read all input and write all output channels
+        /// Write all ouput and read all input channels (in this order)
         /// </summary>
         public void Update()
         {   // update all channels: read in/out and write out channels

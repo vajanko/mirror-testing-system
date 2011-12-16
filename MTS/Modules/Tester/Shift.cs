@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Threading;
+using System.Diagnostics;
 
 using MTS.IO;
 using MTS.Editor;
-using System.Diagnostics;
+using MTS.Data;
+using MTS.Data.Converters;
+using MTS.Data.Types;
+using MTS.Tester.Result;
+
 
 namespace MTS.TesterModule
 {
@@ -20,6 +26,8 @@ namespace MTS.TesterModule
         private TestCollection tests;
         private TaskScheduler scheduler;
         private Thread loop;
+        private Dictionary<string, KeyValuePair<int, Dictionary<string, Param>>> testParam;
+        private int shiftId = 1;
 
         #endregion
 
@@ -124,18 +132,62 @@ namespace MTS.TesterModule
 
         #region Private Methods
 
+        private void saveUsedTests(TestCollection tests)
+        {
+            // in this dictionary are saved string identifiers of test used in this shift and
+            // pair of: Id of test in database and dictionary of this test parameters where key
+            // is a string param identifier and value is its content in database
+            testParam = new Dictionary<string, KeyValuePair<int, Dictionary<string, Param>>>();
+
+            using (MTSContext context = new MTSContext())
+            {
+                // save all used test to database
+                foreach (TestValue tv in tests)
+                {
+                    // from database select test with this name: tv.Id
+                    Test dbTest = context.Tests.FirstOrDefault(t => t.Name == tv.Id);
+                    if (dbTest == null) // if such a test does not exist yet - add a new one
+                    {   // this test does not have its id generated yet
+                        dbTest = context.Tests.Add(new Test { Name = tv.Id });
+                        // by saveing changes new id for dbTest will be generated
+                    }
+
+                    // database instances of newly added or referenced parameters
+                    List<Param> refParams = new List<Param>();
+
+                    foreach (ParamValue pv in tv)
+                    {   // from database select parameter with this name and value
+                        string pValue = pv.ValueToString();
+                        ParamType pType = pv.ValueType();
+                        Param dbParam = context.Params
+                            .FirstOrDefault(p => p.Name == pv.Id && p.Value == pValue);
+                        if (dbParam == null)    // if such a param does not exists yet - add a new one
+                        {   // this param does not have its id generated
+                            dbParam = context.Params.Add(new Param { Name = pv.Id, Value = pValue, Type = (byte)pType });
+                            context.TestParams.Add(new TestParam { Test = dbTest, Param = dbParam });
+                        }
+                        refParams.Add(dbParam);
+                    }
+                    // by saveing changes new ids for dbParams will be generated and newly added parameters
+                    // will be save to database
+                    context.SaveChanges();
+
+                    Dictionary<string, Param> paramIds = new Dictionary<string, Param>();
+                    foreach (Param rp in refParams)
+                        paramIds.Add(rp.Name, rp);
+                    testParam.Add(dbTest.Name, new KeyValuePair<int, Dictionary<string, Param>>(
+                        dbTest.Id, paramIds));
+                }
+            }
+        }
+
         private void setSafeStateOutputs(Channels channels)
         {
             if (channels != null)
             {
-                // stop powerfold
-                channels.FoldPowerfold.Value = false;
-                channels.UnfoldPowerfold.Value = false;
-                // stop mirror movement
-                channels.MoveMirrorHorizontal.Value = false;
-                channels.MoveMirrorVertical.Value = false;
-                channels.MoveMirrorReverse.Value = false;
-                channels.AllowMirrorMovement.Value = false;
+                channels.StopMirror();
+                channels.StopPowerfold();
+                channels.StopAir();
 
                 // stop direction light
                 channels.DirectionLightOn.Value = false;
@@ -146,8 +198,6 @@ namespace MTS.TesterModule
                 channels.MoveDistanceSensorUp.Value = false;
                 channels.MoveDistanceSensorDown.Value = true;
 
-                // 
-                channels.SuckOn.Value = false;
 
                 // switch off lights
                 channels.RedLightOn.Value = false;
@@ -183,7 +233,7 @@ namespace MTS.TesterModule
             //// wait for start
             //scheduler.AddWaitForStart();
             //// add tests of mirror movement
-            scheduler.AddTravelTests(tests);
+            //scheduler.AddTravelTests(tests);
 
             //// wait for start
             //scheduler.AddWaitForStart();
@@ -218,11 +268,13 @@ namespace MTS.TesterModule
 
         private void executeLoop()
         {
-            Stopwatch watch = new Stopwatch();
-            DateTime time = DateTime.Now;       // time of updating scheduler
+            Stopwatch watch = new Stopwatch();  // time elapsed since last loop
+            DateTime time = DateTime.Now;       // current time of updating scheduler
 
             Output.WriteLine("Execution loop started!");
-            watch.Start();
+            watch.Start();      // start measuring execution time
+
+            // while there are some mirrors to be tested
             while (Remained > 0)
             {
                 Output.WriteLine("Test sequence {0} started", Finished + 1);
@@ -230,45 +282,97 @@ namespace MTS.TesterModule
                 // create scheduler with tasks to be executed
                 scheduler = createScheduler(channels, tests);
 
+                // this loop tests one mirror
                 while (!scheduler.IsFinished)
                 {
-                    Thread.Sleep(50);   // for presentation purpose only
-                    time += watch.Elapsed;  // current time
-                    scheduler.UpdateOutputs(time);
-                    scheduler.Update(time);
+                    Thread.Sleep(200);              // for presentation purpose only
+                    time += watch.Elapsed;          // caluculate current time (DateTime.Now is not very exactly)
+                    scheduler.Update(time);         // execute tasks
                 }
+
                 Output.WriteLine("Test sequence {0} finished", Finished + 1);
 
                 // write outputs to safe state
                 setSafeStateOutputs(channels);
 
                 // handle results
-                schedulerExecuted(scheduler, new EventArgs());
+                handleResults(scheduler);
             }
-            watch.Stop();
-            Output.WriteLine("Execution loop finished!");
+            watch.Stop();       // stop measuring execution time
+
+            // finalize shift execution
             Finish();
+            Output.WriteLine("Execution loop finished!");
         }
 
-        private void schedulerExecuted(TaskScheduler sender, EventArgs args)
+        private void handleResults(TaskScheduler scheduler)
         {
-            bool result = sender.AreAllPassed();
+            // first of all display result to user - saveing may be spent some period of time
             string msg;
-            if (result)
+            TaskResultCode resultCode = scheduler.GetResultCode();
+            if (resultCode == TaskResultCode.Completed)
             {
                 msg = "Mirror passed!";
-                channels.GreenLightOn.Value = true;
+                channels.GreenLightOn.SwitchOn();
                 Passed++;
+            }
+            else if (resultCode == TaskResultCode.Failed)
+            {
+                msg = "Mirror failed!";
+                channels.RedLightOn.SwitchOn();
+                Failed++;
             }
             else
             {
-                msg = "Mirror failed!";
-                channels.RedLightOn.Value = true;
-                Failed++;
+                msg = "Aborted!";
             }
+
             Output.WriteLine("Result: " + msg);
             // switch light (green or red) on
             channels.UpdateOutputs();
+
+            ParamTypeConverter converter = new ParamTypeConverter();
+
+            Output.Write("Saveing results do database ... ");
+            // save all results to database
+            using (MTSContext context = new MTSContext())
+            {
+                List<TaskResult> results = scheduler.GetResultData();
+                foreach (TaskResult res in results)
+                {
+                    if (res.Id == null || !testParam.ContainsKey(res.Id))   // check if there is test name
+                        continue;
+                    var item = testParam[res.Id];
+                    int testId = item.Key;
+                    var paramIds = item.Value;
+
+                    TestOutput testOutput = context.TestOutputs.Add(new TestOutput
+                    {
+                        Result = (byte)res.ResultCode,
+                        ShiftId = this.shiftId,
+                    });
+
+                    // for now just write to output
+                    foreach (ParamResult paramRes in res.Params)
+                    {   // throw away param result if we do not have its id
+                        if (!paramIds.ContainsKey(paramRes.Id))
+                            continue;                        
+                        Param dbParam = paramIds[paramRes.Id];
+                        string paramValue = converter.ConvertToString((ParamType)dbParam.Type, paramRes.Value);
+
+                        context.ParamOutputs.Add(new ParamOutput
+                        {
+                            Param = dbParam,
+                            TestOutput = testOutput,
+                            Value = paramValue                            
+                        });
+                    }
+                }
+                context.SaveChanges();
+            }
+            Output.WriteLine("Saved!");
+
+            // wait a moment to display light
             Thread.Sleep(1000);
         }
 
@@ -307,6 +411,10 @@ namespace MTS.TesterModule
             }
             // create a new thread for execution loop
             loop = new Thread(new ThreadStart(executeLoop));
+
+            // everything is prepared for execution - now save used tests and parameters to database
+            // only parameters and tests are saved to database that which do not already exist
+            saveUsedTests(tests);
         }
         public void Start()
         {
@@ -352,7 +460,7 @@ namespace MTS.TesterModule
         {
             this.channels = channels;
             this.tests = tests;
-            Mirrors = 1;
+            Mirrors = 1;        // default count
         }
 
         #endregion

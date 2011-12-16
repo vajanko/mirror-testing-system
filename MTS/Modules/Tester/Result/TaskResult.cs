@@ -8,6 +8,10 @@ namespace MTS.Tester.Result
     public class TaskResult
     {
         /// <summary>
+        /// (Get/Set) Unique idnetifier of this task
+        /// </summary>
+        public string Id { get; private set; }
+        /// <summary>
         /// (Get/Set) Time when task started its execution
         /// </summary>
         public DateTime Begin { get; set; }
@@ -28,11 +32,19 @@ namespace MTS.Tester.Result
         /// </summary>
         public TaskResultCode ResultCode { get; set; }
 
+        /// <summary>
+        /// (Get) Collection of parameter results for this test. This values contains parameter identifier
+        /// and its value in string representation. It is exprected that these values will be saved in database.
+        /// For more information see <see cref="ParamResult"/> class implementation.
+        /// </summary>
+        public List<ParamResult> Params { get; private set; }
+
         #region Constructors
 
-        public TaskResult()
+        public TaskResult(string id)
         {
-            
+            this.Id = id;
+            Params = new List<ParamResult>();
         }
 
         #endregion

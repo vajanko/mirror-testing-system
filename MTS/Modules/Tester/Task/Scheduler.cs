@@ -26,7 +26,7 @@ namespace MTS.TesterModule
         // these tasks are already executed - necessary to collect data
         private LinkedList<Task> executed = new LinkedList<Task>();
         // result of all executed tasks
-        private List<TaskResult> results = new List<TaskResult>();
+        private List<TaskResult> results = new List<TaskResult>();       
 
         #endregion
 
@@ -35,11 +35,11 @@ namespace MTS.TesterModule
         /// <summary>
         /// (Get) Value indicating if there are no more task to be executed
         /// </summary>
-        public bool IsFinished
-        {
-            get;
-            private set;
-        }
+        public bool IsFinished { get; private set; }
+        /// <summary>
+        /// (Get) Value indicating if executing of scheduler is being aborted by some external force
+        /// </summary>
+        public bool IsAborting { get; private set; }
 
 
         #endregion
@@ -274,6 +274,7 @@ namespace MTS.TesterModule
             // save result
             results.Add(args.Result);
 
+            // check if there are more tasks to be executed
             if (executing.Count == 0 && toExecute.Count == 0)
                 RaiseExecuted();
 
@@ -283,7 +284,7 @@ namespace MTS.TesterModule
             {   // add all tasks that may be executed
                 task = getNextTask();
                 if (task != null)
-                    prepared.AddFirst(task);    // BeginExecute will be called on this tasks
+                    prepared.AddFirst(task);    // Initialize will be called on this task at next Update()
             } while (task != null);
         }
         /// <summary>
@@ -335,12 +336,15 @@ namespace MTS.TesterModule
             prepared.AddFirst(newTask);
         }
 
+        #region Lifecycle
+
         /// <summary>
         /// Prepare scheduler for tasks executing. This method must be called before first Update()
         /// </summary>
         public void Initialize()
         {
             IsFinished = false;
+            IsAborting = false;
 
             // nothing to execute
             if (toExecute.Count <= 0)
@@ -354,7 +358,11 @@ namespace MTS.TesterModule
             toExecute.RemoveFirst();
             // initialize channels
         }
-        public void UpdateOutputs(DateTime time)
+        /// <summary>
+        /// Update all executing tasks
+        /// </summary>
+        /// <param name="time">Time at moment of calling this method</param>
+        public void Update(DateTime time)
         {
             // begin execute all prepared tasks and add them to executing colletion
             foreach (Task task in prepared)
@@ -362,27 +370,11 @@ namespace MTS.TesterModule
                 task.Initialize(time);
                 executing.AddFirst(task);
             }
-            prepared.Clear();
+            prepared.Clear();           // prepared tasks became executing
 
-            // update all executing tasks
-            LinkedListNode<Task> node1 = executing.First, node2;
-            while (node1 != null)
-            {
-                node2 = node1.Next;
-                //node1.Value.UpdateOutputs(time);    // notice that when updating node1 - it could be removed
-                node1 = node2;                      // because of that we hold next node = node2
-            }
-            // update output channels - values that has been just writed by executing tasks
-            channels.UpdateOutputs();
-        }
-        /// <summary>
-        /// Update all executing tasks
-        /// </summary>
-        /// <param name="time">Time at moment of calling this method</param>
-        public void Update(DateTime time)
-        {
-            // update input channels - values that are going to be read by executing tasks
-            channels.UpdateInputs();
+            // write all outputs and read inputs (in this order)
+            channels.Update();
+
             // update all executing tasks
             LinkedListNode<Task> node1 = executing.First, node2;
             while (node1 != null)
@@ -393,6 +385,21 @@ namespace MTS.TesterModule
             }
         }
 
+        #endregion
+
+        public TaskResultCode GetResultCode()
+        {
+            // check if scheduler has been aborted by some external force
+            if (IsAborting)
+                return TaskResultCode.Aborted;
+
+            // check if there is some failed task - then result is Failed
+            foreach (TaskResult result in results)
+                if (result.ResultCode == TaskResultCode.Failed)
+                    return TaskResultCode.Failed;
+            // otherwise everythig finished correctly
+            return TaskResultCode.Completed;
+        }
         public bool AreAllPassed()
         {
             bool ret = true;
@@ -404,7 +411,7 @@ namespace MTS.TesterModule
 
         public List<TaskResult> GetResultData()
         {
-            throw new NotImplementedException("Return collection of TaskResult for each task");
+            return results;
         }
 
         #endregion

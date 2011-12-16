@@ -59,10 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Types\ParamType.cs" />
+    <Compile Include="Converters\ParamTypeConverter.cs" />
     <Compile Include="Mirror.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MirrorType.cs" />
+    <Compile Include="Types\MirrorType.cs" />
     <Compile Include="MTSModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -81,7 +83,7 @@
     <Compile Include="Operator.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="OperatorType.cs" />
+    <Compile Include="Types\OperatorType.cs" />
     <Compile Include="Param.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
@@ -167,6 +169,7 @@
       <DependentUpon>mts.mdf</DependentUpon>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
