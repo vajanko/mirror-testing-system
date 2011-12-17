@@ -224,12 +224,27 @@ namespace MTS.IO
             throw new NotImplementedException("Method which switch all ouputs to safe state is not implemented yet!");
         }
 
-
         #region IEnumerable Members
 
         public System.Collections.IEnumerator GetEnumerator()
         {
             return module.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Release resources allocated by underlaying module instance. Disconnect module if it is connected
+        /// </summary>
+        public void Dispose()
+        {
+            if (module != null)
+            {
+                Disconnect();
+                module.Dispose();
+            }
         }
 
         #endregion

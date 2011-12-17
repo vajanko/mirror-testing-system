@@ -285,6 +285,11 @@ namespace MTS
 
         #endregion
 
-
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            while (loginWindow.ShowDialog() != true)
+                loginWindow = new LoginWindow();
+        }
     }
 }

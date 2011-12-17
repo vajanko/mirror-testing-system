@@ -25,6 +25,15 @@ namespace MTS.Editor
 
         #endregion
 
+        public TestValue this[string key]
+        {
+            get { return tests[key]; }
+            set { tests[key] = value; }
+        }
+        public bool ContainsKey(string key)
+        {
+            return tests.ContainsKey(key);
+        }
         public void AddTest(TestValue test)
         {
             tests.Add(test.Id, test);

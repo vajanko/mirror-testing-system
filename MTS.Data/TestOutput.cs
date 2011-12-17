@@ -21,10 +21,14 @@ namespace MTS.Data
     
         public int Id { get; set; }
         public byte Result { get; set; }
+        public System.DateTime Start { get; set; }
+        public System.DateTime Finish { get; set; }
+        public int TestId { get; set; }
         public int ShiftId { get; set; }
     
-        public virtual ICollection<ParamOutput> ParamOutputs { get; set; }
+        public virtual Test Test { get; set; }
         public virtual Shift Shift { get; set; }
+        public virtual ICollection<ParamOutput> ParamOutputs { get; set; }
     }
     
 }

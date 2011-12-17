@@ -15,8 +15,8 @@ namespace MTS.Data
     public partial class TestShift
     {
         public int Id { get; set; }
-        public int ShiftId { get; set; }
         public int TestId { get; set; }
+        public int ShiftId { get; set; }
     
         public virtual Shift Shift { get; set; }
         public virtual Test Test { get; set; }

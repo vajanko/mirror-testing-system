@@ -59,38 +59,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Types\ParamType.cs" />
-    <Compile Include="Converters\ParamTypeConverter.cs" />
     <Compile Include="Mirror.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Types\MirrorType.cs" />
-    <Compile Include="MTSModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MTSModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MTSModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MTSModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MTSModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MTSModel.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="MTSDataHelper.cs" />
     <Compile Include="Operator.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Types\OperatorType.cs" />
     <Compile Include="Param.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ParamOutput.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shift.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
@@ -109,6 +90,26 @@
     <Compile Include="TestShift.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Types\ParamType.cs" />
+    <Compile Include="Converters\ParamTypeConverter.cs" />
+    <Compile Include="Types\MirrorType.cs" />
+    <Compile Include="MTSModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MTSModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MTSModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MTSModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MTSModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Types\OperatorType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
@@ -159,15 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="mts.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="mts_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>mts.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

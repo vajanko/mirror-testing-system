@@ -16,8 +16,8 @@ namespace MTS.Data
     {
         public Shift()
         {
-            this.TestShifts = new HashSet<TestShift>();
             this.TestOutputs = new HashSet<TestOutput>();
+            this.TestShifts = new HashSet<TestShift>();
         }
     
         public int Id { get; set; }
@@ -28,8 +28,8 @@ namespace MTS.Data
     
         public virtual Mirror Mirror { get; set; }
         public virtual Operator Operator { get; set; }
-        public virtual ICollection<TestShift> TestShifts { get; set; }
         public virtual ICollection<TestOutput> TestOutputs { get; set; }
+        public virtual ICollection<TestShift> TestShifts { get; set; }
     }
     
 }

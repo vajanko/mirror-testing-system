@@ -17,7 +17,7 @@ namespace MTS.Data
         public int Id { get; set; }
         public string Value { get; set; }
         public int ParamId { get; set; }
-        public int TestOutputId { get; set; }
+        public int TestOutpuId { get; set; }
     
         public virtual Param Param { get; set; }
         public virtual TestOutput TestOutput { get; set; }

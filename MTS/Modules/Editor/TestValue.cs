@@ -57,6 +57,11 @@ namespace MTS.Editor
 
         #region Parameters
 
+        public ParamValue this[string key]
+        {
+            get { return parameters[key]; }
+            set { parameters[key] = value; }
+        }
         public void AddParam(ParamValue param)
         {
             parameters.Add(param.Id, param);
