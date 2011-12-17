@@ -127,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Modules\Admin\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Modules\Admin\ModbusSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,6 +200,10 @@
     </Compile>
     <Compile Include="Controls\Validators\PasswordEqualityValidator.cs" />
     <Compile Include="Controls\Validators\RequiredFieldValidator.cs" />
+    <Compile Include="Modules\Admin\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\Admin\Operator.cs" />
     <Compile Include="Modules\Data\EditOperatorWindow.xaml.cs">
       <DependentUpon>EditOperatorWindow.xaml</DependentUpon>
     </Compile>

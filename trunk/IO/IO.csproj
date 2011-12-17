@@ -52,7 +52,12 @@
     <Compile Include="Address\ECAddress.cs" />
     <Compile Include="Address\ModbusAddress.cs" />
     <Compile Include="ChannelSetting.cs" />
+    <Compile Include="ChannelSettings.cs" />
     <Compile Include="Channel\ChannelException.cs" />
+    <Compile Include="IAnalogInput.cs" />
+    <Compile Include="IAnalogOutput.cs" />
+    <Compile Include="IDigitalInput.cs" />
+    <Compile Include="IDigitalOutput.cs" />
     <Compile Include="IOException.cs" />
     <Compile Include="Module\ConnectionException.cs" />
     <Compile Include="Module\ModbusAISlot.cs" />

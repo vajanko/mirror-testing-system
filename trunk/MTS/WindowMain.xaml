@@ -7,7 +7,7 @@
         xmlns:ctrl="clr-namespace:MTS.Controls"
         xmlns:ed="clr-namespace:MTS.Editor"
         xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
-        Title="MTS" Height="800" Width="800" Left="0" Top="0"
+        Title="MTS" Height="800" Width="800" Left="0" Top="0" Loaded="MainWindow_Loaded"
         >
 
     <Window.CommandBindings>

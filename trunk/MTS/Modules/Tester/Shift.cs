@@ -26,8 +26,16 @@ namespace MTS.TesterModule
         private TestCollection tests;
         private TaskScheduler scheduler;
         private Thread loop;
-        private Dictionary<string, KeyValuePair<int, Dictionary<string, Param>>> testParam;
-        private int shiftId = 1;
+        private Data.Shift dbShift;
+        
+        /// <summary>
+        /// Id of mirror tested in this shift
+        /// </summary>
+        private int mirrorId;
+        /// <summary>
+        /// Id of operator who has executed this shift
+        /// </summary>
+        private int operatorId;
 
         #endregion
 
@@ -58,7 +66,6 @@ namespace MTS.TesterModule
                 NotifyPropretyChanged("Mirrors");
             }
         }
-
         /// <summary>
         /// (Get) Number of finised tests
         /// </summary>
@@ -66,7 +73,6 @@ namespace MTS.TesterModule
         {
             get { return Passed + Failed; }
         }
-
         private int passed = 0;
         /// <summary>
         /// (Get/Set) Number of correnct finished tests
@@ -80,7 +86,6 @@ namespace MTS.TesterModule
                 NotifyPropretyChanged("Passed");
             }
         }
-
         private int failed = 0;
         /// <summary>
         /// (Get/Set) Number of finished tests that have failed
@@ -94,7 +99,6 @@ namespace MTS.TesterModule
                 NotifyPropretyChanged("Failed");
             }
         }
-
         /// <summary>
         /// (Get) Number of mirror that remain to be tested
         /// </summary>
@@ -102,7 +106,6 @@ namespace MTS.TesterModule
         {
             get { return Mirrors - Finished; }
         }
-
         /// <summary>
         /// (Get) Value indicating if schift is running or not
         /// </summary>
@@ -110,6 +113,14 @@ namespace MTS.TesterModule
         {
             get {  return (loop != null) ? loop.IsAlive : false; }  // true is thread is alive
         }
+        /// <summary>
+        /// (Get) Date and time when shift has been started
+        /// </summary>
+        public DateTime Begin { get; private set; }
+        /// <summary>
+        /// (Get) Date and time when shift has been finished
+        /// </summary>
+        public DateTime End { get; private set; }
 
 
         #endregion
@@ -131,55 +142,6 @@ namespace MTS.TesterModule
         #endregion
 
         #region Private Methods
-
-        private void saveUsedTests(TestCollection tests)
-        {
-            // in this dictionary are saved string identifiers of test used in this shift and
-            // pair of: Id of test in database and dictionary of this test parameters where key
-            // is a string param identifier and value is its content in database
-            testParam = new Dictionary<string, KeyValuePair<int, Dictionary<string, Param>>>();
-
-            using (MTSContext context = new MTSContext())
-            {
-                // save all used test to database
-                foreach (TestValue tv in tests)
-                {
-                    // from database select test with this name: tv.Id
-                    Test dbTest = context.Tests.FirstOrDefault(t => t.Name == tv.Id);
-                    if (dbTest == null) // if such a test does not exist yet - add a new one
-                    {   // this test does not have its id generated yet
-                        dbTest = context.Tests.Add(new Test { Name = tv.Id });
-                        // by saveing changes new id for dbTest will be generated
-                    }
-
-                    // database instances of newly added or referenced parameters
-                    List<Param> refParams = new List<Param>();
-
-                    foreach (ParamValue pv in tv)
-                    {   // from database select parameter with this name and value
-                        string pValue = pv.ValueToString();
-                        ParamType pType = pv.ValueType();
-                        Param dbParam = context.Params
-                            .FirstOrDefault(p => p.Name == pv.Id && p.Value == pValue);
-                        if (dbParam == null)    // if such a param does not exists yet - add a new one
-                        {   // this param does not have its id generated
-                            dbParam = context.Params.Add(new Param { Name = pv.Id, Value = pValue, Type = (byte)pType });
-                            context.TestParams.Add(new TestParam { Test = dbTest, Param = dbParam });
-                        }
-                        refParams.Add(dbParam);
-                    }
-                    // by saveing changes new ids for dbParams will be generated and newly added parameters
-                    // will be save to database
-                    context.SaveChanges();
-
-                    Dictionary<string, Param> paramIds = new Dictionary<string, Param>();
-                    foreach (Param rp in refParams)
-                        paramIds.Add(rp.Name, rp);
-                    testParam.Add(dbTest.Name, new KeyValuePair<int, Dictionary<string, Param>>(
-                        dbTest.Id, paramIds));
-                }
-            }
-        }
 
         private void setSafeStateOutputs(Channels channels)
         {
@@ -222,13 +184,13 @@ namespace MTS.TesterModule
             // add for providing basic steps to start executing test
             // this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
             // close device
-            scheduler.AddInitSequence();
+            //scheduler.AddInitSequence();
 
             // wait for start
             //scheduler.AddWaitForStart();
 
             // rubber test
-            scheduler.AddRubberTest(tests);
+            //scheduler.AddRubberTest(tests);
 
             //// wait for start
             //scheduler.AddWaitForStart();
@@ -243,12 +205,12 @@ namespace MTS.TesterModule
             // wait for start
             //scheduler.AddWaitForStart();
             // test powerfold
-            scheduler.AddTask(new PowerfoldTest(channels, tests.GetTest(TestCollection.Powerfold)));
+            //scheduler.AddTask(new PowerfoldTest(channels, tests.GetTest(TestCollection.Powerfold)));
 
             // wait for start
             //scheduler.AddWaitForStart();
             // test blinker
-            scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.DirectionLight)));
+            //scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.DirectionLight)));
 
             // wait for start
             //scheduler.AddWaitForStart();
@@ -256,7 +218,7 @@ namespace MTS.TesterModule
             scheduler.AddTask(new SpiralTest(channels, tests.GetTest(TestCollection.Heating)));
 
             // open device
-            scheduler.AddOpenDevice();
+            //scheduler.AddOpenDevice();
 
             // add first task to be executed
             scheduler.Initialize();
@@ -331,50 +293,101 @@ namespace MTS.TesterModule
             // switch light (green or red) on
             channels.UpdateOutputs();
 
-            ParamTypeConverter converter = new ParamTypeConverter();
+            this.End = DateTime.Now;
 
             Output.Write("Saveing results do database ... ");
-            // save all results to database
-            using (MTSContext context = new MTSContext())
-            {
-                List<TaskResult> results = scheduler.GetResultData();
-                foreach (TaskResult res in results)
-                {
-                    if (res.Id == null || !testParam.ContainsKey(res.Id))   // check if there is test name
-                        continue;
-                    var item = testParam[res.Id];
-                    int testId = item.Key;
-                    var paramIds = item.Value;
-
-                    TestOutput testOutput = context.TestOutputs.Add(new TestOutput
-                    {
-                        Result = (byte)res.ResultCode,
-                        ShiftId = this.shiftId,
-                    });
-
-                    // for now just write to output
-                    foreach (ParamResult paramRes in res.Params)
-                    {   // throw away param result if we do not have its id
-                        if (!paramIds.ContainsKey(paramRes.Id))
-                            continue;                        
-                        Param dbParam = paramIds[paramRes.Id];
-                        string paramValue = converter.ConvertToString((ParamType)dbParam.Type, paramRes.Value);
-
-                        context.ParamOutputs.Add(new ParamOutput
-                        {
-                            Param = dbParam,
-                            TestOutput = testOutput,
-                            Value = paramValue                            
-                        });
-                    }
-                }
-                context.SaveChanges();
-            }
+            List<TaskResult> results = scheduler.GetResultData();
+            saveShiftResult(results, tests);
             Output.WriteLine("Saved!");
 
             // wait a moment to display light
             Thread.Sleep(1000);
         }
+
+        #region Database Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="results"></param>
+        /// <param name="usedTests"></param>
+        private void saveShiftResult(List<TaskResult> results, TestCollection usedTests)
+        {
+            // this converter is used to convert object value to its string representation when
+            // saveing to and retriving from database
+            ParamTypeConverter converter = new ParamTypeConverter();
+
+            using (MTSContext context = new MTSContext())
+            {
+                // save result data
+                foreach (TaskResult tRes in results)
+                {   // skip result without data to be saved
+                    if (tRes.Id == null || !usedTests.ContainsKey(tRes.Id))
+                        continue;
+
+                    // 1) save used test if it does not exists and generate a new id
+                    TestValue tv = usedTests[tRes.Id];  // test used to produce this output
+                    Test dbTest = context.Tests.FirstOrDefault(t => t.Name == tv.Id);
+                    if (dbTest == null)
+                    {   // check if such a test already exists
+                        dbTest = context.Tests.Add(new Test { Name = tv.Id });
+                        context.SaveChanges();  // this will generate a new id for this test
+                    }
+
+                    // 2) save test output and reference used test to produce this output
+                    TestOutput dbTestOutput = context.TestOutputs.Add(new TestOutput
+                    {
+                        Result = (byte)tRes.ResultCode,
+                        Start = tRes.Begin,
+                        Finish = tRes.End,
+                        ShiftId = dbShift.Id,
+                        TestId = dbTest.Id
+                    });
+                    context.SaveChanges();  // generate new id of test output so param output can use it
+                    int testOutputId = dbTestOutput.Id;
+
+                    // 3) save parameters (outputs)
+                    foreach (ParamResult pRes in tRes.Params)
+                    {
+                        // 3.1 save used parameter if it doest not exists and generate a new id
+                        ParamValue pv = tv[pRes.Id];        // parameter used to produce this output
+                        Param dbParam = context.Params.FirstOrDefault(p => p.Name == pRes.Id);
+                        if (dbParam == null)
+                        {   // check if such a param already exists
+                            
+                            string strVal = pv.ValueToString(); // convert parameter value to string representation
+                            byte typeVal = (byte)pv.ValueType();// conversion to string loose which type it was
+                            dbParam = context.Params.Add(new Param { Name = pv.Id, Type = typeVal, Value = strVal });
+                            context.SaveChanges();  // this will generate a new id for this param
+                        }
+
+                        // 3.2 save relationship between test and param if it does not exists yet
+                        TestParam dbTestParam = context.TestParams
+                            .FirstOrDefault(tp => tp.TestId == dbTest.Id && tp.ParamId == dbParam.Id);
+                        if (dbTestParam == null)
+                        {
+                            dbTestParam = context.TestParams.Add(new TestParam
+                            {
+                                TestId = dbTest.Id,
+                                ParamId = dbParam.Id
+                            });
+                        }
+
+                        // 3.3 save parameter output and reference used param to produce this output
+                        string resultValue = converter.ConvertToString(pv.ValueType(), pRes.Value);
+                        context.ParamOutputs.Add(new ParamOutput
+                        {
+                            ParamId = dbParam.Id,
+                            TestOutpuId = testOutputId,
+                            Value = resultValue
+                        });
+                    }
+                }
+                context.SaveChanges();
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -411,13 +424,26 @@ namespace MTS.TesterModule
             }
             // create a new thread for execution loop
             loop = new Thread(new ThreadStart(executeLoop));
-
-            // everything is prepared for execution - now save used tests and parameters to database
-            // only parameters and tests are saved to database that which do not already exist
-            saveUsedTests(tests);
         }
         public void Start()
-        {
+        {   // save date and time when shift has been started - necessary for database
+            Begin = DateTime.Now;
+            
+            // test
+            using (MTSContext context = new MTSContext())
+            {
+                mirrorId = context.Mirrors.Select(m => m.Id).First();
+                operatorId = Admin.Operator.Instance.Id;                // loged in operator id
+                dbShift = context.Shifts.Add(new Data.Shift
+                {
+                    Start = DateTime.Now,
+                    Finish = DateTime.Now,
+                    MirrorId = mirrorId,
+                    OperatorId = operatorId
+                });
+                context.SaveChanges();
+            }
+
             // only start execution loop if it is not started yet
             if (loop != null && !loop.IsAlive)
                 loop.Start();
@@ -427,10 +453,18 @@ namespace MTS.TesterModule
             // switch off everythig dangerous
             setSafeStateOutputs(channels);
 
+            // save date and time when shift has been finished - necessary for database
+            End = DateTime.Now;            
+            using (MTSContext context = new MTSContext())
+            {
+                dbShift.Finish = DateTime.Now;
+                context.SaveChanges();
+            }
+
             Output.WriteLine("Shift finished!");
 
             // raise notify event that shift has been finished
-            RaiseExecuted();
+            RaiseExecuted();    // here data should be saved
         }
         public void Abort()
         {

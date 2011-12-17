@@ -429,7 +429,7 @@ namespace MTS.Admin
                     
                     try
                     {
-                        context.Operators.Add(new Operator()
+                        context.Operators.Add(new Data.Operator()
                         {
                             Login = dialog.Login,
                             Name = dialog.OperatorName,

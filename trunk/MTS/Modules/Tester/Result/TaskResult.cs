@@ -6,7 +6,7 @@ namespace MTS.Tester.Result
     public class TaskResult
     {
         /// <summary>
-        /// (Get/Set) Unique identifier of this task
+        /// (Get/Set) Unique identifier of this task. If task is a test this will be test name
         /// </summary>
         public string Id { get; private set; }
         /// <summary>

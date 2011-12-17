@@ -16,15 +16,17 @@ namespace MTS.Data
     {
         public Test()
         {
-            this.TestShifts = new HashSet<TestShift>();
+            this.TestOutputs = new HashSet<TestOutput>();
             this.TestParams = new HashSet<TestParam>();
+            this.TestShifts = new HashSet<TestShift>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
-        public virtual ICollection<TestShift> TestShifts { get; set; }
+        public virtual ICollection<TestOutput> TestOutputs { get; set; }
         public virtual ICollection<TestParam> TestParams { get; set; }
+        public virtual ICollection<TestShift> TestShifts { get; set; }
     }
     
 }

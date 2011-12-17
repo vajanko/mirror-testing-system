@@ -246,6 +246,16 @@ namespace MTS.IO.Module
 
         #endregion
 
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            if (IsConnected)
+                Disconnect();
+        }
+
+        #endregion
+
         #endregion
 
         #region Constructors

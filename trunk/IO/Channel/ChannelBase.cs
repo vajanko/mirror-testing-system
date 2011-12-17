@@ -35,7 +35,7 @@ namespace MTS.IO.Channel
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
         /// <summary>
-        /// (Get/Set) Array of memory bytes containing <paramref name="Value"/> of this channel. This 
+        /// (Get/Set) Array of memory bytes containing <see cref="Value"/> of this channel. This 
         /// is necessary for network communication
         /// </summary>
         public abstract byte[] ValueBytes
@@ -45,7 +45,7 @@ namespace MTS.IO.Channel
         }
 
         /// <summary>
-        /// (Get/Set) Size of channel value in bytes. (Size of <paramref name="ValueBytes"/> array)
+        /// (Get/Set) Size of channel value in bytes. (Size of <see cref="ValueBytes"/> array)
         /// </summary>
         public int Size { get; set; }
 

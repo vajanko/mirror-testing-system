@@ -36,16 +36,12 @@
             <End Role="Operator" EntitySet="Operator" />
             <End Role="Shift" EntitySet="Shift" />
           </AssociationSet>
-          <AssociationSet Name="fk_testExec_shiftId" Association="MTS.Data.Store.fk_testExec_shiftId">
-            <End Role="Shift" EntitySet="Shift" />
-            <End Role="TestShift" EntitySet="TestShift" />
-          </AssociationSet>
-          <AssociationSet Name="fk_testExec_testId" Association="MTS.Data.Store.fk_testExec_testId">
-            <End Role="Test" EntitySet="Test" />
-            <End Role="TestShift" EntitySet="TestShift" />
-          </AssociationSet>
           <AssociationSet Name="fk_testOutput_shiftId" Association="MTS.Data.Store.fk_testOutput_shiftId">
             <End Role="Shift" EntitySet="Shift" />
+            <End Role="TestOutput" EntitySet="TestOutput" />
+          </AssociationSet>
+          <AssociationSet Name="fk_testOutput_testId" Association="MTS.Data.Store.fk_testOutput_testId">
+            <End Role="Test" EntitySet="Test" />
             <End Role="TestOutput" EntitySet="TestOutput" />
           </AssociationSet>
           <AssociationSet Name="fk_testParam_paramId" Association="MTS.Data.Store.fk_testParam_paramId">
@@ -56,6 +52,14 @@
             <End Role="Test" EntitySet="Test" />
             <End Role="TestParam" EntitySet="TestParam" />
           </AssociationSet>
+          <AssociationSet Name="fk_testShift_shiftId" Association="MTS.Data.Store.fk_testShift_shiftId">
+            <End Role="Shift" EntitySet="Shift" />
+            <End Role="TestShift" EntitySet="TestShift" />
+          </AssociationSet>
+          <AssociationSet Name="fk_testShift_testId" Association="MTS.Data.Store.fk_testShift_testId">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="TestShift" EntitySet="TestShift" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Mirror">
           <Key>
@@ -65,8 +69,8 @@
           <Property Name="SerialNumber" Type="char" Nullable="false" MaxLength="15" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
-          <Property Name="SupplierId" Type="int" Nullable="false" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Operator">
           <Key>
@@ -76,7 +80,7 @@
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="Surname" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="Login" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="Password" Type="varchar" Nullable="false" MaxLength="64" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Param">
@@ -132,6 +136,9 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Result" Type="tinyint" Nullable="false" />
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="Finish" Type="datetime" Nullable="false" />
+          <Property Name="TestId" Type="int" Nullable="false" />
           <Property Name="ShiftId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TestParam">
@@ -147,8 +154,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ShiftId" Type="int" Nullable="false" />
           <Property Name="TestId" Type="int" Nullable="false" />
+          <Property Name="ShiftId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="fk_mirror_supplier_id">
           <End Role="Supplier" Type="MTS.Data.Store.Supplier" Multiplicity="1" />
@@ -210,30 +217,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_testExec_shiftId">
-          <End Role="Shift" Type="MTS.Data.Store.Shift" Multiplicity="1" />
-          <End Role="TestShift" Type="MTS.Data.Store.TestShift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shift">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TestShift">
-              <PropertyRef Name="ShiftId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_testExec_testId">
-          <End Role="Test" Type="MTS.Data.Store.Test" Multiplicity="1" />
-          <End Role="TestShift" Type="MTS.Data.Store.TestShift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TestShift">
-              <PropertyRef Name="TestId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_testOutput_shiftId">
           <End Role="Shift" Type="MTS.Data.Store.Shift" Multiplicity="1" />
           <End Role="TestOutput" Type="MTS.Data.Store.TestOutput" Multiplicity="*" />
@@ -243,6 +226,18 @@
             </Principal>
             <Dependent Role="TestOutput">
               <PropertyRef Name="ShiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_testOutput_testId">
+          <End Role="Test" Type="MTS.Data.Store.Test" Multiplicity="1" />
+          <End Role="TestOutput" Type="MTS.Data.Store.TestOutput" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TestOutput">
+              <PropertyRef Name="TestId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -270,6 +265,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_testShift_shiftId">
+          <End Role="Shift" Type="MTS.Data.Store.Shift" Multiplicity="1" />
+          <End Role="TestShift" Type="MTS.Data.Store.TestShift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shift">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TestShift">
+              <PropertyRef Name="ShiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_testShift_testId">
+          <End Role="Test" Type="MTS.Data.Store.Test" Multiplicity="1" />
+          <End Role="TestShift" Type="MTS.Data.Store.TestShift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TestShift">
+              <PropertyRef Name="TestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -287,8 +306,6 @@
           <EntitySet Name="Shifts" EntityType="MTS.Data.Shift" />
           <EntitySet Name="Tests" EntityType="MTS.Data.Test" />
           <EntitySet Name="TestOutputs" EntityType="MTS.Data.TestOutput" />
-          <EntitySet Name="TestParams" EntityType="MTS.Data.TestParam" />
-          <EntitySet Name="TestShifts" EntityType="MTS.Data.TestShift" />
           <AssociationSet Name="fk_shift_mirrorId" Association="MTS.Data.fk_shift_mirrorId">
             <End Role="Mirror" EntitySet="Mirrors" />
             <End Role="Shift" EntitySet="Shifts" />
@@ -301,29 +318,35 @@
             <End Role="Param" EntitySet="Params" />
             <End Role="ParamOutput" EntitySet="ParamOutputs" />
           </AssociationSet>
+          <AssociationSet Name="fk_testOutput_testId" Association="MTS.Data.fk_testOutput_testId">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="TestOutput" EntitySet="TestOutputs" />
+          </AssociationSet>
+          <EntitySet Name="TestParams" EntityType="MTS.Data.TestParam" />
+          <EntitySet Name="TestShifts" EntityType="MTS.Data.TestShift" />
           <AssociationSet Name="fk_testParam_paramId" Association="MTS.Data.fk_testParam_paramId">
             <End Role="Param" EntitySet="Params" />
             <End Role="TestParam" EntitySet="TestParams" />
-          </AssociationSet>
-          <AssociationSet Name="fk_paramOutput_testOutputId" Association="MTS.Data.fk_paramOutput_testOutputId">
-            <End Role="TestOutput" EntitySet="TestOutputs" />
-            <End Role="ParamOutput" EntitySet="ParamOutputs" />
-          </AssociationSet>
-          <AssociationSet Name="fk_testExec_shiftId" Association="MTS.Data.fk_testExec_shiftId">
-            <End Role="Shift" EntitySet="Shifts" />
-            <End Role="TestShift" EntitySet="TestShifts" />
           </AssociationSet>
           <AssociationSet Name="fk_testOutput_shiftId" Association="MTS.Data.fk_testOutput_shiftId">
             <End Role="Shift" EntitySet="Shifts" />
             <End Role="TestOutput" EntitySet="TestOutputs" />
           </AssociationSet>
-          <AssociationSet Name="fk_testExec_testId" Association="MTS.Data.fk_testExec_testId">
-            <End Role="Test" EntitySet="Tests" />
+          <AssociationSet Name="fk_testShift_shiftId" Association="MTS.Data.fk_testShift_shiftId">
+            <End Role="Shift" EntitySet="Shifts" />
             <End Role="TestShift" EntitySet="TestShifts" />
           </AssociationSet>
           <AssociationSet Name="fk_testParam_testId" Association="MTS.Data.fk_testParam_testId">
             <End Role="Test" EntitySet="Tests" />
             <End Role="TestParam" EntitySet="TestParams" />
+          </AssociationSet>
+          <AssociationSet Name="fk_testShift_testId" Association="MTS.Data.fk_testShift_testId">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="TestShift" EntitySet="TestShifts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_paramOutput_testOutputId" Association="MTS.Data.fk_paramOutput_testOutputId">
+            <End Role="TestOutput" EntitySet="TestOutputs" />
+            <End Role="ParamOutput" EntitySet="ParamOutputs" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Mirror">
@@ -372,7 +395,7 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Surname" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Login" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Password" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Password" Nullable="false" FixedLength="false" Unicode="false" MaxLength="64" />
           <NavigationProperty Name="Shifts" Relationship="MTS.Data.fk_shift_operatorId" FromRole="Operator" ToRole="Shift" />
           <Property Type="Byte" Name="Type" Nullable="false" />
         </EntityType>
@@ -384,8 +407,8 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Value" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ParamOutputs" Relationship="MTS.Data.fk_paramOutput_paramId" FromRole="Param" ToRole="ParamOutput" />
-          <NavigationProperty Name="TestParams" Relationship="MTS.Data.fk_testParam_paramId" FromRole="Param" ToRole="TestParam" />
           <Property Type="Byte" Name="Type" Nullable="false" />
+          <NavigationProperty Name="TestParams" Relationship="MTS.Data.fk_testParam_paramId" FromRole="Param" ToRole="TestParam" />
         </EntityType>
         <EntityType Name="ParamOutput">
           <Key>
@@ -394,8 +417,8 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Value" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="ParamId" Nullable="false" />
-          <Property Type="Int32" Name="TestOutputId" Nullable="false" />
           <NavigationProperty Name="Param" Relationship="MTS.Data.fk_paramOutput_paramId" FromRole="ParamOutput" ToRole="Param" />
+          <Property Type="Int32" Name="TestOutpuId" Nullable="false" />
           <NavigationProperty Name="TestOutput" Relationship="MTS.Data.fk_paramOutput_testOutputId" FromRole="ParamOutput" ToRole="TestOutput" />
         </EntityType>
         <EntityType Name="Shift">
@@ -409,8 +432,8 @@
           <Property Type="Int32" Name="OperatorId" Nullable="false" />
           <NavigationProperty Name="Mirror" Relationship="MTS.Data.fk_shift_mirrorId" FromRole="Shift" ToRole="Mirror" />
           <NavigationProperty Name="Operator" Relationship="MTS.Data.fk_shift_operatorId" FromRole="Shift" ToRole="Operator" />
-          <NavigationProperty Name="TestShifts" Relationship="MTS.Data.fk_testExec_shiftId" FromRole="Shift" ToRole="TestShift" />
           <NavigationProperty Name="TestOutputs" Relationship="MTS.Data.fk_testOutput_shiftId" FromRole="Shift" ToRole="TestOutput" />
+          <NavigationProperty Name="TestShifts" Relationship="MTS.Data.fk_testShift_shiftId" FromRole="Shift" ToRole="TestShift" />
         </EntityType>
         <EntityType Name="Test">
           <Key>
@@ -418,8 +441,9 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="TestShifts" Relationship="MTS.Data.fk_testExec_testId" FromRole="Test" ToRole="TestShift" />
+          <NavigationProperty Name="TestOutputs" Relationship="MTS.Data.fk_testOutput_testId" FromRole="Test" ToRole="TestOutput" />
           <NavigationProperty Name="TestParams" Relationship="MTS.Data.fk_testParam_testId" FromRole="Test" ToRole="TestParam" />
+          <NavigationProperty Name="TestShifts" Relationship="MTS.Data.fk_testShift_testId" FromRole="Test" ToRole="TestShift" />
         </EntityType>
         <EntityType Name="TestOutput">
           <Key>
@@ -427,29 +451,13 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Byte" Name="Result" Nullable="false" />
+          <Property Type="DateTime" Name="Start" Nullable="false" />
+          <Property Type="DateTime" Name="Finish" Nullable="false" />
+          <Property Type="Int32" Name="TestId" Nullable="false" />
+          <NavigationProperty Name="Test" Relationship="MTS.Data.fk_testOutput_testId" FromRole="TestOutput" ToRole="Test" />
           <Property Type="Int32" Name="ShiftId" Nullable="false" />
-          <NavigationProperty Name="ParamOutputs" Relationship="MTS.Data.fk_paramOutput_testOutputId" FromRole="TestOutput" ToRole="ParamOutput" />
           <NavigationProperty Name="Shift" Relationship="MTS.Data.fk_testOutput_shiftId" FromRole="TestOutput" ToRole="Shift" />
-        </EntityType>
-        <EntityType Name="TestParam">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="TestId" Nullable="false" />
-          <Property Type="Int32" Name="ParamId" Nullable="false" />
-          <NavigationProperty Name="Param" Relationship="MTS.Data.fk_testParam_paramId" FromRole="TestParam" ToRole="Param" />
-          <NavigationProperty Name="Test" Relationship="MTS.Data.fk_testParam_testId" FromRole="TestParam" ToRole="Test" />
-        </EntityType>
-        <EntityType Name="TestShift">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="ShiftId" Nullable="false" />
-          <Property Type="Int32" Name="TestId" Nullable="false" />
-          <NavigationProperty Name="Shift" Relationship="MTS.Data.fk_testExec_shiftId" FromRole="TestShift" ToRole="Shift" />
-          <NavigationProperty Name="Test" Relationship="MTS.Data.fk_testExec_testId" FromRole="TestShift" ToRole="Test" />
+          <NavigationProperty Name="ParamOutputs" Relationship="MTS.Data.fk_paramOutput_testOutputId" FromRole="TestOutput" ToRole="ParamOutput" />
         </EntityType>
         <Association Name="fk_shift_mirrorId">
           <End Type="MTS.Data.Mirror" Role="Mirror" Multiplicity="1" />
@@ -487,6 +495,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_testOutput_testId">
+          <End Type="MTS.Data.Test" Role="Test" Multiplicity="1" />
+          <End Type="MTS.Data.TestOutput" Role="TestOutput" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TestOutput">
+              <PropertyRef Name="TestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TestParam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="TestId" Nullable="false" />
+          <Property Type="Int32" Name="ParamId" Nullable="false" />
+          <NavigationProperty Name="Param" Relationship="MTS.Data.fk_testParam_paramId" FromRole="TestParam" ToRole="Param" />
+          <NavigationProperty Name="Test" Relationship="MTS.Data.fk_testParam_testId" FromRole="TestParam" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="TestShift">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="TestId" Nullable="false" />
+          <Property Type="Int32" Name="ShiftId" Nullable="false" />
+          <NavigationProperty Name="Shift" Relationship="MTS.Data.fk_testShift_shiftId" FromRole="TestShift" ToRole="Shift" />
+          <NavigationProperty Name="Test" Relationship="MTS.Data.fk_testShift_testId" FromRole="TestShift" ToRole="Test" />
+        </EntityType>
         <Association Name="fk_testParam_paramId">
           <End Type="MTS.Data.Param" Role="Param" Multiplicity="1" />
           <End Type="MTS.Data.TestParam" Role="TestParam" Multiplicity="*" />
@@ -496,30 +536,6 @@
             </Principal>
             <Dependent Role="TestParam">
               <PropertyRef Name="ParamId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_paramOutput_testOutputId">
-          <End Type="MTS.Data.TestOutput" Role="TestOutput" Multiplicity="1" />
-          <End Type="MTS.Data.ParamOutput" Role="ParamOutput" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TestOutput">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ParamOutput">
-              <PropertyRef Name="TestOutputId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_testExec_shiftId">
-          <End Type="MTS.Data.Shift" Role="Shift" Multiplicity="1" />
-          <End Type="MTS.Data.TestShift" Role="TestShift" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shift">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TestShift">
-              <PropertyRef Name="ShiftId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -535,15 +551,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_testExec_testId">
-          <End Type="MTS.Data.Test" Role="Test" Multiplicity="1" />
+        <Association Name="fk_testShift_shiftId">
+          <End Type="MTS.Data.Shift" Role="Shift" Multiplicity="1" />
           <End Type="MTS.Data.TestShift" Role="TestShift" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Test">
+            <Principal Role="Shift">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TestShift">
-              <PropertyRef Name="TestId" />
+              <PropertyRef Name="ShiftId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -556,6 +572,30 @@
             </Principal>
             <Dependent Role="TestParam">
               <PropertyRef Name="TestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_testShift_testId">
+          <End Type="MTS.Data.Test" Role="Test" Multiplicity="1" />
+          <End Type="MTS.Data.TestShift" Role="TestShift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TestShift">
+              <PropertyRef Name="TestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_paramOutput_testOutputId">
+          <End Type="MTS.Data.TestOutput" Role="TestOutput" Multiplicity="1" />
+          <End Type="MTS.Data.ParamOutput" Role="ParamOutput" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestOutput">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ParamOutput">
+              <PropertyRef Name="TestOutpuId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -607,7 +647,7 @@
           <EntitySetMapping Name="ParamOutputs">
             <EntityTypeMapping TypeName="MTS.Data.ParamOutput">
               <MappingFragment StoreEntitySet="ParamOutput">
-                <ScalarProperty Name="TestOutputId" ColumnName="TestOutputId" />
+                <ScalarProperty Name="TestOutpuId" ColumnName="TestOutputId" />
                 <ScalarProperty Name="ParamId" ColumnName="ParamId" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -637,6 +677,9 @@
             <EntityTypeMapping TypeName="MTS.Data.TestOutput">
               <MappingFragment StoreEntitySet="TestOutput">
                 <ScalarProperty Name="ShiftId" ColumnName="ShiftId" />
+                <ScalarProperty Name="TestId" ColumnName="TestId" />
+                <ScalarProperty Name="Finish" ColumnName="Finish" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -654,13 +697,13 @@
           <EntitySetMapping Name="TestShifts">
             <EntityTypeMapping TypeName="MTS.Data.TestShift">
               <MappingFragment StoreEntitySet="TestShift">
-                <ScalarProperty Name="TestId" ColumnName="TestId" />
                 <ScalarProperty Name="ShiftId" ColumnName="ShiftId" />
+                <ScalarProperty Name="TestId" ColumnName="TestId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -688,52 +731,56 @@
           <ConnectorPoint PointX="2" PointY="1.5426741536458333" />
           <ConnectorPoint PointX="3" PointY="1.5426741536458333" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="MTS.Data.Operator" Width="1.5" PointX="0.5" PointY="3.625" Height="2.0853483072916665" />
-        <EntityTypeShape EntityType="MTS.Data.Param" Width="1.5" PointX="5.25" PointY="6.75" Height="1.9210009765624996" />
-        <EntityTypeShape EntityType="MTS.Data.ParamOutput" Width="1.5" PointX="5.25" PointY="3.625" Height="1.9210009765624996" />
-        <EntityTypeShape EntityType="MTS.Data.Shift" Width="1.5" PointX="3" PointY="3.375" Height="2.4140429687499996" />
-        <EntityTypeShape EntityType="MTS.Data.Test" Width="1.5" PointX="0.5" PointY="9" Height="1.7566536458333317" />
-        <EntityTypeShape EntityType="MTS.Data.TestOutput" Width="1.5" PointX="5" PointY="0.5" Height="1.7566536458333317" />
-        <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="3.125" PointY="6.75" Height="1.7566536458333317" />
-        <EntityTypeShape EntityType="MTS.Data.TestShift" Width="1.5" PointX="0.5" PointY="6.25" Height="1.7566536458333317" />
+        <EntityTypeShape EntityType="MTS.Data.Operator" Width="1.5" PointX="0.5" PointY="3.125" Height="2.0853483072916665" />
+        <EntityTypeShape EntityType="MTS.Data.Param" Width="1.5" PointX="3.375" PointY="6" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="MTS.Data.ParamOutput" Width="1.5" PointX="6" PointY="6" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="MTS.Data.Shift" Width="1.5" PointX="3" PointY="3.125" Height="2.5783902994791656" />
+        <EntityTypeShape EntityType="MTS.Data.Test" Width="1.5" PointX="0.75" PointY="9" Height="1.9210009765624996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MTS.Data.TestOutput" Width="1.5" PointX="7.375" PointY="3" Height="2.41404296875" />
         <AssociationConnector Association="MTS.Data.fk_shift_mirrorId" >
-          <ConnectorPoint PointX="3.75" PointY="2.5853483072916665" />
-          <ConnectorPoint PointX="3.75" PointY="3.375" />
+          <ConnectorPoint PointX="3.75" PointY="2.7496956380208331" />
+          <ConnectorPoint PointX="3.75" PointY="3.125" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_shift_operatorId" >
-          <ConnectorPoint PointX="2" PointY="4.6676741536458337" />
-          <ConnectorPoint PointX="3" PointY="4.6676741536458337" />
+          <ConnectorPoint PointX="2" PointY="4.1676741536458337" />
+          <ConnectorPoint PointX="3" PointY="4.1676741536458337" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_paramOutput_paramId" >
-          <ConnectorPoint PointX="6" PointY="6.75" />
-          <ConnectorPoint PointX="6" PointY="5.5460009765625" />
+          <ConnectorPoint PointX="4.875" PointY="6.96050048828125" />
+          <ConnectorPoint PointX="6" PointY="6.96050048828125" />
         </AssociationConnector>
+        <AssociationConnector Association="MTS.Data.fk_testOutput_testId" >
+          <ConnectorPoint PointX="2.25" PointY="10.475403645833334" />
+          <ConnectorPoint PointX="8.5541386445303012" PointY="10.475403645833334" />
+          <ConnectorPoint PointX="8.5541386445303012" PointY="5.41404296875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="3.25" PointY="8.375" Height="1.7566536458333353" />
+        <EntityTypeShape EntityType="MTS.Data.TestShift" Width="1.5" PointX="0.625" PointY="5.875" Height="1.7566536458333317" />
         <AssociationConnector Association="MTS.Data.fk_testParam_paramId" >
-          <ConnectorPoint PointX="5.25" PointY="7.6283268229166659" />
-          <ConnectorPoint PointX="4.625" PointY="7.6283268229166659" />
-        </AssociationConnector>
-        <AssociationConnector Association="MTS.Data.fk_paramOutput_testOutputId" >
-          <ConnectorPoint PointX="5.875" PointY="2.2566536458333317" />
-          <ConnectorPoint PointX="5.875" PointY="3.625" />
-        </AssociationConnector>
-        <AssociationConnector Association="MTS.Data.fk_testExec_shiftId" >
-          <ConnectorPoint PointX="3.03125" PointY="5.78904296875" />
-          <ConnectorPoint PointX="3.03125" PointY="6.46875" />
-          <ConnectorPoint PointX="2" PointY="6.46875" />
+          <ConnectorPoint PointX="4.0625" PointY="7.9210009765625" />
+          <ConnectorPoint PointX="4.0625" PointY="8.375" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_shiftId" >
-          <ConnectorPoint PointX="4.5" PointY="3.46875" />
-          <ConnectorPoint PointX="5.09375" PointY="3.46875" />
-          <ConnectorPoint PointX="5.09375" PointY="2.2566536458333317" />
+          <ConnectorPoint PointX="4.5" PointY="3.7447446628790235" />
+          <ConnectorPoint PointX="7.375" PointY="3.7447446628790235" />
         </AssociationConnector>
-        <AssociationConnector Association="MTS.Data.fk_testExec_testId" >
-          <ConnectorPoint PointX="1.25" PointY="9" />
-          <ConnectorPoint PointX="1.25" PointY="8.0066536458333317" />
+        <AssociationConnector Association="MTS.Data.fk_testShift_shiftId" >
+          <ConnectorPoint PointX="3" PointY="5.4059456380208335" />
+          <ConnectorPoint PointX="2.09375" PointY="5.4059456380208335" />
+          <ConnectorPoint PointX="2.09375" PointY="5.875" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testParam_testId" >
-          <ConnectorPoint PointX="2" PointY="9.4292482382812484" />
-          <ConnectorPoint PointX="3.875" PointY="9.4292482382812484" />
-          <ConnectorPoint PointX="3.875" PointY="8.5066536458333317" />
+          <ConnectorPoint PointX="2.25" PointY="9.5658268229166676" />
+          <ConnectorPoint PointX="3.25" PointY="9.5658268229166676" />
+        </AssociationConnector>
+        <AssociationConnector Association="MTS.Data.fk_testShift_testId" >
+          <ConnectorPoint PointX="1.4375" PointY="9" />
+          <ConnectorPoint PointX="1.4375" PointY="7.6316536458333317" />
+        </AssociationConnector>
+        <AssociationConnector Association="MTS.Data.fk_paramOutput_testOutputId" >
+          <ConnectorPoint PointX="7.375" PointY="4.8746131335794214" />
+          <ConnectorPoint PointX="6.6874994999999995" PointY="4.8746131335794214" />
+          <ConnectorPoint PointX="6.6874994999999995" PointY="6" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>
