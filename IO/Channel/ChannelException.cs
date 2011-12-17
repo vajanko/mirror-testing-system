@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MTS.IO.Channel
 {
@@ -23,7 +20,7 @@ namespace MTS.IO.Channel
         /// <summary>
         /// Initializes a new instance of the <paramref name="ChannelException"/> class.
         /// </summary>
-        public ChannelException() : base() { }
+        public ChannelException() { }
         /// <summary>
         /// Initializes a new instance of the <paramref name="ChannelException"/> class with a specified 
         /// error message.

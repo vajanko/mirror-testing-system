@@ -3,7 +3,7 @@
     class ECAddress
     {
         /// <summary>
-        /// (Get/Set) Identifier of group of channels this one belogs to. Group is a view on some collection of
+        /// (Get/Set) Identifier of group of channels this one belongs to. Group is a view on some collection of
         /// channels. For example one group may be Inputs or Output. This value will be usually 
         /// <paramref name="AdsReservedIndexGroups.SymbolValueByHandle"/>
         /// </summary>

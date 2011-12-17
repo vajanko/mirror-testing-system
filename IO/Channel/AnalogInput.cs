@@ -41,13 +41,13 @@ namespace MTS.IO.Channel
         /// </summary>
         protected uint value;
         /// <summary>
-        /// (Get) Integer (raw) value of this channel. Setting this value afects <paramref name="RealValue"/>
+        /// (Get) Integer (raw) value of this channel. Setting this value efects <paramref name="RealValue"/>
         /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
         /// </summary>
         public uint Value { get { return value; } }
 
         /// <summary>
-        /// (Get/Set) Real value of this channel. Setting this value afects <paramref name="Value"/>
+        /// (Get/Set) Real value of this channel. Setting this value efects <paramref name="Value"/>
         /// Minimum possible value is <paramref name="RealLow"/>. Maximum possible value is <paramref name="RealHigh"/>
         /// </summary>
         public double RealValue
@@ -72,7 +72,6 @@ namespace MTS.IO.Channel
             if (this.value != value)    // only change if necessary - no event will be raised
             {
                 this.value = value;
-                //NotifyPropretyChanged(ValueString);
                 NotifyPropretyChanged(RealValueString);
             }
         }
@@ -88,10 +87,11 @@ namespace MTS.IO.Channel
                 switch (value.Length)
                 {
                     case 1: SetValue(value[0]); break;
-                    case 2: SetValue(BitConverter.ToUInt16(value, 0)); break;
+                    case 2: SetValue(BitConverter.ToUInt16(value, 0)); break;  // start at 0 byte
                     case 4: SetValue(BitConverter.ToUInt32(value, 0)); break;
+                    default: SetValue(BitConverter.ToUInt32(value, 0)); break;
                 }
-            }  // start at 0 byte
+            }
         }
 
         #endregion

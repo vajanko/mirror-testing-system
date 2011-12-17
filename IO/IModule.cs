@@ -1,10 +1,13 @@
-﻿namespace MTS.IO
+﻿using System;
+using System.Collections;
+
+namespace MTS.IO
 {
     /// <summary>
     /// Abstract layer for accessing particular remote hardware module
     /// Module contains several channels digital or analog, input or output
     /// </summary>
-    public interface IModule : System.Collections.IEnumerable
+    public interface IModule : IEnumerable, IDisposable
     {
         /// <summary>
         /// Load configuration of channels form file. At this time connection must not be established
@@ -25,7 +28,7 @@
         void Initialize();
 
         /// <summary>
-        /// Write all ouput and read all input channels (in this order)
+        /// Write all output and read all input channels (in this order)
         /// </summary>
         void Update();
 
@@ -46,9 +49,9 @@
         void Disconnect();
 
         /// <summary>
-        /// Get an instance of paricular channel identified by its name. Return null if ther is no such a channel
+        /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
         /// </summary>
-        /// <param name="name">Unic name (identifier) of required channel</param>
+        /// <param name="name">Unique name (identifier) of required channel</param>
         IChannel GetChannelByName(string name);
 
         /// <summary>

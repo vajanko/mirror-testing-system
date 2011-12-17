@@ -313,13 +313,13 @@ namespace MTS.TesterModule
             if (resultCode == TaskResultCode.Completed)
             {
                 msg = "Mirror passed!";
-                channels.GreenLightOn.SwitchOn();
+                channels.GreenLightOn.On();
                 Passed++;
             }
             else if (resultCode == TaskResultCode.Failed)
             {
                 msg = "Mirror failed!";
-                channels.RedLightOn.SwitchOn();
+                channels.RedLightOn.On();
                 Failed++;
             }
             else

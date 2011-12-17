@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 
 namespace MTS.IO
 {
@@ -41,92 +40,4 @@ namespace MTS.IO
         /// </summary>
         object Address { get; set; }
     }
-    public interface IDigitalInput : IChannel
-    {
-        /// <summary>
-        /// (Get) Logical value of this channel
-        /// </summary>
-        bool Value { get; }
-
-        /// <summary>
-        /// Set value of property <paramref name="Value"/>. An event will be raised
-        /// </summary>
-        /// <param name="value">Value to set</param>
-        void SetValue(bool value);
-    }
-    public interface IDigitalOutput : IDigitalInput
-    {
-        /// <summary>
-        /// (Get/Set) Logical value of this channel
-        /// </summary>
-        new bool Value { get; set; }
-
-        /// <summary>
-        /// Set logical value of this channel to true
-        /// </summary>
-        void SwitchOn();
-        /// <summary>
-        /// Set logical value of this channel to false
-        /// </summary>
-        void SwitchOff();
-    }
-    public interface IAnalogInput : IChannel
-    {
-        /// <summary>
-        /// (Get/Set) Minimal possible raw value of this channel. Raw value is value of <paramref name="Value"/>
-        /// property without interpretation.
-        /// </summary>
-        int RawLow { get; set; }
-        /// <summary>
-        /// (Get/Set) Maximal possible raw value of this channel. Raw value is value of <paramref name="Value"/>
-        /// property without interpretation.
-        /// </summary>
-        int RawHigh { get; set; }
-        /// <summary>
-        /// (Get/Set) Minimal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
-        /// property interpreted as some quantity.
-        /// </summary>
-        double RealLow { get; set; }
-        /// <summary>
-        /// (Get/Set) Maximal possible real value of this channel. Real value if value of <paramref name="RealValue"/>
-        /// property interpreted as some quantity.
-        /// </summary>
-        double RealHigh { get; set; }
-
-        /// <summary>
-        /// (Get) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
-        /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
-        /// </summary>
-        uint Value { get; }
-
-        /// <summary>
-        /// (Get) Real value of this channel. Setting this value afects <paramref name="Value"/>
-        /// Minimum possible value is <paramref name="RealLow"/>. Maximum possible value is <paramref name="RealHigh"/>
-        /// </summary>
-        double RealValue { get; }
-
-        /// <summary>
-        /// Set value of property <paramref name="Value"/>. An event will be raised
-        /// </summary>
-        /// <param name="value">Value to set</param>
-        void SetValue(uint value);
-
-        /// <summary>
-        /// (Get/Set) Delegate that converts raw value to real value (<paramref name="Value"/> to 
-        /// <paramref name="RealValue"/> in this case) according to values <paramref name="RawLow"/>,
-        /// <paramref name="RawHigh"/>, <paramref name="RealLow"/> and <paramref name="RealHigh"/>
-        /// </summary>
-        Converter<uint, double> RawToReal { get; set; }
-    }
-
-    public interface IAnalogOutput : IAnalogInput
-    {
-        /// <summary>
-        /// (Get/Set) Integer value of this channel. Setting this value afects <paramref name="RealValue"/>
-        /// Minimum possible value is <paramref name="RawLow"/>. Maximum possible value is <paramref name="RawHigh"/>
-        /// </summary>
-        new uint Value { get; set; }
-    }
-
-
 }

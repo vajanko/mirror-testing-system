@@ -54,6 +54,11 @@
     <Compile Include="ChannelSetting.cs" />
     <Compile Include="Channel\ChannelException.cs" />
     <Compile Include="IOException.cs" />
+    <Compile Include="Module\ConnectionException.cs" />
+    <Compile Include="Module\ModbusAISlot.cs" />
+    <Compile Include="Module\ModbusDISlot.cs" />
+    <Compile Include="Module\ModbusDOSlot.cs" />
+    <Compile Include="Module\ModbusOutputSlot.cs" />
     <Compile Include="Module\ModuleException.cs" />
     <Compile Include="Module\ECModule.cs" />
     <Compile Include="Channel\AnalogInput.cs" />

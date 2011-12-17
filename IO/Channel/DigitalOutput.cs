@@ -15,7 +15,7 @@
         /// <summary>
         /// Set logical value of this channel to true. Setting value does not raise an event
         /// </summary>
-        public void SwitchOn()
+        public void On()
         {
             Value = true;
         }

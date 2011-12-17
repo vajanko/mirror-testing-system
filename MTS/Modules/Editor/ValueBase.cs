@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace MTS.Editor
 {
@@ -51,7 +49,7 @@ namespace MTS.Editor
 
         public ValueBase(string id)
         {
-            this.Id = id;
+            Id = id;
         }
 
         #endregion

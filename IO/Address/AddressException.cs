@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MTS.IO.Address
 {
@@ -17,7 +16,7 @@ namespace MTS.IO.Address
         /// <summary>
         /// Initializes a new instance of the <paramref name="AddressException"/> class.
         /// </summary>
-        public AddressException() : base() { }
+        public AddressException() { }
         /// <summary>
         /// Initializes a new instance of the <paramref name="AddressException"/> class with a specified 
         /// error message.

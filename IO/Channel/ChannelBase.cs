@@ -28,7 +28,7 @@ namespace MTS.IO.Channel
         /// <summary>
         /// Raise an PropertyChanged event that signalized that some property has been changed
         /// </summary>
-        /// <param name="name">Name of the propety that has been changed</param>
+        /// <param name="name">Name of the property that has been changed</param>
         public void NotifyPropretyChanged(string name)
         {
             if (PropertyChanged != null)
@@ -50,7 +50,7 @@ namespace MTS.IO.Channel
         public int Size { get; set; }
 
         /// <summary>
-        /// (Get/Set) Address of channel inside tha hardware. This allows us to access (read/write)
+        /// (Get/Set) Address of channel in the hardware module. This allows us to access (read/write)
         /// data (from/to) this channel
         /// </summary>
         public object Address { get; set; }
