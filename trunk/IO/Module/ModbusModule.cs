@@ -13,15 +13,14 @@ namespace MTS.IO.Module
         public ushort Port { get; private set; }
         public string IpAddress { get; private set; }
 
-        private uint timeout = 5000;
+        private const uint timeout = 5000;
         private int hConnection;
 
-        private Dictionary<int, ModbusSlot> inputs = new Dictionary<int, ModbusSlot>();
-        private Dictionary<int, ModbusSlot> outputs = new Dictionary<int, ModbusSlot>();
+        private readonly Dictionary<int, ModbusSlot> inputs = new Dictionary<int, ModbusSlot>();
+        private readonly Dictionary<int, ModbusSlot> outputs = new Dictionary<int, ModbusSlot>();
 
         #region IModule Members
 
-        private readonly char[] whiteSpaces = { ' ', '\t', '\r' };
         private readonly char[] csvSep = { ';' };
         private const int itemsPerLine = 5; // number of items per one line
 
@@ -31,7 +30,7 @@ namespace MTS.IO.Module
         public void LoadConfiguration(string filename)
         {
             string str;         // temporary value for string while parsing
-            int value;          // temporary value fot integer while parsing
+            int value;          // temporary value for integer while parsing
             string[] items;     // parsed items on one line 
 
             // reference to just created channel
@@ -41,8 +40,7 @@ namespace MTS.IO.Module
             List<ChannelBase> channels = new List<ChannelBase>();
 
             // open configuration file
-            StreamReader reader;
-            reader = new StreamReader(filename);
+            StreamReader reader = new StreamReader(filename);
 
             // skip first line (.csv file format) and count number of items on first line
             //itemsPerLine = 
@@ -140,7 +138,7 @@ namespace MTS.IO.Module
                 if (mSlot == null)    // slot could not be created
                 {
                     // skip this channels, but before remove all channels that belongs to this slot
-                    channels.RemoveAll(new Predicate<ChannelBase>(c => (c.Address as ModbusAddress).Slot == slot));
+                    channels.RemoveAll(c => (c.Address as ModbusAddress).Slot == slot);
                     continue;
                 }
 
@@ -156,18 +154,18 @@ namespace MTS.IO.Module
                     outputs.Add(slot, mSlot);
 
                 // channels are added to slot - remove them from temporary collection
-                channels.RemoveAll(new Predicate<ChannelBase>(c => (c.Address as ModbusAddress).Slot == slot));
+                channels.RemoveAll(c => (c.Address as ModbusAddress).Slot == slot);
             }
         }
 
         public void Connect()
         {
-            // initialize Modbus connection - alocate Modbus resources
+            // initialize Modbus connection - allocate Modbus resources
             Mxio.MXEIO_Init();
             // create a windows socket on port: "Port", with timeout: "timeout"
-            // hConnection is a connnection handle that identifies this connection
+            // hConnection is a connection handle that identifies this connection
             Mxio.MXEIO_Connect(System.Text.Encoding.UTF8.GetBytes(IpAddress), Port, timeout, ref hConnection);
-            isConnected = true;
+            IsConnected = true;
         }
         /// <summary>
         /// Prepare (initialize) channels for reading and writing. When this method is called, connection
@@ -220,7 +218,7 @@ namespace MTS.IO.Module
             Mxio.MXEIO_Disconnect(hConnection);
             // release Modbus resources
             Mxio.MXEIO_Exit();
-            isConnected = false;
+            IsConnected = false;
         }
 
         public IChannel GetChannelByName(string name)
@@ -234,16 +232,10 @@ namespace MTS.IO.Module
             // channel with required name has not been found
             return null;
         }
-
-        private bool isConnected;
         /// <summary>
         /// (Get) Value indicating that this module is Listening to remote hardware
         /// </summary>
-        public bool IsConnected
-        {
-            get { return isConnected; }
-            private set { isConnected = value; }
-        }
+        public bool IsConnected { get; private set; }
 
         #region IEnumerable Members
 
@@ -260,8 +252,8 @@ namespace MTS.IO.Module
 
         public ModbusModule(string ipAddress, ushort port)
         {
-            this.IpAddress = ipAddress;
-            this.Port = port;
+            IpAddress = ipAddress;
+            Port = port;
         }
 
         #endregion

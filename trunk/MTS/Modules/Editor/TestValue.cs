@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using System.Xml.Linq;
 using System.ComponentModel;
 
 namespace MTS.Editor
 {
     public class TestValue : ValueBase, IEnumerable<ParamValue>
     {
-        private Dictionary<string, ParamValue> parameters = new Dictionary<string, ParamValue>();
+        private readonly Dictionary<string, ParamValue> parameters = new Dictionary<string, ParamValue>();
 
         #region Known Parameters Ids
 
@@ -22,8 +21,7 @@ namespace MTS.Editor
 
         public const string SupplierName = "SupplierName";
         public const string SupplierCode = "SupplierCode";
-        public const string PartNumber = "PartNumber";
-        //public const string Description = "Description";
+        public const string PartNumber = "PartNumber";        
         public const string DescriptionId = "Description";
         public const string Weight = "Weight";
         public const string Orientation = "Orientation";
@@ -73,7 +71,7 @@ namespace MTS.Editor
         }
         /// <summary>
         /// Finds parameter value in collection of parameters in this test identified by its key.
-        /// Return null if it doesnt exists
+        /// Return null if it doesn't exists
         /// </summary>
         /// <typeparam name="T">Type of parameter value</typeparam>
         /// <param name="key">Name (identifier) of required parameter</param>
@@ -105,7 +103,7 @@ namespace MTS.Editor
         #region IEnumerable<ParamValue> Members
 
         /// <summary>
-        /// Returns an enumerator that iterates throught the collection
+        /// Returns an enumerator that iterates through the collection
         /// </summary>
         /// <returns></returns>
         public IEnumerator<ParamValue> GetEnumerator()
@@ -118,7 +116,7 @@ namespace MTS.Editor
         #region IEnumerable Members
 
         /// <summary>
-        /// Returns an enumerator that iterates throught the collection
+        /// Returns an enumerator that iterates through the collection
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()

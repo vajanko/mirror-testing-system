@@ -10,7 +10,7 @@
         /// </summary>
         Completed,
         /// <summary>
-        /// An error occured while executing task
+        /// An error occurred while executing task
         /// </summary>
         Failed,
         /// <summary>

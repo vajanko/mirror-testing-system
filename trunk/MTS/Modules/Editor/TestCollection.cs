@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using System.Text;
 using System.ComponentModel;
 
 namespace MTS.Editor
 {
     public class TestCollection : IEnumerable<TestValue>
     {
-        private Dictionary<string, TestValue> tests = new Dictionary<string, TestValue>();
+        private readonly Dictionary<string, TestValue> tests = new Dictionary<string, TestValue>();
 
         #region Known Test Ids
 
@@ -52,7 +51,7 @@ namespace MTS.Editor
         #region IEnumerable<TestValue> Members
 
         /// <summary>
-        /// Returns an enumerator that iterates throught the collection
+        /// Returns an enumerator that iterates through the collection
         /// </summary>
         /// <returns></returns>
         public IEnumerator<TestValue> GetEnumerator()
@@ -65,22 +64,12 @@ namespace MTS.Editor
         #region IEnumerable Members
 
         /// <summary>
-        /// Returns an enumerator that iterates throught the collection
+        /// Returns an enumerator that iterates through the collection
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)tests.Values).GetEnumerator();
-        }
-
-        #endregion
-
-
-        #region Constructors
-
-        public TestCollection()
-        {
-            
         }
 
         #endregion

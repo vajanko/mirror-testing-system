@@ -41,7 +41,7 @@ namespace MTS.TesterModule
                 case ExState.Initializing:
                     maxMeasuredCurrent = double.MinValue;                   // initialize max and min
                     minMeasuredCurrent = double.MaxValue;                   // measured values
-                    channels.DirectionLightOn.SwitchOn();                   // switch on direction light
+                    channels.DirectionLightOn.On();                   // switch on direction light
                     StartWatch(time);                                       // start measuring time of light on
                     goTo(ExState.BlinkerOn);                                // go to next state
                     Output.WriteLine("Switchig direction light on");
@@ -61,7 +61,7 @@ namespace MTS.TesterModule
                 case ExState.BlinkerOff:  // do not measure current
                     if (TimeElapsed(time) >= breakTime)                     // if break time elapsed
                     {
-                        channels.DirectionLightOn.SwitchOn();               // switch on light
+                        channels.DirectionLightOn.On();               // switch on light
                         StartWatch(time);                                   // start to measure time of light on
                         goTo(ExState.BlinkerOn);
                         Output.WriteLine("Switchig direction light on");

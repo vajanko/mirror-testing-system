@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using MTS.IO.Channel;
-using MTS.IO.Address;
 
 namespace MTS.IO.Module
 {
@@ -14,11 +13,7 @@ namespace MTS.IO.Module
         /// True if module is Listening
         /// </summary>
         public bool IsConnected { get; set; }
-        /// <summary>
-        /// Collection of channels identified by (string) name
-        /// </summary>
-        private Dictionary<string, IChannel> channels = new Dictionary<string, IChannel>();
-        private System.Timers.Timer timer = new System.Timers.Timer();
+        private readonly System.Timers.Timer timer = new System.Timers.Timer();
 
         TcpClient master;
 
@@ -26,108 +21,6 @@ namespace MTS.IO.Module
 
         public void Initialize()
         {
-            // analog inputs
-            //DistanceX = (IAnalogInput)GetChannelByName("DistanceX");
-            //DistanceX.SetValue(1200);
-            //DistanceY = (IAnalogInput)GetChannelByName("DistanceY");
-            //DistanceY.SetValue(1200);
-            //DistanceZ = (IAnalogInput)GetChannelByName("DistanceZ");
-            //DistanceZ.SetValue(1200);
-
-            //PowerfoldCurrent = (IAnalogInput)GetChannelByName("PowerfoldCurrent");
-            //HeatingFoilCurrent = (IAnalogInput)GetChannelByName("HeatingFoilCurrent");
-            //VerticalActuatorCurrent = (IAnalogInput)GetChannelByName("VerticalActuatorCurrent");
-            //HorizontalActuatorCurrent = (IAnalogInput)GetChannelByName("HorizontalActuatorCurrent");
-            //DirectionLightCurrent = (IAnalogInput)GetChannelByName("DirectionLightCurrent");
-
-            //PowerSupplyVoltage1 = (IAnalogInput)GetChannelByName("PowerSupplyVoltage1");
-            //PowerSupplyVoltage2 = (IAnalogInput)GetChannelByName("PowerSupplyVoltage2");
-            //// analog inputs
-
-            //// digital inputs
-            //IsDistanceSensorUp = (IDigitalInput)GetChannelByName("IsDistanceSensorUp");
-            //IsDistanceSensorDown = (IDigitalInput)GetChannelByName("IsDistanceSensorDown");
-            //IsSuckerUp = (IDigitalInput)GetChannelByName("IsSuckerUp");
-            //IsSuckerDown = (IDigitalInput)GetChannelByName("IsSuckerDown");
-            //IsVacuum = (IDigitalInput)GetChannelByName("IsVacuum");
-            //IsLeftRubberPresent = (IDigitalInput)GetChannelByName("IsLeftRubberPresent");
-
-            //IsPowerfoldDown = (IDigitalInput)GetChannelByName("IsPowerfoldDown");
-            //IsPowerfoldUp = (IDigitalInput)GetChannelByName("IsPowerfoldUp");
-            //IsOldPowerfoldUp = (IDigitalInput)GetChannelByName("IsOldPowerfoldUp");
-            //IsRightRubberPresent = (IDigitalInput)GetChannelByName("IsRightRubberPresent");
-
-            //IsLeftMirror = (IDigitalInput)GetChannelByName("IsLeftMirror");
-            //IsOldMirror = (IDigitalInput)GetChannelByName("IsOldMirror");
-            //IsOldPowerfoldDown = (IDigitalInput)GetChannelByName("IsOldPowerfoldDown");
-            //IsStartPressed = (IDigitalInput)GetChannelByName("IsStartPressed");
-            //IsAckPressed = (IDigitalInput)GetChannelByName("IsAckPressed");
-
-            //IsLocked = (IDigitalInput)GetChannelByName("IsLocked");
-            //IsOldLocked = (IDigitalInput)GetChannelByName("IsOldLocked");
-            //// digital inputs
-
-            //// digital outputs
-            //AllowMirrorMovement = (IDigitalOutput)GetChannelByName("AllowMirrorMovement");
-            //MoveMirrorVertical = (IDigitalOutput)GetChannelByName("MoveMirrorVertical");
-            //MoveMirrorHorizontal = (IDigitalOutput)GetChannelByName("MoveMirrorHorizontal");
-            //MoveMirrorReverse = (IDigitalOutput)GetChannelByName("MoveMirrorReverse");
-            //FoldPowerfold = (IDigitalOutput)GetChannelByName("FoldPowerfold");
-            //UnfoldPowerfold = (IDigitalOutput)GetChannelByName("UnfoldPowerfold");
-            //HeatingFoilOn = (IDigitalOutput)GetChannelByName("HeatingFoilOn");
-            //DirectionLightOn = (IDigitalOutput)GetChannelByName("DirectionLightOn");
-
-            //LockWeak = (IDigitalOutput)GetChannelByName("LockWeak");
-            //UnlockWeak = (IDigitalOutput)GetChannelByName("UnlockWeak");
-            //MoveDistanceSensorUp = (IDigitalOutput)GetChannelByName("MoveDistanceSensorUp");
-            //MoveDistanceSensorDown = (IDigitalOutput)GetChannelByName("MoveDistanceSensorDown");
-            //MoveSuckerUp = (IDigitalOutput)GetChannelByName("MoveSuckerUp");
-            //MoveSuckerDown = (IDigitalOutput)GetChannelByName("MoveSuckerDown");
-            //SuckOn = (IDigitalOutput)GetChannelByName("SuckOn");
-            //BlowOn = (IDigitalOutput)GetChannelByName("BlowOn");
-
-            //AllowPowerSupply = (IDigitalOutput)GetChannelByName("AllowPowerSupply");
-            //LockStrong = (IDigitalOutput)GetChannelByName("LockStrong");
-            //UnlockStrong = (IDigitalOutput)GetChannelByName("UnlockStrong");
-            //GreenLightOn = (IDigitalOutput)GetChannelByName("GreenLightOn");
-            //RedLightOn = (IDigitalOutput)GetChannelByName("RedLightOn");
-            //BuzzerOn = (IDigitalOutput)GetChannelByName("BuzzerOn");
-
-            //// digital outputs
-
-            //// ???
-            //TestingDeviceOpened = (IDigitalInput)GetChannelByName("TestingDeviceOpened");
-            //TestingDeviceClosed = (IDigitalInput)GetChannelByName("TestingDeviceClosed");
-            //ErrorAcknButton = (IDigitalInput)GetChannelByName("ErrorAcknButton");
-
-
-            //// powerfold
-            //PowerFoldUnfoldedPositionSensor1 = (IDigitalInput)GetChannelByName("PowerFoldUnfoldedPositionSensor1");
-            //PowerFoldUnfoldedPositionSensor2 = (IDigitalInput)GetChannelByName("PowerFoldUnfoldedPositionSensor2");
-            //PowerFoldFoldedPositionSensor = (IDigitalInput)GetChannelByName("PowerFoldFoldedPositionSensor");
-
-
-            //HeatingFoilSignSensor = (IDigitalInput)GetChannelByName("HeatingFoilSignSensor");
-
-            //SensorHeadOut = (IDigitalInput)GetChannelByName("SensorHeadOut");
-            //SensorHeadIn = (IDigitalInput)GetChannelByName("SensorHeadIn");
-            //InsCheck1 = (IDigitalInput)GetChannelByName("InsCheck1");
-            //InsCheck2 = (IDigitalInput)GetChannelByName("InsCheck2");
-            //InsCheck3 = (IDigitalInput)GetChannelByName("InsCheck3");
-            //InsCheck4 = (IDigitalInput)GetChannelByName("InsCheck4");
-            //InsCheck5 = (IDigitalInput)GetChannelByName("InsCheck5");
-            //InsCheck6 = (IDigitalInput)GetChannelByName("InsCheck6");
-            //InsCheck7 = (IDigitalInput)GetChannelByName("InsCheck7");
-            //InsCheck8 = (IDigitalInput)GetChannelByName("InsCheck8");
-            //InsCheck9 = (IDigitalInput)GetChannelByName("InsCheck9");
-            //InsCheck10 = (IDigitalInput)GetChannelByName("InsCheck10");
-            //InsCheck11 = (IDigitalInput)GetChannelByName("InsCheck11");
-            //InsCheck12 = (IDigitalInput)GetChannelByName("InsCheck12");
-            //InsCheck13 = (IDigitalInput)GetChannelByName("InsCheck13");
-            //InsCheck14 = (IDigitalInput)GetChannelByName("InsCheck14");
-            //InsCheck15 = (IDigitalInput)GetChannelByName("InsCheck15");
-            //InsCheck16 = (IDigitalInput)GetChannelByName("InsCheck16");
-            //IsPowerSupplyOff = (IDigitalInput)GetChannelByName("IsPowerSupplyOff");
         }
 
         public void Connect()
@@ -176,7 +69,7 @@ namespace MTS.IO.Module
                 {
                     string name = tmp[0];
                     string value = tmp[1];
-                    IChannel channel = this.GetChannelByName(name);
+                    IChannel channel = GetChannelByName(name);
                     if (channel != null)
                         channel.ValueBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(value);
                 }
@@ -195,7 +88,7 @@ namespace MTS.IO.Module
             // send write command
             writer.WriteLine("write");
             // write all !!! output !!! channels to stream
-            foreach (IChannel channel in this.outputs)
+            foreach (IChannel channel in outputs)
             {
                 writer.Write("{0}:{1}\n", channel.Name,
                     System.Text.ASCIIEncoding.ASCII.GetString(channel.ValueBytes));
@@ -224,10 +117,9 @@ namespace MTS.IO.Module
             return null;        // channel with name "name" was not found
         }
 
-        private List<ChannelBase> inputs = new List<ChannelBase>();
-        private List<ChannelBase> outputs = new List<ChannelBase>();
+        private readonly List<ChannelBase> inputs = new List<ChannelBase>();
+        private readonly List<ChannelBase> outputs = new List<ChannelBase>();
 
-        private readonly char[] whiteSpaces = { ' ', '\t', '\r' };
         private readonly char[] csvSep = { ';' };
         private const int itemsPerLine = 5; // number of items per one line
 
@@ -244,8 +136,7 @@ namespace MTS.IO.Module
             ChannelBase channel;
 
             // open configuration file
-            StreamReader reader;
-            reader = new StreamReader(filename);
+            StreamReader reader = new StreamReader(filename);
 
             // skip first line (.csv file format) and count number of items on first line
             //itemsPerLine = 
@@ -298,7 +189,6 @@ namespace MTS.IO.Module
 
         #endregion
 
-        Random gen = new Random();
 
         #region Channels
 
@@ -388,14 +278,6 @@ namespace MTS.IO.Module
         public IDigitalOutput OpenTestingDevice { get; set; }
         public IDigitalOutput CloseTestingDevice { get; set; }
 
-        IDigitalOutput MARKER_LEFT { get; set; }
-        IDigitalOutput MARKER_RIGHT { get; set; }
-        IDigitalOutput MOVE_SENSOR_UP { get; set; }
-        IDigitalOutput MOVE_SENSOR_DOWN { get; set; }
-        IDigitalOutput MOVE_SUPPORT_IN { get; set; }
-        IDigitalOutput MOVE_SUPPORT_UP { get; set; }
-        IDigitalOutput MOVE_SUPPORT_DOWN { get; set; }
-
         #endregion
 
         #region Analog inputs
@@ -421,6 +303,19 @@ namespace MTS.IO.Module
         public System.Collections.IEnumerator GetEnumerator()
         {
             return inputs.GetEnumerator();
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Disconnect();
+            if (master != null)
+                master.Close();
+
+            timer.Dispose();
         }
 
         #endregion

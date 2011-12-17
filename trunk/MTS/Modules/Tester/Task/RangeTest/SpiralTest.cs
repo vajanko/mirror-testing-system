@@ -31,7 +31,7 @@ namespace MTS.TesterModule
                 case ExState.Initializing:
                     minMeasuredCurrent = double.MaxValue;             // initialize max and min
                     maxMeasuredCurrent = double.MinValue;             // measured values
-                    channels.HeatingFoilOn.SwitchOn();                // switch on spiral
+                    channels.HeatingFoilOn.On();                // switch on spiral
                     StartWatch(time);                                 // start measuring time                                      
                     goTo(ExState.Measuring);                          // start measuring
                     break;

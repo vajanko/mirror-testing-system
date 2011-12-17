@@ -4,7 +4,6 @@ using System.Xml.Linq;
 using System.Windows;
 using System.IO;
 using Microsoft.Win32;
-
 using MTS.Properties;
 
 namespace MTS.Editor
@@ -146,13 +145,6 @@ namespace MTS.Editor
 
         #endregion
 
-        #region Properties
-
-        //public static string LastSaveDirectory = "E:\tmp";
-        //public static string LastOpenDirectory = "E:\tmp";
-
-        #endregion
-
         #region Methods
 
         #region Xml Format
@@ -280,8 +272,7 @@ namespace MTS.Editor
         /// </summary>
         public static string GetNewName()
         {
-            lastNewFileIndex++;     // index of last created file name
-            return NewFileString + lastNewFileIndex.ToString();
+            return NewFileString + ++lastNewFileIndex;  // index of last created file name
         }
 
         /// <summary>
@@ -483,7 +474,7 @@ namespace MTS.Editor
         /// <summary>
         /// Create and configure a new dialog to save a file wist testing parameters
         /// </summary>
-        /// <returns>An instance of <paramref name="SaveFileDialog"/> configured for saveing test collection
+        /// <returns>An instance of <see cref="SaveFileDialog"/> configured for saveing test collection
         /// files</returns>
         public static SaveFileDialog CreateSaveFileDialog()
         {
