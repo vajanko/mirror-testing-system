@@ -347,7 +347,7 @@ namespace MTS.Editor
                         // initialize value of parameter
                         pv.ValueFromString(value);
                         // add created parameter to test instance
-                        tv.AddParam(pv.Id, pv);
+                        tv.AddParam(pv.ValueId, pv);
                     }
 
                     tc.AddTest(testId, tv);
@@ -382,14 +382,14 @@ namespace MTS.Editor
             {
                 // create test element with attributes id and enabled
                 XElement testElem = new XElement(TestElem,
-                    new XAttribute(IdAttr, test.Id),
+                    new XAttribute(IdAttr, test.ValueId),
                     new XAttribute(EnabledElem, test.Enabled));
                 // add param childs elements to test
                 foreach (ParamValue param in test)
                 {
                     // create param element with id attribute and its string value representation
                     XElement paramElem = new XElement(ParamElem,
-                        new XAttribute(IdAttr, param.Id),
+                        new XAttribute(IdAttr, param.ValueId),
                         param.ValueToString());    // this is value of parameter in string format
                     // add to parameter to test
                     testElem.Add(paramElem);

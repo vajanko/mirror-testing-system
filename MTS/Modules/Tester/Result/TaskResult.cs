@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using MTS.Editor;
 
 namespace MTS.Tester.Result
 {
-    public class TaskResult
+    public class TaskResult : ResultBase
     {
-        /// <summary>
-        /// (Get/Set) Unique identifier of this task. If task is a test this will be test name
-        /// </summary>
-        public string Id { get; private set; }
+        #region Properties
+
         /// <summary>
         /// (Get/Set) Time when task started its execution
         /// </summary>
@@ -29,7 +28,6 @@ namespace MTS.Tester.Result
         /// of <see cref="TaskResultCode"/> enumerator
         /// </summary>
         public TaskResultCode ResultCode { get; set; }
-
         /// <summary>
         /// (Get) Collection of parameter results for this test. This values contains parameter identifier
         /// and its value in string representation. It is expected that these values will be saved in database.
@@ -37,11 +35,13 @@ namespace MTS.Tester.Result
         /// </summary>
         public List<ParamResult> Params { get; private set; }
 
+        #endregion
+
         #region Constructors
 
-        public TaskResult(string id)
+        public TaskResult(TestValue value = null)
+            : base(value)
         {
-            Id = id;
             Params = new List<ParamResult>();
         }
 

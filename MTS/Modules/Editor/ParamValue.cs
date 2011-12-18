@@ -18,12 +18,22 @@ namespace MTS.Editor
         public object Value { get; protected set; }
 
         /// <summary>
-        /// Convert parameter value to string representation using invariant culture info
+        /// Convert parameter <see cref="Value"/> to string representation using invariant culture info
         /// </summary>
         /// <returns></returns>
         public virtual string ValueToString()
         {
-            return string.Format(CultureInfo.InvariantCulture, "{0}", Value);
+            return ValueToString(Value);
+        }
+        /// <summary>
+        /// Convert parameter <paramref name="value"/> to string representation using invariant culture info.
+        /// Return null if given value is null.
+        /// </summary>
+        /// <param name="value">Value of this parameter to convert to string representation</param>
+        /// <returns>String representation of parameter <paramref name="value"/> or null if given value is null</returns>
+        public virtual string ValueToString(object value)
+        {
+            return value == null ? null : string.Format(CultureInfo.InvariantCulture, "{0}", value);
         }
         public abstract void ValueFromString(string value);
         public abstract ParamType ValueType();

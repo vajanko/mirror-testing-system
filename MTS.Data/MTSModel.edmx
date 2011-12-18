@@ -97,7 +97,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Value" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Value" Type="varchar" MaxLength="50" />
           <Property Name="ParamId" Type="int" Nullable="false" />
           <Property Name="TestOutputId" Type="int" Nullable="false" />
         </EntityType>
@@ -415,7 +415,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="Value" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Value" Nullable="true" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Int32" Name="ParamId" Nullable="false" />
           <NavigationProperty Name="Param" Relationship="MTS.Data.fk_paramOutput_paramId" FromRole="ParamOutput" ToRole="Param" />
           <Property Type="Int32" Name="TestOutpuId" Nullable="false" />
@@ -732,11 +732,11 @@
           <ConnectorPoint PointX="3" PointY="1.5426741536458333" />
         </AssociationConnector>
         <EntityTypeShape EntityType="MTS.Data.Operator" Width="1.5" PointX="0.5" PointY="3.125" Height="2.0853483072916665" />
-        <EntityTypeShape EntityType="MTS.Data.Param" Width="1.5" PointX="3.375" PointY="6" Height="1.9210009765624996" />
-        <EntityTypeShape EntityType="MTS.Data.ParamOutput" Width="1.5" PointX="6" PointY="6" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="MTS.Data.Param" Width="1.5" PointX="5" PointY="3.375" Height="1.9210009765624996" />
+        <EntityTypeShape EntityType="MTS.Data.ParamOutput" Width="1.5" PointX="7.375" PointY="3.375" Height="1.9210009765624996" />
         <EntityTypeShape EntityType="MTS.Data.Shift" Width="1.5" PointX="3" PointY="3.125" Height="2.5783902994791656" />
         <EntityTypeShape EntityType="MTS.Data.Test" Width="1.5" PointX="0.75" PointY="9" Height="1.9210009765624996" IsExpanded="true" />
-        <EntityTypeShape EntityType="MTS.Data.TestOutput" Width="1.5" PointX="7.375" PointY="3" Height="2.41404296875" />
+        <EntityTypeShape EntityType="MTS.Data.TestOutput" Width="1.5" PointX="6.25" PointY="8.875" Height="2.41404296875" />
         <AssociationConnector Association="MTS.Data.fk_shift_mirrorId" >
           <ConnectorPoint PointX="3.75" PointY="2.7496956380208331" />
           <ConnectorPoint PointX="3.75" PointY="3.125" />
@@ -746,23 +746,25 @@
           <ConnectorPoint PointX="3" PointY="4.1676741536458337" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_paramOutput_paramId" >
-          <ConnectorPoint PointX="4.875" PointY="6.96050048828125" />
-          <ConnectorPoint PointX="6" PointY="6.96050048828125" />
+          <ConnectorPoint PointX="6.5" PointY="4.33550048828125" />
+          <ConnectorPoint PointX="7.375" PointY="4.33550048828125" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_testId" >
-          <ConnectorPoint PointX="2.25" PointY="10.475403645833334" />
-          <ConnectorPoint PointX="8.5541386445303012" PointY="10.475403645833334" />
-          <ConnectorPoint PointX="8.5541386445303012" PointY="5.41404296875" />
+          <ConnectorPoint PointX="2.25" PointY="9.8783268229166659" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="9.8783268229166659" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="9.8783268229166659" />
+          <ConnectorPoint PointX="6.25" PointY="9.8783268229166659" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="3.25" PointY="8.375" Height="1.7566536458333353" />
+        <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="4.625" PointY="6.625" Height="1.7566536458333353" />
         <EntityTypeShape EntityType="MTS.Data.TestShift" Width="1.5" PointX="0.625" PointY="5.875" Height="1.7566536458333317" />
         <AssociationConnector Association="MTS.Data.fk_testParam_paramId" >
-          <ConnectorPoint PointX="4.0625" PointY="7.9210009765625" />
-          <ConnectorPoint PointX="4.0625" PointY="8.375" />
+          <ConnectorPoint PointX="5.5625" PointY="5.2960009765625" />
+          <ConnectorPoint PointX="5.5625" PointY="6.625" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_shiftId" >
-          <ConnectorPoint PointX="4.5" PointY="3.7447446628790235" />
-          <ConnectorPoint PointX="7.375" PointY="3.7447446628790235" />
+          <ConnectorPoint PointX="3.75" PointY="5.53904296875" />
+          <ConnectorPoint PointX="3.75" PointY="10.614937395833334" />
+          <ConnectorPoint PointX="6.25" PointY="10.614937395833334" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testShift_shiftId" >
           <ConnectorPoint PointX="3" PointY="5.4059456380208335" />
@@ -770,17 +772,19 @@
           <ConnectorPoint PointX="2.09375" PointY="5.875" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testParam_testId" >
-          <ConnectorPoint PointX="2.25" PointY="9.5658268229166676" />
-          <ConnectorPoint PointX="3.25" PointY="9.5658268229166676" />
+          <ConnectorPoint PointX="2.25" PointY="9.4079109114583321" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="9.4079109114583321" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="9.4079109114583321" />
+          <ConnectorPoint PointX="5.375" PointY="9.4079109114583321" />
+          <ConnectorPoint PointX="5.375" PointY="8.3816536458333353" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testShift_testId" >
           <ConnectorPoint PointX="1.4375" PointY="9" />
           <ConnectorPoint PointX="1.4375" PointY="7.6316536458333317" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_paramOutput_testOutputId" >
-          <ConnectorPoint PointX="7.375" PointY="4.8746131335794214" />
-          <ConnectorPoint PointX="6.6874994999999995" PointY="4.8746131335794214" />
-          <ConnectorPoint PointX="6.6874994999999995" PointY="6" />
+          <ConnectorPoint PointX="7.5625" PointY="8.875" />
+          <ConnectorPoint PointX="7.5625" PointY="5.2960009765625" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

@@ -210,17 +210,14 @@ namespace MTS.TesterModule
             this.AddDistanceSensorsDown();
         }
 
-        public void AddRubberTest(TestCollection tests)
+        public void AddRubberTest(TestValue test)
         {
-            TestValue test = tests.GetTest(TestCollection.Rubber);
-            // add this test if it is enabled
-            if (test.Enabled)
-                this.AddTask(new ExecuteIf(channels, this, channels.IsLeftMirror, true,
-                    new PresenceTest(channels, test, channels.IsLeftRubberPresent),
-                    new PresenceTest(channels, test, channels.IsRightRubberPresent)));
+            AddTask(new ExecuteIf(channels, this, channels.IsLeftMirror, true,
+                new PresenceTest(channels, test, channels.IsLeftRubberPresent),
+                new PresenceTest(channels, test, channels.IsRightRubberPresent)));
         }
 
-        public void AddPulloffTest(TestCollection tests)
+        public void AddPulloffTest(TestValue test)
         {
             // move sucker up
             SetMultipleValues multi = new SetMultipleValues(channels);
@@ -238,7 +235,7 @@ namespace MTS.TesterModule
             this.AddTask(new WaitForValue(channels, channels.IsVacuum, true));
 
             // provide test
-            this.AddTask(new PulloffTest(channels, tests.GetTest(TestCollection.Pulloff)));
+            this.AddTask(new PulloffTest(channels, test));
 
             // stop suction
             this.AddTask(new SetValue(channels, channels.SuckOn, false));

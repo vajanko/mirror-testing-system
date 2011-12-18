@@ -23,13 +23,24 @@ namespace MTS.TesterModule
         /// </summary>
         protected bool Enabled { get; private set; }
 
+        protected override TaskResult getResult()
+        {
+            return new TaskResult(testParam)
+            {
+                Begin = Begin,
+                End = End,
+                ResultCode = getResultCode(),
+                HasData = true
+            };
+        }
+
         #region Constructors
 
         public TestTask(Channels channels, TestValue testParam) : base(channels) 
         {
             this.testParam = testParam;
             Name = testParam.Name;
-            Id = testParam.Id;
+            Id = testParam.ValueId;
             Enabled = testParam.Enabled;
         }
 

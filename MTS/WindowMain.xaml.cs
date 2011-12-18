@@ -287,9 +287,10 @@ namespace MTS
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            LoginWindow loginWindow = new LoginWindow();
-            while (loginWindow.ShowDialog() != true)
-                loginWindow = new LoginWindow();
+            //LoginWindow loginWindow = new LoginWindow();
+            //while (loginWindow.ShowDialog() != true)
+            //    loginWindow = new LoginWindow();
+            Admin.Operator.TryLogin("admin", "admin");
         }
     }
 }

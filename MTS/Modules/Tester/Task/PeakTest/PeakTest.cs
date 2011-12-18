@@ -14,6 +14,9 @@ namespace MTS.TesterModule
         protected bool isOverloaded = false;
         protected DateTime overloaded;
 
+        DoubleParam maxCurrent;
+        IntParam maxOverloadTime;
+
         #endregion
 
         #region Properties
@@ -66,10 +69,8 @@ namespace MTS.TesterModule
         {
             TaskResult result = base.getResult();
 
-            if (result != null)
-            {
-                result.Params.Add(new ParamResult(TestValue.MaxOverloadTime, maxMeasuredOverloadTime));
-            }
+            result.Params.Add(new ParamResult(maxCurrent, maxMeasuredOverloadTime));
+            result.Params.Add(new ParamResult(maxOverloadTime));
 
             return result;
         }
@@ -80,13 +81,9 @@ namespace MTS.TesterModule
             : base(channels, testParam)
         {
             // from test parameters get MaxCurrent item
-            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
-            if (dValue != null)     // it must be of type double
-                MaxCurrent = dValue.DoubleValue;
+            maxCurrent = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
             // from test parameters get MaxOverloadTime item
-            IntParam iValue = testParam.GetParam<IntParam>(TestValue.MaxOverloadTime);
-            if (iValue != null)     // param is of other type then int
-                MaxOverloadTime = iValue.IntValue;
+            maxOverloadTime = testParam.GetParam<IntParam>(TestValue.MaxOverloadTime);
         }
 
         #endregion

@@ -36,7 +36,7 @@ namespace MTS.Editor
         }
         public void AddTest(TestValue test)
         {
-            tests.Add(test.Id, test);
+            tests.Add(test.ValueId, test);
         }
         public void AddTest(string key, TestValue test)
         {
@@ -46,6 +46,15 @@ namespace MTS.Editor
         {
             return tests[key];
         }
+        public void RemoveTest(string key)
+        {
+            tests.Remove(key);
+        }
+        public void RemoveTest(TestValue test)
+        {
+            RemoveTest(test.ValueId);
+        }
+
         /// <summary>
         /// Set handler to be called when any of property of any test or parameter get changed 
         /// </summary>
