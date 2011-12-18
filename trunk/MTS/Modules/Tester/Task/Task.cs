@@ -128,12 +128,14 @@ namespace MTS.TesterModule
         }
         protected virtual TaskResult getResult()
         {
-            // for test this is test name (unique identifier)
-            return new TaskResult(this.Id)
+            // these value are common for all tasks
+            // overrirde this method is TestTask and add properties to TaskResult
+            return new TaskResult()
             {
                 ResultCode = getResultCode(),
                 Begin = this.Begin,
                 End = this.End,
+                HasData = false
             };
         }
 

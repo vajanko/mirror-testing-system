@@ -14,8 +14,9 @@ namespace MTS.TesterModule
         /// <summary>
         /// Required duration in seconds of spiral to be swtiched on during this test
         /// </summary>
-        private double testingTime;
-        //private TimeSpan start;
+        private double maxTime;
+
+        private DoubleParam testingTime;
 
         #endregion
 
@@ -37,7 +38,7 @@ namespace MTS.TesterModule
                     break;
                 case ExState.Measuring:
                     measureCurrent(channels.HeatingFoilCurrent);      // measure spiral current
-                    if (TimeElapsed(time) > testingTime)              // if testing time elapsed
+                    if (TimeElapsed(time) > maxTime)                  // if testing time elapsed
                         goTo(ExState.Finalizing);                     // go to next state                     
                     break;
                 case ExState.Finalizing:
@@ -49,6 +50,15 @@ namespace MTS.TesterModule
                     Finish(time);
                     break;
             }
+        }
+
+        protected override TaskResult getResult()
+        {
+            TaskResult result = base.getResult();
+            // this parametes has been used, but no output has been generated
+            result.Params.Add(new ParamResult(testingTime));
+
+            return result;
         }
 
         #region Constructors
@@ -63,9 +73,7 @@ namespace MTS.TesterModule
             : base(channels, testParam) 
         {
             // from test parameters get TestingTime item
-            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
-            if (dValue != null)     // it must be of type int
-                testingTime = dValue.DoubleValue;
+            testingTime = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
         }
 
         #endregion

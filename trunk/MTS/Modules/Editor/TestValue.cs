@@ -64,7 +64,7 @@ namespace MTS.Editor
         }
         public void AddParam(ParamValue param)
         {
-            parameters.Add(param.Id, param);
+            parameters.Add(param.ValueId, param);
         }
         public void AddParam(string key, ParamValue param)
         {

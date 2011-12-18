@@ -1,29 +1,36 @@
 ﻿using System;
+using MTS.Editor;
+using MTS.Data.Types;
 
 namespace MTS.Tester.Result
 {
-    public class ParamResult
+    public class ParamResult : ResultBase
     {
         /// <summary>
-        /// (Get) Unique identifier of parameter
+        /// (Get) Value of parameter result
         /// </summary>
-        public string Id { get; private set; }
+        public object ResultValue { get; private set; }
+        public string ResultStringValue { get { return Param.ValueToString(ResultValue); } }
         /// <summary>
-        /// (Get) Value of parameter
+        /// (Get) Parameter used to produce this output
         /// </summary>
-        public object Value { get; private set; }
+        public ParamValue Param { get { return Value as ParamValue; } }
+        public ParamType ValueType { get { return Param.ValueType(); } }
 
         #region Constructors
 
         /// <summary>
-        /// Create a new instance of <see cref="ParamResult"/>. This value could be saved to database
+        /// Create a new instance of <see cref="ParamResult"/> intializing it with used parameter string
+        /// identifier <see cref="ValueId"/> and database id of used paramerter
         /// </summary>
-        /// <param name="id">Unique identifier of parameter</param>
-        /// <param name="value">Value of parameter</param>
-        public ParamResult(string id, object value)
+        /// <param name="valueId">String id of used parameter</param>
+        /// <param name="databaseId">Database id of used parameter</param>
+        /// <param name="value">Value of parameter. If this is null value will not be save to database
+        /// but will be referenced by test output as used parameter</param>
+        public ParamResult(ParamValue value, object resultValue = null)
+            : base(value)
         {
-            Id = id;
-            Value = value;
+            ResultValue = resultValue;
         }
 
         #endregion

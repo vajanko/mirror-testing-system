@@ -22,6 +22,9 @@ namespace MTS.TesterModule
         /// </summary>
         protected double maxMeasuredCurrent;
 
+        protected IntParam minCurrent;
+        protected IntParam maxCurrent;
+
         #endregion
 
         #region Properties
@@ -29,11 +32,11 @@ namespace MTS.TesterModule
         /// <summary>
         /// (Get) Mininal allowed current for this test
         /// </summary>
-        protected double MinCurrent { get; private set; }
+        protected int MinCurrent { get { return minCurrent.IntValue; } }
         /// <summary>
         /// (Get) Maximal allowed current for this test
         /// </summary>
-        protected double MaxCurrent { get; private set; }
+        protected int MaxCurrent { get { return maxCurrent.IntValue; } }
 
         #endregion
 
@@ -66,14 +69,11 @@ namespace MTS.TesterModule
         }
         protected override TaskResult getResult()
         {
+            // only add parameters to already creatred test result
             TaskResult result = base.getResult();
 
-            // add parameter results
-            if (result != null)
-            {
-                result.Params.Add(new ParamResult(TestValue.MinCurrent, minMeasuredCurrent));
-                result.Params.Add(new ParamResult(TestValue.MaxCurrent, maxMeasuredCurrent));
-            }
+            result.Params.Add(new ParamResult(minCurrent, minMeasuredCurrent));
+            result.Params.Add(new ParamResult(maxCurrent, maxMeasuredCurrent));
 
             return result;
         }
@@ -84,13 +84,9 @@ namespace MTS.TesterModule
             : base(channels, testParam)
         {
             // from test parameters get MinCurrent parameter
-            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.MinCurrent);
-            if (dValue != null)     // it must be of type double
-                MinCurrent = dValue.DoubleValue;
+            minCurrent = testParam.GetParam<IntParam>(TestValue.MinCurrent);
             // from test parameters get MaxCurrent parameter
-            dValue = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
-            if (dValue != null)     // it must be of type double
-                MaxCurrent = dValue.DoubleValue;
+            maxCurrent = testParam.GetParam<IntParam>(TestValue.MaxCurrent);
         }
 
         #endregion

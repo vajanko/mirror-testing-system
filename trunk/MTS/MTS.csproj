@@ -209,6 +209,7 @@
     </Compile>
     <Compile Include="Modules\Data\OperatorSource.cs" />
     <Compile Include="Modules\Tester\Result\ParamResult.cs" />
+    <Compile Include="Modules\Tester\Result\ResultBase.cs" />
     <Compile Include="Modules\Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Modules\Tester\Result\TaskResult.cs" />
     <Compile Include="Modules\Tester\Result\TaskResultCode.cs" />

@@ -7,7 +7,12 @@ namespace MTS.Editor
 {
     public abstract class ValueBase : INotifyPropertyChanged
     {
-        public string Id { get; protected set; }
+        /// <summary>
+        /// (Get/Set) This property could be optionaly used to store database id of test or parameter value
+        /// </summary>
+        public int DatabaseId { get; set; }
+
+        public string ValueId { get; protected set; }
 
         public string Name { get; set; }
 
@@ -49,7 +54,7 @@ namespace MTS.Editor
 
         public ValueBase(string id)
         {
-            Id = id;
+            ValueId = id;
         }
 
         #endregion

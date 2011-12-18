@@ -23,10 +23,11 @@ namespace MTS.TesterModule
         #region Private Fields
 
         private Channels channels;
-        private TestCollection tests;
+        private TestCollection shiftTests;
         private TaskScheduler scheduler;
         private Thread loop;
         private Data.Shift dbShift;
+        MTSContext context;
         
         /// <summary>
         /// Id of mirror tested in this shift
@@ -242,7 +243,7 @@ namespace MTS.TesterModule
                 Output.WriteLine("Test sequence {0} started", Finished + 1);
 
                 // create scheduler with tasks to be executed
-                scheduler = createScheduler(channels, tests);
+                scheduler = createScheduler(channels, shiftTests);
 
                 // this loop tests one mirror
                 while (!scheduler.IsFinished)
@@ -297,7 +298,7 @@ namespace MTS.TesterModule
 
             Output.Write("Saveing results do database ... ");
             List<TaskResult> results = scheduler.GetResultData();
-            saveShiftResult(results, tests);
+            saveShiftResult(results);
             Output.WriteLine("Saved!");
 
             // wait a moment to display light
@@ -306,85 +307,130 @@ namespace MTS.TesterModule
 
         #region Database Methods
 
+        private void initTests()
+        {
+            // 1) remove all disabled test - will not be executed
+            List<TestValue> toRemove = new List<TestValue>();
+            foreach (TestValue test in shiftTests)
+                if (!test.Enabled)
+                    toRemove.Add(test);
+            foreach (TestValue test in toRemove)
+                shiftTests.RemoveTest(test);
+
+            // 2) save tests that will be used to database
+            foreach (TestValue test in shiftTests)
+            {
+                // 2.1) save used test to database
+                Test dbTest = context.Tests.FirstOrDefault(t => t.Name == test.ValueId);
+                if (dbTest == null)
+                {   // check if such a test already exists
+                    dbTest = context.Tests.Add(new Test { Name = test.ValueId });
+                    context.SaveChanges();  // this will generate a new id for this test
+                }
+                test.DatabaseId = dbTest.Id;
+
+                // 2.2) save used test parameters to database
+                foreach (ParamValue param in test)
+                {
+                    // 2.2.1) save used parameter to database
+                    string strValue = param.ValueToString();
+                    Param dbParam = context.Params.FirstOrDefault(p => p.Name == param.ValueId && p.Value == strValue);
+                    if (dbParam == null)
+                    {   // if it does not exists create a new one
+                        byte valueType = (byte)param.ValueType();
+                        dbParam = context.Params.Add(new Param { Name = param.ValueId, Type = valueType, Value = strValue });
+                        context.SaveChanges();
+                    }
+
+                    // 2.2.2) save relationship between test and param if it does not exists yet
+                    TestParam dbTestParam = context.TestParams
+                        .FirstOrDefault(tp => tp.TestId == dbTest.Id && tp.ParamId == dbParam.Id);
+                    if (dbTestParam == null)
+                    {
+                        dbTestParam = context.TestParams.Add(new TestParam { TestId = dbTest.Id, ParamId = dbParam.Id });
+                    }
+
+                    param.DatabaseId = dbParam.Id;
+                }
+            }
+            context.SaveChanges();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="usedTests">Only tests that will be executed (not disabled)</param>
+        private void createShift(TestCollection usedTests)
+        {
+            // 1) create a new instance of shift and save it to database
+            mirrorId = context.Mirrors.Select(m => m.Id).First();   // depends on parameter settings
+            operatorId = Admin.Operator.Instance.Id;                // loged in operator id
+            dbShift = context.Shifts.Add(new Data.Shift
+            {
+                Start = DateTime.Now,
+                Finish = DateTime.Now,      // must be initialized otherwise exception is thrown
+                MirrorId = mirrorId,
+                OperatorId = operatorId
+            });
+            context.SaveChanges();
+
+            // 2) save information about used tests in current shift
+            foreach (TestValue tv in usedTests)
+            {
+                context.TestShifts.Add(new TestShift { ShiftId = dbShift.Id, TestId = tv.DatabaseId });
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="results"></param>
-        /// <param name="usedTests"></param>
-        private void saveShiftResult(List<TaskResult> results, TestCollection usedTests)
+        private void saveShiftResult(IEnumerable<TaskResult> results)
         {
             // this converter is used to convert object value to its string representation when
             // saveing to and retriving from database
             ParamTypeConverter converter = new ParamTypeConverter();
+            Data.Shift dbShift = this.dbShift;
 
-            using (MTSContext context = new MTSContext())
+            foreach (TaskResult tRes in results)
             {
-                // save result data
-                foreach (TaskResult tRes in results)
-                {   // skip result without data to be saved
-                    if (tRes.Id == null || !usedTests.ContainsKey(tRes.Id))
-                        continue;
-
-                    // 1) save used test if it does not exists and generate a new id
-                    TestValue tv = usedTests[tRes.Id];  // test used to produce this output
-                    Test dbTest = context.Tests.FirstOrDefault(t => t.Name == tv.Id);
-                    if (dbTest == null)
-                    {   // check if such a test already exists
-                        dbTest = context.Tests.Add(new Test { Name = tv.Id });
-                        context.SaveChanges();  // this will generate a new id for this test
-                    }
-
-                    // 2) save test output and reference used test to produce this output
+                if (tRes.HasData)
+                {
+                    // save test output
                     TestOutput dbTestOutput = context.TestOutputs.Add(new TestOutput
                     {
                         Result = (byte)tRes.ResultCode,
                         Start = tRes.Begin,
                         Finish = tRes.End,
                         ShiftId = dbShift.Id,
-                        TestId = dbTest.Id
+                        TestId = tRes.DatabaseId
                     });
-                    context.SaveChanges();  // generate new id of test output so param output can use it
-                    int testOutputId = dbTestOutput.Id;
+                    context.SaveChanges();      // generate id
 
-                    // 3) save parameters (outputs)
                     foreach (ParamResult pRes in tRes.Params)
                     {
-                        // 3.1 save used parameter if it doest not exists and generate a new id
-                        ParamValue pv = tv[pRes.Id];        // parameter used to produce this output
-                        Param dbParam = context.Params.FirstOrDefault(p => p.Name == pRes.Id);
-                        if (dbParam == null)
-                        {   // check if such a param already exists
-                            
-                            string strVal = pv.ValueToString(); // convert parameter value to string representation
-                            byte typeVal = (byte)pv.ValueType();// conversion to string loose which type it was
-                            dbParam = context.Params.Add(new Param { Name = pv.Id, Type = typeVal, Value = strVal });
-                            context.SaveChanges();  // this will generate a new id for this param
-                        }
-
-                        // 3.2 save relationship between test and param if it does not exists yet
-                        TestParam dbTestParam = context.TestParams
-                            .FirstOrDefault(tp => tp.TestId == dbTest.Id && tp.ParamId == dbParam.Id);
-                        if (dbTestParam == null)
-                        {
-                            dbTestParam = context.TestParams.Add(new TestParam
-                            {
-                                TestId = dbTest.Id,
-                                ParamId = dbParam.Id
-                            });
-                        }
-
-                        // 3.3 save parameter output and reference used param to produce this output
-                        string resultValue = converter.ConvertToString(pv.ValueType(), pRes.Value);
+                        // save param output (notice that if could be null also)
                         context.ParamOutputs.Add(new ParamOutput
                         {
-                            ParamId = dbParam.Id,
-                            TestOutpuId = testOutputId,
-                            Value = resultValue
+                            ParamId = pRes.DatabaseId,
+                            TestOutpuId = dbTestOutput.Id,
+                            Value = pRes.ResultStringValue
                         });
                     }
                 }
+            }
+            try
+            {
                 context.SaveChanges();
             }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void saveShift()
+        {
+            dbShift.Finish = DateTime.Now;
+            context.SaveChanges();
         }
 
         #endregion
@@ -427,22 +473,14 @@ namespace MTS.TesterModule
         }
         public void Start()
         {   // save date and time when shift has been started - necessary for database
-            Begin = DateTime.Now;
-            
+           
             // test
-            using (MTSContext context = new MTSContext())
-            {
-                mirrorId = context.Mirrors.Select(m => m.Id).First();
-                operatorId = Admin.Operator.Instance.Id;                // loged in operator id
-                dbShift = context.Shifts.Add(new Data.Shift
-                {
-                    Start = DateTime.Now,
-                    Finish = DateTime.Now,
-                    MirrorId = mirrorId,
-                    OperatorId = operatorId
-                });
-                context.SaveChanges();
-            }
+            context = new MTSContext();
+            // prepare test collection for execution - remove disabled tests and the rest save to database
+            // remember test and parameter id in database
+            initTests();
+            // create and save a new instance of this to database
+            createShift(shiftTests);
 
             // only start execution loop if it is not started yet
             if (loop != null && !loop.IsAlive)
@@ -454,12 +492,9 @@ namespace MTS.TesterModule
             setSafeStateOutputs(channels);
 
             // save date and time when shift has been finished - necessary for database
-            End = DateTime.Now;            
-            using (MTSContext context = new MTSContext())
-            {
-                dbShift.Finish = DateTime.Now;
-                context.SaveChanges();
-            }
+            saveShift();
+
+            context.Dispose();
 
             Output.WriteLine("Shift finished!");
 
@@ -493,7 +528,7 @@ namespace MTS.TesterModule
         public Shift(Channels channels, TestCollection tests)
         {
             this.channels = channels;
-            this.tests = tests;
+            this.shiftTests = tests;
             Mirrors = 1;        // default count
         }
 

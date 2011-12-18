@@ -11,6 +11,8 @@ namespace MTS.Data.Converters
     {
         public string ConvertToString(ParamType type, object value)
         {
+            if (value == null)
+                return null;
             switch (type)
             {
                 default: return value.ToString();
