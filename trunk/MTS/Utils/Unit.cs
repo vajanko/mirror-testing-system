@@ -10,13 +10,79 @@ namespace MTS
         public Unit LargerUnit { get; set; }
         public Unit SmallerUnit { get; set; }
 
+        /// <summary>
+        /// (Get/Set) Short name of unit f.e.: mm, ms, s, mA, ...
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// (Get/Set) Long name of unit f.e.: milimethers, miliamperes, ...
+        /// </summary>
         public string FullName { get; set; }
 
-        public override string ToString()
+        /// <summary>
+        /// Convert unit to string representation using shoft name - see <see cref="Name"/>
+        /// </summary>
+        /// <returns><see cref="Name"/> of unit</returns>
+        public override string ToString() { return Name; }
+
+        /// <summary>
+        /// Convert given value to particular unit
+        /// </summary>
+        /// <param name="unit">Unit to convert given value to</param>
+        /// <param name="value">Value to be converted</param>
+        /// <returns>Value converted to particular unit or given value if conversion is not possible</returns>
+        public double ConvertTo(Unit unit, double value)
         {
-            return Name;
+            Unit current = this;
+            double result = value;
+            while (current != null)
+            {
+                if (current.Name == unit.Name)
+                    return result;
+                current = current.LargerUnit;
+                result /= 1000;
+            }
+
+            current = this;
+            result = value;
+            while (current != null)
+            {
+                if (current.Name == unit.Name)
+                    return result;
+                current = current.SmallerUnit;
+                result *= 1000;
+            }
+            return value;
+        }
+        /// <summary>
+        /// Convert given value to particular unit
+        /// </summary>
+        /// <param name="unit">Unit to convert given value to</param>
+        /// <param name="value">Value to be converted</param>
+        /// <returns>Value converted to particular unit or given value if conversion is not possible</returns>
+        public int ConvertTo(Unit unit, int value)
+        {
+            Unit current = this;
+            int result = value;
+            while (current != null)
+            {
+                if (current.Name == unit.Name)
+                    return result;
+                current = current.LargerUnit;
+                result /= 1000;
+            }
+
+            current = this;
+            result = value;
+            while (current != null)
+            {
+                if (current.Name == unit.Name)
+                    return result;
+                current = current.SmallerUnit;
+                result *= 1000;
+            }
+            return result;
         }
     }
 

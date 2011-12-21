@@ -19,15 +19,29 @@ namespace MTS.Admin
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
-        {
-            InitializeComponent();
-        }
-
         private void login_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = Operator.TryLogin(loginBox.Text, passwordBox.Password);
             this.Close();
         }
+
+        #region Constructors
+
+        public LoginWindow(Window owner)
+            : base()
+        {
+            Owner = owner;
+        }
+        public LoginWindow(Window owner, bool previousFailed = false)
+            : this(owner)
+        {
+            InitializeComponent();
+            if (previousFailed)
+                messageLabel.Visibility = System.Windows.Visibility.Visible;
+            else
+                messageLabel.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        #endregion
     }
 }

@@ -109,6 +109,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\PopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TestControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -197,6 +201,9 @@
     <Compile Include="Controls\DocumentTab.cs" />
     <Compile Include="Controls\IPAddressControl.xaml.cs">
       <DependentUpon>IPAddressControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PopupWindow.xaml.cs">
+      <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Validators\PasswordEqualityValidator.cs" />
     <Compile Include="Controls\Validators\RequiredFieldValidator.cs" />

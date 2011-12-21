@@ -205,5 +205,17 @@ namespace MTS.Properties {
                 return ((string)(this["MTSEntities"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234")]
+        public ushort DummyPort {
+            get {
+                return ((ushort)(this["DummyPort"]));
+            }
+            set {
+                this["DummyPort"] = value;
+            }
+        }
     }
 }

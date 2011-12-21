@@ -54,8 +54,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.directionLightCurrentMin = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.listenButton = new System.Windows.Forms.Button();
+            this.disconnectButton = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.isNewMirror = new System.Windows.Forms.RadioButton();
             this.isOldMirror = new System.Windows.Forms.RadioButton();
@@ -80,6 +80,9 @@
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.tester1 = new MTS.Simulator.Tester();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.portBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).BeginInit();
@@ -104,6 +107,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.lockTime)).BeginInit();
             this.groupBox15.SuspendLayout();
             this.groupBox12.SuspendLayout();
+            this.groupBox14.SuspendLayout();
             this.SuspendLayout();
             // 
             // startButton
@@ -405,25 +409,25 @@
             this.directionLightCurrentMin.TabIndex = 0;
             this.directionLightCurrentMin.Value = global::MTS.Simulator.Properties.Settings.Default.BlinkerMinCurrent;
             // 
-            // button1
+            // listenButton
             // 
-            this.button1.Location = new System.Drawing.Point(542, 523);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Listen";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.listenButton_Click);
+            this.listenButton.Location = new System.Drawing.Point(86, 39);
+            this.listenButton.Name = "listenButton";
+            this.listenButton.Size = new System.Drawing.Size(75, 23);
+            this.listenButton.TabIndex = 0;
+            this.listenButton.Text = "Listen";
+            this.listenButton.UseVisualStyleBackColor = true;
+            this.listenButton.Click += new System.EventHandler(this.listenButton_Click);
             // 
-            // button2
+            // disconnectButton
             // 
-            this.button2.Location = new System.Drawing.Point(623, 523);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Disconnect";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.disconnectButton_Click);
+            this.disconnectButton.Location = new System.Drawing.Point(6, 39);
+            this.disconnectButton.Name = "disconnectButton";
+            this.disconnectButton.Size = new System.Drawing.Size(75, 23);
+            this.disconnectButton.TabIndex = 11;
+            this.disconnectButton.Text = "Disconnect";
+            this.disconnectButton.UseVisualStyleBackColor = true;
+            this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
             // groupBox8
             // 
@@ -520,12 +524,10 @@
             // powerOff
             // 
             this.powerOff.AutoSize = true;
-            this.powerOff.Checked = true;
             this.powerOff.Location = new System.Drawing.Point(6, 41);
             this.powerOff.Name = "powerOff";
             this.powerOff.Size = new System.Drawing.Size(39, 17);
             this.powerOff.TabIndex = 8;
-            this.powerOff.TabStop = true;
             this.powerOff.Text = "Off";
             this.powerOff.UseVisualStyleBackColor = true;
             this.powerOff.CheckedChanged += new System.EventHandler(this.powerOff_CheckedChanged);
@@ -533,10 +535,12 @@
             // powerOn
             // 
             this.powerOn.AutoSize = true;
+            this.powerOn.Checked = true;
             this.powerOn.Location = new System.Drawing.Point(6, 18);
             this.powerOn.Name = "powerOn";
             this.powerOn.Size = new System.Drawing.Size(39, 17);
             this.powerOn.TabIndex = 7;
+            this.powerOn.TabStop = true;
             this.powerOn.Text = "On";
             this.powerOn.UseVisualStyleBackColor = true;
             // 
@@ -692,11 +696,42 @@
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Mirror";
             // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.portBox);
+            this.groupBox14.Controls.Add(this.label11);
+            this.groupBox14.Controls.Add(this.listenButton);
+            this.groupBox14.Controls.Add(this.disconnectButton);
+            this.groupBox14.Location = new System.Drawing.Point(470, 486);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(167, 70);
+            this.groupBox14.TabIndex = 24;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Setup";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 16);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(29, 13);
+            this.label11.TabIndex = 12;
+            this.label11.Text = "Port:";
+            // 
+            // portBox
+            // 
+            this.portBox.Location = new System.Drawing.Point(41, 13);
+            this.portBox.Name = "portBox";
+            this.portBox.Size = new System.Drawing.Size(66, 20);
+            this.portBox.TabIndex = 13;
+            this.portBox.Text = "1234";
+            // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(779, 568);
+            this.ClientSize = new System.Drawing.Size(647, 568);
+            this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox15);
             this.Controls.Add(this.groupBox13);
@@ -705,8 +740,6 @@
             this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox9);
             this.Controls.Add(this.groupBox8);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -746,6 +779,8 @@
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
             this.groupBox12.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -778,8 +813,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown directionLightCurrentMin;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button listenButton;
+        private System.Windows.Forms.Button disconnectButton;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.RadioButton isNewMirror;
         private System.Windows.Forms.RadioButton isOldMirror;
@@ -804,6 +839,9 @@
         private System.Windows.Forms.RadioButton powerOff;
         private System.Windows.Forms.RadioButton powerOn;
         private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.TextBox portBox;
+        private System.Windows.Forms.Label label11;
     }
 }
 

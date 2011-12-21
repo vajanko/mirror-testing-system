@@ -14,6 +14,7 @@ namespace MTS.IO.Module
         /// </summary>
         public bool IsConnected { get; set; }
         private readonly System.Timers.Timer timer = new System.Timers.Timer();
+        private int port = 1234;
 
         TcpClient master;
 
@@ -29,7 +30,7 @@ namespace MTS.IO.Module
             {
                 master = new TcpClient();
                 //new Socket(IPAddress.Loopback.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                master.Connect(new IPEndPoint(IPAddress.Loopback, 1234));
+                master.Connect(new IPEndPoint(IPAddress.Loopback, port));
                 IsConnected = true;
             }
             catch
@@ -319,5 +320,10 @@ namespace MTS.IO.Module
         }
 
         #endregion
+
+        public DummyModule(int port = 1234)
+        {
+            this.port = port;
+        }
     }
 }

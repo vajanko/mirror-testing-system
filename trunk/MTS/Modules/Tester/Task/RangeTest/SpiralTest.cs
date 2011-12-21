@@ -14,9 +14,9 @@ namespace MTS.TesterModule
         /// <summary>
         /// Required duration in seconds of spiral to be swtiched on during this test
         /// </summary>
-        private double maxTime;
+        private readonly double maxTime;
 
-        private DoubleParam testingTime;
+        private readonly DoubleParam testingTime;
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace MTS.TesterModule
                 case ExState.Initializing:
                     minMeasuredCurrent = double.MaxValue;             // initialize max and min
                     maxMeasuredCurrent = double.MinValue;             // measured values
-                    channels.HeatingFoilOn.On();                // switch on spiral
+                    channels.HeatingFoilOn.On();                      // switch on spiral
                     StartWatch(time);                                 // start measuring time                                      
                     goTo(ExState.Measuring);                          // start measuring
                     break;
@@ -43,7 +43,7 @@ namespace MTS.TesterModule
                     break;
                 case ExState.Finalizing:
                     channels.HeatingFoilOn.SwitchOff();               // swtich off spiral
-                    Finish(time);                                     //
+                    Finish(time);
                     break;
                 case ExState.Aborting:
                     channels.HeatingFoilOn.SwitchOff();               // swtich off spiral
@@ -56,7 +56,7 @@ namespace MTS.TesterModule
         {
             TaskResult result = base.getResult();
             // this parametes has been used, but no output has been generated
-            result.Params.Add(new ParamResult(testingTime));
+            result.Params.Add(new ParamResult(testingTime, Duration.TotalMilliseconds));
 
             return result;
         }
@@ -74,6 +74,8 @@ namespace MTS.TesterModule
         {
             // from test parameters get TestingTime item
             testingTime = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
+            // convert testig time to miliampheres
+            maxTime = testingTime.Unit.ConvertTo(Units.Miliseconds, testingTime.DoubleValue);
         }
 
         #endregion
