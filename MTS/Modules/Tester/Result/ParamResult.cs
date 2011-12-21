@@ -31,6 +31,9 @@ namespace MTS.Tester.Result
             : base(value)
         {
             ResultValue = resultValue;
+            // if parameter should not be saved to database, must be explicitly set
+            // by default all parameters are saved to database (even if result value is null)
+            HasData = true;
         }
 
         #endregion

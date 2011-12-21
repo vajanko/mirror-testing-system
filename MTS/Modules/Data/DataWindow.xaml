@@ -53,13 +53,7 @@
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="test">
-                    <ad:ResizingPanel>
-                        <ad:DockablePane ad:ResizingPanel.ResizeWidth="30">
-                            <ad:DockableContent Title="test">
-                                <Button Width="100" Height="100"/>
-                            </ad:DockableContent>
-                        </ad:DockablePane>
-                    </ad:ResizingPanel>
+                    
                 </TabItem>
             </TabControl>
         </StackPanel>

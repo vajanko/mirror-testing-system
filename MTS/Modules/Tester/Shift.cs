@@ -27,7 +27,7 @@ namespace MTS.TesterModule
         private TaskScheduler scheduler;
         private Thread loop;
         private Data.Shift dbShift;
-        MTSContext context;
+        private MTSContext context;
         
         /// <summary>
         /// Id of mirror tested in this shift
@@ -53,7 +53,7 @@ namespace MTS.TesterModule
 
         #region Properties
 
-        private int mirrors = 0;
+        private int mirrors = 1;
         /// <summary>
         /// (Get/Set) Number of mirrors to test
         /// </summary>
@@ -81,7 +81,7 @@ namespace MTS.TesterModule
         public int Passed
         {
             get { return passed; }
-            set
+            private set
             {
                 passed = value;
                 NotifyPropretyChanged("Passed");
@@ -94,7 +94,7 @@ namespace MTS.TesterModule
         public int Failed
         {
             get { return failed; }
-            set
+            private set
             {
                 failed = value;
                 NotifyPropretyChanged("Failed");
@@ -191,7 +191,9 @@ namespace MTS.TesterModule
             //scheduler.AddWaitForStart();
 
             // rubber test
-            //scheduler.AddRubberTest(tests);
+            TestValue rubber = tests.GetTest(TestCollection.Rubber);
+            if (rubber != null)
+                scheduler.AddRubberTest(rubber);
 
             //// wait for start
             //scheduler.AddWaitForStart();
@@ -216,7 +218,9 @@ namespace MTS.TesterModule
             // wait for start
             //scheduler.AddWaitForStart();
             // test spiral
-            scheduler.AddTask(new SpiralTest(channels, tests.GetTest(TestCollection.Heating)));
+            TestValue spiral = tests.GetTest(TestCollection.Heating);
+            if (spiral != null)
+                scheduler.AddTask(new SpiralTest(channels, spiral));
 
             // open device
             //scheduler.AddOpenDevice();
@@ -307,6 +311,12 @@ namespace MTS.TesterModule
 
         #region Database Methods
 
+        /// <summary>
+        /// Initialize test that are going to be used in this shift. Remove disabled test, save tests and their
+        /// parameters that are going to be used to database. Use test or parameter database id as auxiliary property
+        /// of test or parameter value. Those will be used when generating test or parameter results and saveing them
+        /// to database
+        /// </summary>
         private void initTests()
         {
             // 1) remove all disabled test - will not be executed
@@ -356,7 +366,8 @@ namespace MTS.TesterModule
             context.SaveChanges();
         }
         /// <summary>
-        /// 
+        /// Create a new instance of shift and save it to database. Current date and time is used for initializing
+        /// start time of shift. Also all tests and parameters that are going to be used in this shift will be saved
         /// </summary>
         /// <param name="usedTests">Only tests that will be executed (not disabled)</param>
         private void createShift(TestCollection usedTests)
@@ -366,11 +377,12 @@ namespace MTS.TesterModule
             operatorId = Admin.Operator.Instance.Id;                // loged in operator id
             dbShift = context.Shifts.Add(new Data.Shift
             {
-                Start = DateTime.Now,
+                Start = DateTime.Now,       // date and time when shift has been started
                 Finish = DateTime.Now,      // must be initialized otherwise exception is thrown
-                MirrorId = mirrorId,
-                OperatorId = operatorId
+                MirrorId = mirrorId,        // mirror which is tested in this shift
+                OperatorId = operatorId     // operator who has executed this shift
             });
+            // by saveing shift new id will be generated - this is necessary for saveing test used in this shift
             context.SaveChanges();
 
             // 2) save information about used tests in current shift
@@ -380,53 +392,60 @@ namespace MTS.TesterModule
             }
         }
         /// <summary>
-        /// 
+        /// Save produced results from one sequence of tests. One shift contains many sequences. At this time
+        /// shift is already saved in database and we reference it when saveing ouputs
         /// </summary>
-        /// <param name="results"></param>
+        /// <param name="results">Collection of <see cref="TaskResult"/> containing data to be saved for
+        /// each test and its parameters</param>
         private void saveShiftResult(IEnumerable<TaskResult> results)
         {
-            // this converter is used to convert object value to its string representation when
-            // saveing to and retriving from database
-            ParamTypeConverter converter = new ParamTypeConverter();
-            Data.Shift dbShift = this.dbShift;
-
-            foreach (TaskResult tRes in results)
+            try
             {
-                if (tRes.HasData)
+                // this converter is used to convert object value to its string representation when
+                // saveing to and retriving from database
+                ParamTypeConverter converter = new ParamTypeConverter();
+
+                foreach (TaskResult tRes in results.Where(t => t.HasData))
                 {
-                    // save test output
+                    // only save test outputs which have data to be saved
                     TestOutput dbTestOutput = context.TestOutputs.Add(new TestOutput
                     {
-                        Result = (byte)tRes.ResultCode,
-                        Start = tRes.Begin,
-                        Finish = tRes.End,
-                        ShiftId = dbShift.Id,
-                        TestId = tRes.DatabaseId
+                        Result = (byte)tRes.ResultCode,     // result of test: Completed/Failed/Aborted
+                        Start = tRes.Begin,                 // date and time then test has been started
+                        Finish = tRes.End,                  // date and time when test has been finished
+                        ShiftId = dbShift.Id,               // shift where this output was generated
+                        TestId = tRes.DatabaseId            // test used for this output
                     });
-                    context.SaveChanges();      // generate id
+                    // generate new id of TestOutput, this is necessary for saveing parameters output
+                    context.SaveChanges();
 
-                    foreach (ParamResult pRes in tRes.Params)
+                    // only save parameter outputs which have data to be saved
+                    foreach (ParamResult pRes in tRes.Params.Where(p => p.HasData))
                     {
                         // save param output (notice that if could be null also)
                         context.ParamOutputs.Add(new ParamOutput
                         {
-                            ParamId = pRes.DatabaseId,
-                            TestOutpuId = dbTestOutput.Id,
-                            Value = pRes.ResultStringValue
+                            ParamId = pRes.DatabaseId,      // parameter used for this output
+                            TestOutpuId = dbTestOutput.Id,  // test output to which this parameter output belongs
+                            Value = pRes.ResultStringValue  // value of parameter output (could be null)
                         });
+                        // context should not be saved - will be saved with next test output or at the end of loop
                     }
                 }
-            }
-            try
-            {
+
+                // save data after last loop (param output is not saved)
                 context.SaveChanges();
             }
             catch (Exception ex)
             {
-
+                // handle error: 
+                throw ex;
             }
         }
-
+        /// <summary>
+        /// Modify and save shift to database. This method shuld be called at the end of shift execution.
+        /// Current data and time is used for end time of shift.
+        /// </summary>
         private void saveShift()
         {
             dbShift.Finish = DateTime.Now;
@@ -474,10 +493,10 @@ namespace MTS.TesterModule
         public void Start()
         {   // save date and time when shift has been started - necessary for database
            
-            // test
+            // create database layer
             context = new MTSContext();
             // prepare test collection for execution - remove disabled tests and the rest save to database
-            // remember test and parameter id in database
+            // remember test and parameter database ids
             initTests();
             // create and save a new instance of this to database
             createShift(shiftTests);
@@ -493,13 +512,13 @@ namespace MTS.TesterModule
 
             // save date and time when shift has been finished - necessary for database
             saveShift();
-
+            // release database layer
             context.Dispose();
 
             Output.WriteLine("Shift finished!");
 
             // raise notify event that shift has been finished
-            RaiseExecuted();    // here data should be saved
+            RaiseExecuted();
         }
         public void Abort()
         {
@@ -529,7 +548,6 @@ namespace MTS.TesterModule
         {
             this.channels = channels;
             this.shiftTests = tests;
-            Mirrors = 1;        // default count
         }
 
         #endregion

@@ -258,7 +258,7 @@
       <value>2.5</value>
       <min>0</min>
       <max>20</max>
-      <unit type="miliseconds"/>
+      <unit type="seconds"/>
     </param>
   </test>
   <test id="DirectionLight">

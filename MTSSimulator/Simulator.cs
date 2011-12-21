@@ -38,6 +38,12 @@ namespace MTS.Simulator
         Random gen = new Random();
         private void listenButton_Click(object sender, EventArgs e)
         {
+            listenButton.Enabled = false;
+
+            int port;
+            if (!int.TryParse(portBox.Text, out port))
+                port = 1234;
+
             slave = new Slave(channels);
             slave.Update += new Action(slave_Update);
 
@@ -47,12 +53,18 @@ namespace MTS.Simulator
             // initialize tester values
             updateTester();
 
-            slave.Listen(System.Net.IPAddress.Loopback, 1234);
+            slave.Listen(System.Net.IPAddress.Loopback, port);
+
+            disconnectButton.Enabled = true;
         }
         private void disconnectButton_Click(object sender, EventArgs e)
         {
+            disconnectButton.Enabled = false;
+
             if (slave != null)
                 slave.Disconnect();
+
+            listenButton.Enabled = true;
         }
         private void Simulator_FormClosing(object sender, FormClosingEventArgs e)
         {

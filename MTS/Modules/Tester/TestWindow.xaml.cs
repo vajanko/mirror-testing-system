@@ -481,8 +481,8 @@ namespace MTS.TesterModule
                 case "Modbus": 
                     module = new ModbusModule(Settings.Default.ModbusIpAddress, Settings.Default.ModbusPort);
                     break;
-                case "Dummy": 
-                    module = new DummyModule();
+                case "Dummy":
+                    module = new DummyModule(Settings.Default.DummyPort);
                     break;    // this is for debugging only
                 default: 
                     module = new ECModule(Settings.Default.EthercatTaskName);
