@@ -10,6 +10,7 @@
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Objects;
 
 namespace MTS.Data
 {
@@ -35,5 +36,17 @@ namespace MTS.Data
         public DbSet<TestOutput> TestOutputs { get; set; }
         public DbSet<TestParam> TestParams { get; set; }
         public DbSet<TestShift> TestShifts { get; set; }
+        public DbSet<ShiftResult> ShiftResults { get; set; }
+    
+        public virtual ObjectResult<GetTestResult_Result> GetTestResult(Nullable<int> shiftId)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(GetTestResult_Result).Assembly);
+    
+            var shiftIdParameter = shiftId.HasValue ?
+                new ObjectParameter("shiftId", shiftId) :
+                new ObjectParameter("shiftId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTestResult_Result>("GetTestResult", shiftIdParameter);
+        }
     }
 }

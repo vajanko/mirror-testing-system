@@ -59,6 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetTestResult_Result.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Mirror.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
@@ -73,6 +76,9 @@
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Shift.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Supplier.cs">
