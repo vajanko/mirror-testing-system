@@ -16,6 +16,18 @@
           <EntitySet Name="TestOutput" EntityType="MTS.Data.Store.TestOutput" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TestParam" EntityType="MTS.Data.Store.TestParam" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TestShift" EntityType="MTS.Data.Store.TestShift" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ShiftResults" EntityType="MTS.Data.Store.ShiftResults" store:Type="Views" store:Schema="dbo" store:Name="ShiftResults">
+            <DefiningQuery>SELECT 
+      [ShiftResults].[Start] AS [Start], 
+      [ShiftResults].[Finish] AS [Finish], 
+      [ShiftResults].[Mirror] AS [Mirror], 
+      [ShiftResults].[Operator] AS [Operator], 
+      [ShiftResults].[TotalTests] AS [TotalTests], 
+      [ShiftResults].[Completed] AS [Completed], 
+      [ShiftResults].[Failed] AS [Failed], 
+      [ShiftResults].[Aborted] AS [Aborted]
+      FROM [dbo].[ShiftResults] AS [ShiftResults]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="fk_mirror_supplier_id" Association="MTS.Data.Store.fk_mirror_supplier_id">
             <End Role="Supplier" EntitySet="Supplier" />
             <End Role="Mirror" EntitySet="Mirror" />
@@ -140,6 +152,7 @@
           <Property Name="Finish" Type="datetime" Nullable="false" />
           <Property Name="TestId" Type="int" Nullable="false" />
           <Property Name="ShiftId" Type="int" Nullable="false" />
+          <Property Name="Sequence" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="TestParam">
           <Key>
@@ -156,6 +169,28 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TestId" Type="int" Nullable="false" />
           <Property Name="ShiftId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'mts.dbo.ShiftResults' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="ShiftResults">
+          <Key>
+            <PropertyRef Name="Start" />
+            <PropertyRef Name="Finish" />
+            <PropertyRef Name="Mirror" />
+            <PropertyRef Name="Operator" />
+            <PropertyRef Name="Completed" />
+            <PropertyRef Name="Failed" />
+            <PropertyRef Name="Aborted" />
+          </Key>
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="Finish" Type="datetime" Nullable="false" />
+          <Property Name="Mirror" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Operator" Type="nvarchar" Nullable="false" MaxLength="41" />
+          <Property Name="TotalTests" Type="int" />
+          <Property Name="Completed" Type="int" Nullable="false" />
+          <Property Name="Failed" Type="int" Nullable="false" />
+          <Property Name="Aborted" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="fk_mirror_supplier_id">
           <End Role="Supplier" Type="MTS.Data.Store.Supplier" Multiplicity="1" />
@@ -289,6 +324,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="udpTestResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shiftId" Type="int" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -348,6 +386,10 @@
             <End Role="TestOutput" EntitySet="TestOutputs" />
             <End Role="ParamOutput" EntitySet="ParamOutputs" />
           </AssociationSet>
+          <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
+          <FunctionImport Name="GetTestResult" ReturnType="Collection(MTS.Data.GetTestResult_Result)">
+            <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Mirror">
           <Key>
@@ -458,6 +500,7 @@
           <Property Type="Int32" Name="ShiftId" Nullable="false" />
           <NavigationProperty Name="Shift" Relationship="MTS.Data.fk_testOutput_shiftId" FromRole="TestOutput" ToRole="Shift" />
           <NavigationProperty Name="ParamOutputs" Relationship="MTS.Data.fk_paramOutput_testOutputId" FromRole="TestOutput" ToRole="ParamOutput" />
+          <Property Type="Int16" Name="Sequence" Nullable="false" />
         </EntityType>
         <Association Name="fk_shift_mirrorId">
           <End Type="MTS.Data.Mirror" Role="Mirror" Multiplicity="1" />
@@ -599,6 +642,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ShiftResult">
+          <Key>
+            <PropertyRef Name="Start" />
+            <PropertyRef Name="Finish" />
+            <PropertyRef Name="Mirror" />
+            <PropertyRef Name="Operator" />
+            <PropertyRef Name="Completed" />
+            <PropertyRef Name="Failed" />
+            <PropertyRef Name="Aborted" />
+          </Key>
+          <Property Type="DateTime" Name="Start" Nullable="false" />
+          <Property Type="DateTime" Name="Finish" Nullable="false" />
+          <Property Type="String" Name="Mirror" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Operator" Nullable="false" MaxLength="41" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="TotalTests" />
+          <Property Type="Int32" Name="Completed" Nullable="false" />
+          <Property Type="Int32" Name="Failed" Nullable="false" />
+          <Property Type="Int32" Name="Aborted" Nullable="false" />
+        </EntityType>
+        <ComplexType Name="GetTestResult_Result">
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="25" />
+          <Property Type="Byte" Name="Result" Nullable="false" />
+          <Property Type="Time" Name="Duration" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -676,6 +743,7 @@
           <EntitySetMapping Name="TestOutputs">
             <EntityTypeMapping TypeName="MTS.Data.TestOutput">
               <MappingFragment StoreEntitySet="TestOutput">
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
                 <ScalarProperty Name="ShiftId" ColumnName="ShiftId" />
                 <ScalarProperty Name="TestId" ColumnName="TestId" />
                 <ScalarProperty Name="Finish" ColumnName="Finish" />
@@ -703,6 +771,29 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ShiftResults">
+            <EntityTypeMapping TypeName="MTS.Data.ShiftResult">
+              <MappingFragment StoreEntitySet="ShiftResults">
+                <ScalarProperty Name="Aborted" ColumnName="Aborted" />
+                <ScalarProperty Name="Failed" ColumnName="Failed" />
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="TotalTests" ColumnName="TotalTests" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="Mirror" ColumnName="Mirror" />
+                <ScalarProperty Name="Finish" ColumnName="Finish" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetTestResult" FunctionName="MTS.Data.Store.udpTestResults">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MTS.Data.GetTestResult_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -750,10 +841,10 @@
           <ConnectorPoint PointX="7.375" PointY="4.33550048828125" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_testId" >
-          <ConnectorPoint PointX="2.25" PointY="9.8783268229166659" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="9.8783268229166659" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="9.8783268229166659" />
-          <ConnectorPoint PointX="6.25" PointY="9.8783268229166659" />
+          <ConnectorPoint PointX="2.25" PointY="10.077972819010416" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="10.077972819010416" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="10.077972819010416" />
+          <ConnectorPoint PointX="6.25" PointY="10.077972819010416" />
         </AssociationConnector>
         <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="4.625" PointY="6.625" Height="1.7566536458333353" />
         <EntityTypeShape EntityType="MTS.Data.TestShift" Width="1.5" PointX="0.625" PointY="5.875" Height="1.7566536458333317" />
@@ -763,8 +854,8 @@
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_shiftId" >
           <ConnectorPoint PointX="3.75" PointY="5.53904296875" />
-          <ConnectorPoint PointX="3.75" PointY="10.614937395833334" />
-          <ConnectorPoint PointX="6.25" PointY="10.614937395833334" />
+          <ConnectorPoint PointX="3.75" PointY="10.796934059244792" />
+          <ConnectorPoint PointX="6.25" PointY="10.796934059244792" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testShift_shiftId" >
           <ConnectorPoint PointX="3" PointY="5.4059456380208335" />
@@ -772,10 +863,10 @@
           <ConnectorPoint PointX="2.09375" PointY="5.875" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testParam_testId" >
-          <ConnectorPoint PointX="2.25" PointY="9.4079109114583321" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="9.4079109114583321" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="9.4079109114583321" />
-          <ConnectorPoint PointX="5.375" PointY="9.4079109114583321" />
+          <ConnectorPoint PointX="2.25" PointY="9.4744595768229161" />
+          <ConnectorPoint PointX="3.6666666666666665" PointY="9.4744595768229161" />
+          <ConnectorPoint PointX="3.8333333333333335" PointY="9.4744595768229161" />
+          <ConnectorPoint PointX="5.375" PointY="9.4744595768229161" />
           <ConnectorPoint PointX="5.375" PointY="8.3816536458333353" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testShift_testId" >
@@ -786,6 +877,7 @@
           <ConnectorPoint PointX="7.5625" PointY="8.875" />
           <ConnectorPoint PointX="7.5625" PointY="5.2960009765625" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="MTS.Data.ShiftResult" Width="1.5" PointX="7.25" PointY="0.5" Height="2.2496956380208331" />
       </Diagram>
     </Diagrams>
   </Designer>

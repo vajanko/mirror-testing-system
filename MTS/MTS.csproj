@@ -332,6 +332,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Editor\test.dtd" />
+    <None Include="Properties\DataSources\MTS.Data.Mirror.datasource" />
+    <None Include="Properties\DataSources\MTS.Data.ShiftResult.datasource" />
+    <None Include="Properties\DataSources\MTS.Data.Supplier.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

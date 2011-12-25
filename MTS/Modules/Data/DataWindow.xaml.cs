@@ -26,12 +26,12 @@ namespace MTS.Data
     /// </summary>
     public partial class DataWindow : DocumentItem 
     {
-        public void Load()
+        private MTSContext context;
+
+        private void root_Loaded(object sender, RoutedEventArgs e)
         {
-            using (MTSContext context = new MTSContext())
-            {
-                grid.ItemsSource = context.Suppliers.ToList();
-            }
+            context = new MTSContext();
+            shiftResultListBox.DataContext = context.ShiftResults.ToList();
         }
 
         #region Constructors
@@ -42,34 +42,5 @@ namespace MTS.Data
         }
 
         #endregion
-
-        private void suppliersGrid_Initialized(object sender, EventArgs e)
-        {
-            //DataGrid grid = sender as DataGrid;
-            //if (grid != null)
-            //{
-            //    using (MTSContext context = new MTSContext())
-            //    {
-            //        grid.ItemsSource = context.Suppliers.ToList();
-            //    }
-            //}
-        }
-
-        private void mirrorsGrid_Initialized(object sender, EventArgs e)
-        {            
-            //DataGrid grid = sender as DataGrid;
-            //if (grid != null)
-            //{
-            //    using (MTSContext context = new MTSContext())
-            //    {
-            //        grid.ItemsSource = context.Mirrors.Include(m => m.Supplier).ToList();
-            //    }
-            //}
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            mirrorsGrid.CommitEdit();
-        }
     }
 }

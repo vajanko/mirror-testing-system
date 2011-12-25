@@ -12,24 +12,16 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class TestOutput
+    public partial class ShiftResult
     {
-        public TestOutput()
-        {
-            this.ParamOutputs = new HashSet<ParamOutput>();
-        }
-    
-        public int Id { get; set; }
-        public byte Result { get; set; }
         public System.DateTime Start { get; set; }
         public System.DateTime Finish { get; set; }
-        public int TestId { get; set; }
-        public int ShiftId { get; set; }
-        public short Sequence { get; set; }
-    
-        public virtual Test Test { get; set; }
-        public virtual Shift Shift { get; set; }
-        public virtual ICollection<ParamOutput> ParamOutputs { get; set; }
+        public string Mirror { get; set; }
+        public string Operator { get; set; }
+        public Nullable<int> TotalTests { get; set; }
+        public int Completed { get; set; }
+        public int Failed { get; set; }
+        public int Aborted { get; set; }
     }
     
 }
