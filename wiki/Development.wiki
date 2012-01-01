@@ -3,6 +3,15 @@
 = Vývoj projektu MTS =
 Na tejto stránke budem zaznamenávať postupné kroky vývoja aplikácie
 
+= Správa 2 =
+
+Zmeny:
+* Vytvorená databáza - adresár config/sql/ obsahuje scripty na vytvorenie, inicializáciu a zmazanie databázy.
+* [http://mts.php5.cz/mts_database.gif E-R model databázy] 
+* Súčasťou projektu je simulátor testovacieho zariadenia. Je na ňom možné odskúšať si priebeh testovania a ukladania dát do databázy.
+* Prehliadanie výsledkov dát
+* Prihlasovanie užívateľov (admin môže pridávať nových)
+
 
 = Správa 1 =
 
