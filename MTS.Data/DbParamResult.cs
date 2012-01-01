@@ -12,16 +12,11 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class ShiftResult
+    public partial class DbParamResult
     {
-        public System.DateTime Start { get; set; }
-        public System.DateTime Finish { get; set; }
-        public string Mirror { get; set; }
-        public string Operator { get; set; }
-        public Nullable<int> TotalTests { get; set; }
-        public int Completed { get; set; }
-        public int Failed { get; set; }
-        public int Aborted { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public string OutputValue { get; set; }
         public int Id { get; set; }
     }
     

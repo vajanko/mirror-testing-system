@@ -4,7 +4,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     sealed class PowerfoldTest : PeakTest
     {

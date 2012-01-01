@@ -116,7 +116,7 @@ namespace MTS.IO {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,0,1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,-1")]
         public global::System.Windows.Media.Media3D.Vector3D ZeroPlaneNormal {
             get {
                 return ((global::System.Windows.Media.Media3D.Vector3D)(this["ZeroPlaneNormal"]));

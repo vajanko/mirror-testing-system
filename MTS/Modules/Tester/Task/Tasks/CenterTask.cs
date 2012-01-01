@@ -5,7 +5,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     public sealed class CenterTask : Task
     {
@@ -43,6 +43,7 @@ namespace MTS.TesterModule
             centerDir = getCenterDir(verAngle, horAngle);
             channels.MoveMirror(centerDir);
             exState = getExecutionState(centerDir);
+            Output.WriteLine("Center direction: {0}", centerDir);
         }
 
         public override void Update(DateTime time)
@@ -54,7 +55,7 @@ namespace MTS.TesterModule
             {
                 case ExState.Initializing:
                     setupCenter(ver, hor);
-                    Output.WriteLine("Centering ... Center direction: {0}", centerDir);
+                    Output.WriteLine("Centering ... ");
                     break;
                 case ExState.MoveingUp:
                     if (ver <= 0)

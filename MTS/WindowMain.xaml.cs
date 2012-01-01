@@ -15,7 +15,7 @@ using MTS.Controls;
 using MTS.Editor;
 using MTS.Admin;
 using MTS.Data;
-using MTS.TesterModule;
+using MTS.Tester;
 
 using AvalonDock;
 
@@ -30,14 +30,6 @@ namespace MTS
 
         #region Menu Events
 
-        private void menuClick_Error(object sender, RoutedEventArgs e)
-        {   // for debugging
-            MTS.Utils.ErrorWindow wnd = new MTS.Utils.ErrorWindow();
-            wnd.Title = MTS.Utils.Errors.FileErrorTitle;
-            wnd.Message = "Error message";
-            wnd.ErrorIcon = MTS.Utils.Errors.FileErrorIcon;
-            wnd.ShowDialog();
-        }
         private void menuClick_Exit(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -210,7 +202,6 @@ namespace MTS
             return (filePane == null) ? null : (filePane.SelectedItem as TestFile);
         }
 
-
         //viewTester
         private void viewTesterCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -221,6 +212,7 @@ namespace MTS
                     if (item is TestWindow)     // one of tab is a test window
                     {
                         e.CanExecute = false;   // could not open next one
+                        e.Handled = true;
                         return;
                     }
                 // there is no test window - could be opened
@@ -244,7 +236,7 @@ namespace MTS
                 foreach (var item in filePane.Items)
                     if (item is SettingsWindow)    // one of tab is a settings window
                     {
-                        e.CanExecute = false;   // could no open next one
+                        e.CanExecute = false;   // could not open next one
                         e.Handled = true;
                         return;
                     }
@@ -262,10 +254,22 @@ namespace MTS
         // viewData
         private void viewDataCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
+            if (filePane != null && filePane.Items != null)
+            {
+                // data window could be opened just once
+                foreach (var item in filePane.Items)
+                    if (item is DataWindow)     // one of tab is a data window
+                    {
+                        e.CanExecute = false;   // could not open next one
+                        e.Handled = true;
+                        return;
+                    }
+                // there is no data window - could be opened
+                e.CanExecute = true;
+            }
             e.CanExecute = true;
             e.Handled = true;
         }
-
         private void viewDataExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var tab = new DataWindow();
@@ -287,11 +291,15 @@ namespace MTS
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //LoginWindow loginWindow = new LoginWindow(this);
-            //bool result;
-            //while ((result = (bool)loginWindow.ShowDialog()) != true)
-            //    loginWindow = new LoginWindow(this, !result);
-            Admin.Operator.TryLogin("admin", "admin");
+            login();
+        }
+        private void login()
+        {
+            LoginWindow loginWindow = new LoginWindow(this, false);
+            bool result;
+            while ((result = (bool)loginWindow.ShowDialog()) != true)
+                loginWindow = new LoginWindow(this, !result);
+            //Admin.Operator.TryLogin("admin", "admin");
         }
     }
 }

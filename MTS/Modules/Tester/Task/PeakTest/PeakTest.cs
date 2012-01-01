@@ -2,9 +2,10 @@
 
 using MTS.IO;
 using MTS.Editor;
+using MTS.Tester;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     public abstract class PeakTest : TestTask
     {
@@ -14,7 +15,7 @@ namespace MTS.TesterModule
         protected bool isOverloaded = false;
         protected DateTime overloaded;
 
-        DoubleParam maxCurrent;
+        IntParam maxCurrent;
         IntParam maxOverloadTime;
 
         #endregion
@@ -69,8 +70,8 @@ namespace MTS.TesterModule
         {
             TaskResult result = base.getResult();
 
-            result.Params.Add(new ParamResult(maxCurrent, maxMeasuredOverloadTime));
-            result.Params.Add(new ParamResult(maxOverloadTime));
+            result.Params.Add(new ParamResult(maxCurrent));
+            result.Params.Add(new ParamResult(maxOverloadTime, maxMeasuredOverloadTime));
 
             return result;
         }
@@ -80,10 +81,14 @@ namespace MTS.TesterModule
         public PeakTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
-            // from test parameters get MaxCurrent item
-            maxCurrent = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
-            // from test parameters get MaxOverloadTime item
+            // from test parameters get MaxCurrent item and throw exception if it is not found
+            maxCurrent = testParam.GetParam<IntParam>(TestValue.MaxCurrent);
+            if (maxCurrent == null)
+                throw new ParamNotFoundException(TestValue.MaxCurrent);
+            // from test parameters get MaxOverloadTime item and throw exception if it is not found
             maxOverloadTime = testParam.GetParam<IntParam>(TestValue.MaxOverloadTime);
+            if (maxOverloadTime == null)
+                throw new ParamNotFoundException(TestValue.MaxOverloadTime);
         }
 
         #endregion

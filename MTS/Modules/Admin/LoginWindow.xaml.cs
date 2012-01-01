@@ -31,11 +31,11 @@ namespace MTS.Admin
             : base()
         {
             Owner = owner;
+            InitializeComponent();           
         }
         public LoginWindow(Window owner, bool previousFailed = false)
             : this(owner)
         {
-            InitializeComponent();
             if (previousFailed)
                 messageLabel.Visibility = System.Windows.Visibility.Visible;
             else

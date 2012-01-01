@@ -107,7 +107,7 @@
       <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="ZeroPlaneNormal" Type="System.Windows.Media.Media3D.Vector3D" Scope="User">
-      <Value Profile="(Default)">0,0,1</Value>
+      <Value Profile="(Default)">0,0,-1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

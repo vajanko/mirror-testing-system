@@ -25,7 +25,7 @@ using AvalonDock;
 
 using Microsoft.Win32;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     /// <summary>
     /// Interaction logic for TestWindow.xaml
@@ -753,26 +753,5 @@ namespace MTS.TesterModule
         }
 
         #endregion        
-
-        // for presentation purpose only
-
-        private void startButtonMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (channels != null)
-                channels.IsStartPressed.SetValue(true);
-        }
-
-        private void startButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (channels != null)
-                channels.IsStartPressed.SetValue(false);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = false;
-        }
-
-        // for presentation purpose only
     }
 }

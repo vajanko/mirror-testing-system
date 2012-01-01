@@ -4,7 +4,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     public class PresenceTest : TestTask
     {

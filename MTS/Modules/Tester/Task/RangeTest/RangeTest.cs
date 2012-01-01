@@ -4,7 +4,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     /// <summary>
     /// Base class for test that check for current in some range

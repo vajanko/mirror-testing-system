@@ -5,7 +5,7 @@ using MTS.IO;
 using MTS.Tester.Result;
 
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     /// <summary>
     /// Represents a method that will handle <paramref name="Task.TaskExecuted"/> event raised when

@@ -24,7 +24,7 @@ namespace MTS.Data
         public string OperatorName { get; set; }
         public string OperatorSurname { get; set; }
         public string Login { get; set; }
-        public System.Security.SecureString Password { get; set; }
+        public string Password { get; set; }
         public OperatorType Type { get; set; }
 
         public string ErorrMessage
@@ -43,11 +43,11 @@ namespace MTS.Data
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
             // check wheter
-            if (passwordBox.SecurePassword.Length > 0 && passwordBox.SecurePassword == confirmPasswordBox.SecurePassword)
+            if (passwordBox.SecurePassword.Length > 0 && passwordBox.Password == confirmPasswordBox.Password)
                 this.DialogResult = true;
             else
             {
-                Utils.ErrorWindow wnd = new Utils.ErrorWindow("Error", "Passwords are fucking different");
+                Utils.ErrorWindow wnd = new Utils.ErrorWindow("Error", "Passwords are different");
                 wnd.ErrorIcon = Utils.Errors.ErrorIcon;
                 wnd.ShowDialog();
             }
@@ -59,10 +59,10 @@ namespace MTS.Data
         /// </summary>
         private void passwordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            Controls.Validators.PasswordEqualityValidator val = new Controls.Validators.PasswordEqualityValidator();
-            val.ConfirmPassword = confirmPasswordBox;
-            val.Password = passwordBox;
-            Password = passwordBox.SecurePassword;
+            //Controls.Validators.PasswordEqualityValidator val = new Controls.Validators.PasswordEqualityValidator();
+            //val.ConfirmPassword = confirmPasswordBox;
+            //val.Password = passwordBox;
+            Password = passwordBox.Password;
         }
 
         #endregion
@@ -70,7 +70,7 @@ namespace MTS.Data
         private bool finalValidation()
         {
             bool result = passwordBox.SecurePassword.Length > 0 &&
-                passwordBox.SecurePassword == confirmPasswordBox.SecurePassword;
+                passwordBox.SecurePassword.ToString() == confirmPasswordBox.SecurePassword.ToString();
 
             result = result && isValid(loginBox.GetBindingExpression(TextBox.TextProperty), loginBox.Text);
             result = result && isValid(nameBox.GetBindingExpression(TextBox.TextProperty), nameBox.Text);
@@ -89,7 +89,7 @@ namespace MTS.Data
         public EditOperatorWindow()
         {
             InitializeComponent();
-            Password = new System.Security.SecureString();
+            Password = string.Empty;
         }
         public EditOperatorWindow(string name, string surname, string login, OperatorType type)
             : this()
@@ -97,7 +97,7 @@ namespace MTS.Data
             nameBox.Text = name;
             surnameBox.Text = surname;
             loginBox.Text = login;
-            typeBox.SelectedIndex = (int)type;            
+            typeBox.SelectedIndex = (int)type;
         }
 
         #endregion

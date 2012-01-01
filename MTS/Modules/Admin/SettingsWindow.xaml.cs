@@ -128,6 +128,12 @@ namespace MTS.Admin
 
         private void settingsWindow_Initialized(object sender, EventArgs e)
         {
+            // hide operators if loged user is not admin
+            if (Operator.IsInRole(Data.Types.OperatorType.Admin))
+                operatorsExpander.Visibility = System.Windows.Visibility.Visible;
+            else
+                operatorsExpander.Visibility = System.Windows.Visibility.Collapsed;
+
             // load application settings
             // PRINTER
             // get names of all installed printers on this conputer
@@ -374,28 +380,53 @@ namespace MTS.Admin
 
         #endregion
 
-        #region Operators
+        #region Operators (Database)
+
+        private MTSContext context;
 
         private void operatorsGrid_Loaded(object sender, RoutedEventArgs e)
         {
             DataGrid grid = sender as DataGrid;
             if (grid != null)
             {
-                using (Data.MTSContext context = new Data.MTSContext())
-                {
-                    updateOperatorsGrid(context);
-                }
+                context = new MTSContext();
+                updateOperatorsGrid();
             }
         }
 
-        #region Data Handling
-
-        private void updateOperatorsGrid(Data.MTSContext context)
+        private void addOperator_Click(object sender, RoutedEventArgs e)
         {
-            //operators.ItemsSource = context.Operators.ToList();
-        }
+            EditOperatorWindow dialog = new Data.EditOperatorWindow();
 
-        #endregion
+            if (dialog.ShowDialog() == true)
+            {
+                string password = Operator.ComputeHash(dialog.Password);
+
+                try
+                {   // create and add new operator
+                    context.Operators.Add(new Data.Operator()
+                    {
+                        Login = dialog.Login,
+                        Name = dialog.OperatorName,
+                        Surname = dialog.OperatorSurname,
+                        Password = password,
+                        Type = (byte)dialog.Type
+                    });
+                    // commit changes - here an exception could be thrown
+                    context.SaveChanges();
+                }
+                catch
+                {
+                    MessageBox.Show("Could not be added");
+                }
+                updateOperatorsGrid();
+            }
+        }
+        private void updateOperatorsGrid()
+        {
+            operatorsGrid.DataContext = context.Operators.ToList();
+        }
+       
 
         #endregion
 
@@ -407,45 +438,5 @@ namespace MTS.Admin
         }
 
         #endregion
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-
-        private void addOperator_Click(object sender, RoutedEventArgs e)
-        {
-            EditOperatorWindow dialog = new Data.EditOperatorWindow();
-
-            if (dialog.ShowDialog() == true)
-            {
-                dialog.Password.MakeReadOnly();
-                SHA512 hash = new SHA512CryptoServiceProvider();
-                hash.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(dialog.Password.ToString()));
-
-                using (MTSContext context = new MTSContext())
-                {
-                    // try to add new operator to collection of operators
-                    
-                    try
-                    {
-                        context.Operators.Add(new Data.Operator()
-                        {
-                            Login = dialog.Login,
-                            Name = dialog.OperatorName,
-                            Surname = dialog.OperatorSurname,
-                            Password = ASCIIEncoding.ASCII.GetString(hash.Hash)
-                        });
-
-                        context.SaveChanges();
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not be added");
-                    }
-                    updateOperatorsGrid(context);
-                }
-            }
-        }
     }
 }

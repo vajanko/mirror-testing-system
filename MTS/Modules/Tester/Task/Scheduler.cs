@@ -7,7 +7,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     public delegate void SchedulerExecutedHandler(TaskScheduler sender, EventArgs args);
 
@@ -174,34 +174,54 @@ namespace MTS.TesterModule
 
         public void AddTravelTests(TestCollection tests)
         {
+            TestValue north = tests.GetTest(TestCollection.TravelNorth);
+            TestValue south = tests.GetTest(TestCollection.TravelSouth);
+            TestValue west = tests.GetTest(TestCollection.TravelWest);
+            TestValue east = tests.GetTest(TestCollection.TravelEast);
+
+            // if all travel tests are disabled, no prerequsities are necessary to be done
+            if (north == null && south == null && west == null && east == null)
+                return;
+
+            // prerequisities:
             // move distance sensors up for measuring
             this.AddDistanceSensorsUp();
-
             // allow mirror movement
             this.AddTask(new SetValue(channels, channels.AllowMirrorMovement, true));
 
-            // center mirror glass to zero plane saved in HWSettings
-            this.AddTask(new CenterTask(channels));
-            // move north
-            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelNorth) , MoveDirection.Up));
+            if (north != null)
+            {
+                // center mirror glass to zero plane saved in HWSettings
+                this.AddTask(new CenterTask(channels));
+                // move north
+                this.AddTask(new TravelTest(channels, north, MoveDirection.Up));
+            }
 
-            // center mirror glass to zero plane saved in HWSettings
-            this.AddTask(new CenterTask(channels));
-            // move north
-            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelSouth), MoveDirection.Down));
+            if (south != null)
+            {
+                // center mirror glass to zero plane saved in HWSettings
+                this.AddTask(new CenterTask(channels));
+                // move north
+                this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelSouth), MoveDirection.Down));
+            }
 
-            // center mirror glass to zero plane saved in HWSettings
-            this.AddTask(new CenterTask(channels));
-            // move north
-            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelWest), MoveDirection.Left));
+            if (west != null)
+            {
+                // center mirror glass to zero plane saved in HWSettings
+                this.AddTask(new CenterTask(channels));
+                // move north
+                this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelWest), MoveDirection.Left));
+            }
 
-            // center mirror glass to zero plane saved in HWSettings
-            this.AddTask(new CenterTask(channels));
-            // move north
-            this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelEast), MoveDirection.Right));
+            if (east != null)
+            {
+                // center mirror glass to zero plane saved in HWSettings
+                this.AddTask(new CenterTask(channels));
+                // move north
+                this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelEast), MoveDirection.Right));
+            }
 
-            // after travel test has been executed - center mirror back to its zero position
-            this.AddTask(new CenterTask(channels));
+            // mirror must not be centered at the end - operator will do this manually
 
             // disable mirror movement
             this.AddTask(new SetValue(channels, channels.AllowMirrorMovement, false));

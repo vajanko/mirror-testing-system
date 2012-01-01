@@ -92,7 +92,7 @@ namespace MTS.Controls
         {
             MultiBinding mb = new MultiBinding();
             // value converter takes a method that will handle the conversion - override possible
-            mb.Converter = new Converters.IdToTitleConverter(new Func<string, bool, string>(ConvertIdToTitle));
+            mb.Converter = new IdToTitleConverter(new Func<string, bool, string>(ConvertIdToTitle));
             mb.Bindings.Add(new Binding("ItemId") { Source = this });
             mb.Bindings.Add(new Binding("IsSaved") { Source = this });
             this.SetBinding(ItemTitleProperty, mb);

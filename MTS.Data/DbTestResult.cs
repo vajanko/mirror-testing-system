@@ -12,11 +12,13 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class GetTestResult_Result
+    public partial class DbTestResult
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public byte Result { get; set; }
         public Nullable<System.TimeSpan> Duration { get; set; }
+        public short Sequence { get; set; }
     }
     
 }

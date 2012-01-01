@@ -44,6 +44,7 @@ namespace MTS.Editor
         }
         public TestValue GetTest(string key)
         {
+            if (!tests.ContainsKey(key)) return null;
             return tests[key];
         }
         public void RemoveTest(string key)
