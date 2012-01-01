@@ -59,7 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetTestResult_Result.cs">
+    <Compile Include="Converters\ResultCodeConverter.cs" />
+    <Compile Include="DbParamResult.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DbTestResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Mirror.cs">
@@ -148,6 +152,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.SQL.Server.Compact.3.5">
+      <Visible>False</Visible>
+      <ProductName>SQL Server Compact 3.5 SP2</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Sql.Server.Express.10.0">
       <Visible>False</Visible>
       <ProductName>SQL Server 2008 Express</ProductName>
@@ -167,7 +176,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

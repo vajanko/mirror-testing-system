@@ -6,16 +6,16 @@
     public enum TaskResultCode
     {
         /// <summary>
-        /// Task has been executed and completed correctly
+        /// Task has been executed and completed correctly. Integer value is 0
         /// </summary>
-        Completed,
+        Completed = 0,
         /// <summary>
-        /// An error occurred while executing task
+        /// An error occurred while executing task. Integer value is 1
         /// </summary>
-        Failed,
+        Failed = 1,
         /// <summary>
-        /// Task has been aborted by some external force
+        /// Task has been aborted by some external force. Integer value is 2
         /// </summary>
-        Aborted
+        Aborted = 2
     }
 }

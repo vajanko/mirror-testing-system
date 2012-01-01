@@ -5,7 +5,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     /// <summary>
     /// Pull-off test is designed to check if mirror glass has been installed enought properly

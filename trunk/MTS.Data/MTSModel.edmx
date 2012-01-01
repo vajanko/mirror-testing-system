@@ -18,6 +18,7 @@
           <EntitySet Name="TestShift" EntityType="MTS.Data.Store.TestShift" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ShiftResults" EntityType="MTS.Data.Store.ShiftResults" store:Type="Views" store:Schema="dbo" store:Name="ShiftResults">
             <DefiningQuery>SELECT 
+      [ShiftResults].[Id] AS [Id], 
       [ShiftResults].[Start] AS [Start], 
       [ShiftResults].[Finish] AS [Finish], 
       [ShiftResults].[Mirror] AS [Mirror], 
@@ -175,6 +176,7 @@
       -->
         <EntityType Name="ShiftResults">
           <Key>
+            <PropertyRef Name="Id" />
             <PropertyRef Name="Start" />
             <PropertyRef Name="Finish" />
             <PropertyRef Name="Mirror" />
@@ -183,6 +185,7 @@
             <PropertyRef Name="Failed" />
             <PropertyRef Name="Aborted" />
           </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="Finish" Type="datetime" Nullable="false" />
           <Property Name="Mirror" Type="nvarchar" Nullable="false" MaxLength="20" />
@@ -324,6 +327,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="udpParamResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="testId" Type="int" Mode="In" />
+        </Function>
         <Function Name="udpTestResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shiftId" Type="int" Mode="In" />
         </Function>
@@ -387,8 +393,11 @@
             <End Role="ParamOutput" EntitySet="ParamOutputs" />
           </AssociationSet>
           <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
-          <FunctionImport Name="GetTestResult" ReturnType="Collection(MTS.Data.GetTestResult_Result)">
-            <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          <FunctionImport Name="GetTestResult" ReturnType="Collection(MTS.Data.DbTestResult)">
+          <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetParamResult" ReturnType="Collection(MTS.Data.DbParamResult)">
+          <Parameter Name="testId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Mirror">
@@ -651,6 +660,7 @@
             <PropertyRef Name="Completed" />
             <PropertyRef Name="Failed" />
             <PropertyRef Name="Aborted" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Type="DateTime" Name="Start" Nullable="false" />
           <Property Type="DateTime" Name="Finish" Nullable="false" />
@@ -660,11 +670,20 @@
           <Property Type="Int32" Name="Completed" Nullable="false" />
           <Property Type="Int32" Name="Failed" Nullable="false" />
           <Property Type="Int32" Name="Aborted" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
         </EntityType>
-        <ComplexType Name="GetTestResult_Result">
+        <ComplexType Name="DbParamResult">
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Value" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="OutputValue" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="DbTestResult">
+          <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="25" />
           <Property Type="Byte" Name="Result" Nullable="false" />
           <Property Type="Time" Name="Duration" Nullable="true" />
+          <Property Type="Int16" Name="Sequence" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -774,6 +793,7 @@
           <EntitySetMapping Name="ShiftResults">
             <EntityTypeMapping TypeName="MTS.Data.ShiftResult">
               <MappingFragment StoreEntitySet="ShiftResults">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Aborted" ColumnName="Aborted" />
                 <ScalarProperty Name="Failed" ColumnName="Failed" />
                 <ScalarProperty Name="Completed" ColumnName="Completed" />
@@ -787,10 +807,22 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetTestResult" FunctionName="MTS.Data.Store.udpTestResults">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MTS.Data.GetTestResult_Result">
+              <ComplexTypeMapping TypeName="MTS.Data.DbTestResult">
+                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetParamResult" FunctionName="MTS.Data.Store.udpParamResults">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MTS.Data.DbParamResult">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="OutputValue" ColumnName="OutputValue" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

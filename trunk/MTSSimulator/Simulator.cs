@@ -207,19 +207,19 @@ namespace MTS.Simulator
 
             if (channels.IsMirrorMoveingUp)
             {
-                channels.DistanceY.SetValue(channels.DistanceY.Value - 10);
+                channels.DistanceY.SetValue(channels.DistanceX.Value - 5);
             }
             else if (channels.IsMirrorMoveingDown)
             {
-                channels.DistanceY.SetValue(channels.DistanceY.Value + 10);
+                channels.DistanceY.SetValue(channels.DistanceX.Value + 5);
             }
             else if (channels.IsMirrorMoveingLeft)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 10);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 5);
             }
             else if (channels.IsMirrorMoveingRight)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 10);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 5);
             }
         }
         private void simulateDistanceSensors()

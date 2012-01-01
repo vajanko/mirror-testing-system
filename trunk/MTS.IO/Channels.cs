@@ -543,11 +543,19 @@ namespace MTS.IO
 
         public double GetHorizontalAngle()
         {
-            return GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), YAxis) / 180 * Math.PI);
+            double rotationAngle = GetRotationAngle();
+            Vector3D rotationAxis = GetRotationAxis();
+            double horizontalAngle = rotationAngle * Math.Cos(Vector3D.AngleBetween(rotationAxis, YAxis) / 180 * Math.PI);
+            return horizontalAngle;
+            //return GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), YAxis) / 180 * Math.PI);
         }
         public double GetVerticalAngle()
         {
-            return -GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), XAxis) / 180 * Math.PI);
+            double rotationAngle = -GetRotationAngle();
+            Vector3D rotationAxis = GetRotationAxis();
+            double verticalAngle = rotationAngle * Math.Cos(Vector3D.AngleBetween(rotationAxis, XAxis) / 180 * Math.PI);
+            return verticalAngle;
+            //return -GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), XAxis) / 180 * Math.PI);
         }
 
         /// <summary>

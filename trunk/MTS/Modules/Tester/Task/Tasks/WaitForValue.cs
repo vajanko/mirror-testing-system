@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using MTS.IO;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     class WaitForValue : Task
     {

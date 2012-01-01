@@ -38,15 +38,26 @@ namespace MTS.Data
         public DbSet<TestShift> TestShifts { get; set; }
         public DbSet<ShiftResult> ShiftResults { get; set; }
     
-        public virtual ObjectResult<GetTestResult_Result> GetTestResult(Nullable<int> shiftId)
+        public virtual ObjectResult<DbTestResult> GetTestResult(Nullable<int> shiftId)
         {
-            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(GetTestResult_Result).Assembly);
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(DbTestResult).Assembly);
     
             var shiftIdParameter = shiftId.HasValue ?
                 new ObjectParameter("shiftId", shiftId) :
                 new ObjectParameter("shiftId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTestResult_Result>("GetTestResult", shiftIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DbTestResult>("GetTestResult", shiftIdParameter);
+        }
+    
+        public virtual ObjectResult<DbParamResult> GetParamResult(Nullable<int> testId)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(DbParamResult).Assembly);
+    
+            var testIdParameter = testId.HasValue ?
+                new ObjectParameter("testId", testId) :
+                new ObjectParameter("testId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DbParamResult>("GetParamResult", testIdParameter);
         }
     }
 }

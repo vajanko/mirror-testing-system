@@ -14,7 +14,7 @@ using MTS.Data.Types;
 using MTS.Tester.Result;
 
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     public delegate void ShiftExecutedHandler(Shift sender, EventArgs args);
 
@@ -177,6 +177,7 @@ namespace MTS.TesterModule
         /// No exception should be thrown!
         /// </summary>
         /// <param name="channels">Collection of hardware channels for task initialization</param>
+        /// <param name="tests">Collection of enabled tests</param>
         /// <returns>New instance of initialized TaskScheduler</returns>
         private TaskScheduler createScheduler(Channels channels, TestCollection tests)
         {
@@ -185,7 +186,7 @@ namespace MTS.TesterModule
             // add for providing basic steps to start executing test
             // this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
             // close device
-            //scheduler.AddInitSequence();
+            scheduler.AddInitSequence();
 
             // wait for start
             //scheduler.AddWaitForStart();
@@ -195,35 +196,31 @@ namespace MTS.TesterModule
             if (rubber != null)
                 scheduler.AddRubberTest(rubber);
 
-            //// wait for start
-            //scheduler.AddWaitForStart();
-            //// add tests of mirror movement
-            //scheduler.AddTravelTests(tests);
+            // add tests of mirror movement
+            scheduler.AddTravelTests(tests);
 
-            //// wait for start
-            //scheduler.AddWaitForStart();
-            //// pull-off test
-            //scheduler.AddPulloffTest(tests);
+            // pull-off test
+            TestValue pullOff = tests.GetTest(TestCollection.Pulloff);
+            if (pullOff != null)
+                scheduler.AddPulloffTest(pullOff);
 
-            // wait for start
-            //scheduler.AddWaitForStart();
             // test powerfold
-            //scheduler.AddTask(new PowerfoldTest(channels, tests.GetTest(TestCollection.Powerfold)));
-
-            // wait for start
-            //scheduler.AddWaitForStart();
+            TestValue powerfold = tests.GetTest(TestCollection.Powerfold);
+            if (powerfold != null)
+                scheduler.AddTask(new PowerfoldTest(channels, powerfold));
+            
             // test blinker
-            //scheduler.AddTask(new BlinkerTest(channels, tests.GetTest(TestCollection.DirectionLight)));
+            TestValue blinker = tests.GetTest(TestCollection.DirectionLight);
+            if (blinker != null)
+                scheduler.AddTask(new BlinkerTest(channels, blinker));
 
-            // wait for start
-            //scheduler.AddWaitForStart();
             // test spiral
             TestValue spiral = tests.GetTest(TestCollection.Heating);
             if (spiral != null)
                 scheduler.AddTask(new SpiralTest(channels, spiral));
 
             // open device
-            //scheduler.AddOpenDevice();
+            scheduler.AddOpenDevice();
 
             // add first task to be executed
             scheduler.Initialize();
@@ -302,7 +299,7 @@ namespace MTS.TesterModule
 
             Output.Write("Saveing results do database ... ");
             List<TaskResult> results = scheduler.GetResultData();
-            saveShiftResult(results);
+            saveShiftResult(results, (Int16)Finished);
             Output.WriteLine("Saved!");
 
             // wait a moment to display light
@@ -397,7 +394,8 @@ namespace MTS.TesterModule
         /// </summary>
         /// <param name="results">Collection of <see cref="TaskResult"/> containing data to be saved for
         /// each test and its parameters</param>
-        private void saveShiftResult(IEnumerable<TaskResult> results)
+        /// <param name="sequence">Number of test sequnece within current shift</param>
+        private void saveShiftResult(IEnumerable<TaskResult> results, Int16 sequence)
         {
             try
             {
@@ -414,7 +412,8 @@ namespace MTS.TesterModule
                         Start = tRes.Begin,                 // date and time then test has been started
                         Finish = tRes.End,                  // date and time when test has been finished
                         ShiftId = dbShift.Id,               // shift where this output was generated
-                        TestId = tRes.DatabaseId            // test used for this output
+                        TestId = tRes.DatabaseId,           // test used for this output
+                        Sequence = sequence                 // number of test sequence within this shift
                     });
                     // generate new id of TestOutput, this is necessary for saveing parameters output
                     context.SaveChanges();

@@ -7,6 +7,10 @@ using MTS.Data.Types;
 
 namespace MTS.Data.Converters
 {
+    /// <summary>
+    /// Converter that convert parameter string representation to its strongly typed instance
+    /// f.e.: "123.456" converts to 123.456 as double. Also conversion to string is supported
+    /// </summary>
     public class ParamTypeConverter
     {
         public string ConvertToString(ParamType type, object value)

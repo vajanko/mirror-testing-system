@@ -232,44 +232,22 @@ CREATE TABLE ParamOutput (
 
 -- CREATE PROCEDURES AND FUCNTIONS
 
---#region CREATE FUNCTION udfParamResults
-IF OBJECT_ID('udfParamResults') IS NOT NULL
-	DROP FUNCTION udfParamResults;
+--#region CREATE PROCEDURE udpParamResults
+IF OBJECT_ID('udpParamResults') IS NOT NULL
+	DROP PROCEDURE udpParamResults;
 GO
-CREATE FUNCTION udfParamResults(@testId INT)
-RETURNS @tab TABLE(Name VARCHAR(50), UsedValue VARCHAR(50), 
-	OutputValue VARCHAR(50))
+-- @testId: Id of test output to which parameter output should be retrieved
+CREATE PROCEDURE udpParamResults(@testId INT)
 AS
 BEGIN
-	INSERT INTO @tab
-		SELECT Param.Name, Param.Value, ParamOutput.Value FROM TestOutput 
-			JOIN ParamOutput ON (TestOutput.Id = ParamOutput.TestOutputId)
-			JOIN Param ON (ParamOutput.ParamId = Param.Id)
-			WHERE TestOutput.Id = @testId;
-	RETURN;
+	SELECT Param.Id, Param.Name, Param.Value, ParamOutput.Value AS OutputValue 
+		FROM TestOutput 
+		JOIN ParamOutput ON (TestOutput.Id = ParamOutput.TestOutputId)
+		JOIN Param ON (ParamOutput.ParamId = Param.Id)
+		WHERE TestOutput.Id = @testId;
 END
 GO
---#endregion
-
---#region CREATE FUNCTION udfTestResults
-IF OBJECT_ID('udfTestResults') IS NOT NULL
-	DROP FUNCTION udfTestResults;
-GO
-CREATE FUNCTION udfTestResults(@shiftId INT)
-RETURNS @tab TABLE(Name VARCHAR(50), Result TINYINT, Duration TIME)
-AS
-BEGIN
-	INSERT INTO @tab
-		SELECT Test.Name, TestOutput.Result, 
-		CAST (TestOutput.Finish - TestOutput.Start AS TIME) AS Duration
-		FROM Shift 
-			JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
-			JOIN Test ON (TestOutput.TestId = Test.Id)
-			WHERE Shift.Id = @shiftId
-		ORDER BY TestOutput.Sequence;
-	RETURN;
-END
-GO
+EXEC udpParamResults 27;
 --#endregion
 
 --#region CREATE PROCEDURE udpTestResults
@@ -279,15 +257,14 @@ GO
 CREATE PROCEDURE udpTestResults(@shiftId INT)
 AS
 BEGIN
-	INSERT INTO @tab
-		SELECT Test.Name, TestOutput.Result, 
-		CAST (TestOutput.Finish - TestOutput.Start AS TIME) AS Duration
-		FROM Shift 
-			JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
-			JOIN Test ON (TestOutput.TestId = Test.Id)
-			WHERE Shift.Id = @shiftId
-		ORDER BY TestOutput.Sequence;
-	RETURN;
+	SELECT TestOutput.Id, Test.Name, TestOutput.Result, 
+	CAST (TestOutput.Finish - TestOutput.Start AS TIME) AS Duration,
+	TestOutput.Sequence
+	FROM Shift 
+		JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
+		JOIN Test ON (TestOutput.TestId = Test.Id)
+		WHERE Shift.Id = @shiftId
+	ORDER BY TestOutput.Sequence;
 END
 GO
 --#endregion
@@ -298,10 +275,10 @@ GO
 -- that shift, total number of excuted test and number of completed, failed and
 -- aborted tests
 IF OBJECT_ID('ShiftResults') IS NOT NULL
-	DROP FUNCTION ShiftResults;
+	DROP VIEW ShiftResults;
 GO
 CREATE VIEW [ShiftResults] AS 
-	SELECT Shift.Start, Shift.Finish, Mirror.Name AS Mirror,
+	SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Name AS Mirror,
 	Operator.Name + ' ' + Operator.Surname AS Operator,
 	ISNULL(Completed, 0) + ISNULL(Failed, 0) + ISNULL(Aborted,0) AS TotalTests,
 	ISNULL(Completed, 0) AS Completed, ISNULL(Failed, 0) AS Failed, 

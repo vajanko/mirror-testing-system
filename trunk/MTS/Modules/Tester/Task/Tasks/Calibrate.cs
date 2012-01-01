@@ -6,7 +6,7 @@ using MTS.IO;
 using MTS.Properties;
 using MTS.Tester.Result;
 
-namespace MTS.TesterModule
+namespace MTS.Tester
 {
     class Calibrate : Task
     {

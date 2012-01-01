@@ -198,6 +198,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Converters\IdToTitleConverter.cs" />
+    <Compile Include="Controls\Converters\TaskResultCodeConverter.cs" />
     <Compile Include="Controls\DocumentTab.cs" />
     <Compile Include="Controls\IPAddressControl.xaml.cs">
       <DependentUpon>IPAddressControl.xaml</DependentUpon>
@@ -220,6 +221,8 @@
     <Compile Include="Modules\Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Modules\Tester\Result\TaskResult.cs" />
     <Compile Include="Modules\Tester\Result\TaskResultCode.cs" />
+    <Compile Include="Modules\Tester\Task\Exception\ParamNotFoundException.cs" />
+    <Compile Include="Modules\Tester\Task\Exception\TestException.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>

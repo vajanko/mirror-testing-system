@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Data;
 
-namespace MTS.Controls.Converters
+namespace MTS.Controls
 {
     public class IdToTitleConverter : IMultiValueConverter
     {

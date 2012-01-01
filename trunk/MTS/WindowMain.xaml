@@ -54,7 +54,6 @@
                 <MenuItem Command="Close"/>
                 <MenuItem Command="Save"/>
                 <MenuItem Command="SaveAs"/>
-                <MenuItem Header="Error" Click="menuClick_Error"/>
                 <Separator/>
                 <MenuItem Header="E_xit" Click="menuClick_Exit"/>
             </MenuItem>

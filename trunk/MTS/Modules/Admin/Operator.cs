@@ -4,6 +4,7 @@ using System.Text;
 using System.Security;
 using System.Security.Cryptography;
 using MTS.Data;
+using MTS.Data.Types;
 
 namespace MTS.Admin
 {
@@ -16,7 +17,7 @@ namespace MTS.Admin
         private static Operator instance = null;
         public static Operator Instance { get { return instance; } }
 
-        public static bool TryLogin(string login, string password)
+        public static string ComputeHash(string password)
         {
             string passHash;
             using (SHA256 sha256 = SHA256.Create())
@@ -27,6 +28,12 @@ namespace MTS.Admin
                 for (int i = 0; i < buffer.Length; i++)
                     passHash += string.Format("{0:x2}", buffer[i]);
             }
+            return passHash;
+        }
+
+        public static bool TryLogin(string login, string password)
+        {
+            string passHash = ComputeHash(password);
 
             bool result = false;
             using (MTSContext context = new MTSContext())
@@ -39,13 +46,24 @@ namespace MTS.Admin
                         Name = op.Name,
                         Surname = op.Surname,
                         Login = op.Login,
-                        Id = op.Id
+                        Id = op.Id,
+                        Type = (OperatorType)op.Type
                     };
                     result = true;
                 }
             }
 
             return result;
+        }
+        public static void LogOut()
+        {
+            instance = null;
+        }
+        public static bool IsInRole(OperatorType role)
+        {
+            if (instance != null)
+                return instance.Type == role;
+            return false;
         }
 
         #region Properties
@@ -54,6 +72,7 @@ namespace MTS.Admin
         public string Surname { get; private set; }
         public string Login { get; private set; }
         public int Id { get; private set; }
+        public OperatorType Type { get; private set; }
 
         #endregion
 

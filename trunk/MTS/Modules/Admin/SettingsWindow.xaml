@@ -8,8 +8,7 @@
     xmlns:local="clr-namespace:MTS.Admin"
     Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}" ItemId="Settings"
     x:Name="root"
-    Initialized="settingsWindow_Initialized" 
-    >
+    Initialized="settingsWindow_Initialized">
     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
         <ScrollViewer.Resources>
             <Style x:Key="sectionHeaderStyle">
@@ -26,13 +25,14 @@
                 <Setter Property="Margin" Value="3"/>
             </Style>
         </ScrollViewer.Resources>
-        <StackPanel HorizontalAlignment="Left" MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}}">
+        <StackPanel>
             <Expander Header="Hardware" IsExpanded="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="200" Width="*" MaxWidth="500"/>
-                        <ColumnDefinition Width="Auto"/> <!-- This is for splitter -->
-                        <ColumnDefinition MinWidth="200" Width="*" MaxWidth="500"/>
+                        <ColumnDefinition MinWidth="200"/>
+                        <!-- This is for splitter -->
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition MinWidth="200"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -169,7 +169,7 @@
                 </Grid>
             </Expander>
             
-            <Expander Header="Operators">
+            <Expander Header="Operators" x:Name="operatorsExpander">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -186,26 +186,26 @@
                         <Button Content="Add" Click="addOperator_Click" />
                         <Button Content="Delete"/>
                         <Button Content="Edit"/>
-                        <Label Style="{StaticResource sectionHeaderStyle}">Info:</Label>
                     </StackPanel>                    
                     <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="5" HorizontalAlignment="Stretch" 
-                                  VerticalAlignment="Stretch"/>                    
-                    <DataGrid Grid.Column="2" x:Name="operators" CanUserReorderColumns="True" CanUserSortColumns="True" CanUserAddRows="True"
-                              AutoGenerateColumns="False"
-                              SelectionMode="Single" SelectionUnit="FullRow" 
-                              Loaded="operatorsGrid_Loaded" SelectionChanged="DataGrid_SelectionChanged">
+                                  VerticalAlignment="Stretch"/>
+                    <DataGrid Grid.Column="2" x:Name="operatorsGrid" ItemsSource="{Binding}"
+                              CanUserReorderColumns="True" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False"
+                              AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray" VerticalGridLinesBrush="DarkGray"
+                              SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0"
+                              Loaded="operatorsGrid_Loaded">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Login" Binding="{Binding Login}"/>
                             <DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="Surname" Binding="{Binding Surname}"/>
-                            <DataGridComboBoxColumn Header="Group" SelectedItemBinding="{Binding Type}"/>
+                            <DataGridTextColumn Header="Group" Binding="{Binding Type}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </Expander>
             
             <Expander Header="Channels">
-                <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}" DockPanel.Dock="Top">
+                <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type io_set:ChannelSetting}" xmlns:io_set="clr-namespace:MTS.IO;assembly=IO">
                             <Border Style="{StaticResource tableStyle}">
@@ -244,7 +244,7 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel/>
+                            <UniformGrid Columns="4"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

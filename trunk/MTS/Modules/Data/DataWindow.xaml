@@ -12,32 +12,84 @@
         <CollectionViewSource x:Key="shiftResultViewSource" d:DesignSource="{d:DesignInstance data:ShiftResult, CreateList=True}" />
     </ctrl:DocumentItem.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Visible">
-        <StackPanel Orientation="Horizontal" DataContext="{StaticResource shiftResultViewSource}" VerticalAlignment="Top">
-            <ListBox ItemsSource="{Binding}" x:Name="shiftResultListBox" SelectionMode="Single" Width="200">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
+        <Grid DataContext="{StaticResource shiftResultViewSource}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="50"/>
+                <!-- This is for splitter -->
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <!-- This is for splitter -->
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="DataGrid">
+                    <Setter Property="CanUserAddRows" Value="False"/>
+                    <Setter Property="CanUserDeleteRows" Value="False"/>
+                    <Setter Property="SelectionMode" Value="Single"/>
+                    <Setter Property="SelectionUnit" Value="FullRow"/>
+                    <Setter Property="AutoGenerateColumns" Value="False"/>
+                    <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
+                    <Setter Property="EnableColumnVirtualization" Value="True"/>
+                    <Setter Property="HorizontalGridLinesBrush" Value="DarkGray"/>
+                    <Setter Property="VerticalGridLinesBrush" Value="DarkGray"/>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible"/>
+                </Style>
+                <Style TargetType="GridSplitter">
+                    <Setter Property="Background" Value="DarkGray"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                </Style>
+            </Grid.Resources>
+            <DataGrid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" ItemsSource="{Binding}" Name="shiftResultDataGrid" 
+                      SelectionChanged="shiftResultDataGrid_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="startColumn" Header="Start" Width="55" Binding="{Binding Start, StringFormat=hh:mm:ss}"/>
+                    <DataGridTextColumn x:Name="finishColumn" Header="Finish" Width="55" Binding="{Binding Finish, StringFormat=hh:mm:ss}"/>
+                    <DataGridTextColumn x:Name="operatorColumn" Binding="{Binding Path=Operator}" Header="Operator" />
+                    <DataGridTextColumn x:Name="mirrorColumn" Binding="{Binding Path=Mirror}" Header="Mirror" Width="80" />
+                    <DataGridTextColumn x:Name="totalTestsColumn" Binding="{Binding Path=TotalTests}" Header="Total Tests" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="completedColumn" Binding="{Binding Path=Completed}" Header="Completed" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="failedColumn" Binding="{Binding Path=Failed}" Header="Failed" Width="SizeToHeader" />
+                    <DataGridTextColumn x:Name="abortedColumn" Binding="{Binding Path=Aborted}" Header="Aborted" Width="SizeToHeader" />
+                </DataGrid.Columns>
+            </DataGrid>
 
-                            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                                <Label Content="{Binding Start}" ContentStringFormat="hh:mm:ss"/>
-                                <Label Content="{Binding Finish}" ContentStringFormat="hh:mm:ss"/>
-                            </StackPanel>
-                            
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Operator}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Mirror}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+            <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" ResizeDirection="Rows"  Height="5" HorizontalAlignment="Stretch" />
+
+            <DataGrid Grid.Column="0" Grid.Row="2" ItemsSource="{Binding}" Name="testResultDataGrid" 
+                      SelectionChanged="testResultDataGrid_SelectionChanged">
+                <DataGrid.Resources>
+                    <ctrl:TaskResultCodeConverter x:Key="resultConverter"/>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="testSequenceColumn" Header="Sequence" Width="50" Binding="{Binding Sequence}"/>
+                    <DataGridTextColumn x:Name="testNameColumn" Header="Test" Width="50" Binding="{Binding Name}"/>
+                    <DataGridTextColumn x:Name="testDurationColumn" Header="Duration" Width="SizeToHeader" 
+                                        Binding="{Binding Duration}">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="ToolTip"  Value="Format: mm:ss.msms"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="testResultColumn" Header="Result" Binding="{Binding Result, Converter={StaticResource resultConverter}}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <GridSplitter Grid.Column="1" Grid.Row="2" ResizeDirection="Columns" Width="5" HorizontalAlignment="Stretch" />
+            
+            <DataGrid Grid.Column="2" Grid.Row="2" ItemsSource="{Binding}" Name="paramResultDataGrid">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="paramName" Header="Parameter" Binding="{Binding Name}"/>
+                    <DataGridTextColumn x:Name="paramValue" Header="Value" Binding="{Binding Value}"/>
+                    <DataGridTextColumn x:Name="outputValue" Header="Output" Binding="{Binding OutputValue}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </ScrollViewer>
 </ctrl:DocumentItem>
