@@ -11,12 +11,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.ComponentModel;
-
+using System.Windows.Media.Media3D;
 using System.Threading;
+using System.Diagnostics;
 
 using MTS.IO;
 using MTS.IO.Module;
 using MTS.Properties;
+using MTS.Tester;
+
+using MTS.Tester.Result;
 
 namespace MTS.Admin
 {
@@ -107,6 +111,13 @@ namespace MTS.Admin
         /// Thread that will handle calibration (executed in a loop)
         /// </summary>
         private Thread calibrationThread;
+        /// <summary>
+        /// Normal of the mirror after calibration
+        /// </summary>
+        private Vector3D mirrorNormal;
+
+        private TaskScheduler scheduler;
+
         private void beginCalibration()
         {
             // create a new thread that will execute calibration loop
@@ -119,38 +130,105 @@ namespace MTS.Admin
             // create a module based on current application settings (could be of different procotol type
             // and loaded from different configuration files
             IModule module = null;
-            double step = 1;
 
             IsExecuted = false;
 
             try
             {
-                //module = Settings.Default.GetModuleInstance();
+                // connect to hw
+                Status = "Initializing ... ";
+                module = Settings.Default.GetModuleInstance();
+                Channels channels = Settings.Default.GetChannelsInstance();
+                channels.Connect();
+                channels.Initialize();
+                CalibrationState++;
+
+                channels.UpdateInputs();    // read channel values
+                // while power supply is not switched on
+                while (channels.IsPowerSupplyOff.Value == true)
+                {
+                    // if power supply is not switch on, ask user to switch it on
+                    MessageBoxResult result = MessageBox.Show("Switch on power supply!", "Power supply",
+                        MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.OK);
+                    if (result == MessageBoxResult.Cancel)  // abort if user does not switched on power supply
+                    {
+                        Status += "Aborted";
+                        return;
+                    }
+                    // read value - check if user has switch on power supply
+                    channels.UpdateInputs();
+                }
+
+                // create scheduler
+                scheduler = new TaskScheduler(channels);
+                scheduler.AddInitSequence();        // open device and wait for mirror to be inserted, then close it
+                scheduler.AddDistanceSensorsUp();   // move up distance sensors for measuring
+                scheduler.AddTask(new Calibrate(channels));     // read distance sensor values
+                scheduler.AddDistanceSensorsDown(); // move down distance sensors - so device could be opened
+                scheduler.AddOpenDevice();          // open device - after that calibration has finished
+                CalibrationState++;
+                Stopwatch watch = new Stopwatch();  // time elapsed since last loop
+                DateTime time = DateTime.Now;       // current time of updating scheduler
+
                 // enter calibration loop
                 IsRunning = true;
 
-                while (CalibrationState < 100)
-                {
-                    Thread.Sleep(3);
-                    CalibrationState += step;
+                Status = "Calibrating ... ";
+                scheduler.Initialize();
+                watch.Start();
+                while (!scheduler.IsFinished)
+                {   // in this loop execute all tasks - open device, wait for mirror to be inserted, close device,
+                    // and move sensors up measure mirror normal, move sensors down open device
+                    time += watch.Elapsed;
+                    scheduler.Update(time);
+                    if (CalibrationState < 100)
+                        CalibrationState++;
                 }
 
                 // calibration has been executed successfully without throwing any exception
-                IsExecuted = true;
+                IsExecuted = handleResult(scheduler);
+
+                Status += "Finished";
             }
-            catch
+            catch (Exception ex)
             {
-                Status = "Connection could not be established!";
+                Status += "Failed!";
+                ExceptionManager.ShowError(ex);
             }
             finally
-            {
+            {   // release connection allocated resources
                 if (module != null)
                     module.Disconnect();
                 IsRunning = false;
             }
+        }
+        private bool handleResult(TaskScheduler scheduler)
+        {
+            // this sould contain only one result from calibration task
+            var results = scheduler.GetResultData();
+            bool executed = false;
 
-            // 
-            
+            try
+            {   // if any of this data is missing as exception will be thrown
+                TaskResult res = results.Where(r => r.Value != null && r.ValueId == "Calibration").First();
+                ParamResult disX = res.Params.Where(p => p.ValueId == "DistanceX").First();
+                ParamResult disY = res.Params.Where(p => p.ValueId == "DistanceY").First();
+                ParamResult disZ = res.Params.Where(p => p.ValueId == "DistanceZ").First();
+
+                // save mirror normal - when ok button is clicked, also will be save to hardware settings file
+                mirrorNormal = new Vector3D((double)disX.ResultValue, (double)disY.ResultValue, (double)disZ.ResultValue);
+                executed = true;
+            }
+            catch
+            {   // result of the calibration taks is corrupted
+                Status = "Missing calibration data!";
+            }
+
+            return executed;
+        }
+        private void abortCalibration()
+        {
+
         }
 
         #endregion
@@ -171,8 +249,13 @@ namespace MTS.Admin
         {
             // operation finished successfully - calibration may be saved to settings file
             // check if there are some errors with calibration (this could be loose of connection, ...)
-
-            this.DialogResult = true;       // calibration was executed successfully
+            this.DialogResult = false;
+            // save calibrated value
+            if (IsExecuted)
+            {
+                HWSettings.Default.ZeroPlaneNormal = mirrorNormal;
+                this.DialogResult = true;       // calibration was executed successfully
+            }
         }
         /// <summary>
         /// This method is called when winwod get initialized. Imadiatelly after that calibration will start
@@ -182,7 +265,6 @@ namespace MTS.Admin
         private void window_Initialized(object sender, EventArgs e)
         {
             beginCalibration();
-            
         }
 
         #endregion

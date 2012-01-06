@@ -122,7 +122,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="MTSModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MTSModel.Designer.cs</LastGenOutput>
@@ -135,6 +137,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MTSModel.cs</LastGenOutput>
     </None>
+    <None Include="Properties\DataSources\ShiftResult.datasource" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

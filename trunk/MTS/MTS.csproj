@@ -55,10 +55,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AvalonDock, Version=1.3.3571.0, Culture=neutral, PublicKeyToken=85a1e0ada7ec13e4, processorArchitecture=MSIL">
-      <HintPath>bin\Debug\AvalonDock.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="AvalonDock.Themes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>bin\Debug\AvalonDock.Themes.dll</HintPath>
+    <Reference Include="AvalonDock.Themes">
+      <HintPath>..\lib\AvalonDock.Themes.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -335,9 +336,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Editor\test.dtd" />
-    <None Include="Properties\DataSources\MTS.Data.Mirror.datasource" />
-    <None Include="Properties\DataSources\MTS.Data.ShiftResult.datasource" />
-    <None Include="Properties\DataSources\MTS.Data.Supplier.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -371,6 +369,7 @@
   <ItemGroup>
     <None Include="config\template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +463,9 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

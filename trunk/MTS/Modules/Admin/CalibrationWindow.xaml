@@ -2,10 +2,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ctrl="clr-namespace:MTS.Controls"
-    Title="Calibrating ..."
+    Title="Calibration"
         Width="300" MaxWidth="400" MinWidth="200"
         Height="200" MaxHeight="400" MinHeight="200"
-        x:Name="root" Initialized="window_Initialized" ShowInTaskbar="False">
+        x:Name="root" Initialized="window_Initialized" Style="{StaticResource commonWindow}">
     <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type Button}">

@@ -14,8 +14,10 @@
       <type>enum</type>
       <value>0</value>      <!-- index of selected value -->
       <values>
-        <value>Left</value>
-        <value>Right</value>
+        <value>Left left-handed</value>
+        <value>Right left-handed</value>
+        <value>Left right-handed</value>
+        <value>Right right-handed</value>
       </values>
     </param>
     <param id="partNumber">
@@ -50,9 +52,9 @@
       <value>2.5</value>
       <min>0</min>
       <max>20</max>
-      <unit type="miliseconds"/>
+      <unit type="seconds"/>
     </param>
-  </test>        
+  </test>
   
   <!-- Travel tests -->
   <test id="TravelEast">

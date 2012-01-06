@@ -4,12 +4,15 @@ using System.Windows.Media.Media3D;
 
 using MTS.IO;
 using MTS.Properties;
+using MTS.Editor;
 using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    class Calibrate : Task
+    sealed class Calibrate : Task
     {
+        private Vector3D mirrorNormal;
+
         /// <summary>
         /// Read distances, caluculate zero plane normal and save this setting
         /// </summary>
@@ -21,15 +24,18 @@ namespace MTS.Tester
                 case ExState.Initializing:
                     StartWatch(time);
                     goTo(ExState.Measuring);
+                    Output.Write("Calibrating ...");
                     break;
                 case ExState.Measuring:
-                    HWSettings.Default.ZeroPlaneNormal = channels.GetMirrorNormal();
+                    mirrorNormal = channels.GetMirrorNormal();
+                    //HWSettings.Default.ZeroPlaneNormal = channels.GetMirrorNormal();
                     if (TimeElapsed(time) > 1000)
                         goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
-                    HWSettings.Default.Save();
-                    HWSettings.Default.Reload();
+                    //HWSettings.Default.Save();
+                    //HWSettings.Default.Reload();
+                    Output.WriteLine("Finished");
                     Finish(time);
                     break;
                 case ExState.Aborting:
@@ -37,7 +43,23 @@ namespace MTS.Tester
                     break;
             }
         }
+        protected override TaskResult getResult()
+        {
+            TaskResult res = new TaskResult(new TestValue("Calibration") { Name = "Calibration" })
+            {
+                ResultCode = getResultCode(),
+                Begin = this.Begin,
+                End = this.End,
+                HasData = false
+            };
+            
+            // as result return measured calibration values - distances of measuring sonds
+            res.Params.Add(new ParamResult(new DoubleParam("DistanceX"), mirrorNormal.X));
+            res.Params.Add(new ParamResult(new DoubleParam("DistanceY"), mirrorNormal.Y));
+            res.Params.Add(new ParamResult(new DoubleParam("DistanceZ"), mirrorNormal.Z));
 
+            return res;
+        }
 
         #region Constructors
 

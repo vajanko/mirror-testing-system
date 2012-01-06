@@ -65,6 +65,17 @@ namespace MTS.Admin
                 return instance.Type == role;
             return false;
         }
+        public static void DebugLogin()
+        {
+            instance = new Operator()
+            {
+                Name = "System",
+                Surname ="Administrator",
+                Login = "admin",
+                Id = 1,
+                Type = OperatorType.Admin
+            };
+        }
 
         #region Properties
 

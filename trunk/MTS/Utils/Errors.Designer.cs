@@ -67,6 +67,24 @@ namespace MTS.Utils {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration file {0} not found!.
+        /// </summary>
+        internal static string ConfigFileNotFoundMsg {
+            get {
+                return ResourceManager.GetString("ConfigFileNotFoundMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection to {0} module could not be established.
+        /// </summary>
+        internal static string ConnectionFailedMsg {
+            get {
+                return ResourceManager.GetString("ConnectionFailedMsg", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap cross {
             get {
                 object obj = ResourceManager.GetObject("cross", resourceCulture);
@@ -121,20 +139,29 @@ namespace MTS.Utils {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File {0} may be corrupted.
+        /// </summary>
+        internal static string FileFormatErrorMsg {
+            get {
+                return ResourceManager.GetString("FileFormatErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File {0} not found.
+        /// </summary>
+        internal static string FileNotFoundMsg {
+            get {
+                return ResourceManager.GetString("FileNotFoundMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input/Output Error.
         /// </summary>
         internal static string IOErrorTitle {
             get {
                 return ResourceManager.GetString("IOErrorTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Printer Error.
-        /// </summary>
-        internal static string PrinterError {
-            get {
-                return ResourceManager.GetString("PrinterError", resourceCulture);
             }
         }
         
@@ -146,11 +173,20 @@ namespace MTS.Utils {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Printer Error.
+        /// </summary>
+        internal static string PrinterErrorTitle {
+            get {
+                return ResourceManager.GetString("PrinterErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Security Error.
         /// </summary>
-        internal static string SecurityError {
+        internal static string SecurityErrorTitle {
             get {
-                return ResourceManager.GetString("SecurityError", resourceCulture);
+                return ResourceManager.GetString("SecurityErrorTitle", resourceCulture);
             }
         }
         

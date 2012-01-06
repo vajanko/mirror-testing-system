@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using MTS.IO;
+using MTS;
+using MTS.Utils;
 
 namespace MTS.Properties {
     
@@ -64,7 +68,12 @@ namespace MTS.Properties {
         {
             return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
         }
-
+        /// <summary>
+        /// Get path to configuration file where channels for current protocol are saved. Current protocol is a user setting
+        /// describing type of module which will be used for communication with tester hardware. If protocol is not set, 
+        /// EtherCAT configuration file will be used as default value
+        /// </summary>
+        /// <returns>Absolute path to configuration file containing all channels used in this application</returns>
         public string GetProtocolConfigPath()
         {
             string protocolConfig;
@@ -100,11 +109,11 @@ namespace MTS.Properties {
         /// <summary>
         /// Create an instance of module for communication with tester hardware based on current protocol settings.
         /// For example if current protocol is EtherCAT, this method will create an instance of
-        /// <paramref name="MTS.IO.Module.ECModule"/> and load its configuration from file which is defined in this
+        /// <see cref="ECModule"/> and load its configuration from file which is defined in this
         /// settings as configuration file for EtherCAT protocol.
         /// </summary>
         /// <returns>A loaded an initialized instance of module prepared for communication with tester hardware</returns>
-        public MTS.IO.IModule GetModuleInstance()
+        public IModule GetModuleInstance()
         {
             // make a decision based on current protocol settings
             string protocol = this.Protocol;
@@ -128,6 +137,45 @@ namespace MTS.Properties {
             module.Initialize();
 
             return module;
+        }
+        /// <summary>
+        /// Create an instance of channels for communication with testr hardware based on current protocol settings.
+        /// For example if current protocol is EtherCAT, this method will create an instace of channels using
+        /// <see cref="ECModule"/> and load its configuration from file wich is defined in this settings as configuration file
+        /// for EtherCAT procotol. This method will handle all exception and show error window to user if necessary.
+        /// At the momemnt of calling this method no connection is established with the tester hardware.
+        /// </summary>
+        /// <returns>Instance of <see cref="Channels"/> with loaded channels or null if channels couldn't be created</returns>
+        public Channels GetChannelsInstance()
+        {
+            // make a decision based on current protocol settings which module will be created for channels communication
+            IModule module = this.GetModuleInstance();
+            // path to configuration file where channels used for current module are stored
+            string configPath = Settings.Default.GetProtocolConfigPath();
+            // load channel settings from hardware settings file
+            ChannelSettings settings = HWSettings.Default.ChannelSettings;
+
+            // create just instace of channel collection, without any initialization or connection
+            Channels channels = new Channels(module, settings);
+            // initialize calibraetors positions
+            channels.InitializeCalibratorsSettings(HWSettings.Default.ZeroPlaneNormal,
+                HWSettings.Default.CalibretorX, HWSettings.Default.CalibretorY, HWSettings.Default.CalibretorZ);
+            try
+            {   // load configuration and create channels for this module
+                channels.LoadConfiguration(configPath);
+            }
+            catch (FileNotFoundException ex)
+            {   // exception was thrown because configuration file was not found
+                ExceptionManager.ShowError(Errors.FileErrorTitle, Errors.FileErrorIcon, Errors.ConfigFileNotFoundMsg, ex.FileName);
+                channels = null;
+            }
+            catch (Exception ex)
+            {   // other error raised when configuration file was readed
+                ExceptionManager.ShowError(ex);
+                channels = null;    // return null indicating that channels was not created
+            }
+
+            return channels;
         }
     }
 }
