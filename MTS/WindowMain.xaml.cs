@@ -291,7 +291,8 @@ namespace MTS
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            login();
+            Admin.Operator.DebugLogin();
+            //login();
         }
         private void login()
         {

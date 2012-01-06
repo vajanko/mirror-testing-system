@@ -23,13 +23,16 @@ namespace MTS.Tester
                 case ExState.Initializing:  // start to measure time
                     StartWatch(time);
                     goTo(ExState.Measuring);
+                    Output.Write("Waiting for {0} ms ... ", miliseconds);
                     break;
                 case ExState.Measuring:     // just wait for required time and finish
-                    if (TimeElapsed(time) > miliseconds)
+                    double elapsed = TimeElapsed(time);
+                    if (elapsed > miliseconds)
                         goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
                     Finish(time);
+                    Output.WriteLine("Finished");
                     break;
                 case ExState.Aborting:
                     Finish(time);

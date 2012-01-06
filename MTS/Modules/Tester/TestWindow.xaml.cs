@@ -434,7 +434,8 @@ namespace MTS.Tester
         {
             bool success = true;
             // create communication layer
-            channels = createChannels();
+            channels = Settings.Default.GetChannelsInstance();
+                //createChannels();
             // createConnection is called only if channels are not null
             if (channels == null || !createConnection(ref channels))
                 return false;     // connection was not created

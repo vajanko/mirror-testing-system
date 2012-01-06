@@ -424,7 +424,7 @@ namespace MTS.Admin
         }
         private void updateOperatorsGrid()
         {
-            operatorsGrid.DataContext = context.Operators.ToList();
+            //operatorsGrid.DataContext = context.Operators.ToList();
         }
        
 

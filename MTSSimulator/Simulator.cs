@@ -137,6 +137,8 @@ namespace MTS.Simulator
 
                 simulateDirectionLightCurrent();
 
+                
+
                 simulateMirrorMovement();
 
                 // update user interface

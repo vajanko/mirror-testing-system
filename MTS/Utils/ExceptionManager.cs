@@ -4,8 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Windows;
+using MTS.Utils;
 
-namespace MTS.Utils
+namespace MTS
 {
     public static class ExceptionManager
     {
