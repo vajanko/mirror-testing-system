@@ -120,6 +120,14 @@
                         <StackPanel>
                             <Label Style="{StaticResource sectionHeaderStyle}">Calibration</Label>
                             <Grid>
+                                <Grid.Resources>
+                                    <Style TargetType="ctrl:UpDownButton">
+                                        <Setter Property="VerticalAlignment" Value="Top"/>
+                                        <Setter Property="Decimals" Value="0"/>
+                                        <Setter Property="Unit" Value="{x:Static main:Units.Milimeters}"/>
+                                        <EventSetter Event="ValueChanged" Handler="distance_ValueChanged"/>
+                                    </Style>
+                                </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="80"/>
@@ -132,25 +140,19 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0">|XY|:</Label>
-                            <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" x:Name="xyDistance" 
-                                           ValueChanged="distance_ValueChanged" 
-                                           MaxValue="100"/>
+                            <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" x:Name="xyDistance"/>
 
                             <Label Grid.Row="1" Grid.Column="0">|YZ|:</Label>
-                            <ctrl:UpDownButton Grid.Row="1" Grid.Column="1" x:Name="yzDistance" 
-                                           ValueChanged="distance_ValueChanged"
-                                           MaxValue="100"/>
+                            <ctrl:UpDownButton Grid.Row="1" Grid.Column="1" x:Name="yzDistance"/>
 
                             <Label Grid.Row="2" Grid.Column="0">|XZ|:</Label>
-                            <ctrl:UpDownButton Grid.Row="2" Grid.Column="1" x:Name="xzDistance" 
-                                           ValueChanged="distance_ValueChanged"
-                                           MaxValue="100"/>
+                            <ctrl:UpDownButton Grid.Row="2" Grid.Column="1" x:Name="xzDistance"/>
 
                             <Button x:Name="calibrate" Grid.Row="3" Grid.ColumnSpan="2"
                                 Click="calibrate_Click">Calibrate</Button>
 
                             <Border Grid.RowSpan="3" Grid.Column="2" BorderBrush="White" BorderThickness="1" HorizontalAlignment="Left">
-                                <Canvas Width="150" Height="150" x:Name="sondeCanvas">
+                                <Canvas Width="150" Height="150" x:Name="calibratorsCanvas">
                                     <Canvas.Resources>
                                         <Style TargetType="Ellipse">
                                             <Setter Property="Width" Value="10"/>
@@ -184,16 +186,15 @@
                     <StackPanel Grid.Column="0">
                         <Label Style="{StaticResource sectionHeaderStyle}">Actions:</Label>
                         <Button Content="Add" Click="addOperator_Click" />
-                        <Button Content="Delete"/>
-                        <Button Content="Edit"/>
+                        <Button Content="Delete" Click="deleteOperator_Click"/>
+                        <Button Content="Edit" Click="editOperator_Click"/>
                     </StackPanel>                    
                     <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="5" HorizontalAlignment="Stretch" 
                                   VerticalAlignment="Stretch"/>
                     <DataGrid Grid.Column="2" x:Name="operatorsGrid" ItemsSource="{Binding}"
                               CanUserReorderColumns="True" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False"
                               AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray" VerticalGridLinesBrush="DarkGray"
-                              SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0"
-                              Loaded="operatorsGrid_Loaded">
+                              SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Login" Binding="{Binding Login}"/>
                             <DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
@@ -203,9 +204,42 @@
                     </DataGrid>
                 </Grid>
             </Expander>
-            
-            <Expander Header="Channels">
-                <ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}">
+
+            <Expander Header="Channels" DataContext="{Binding ChannelSettings, ElementName=root}">
+                <DockPanel>
+                    <ListBox DockPanel.Dock="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True"
+                             Name="channelsSettingListBox"/>
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.Resources>
+                            <Style TargetType="ctrl:UpDownButton">
+                                <Setter Property="MinValue" Value="0"/>
+                                <Setter Property="MaxValue" Value="65000"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
+                        <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" Value="{Binding RawLow, Mode=TwoWay}" Decimals="0"/>
+
+                        <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
+                        <ctrl:UpDownButton Grid.Row="1" Grid.Column="1" Value="{Binding RawHigh, Mode=TwoWay}" Decimals="0"/>
+
+                        <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
+                        <ctrl:UpDownButton Grid.Row="2" Grid.Column="1" Value="{Binding RealLow, Mode=TwoWay}"/>
+
+                        <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
+                        <ctrl:UpDownButton Grid.Row="3" Grid.Column="1" Value="{Binding RealHigh, Mode=TwoWay}"/>
+                    </Grid>
+                    <Label DockPanel.Dock="Top" Content="{Binding Description}"/>
+                    <!--<ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type io_set:ChannelSetting}" xmlns:io_set="clr-namespace:MTS.IO;assembly=IO">
                             <Border Style="{StaticResource tableStyle}">
@@ -247,7 +281,8 @@
                             <UniformGrid Columns="4"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                </ItemsControl>-->
+                </DockPanel>
             </Expander>
 
             <StackPanel Orientation="Horizontal" Margin="3" HorizontalAlignment="Right">

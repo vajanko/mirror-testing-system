@@ -23,7 +23,6 @@
       [ShiftResults].[Finish] AS [Finish], 
       [ShiftResults].[Mirror] AS [Mirror], 
       [ShiftResults].[Operator] AS [Operator], 
-      [ShiftResults].[TotalTests] AS [TotalTests], 
       [ShiftResults].[Completed] AS [Completed], 
       [ShiftResults].[Failed] AS [Failed], 
       [ShiftResults].[Aborted] AS [Aborted]
@@ -190,7 +189,6 @@
           <Property Name="Finish" Type="datetime" Nullable="false" />
           <Property Name="Mirror" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="Operator" Type="nvarchar" Nullable="false" MaxLength="41" />
-          <Property Name="TotalTests" Type="int" />
           <Property Name="Completed" Type="int" Nullable="false" />
           <Property Name="Failed" Type="int" Nullable="false" />
           <Property Name="Aborted" Type="int" Nullable="false" />
@@ -666,7 +664,6 @@
           <Property Type="DateTime" Name="Finish" Nullable="false" />
           <Property Type="String" Name="Mirror" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Operator" Nullable="false" MaxLength="41" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="TotalTests" />
           <Property Type="Int32" Name="Completed" Nullable="false" />
           <Property Type="Int32" Name="Failed" Nullable="false" />
           <Property Type="Int32" Name="Aborted" Nullable="false" />
@@ -797,7 +794,6 @@
                 <ScalarProperty Name="Aborted" ColumnName="Aborted" />
                 <ScalarProperty Name="Failed" ColumnName="Failed" />
                 <ScalarProperty Name="Completed" ColumnName="Completed" />
-                <ScalarProperty Name="TotalTests" ColumnName="TotalTests" />
                 <ScalarProperty Name="Operator" ColumnName="Operator" />
                 <ScalarProperty Name="Mirror" ColumnName="Mirror" />
                 <ScalarProperty Name="Finish" ColumnName="Finish" />

@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="{Binding ErrorTitle, RelativeSource={RelativeSource self}}" MinWidth="220" MinHeight="170"
-        Width="200" Height="170" MaxHeight="400" MaxWidth="600" x:Name="root"
-        Style="{StaticResource commonWindow}" >
+        Width="350" Height="170" MaxHeight="400" MaxWidth="600" x:Name="root"
+        Style="{StaticResource commonWindow}" Icon="/MTS;component/Resources/icons/errorWindow.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,9 +31,53 @@ namespace MTS
 
         #region Menu Events
 
+        /// <summary>
+        /// This method is called when MainMenu->File->Exit item is clicked
+        /// </summary>
         private void menuClick_Exit(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        /// <summary>
+        /// This method is called when MainMenu->Options->Log in item is clicked
+        /// </summary>
+        private void login_Click(object sender, RoutedEventArgs e)
+        {   // open login window for user
+            login();
+        }
+        /// <summary>
+        /// This method is called when MainMenu->Options->Log out item is clicked
+        /// </summary>
+        private void logout_Click(object sender, RoutedEventArgs e)
+        {   // before logout close all tab items (some of them may require loged in user instance)
+            List<DocumentItem> toClose = new List<DocumentItem>();
+            foreach (DocumentContent item in filePane.Items)
+            {   // get all document items - should be closed
+                if (item is DocumentItem)
+                    toClose.Add(item as DocumentItem);
+            }
+            while (toClose.Count > 0)
+            {
+                DocumentItem item = toClose[0];
+                toClose.RemoveAt(0);
+                if (!item.Close())
+                    return; // this DocumentItem could not be closed - logout is not successfull
+            }
+            // now all document items are closed - operator will be loged out
+            Output.WriteLine("Logout {0}", Admin.Operator.Instance.Login);
+            Admin.Operator.LogOut();
+        }
+
+        #endregion
+
+        #region Window Events
+
+        /// <summary>
+        /// This method is called once when window is loaded.
+        /// </summary>
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {   // open login windows for user, so he or she should not manualy click this menu item at startup
+            login();
         }
 
         #endregion
@@ -128,18 +173,19 @@ namespace MTS
         // save
         private void saveCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // filePane exists so get its active document (tab), it must be a TestFile
-            var file = getActiveTestFile();
+            // filePane exists so get its active document (tab), it must be a DocumentItem (Saveable)
+            DocumentItem item = getActiveItem();
+
             // file exists, it is a test file and is not saved
-            e.CanExecute = (file != null) && (!file.IsSaved);
+            e.CanExecute = (item != null) && (item.CanSave);
             e.Handled = true;
         }
         private void saveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             // when this method is called we are sure that filePane exists and selected item is a test file
             // and it is not saved
-            TestFile file = getActiveTestFile();    // check for errors
-            file.Save();
+            DocumentItem item = getActiveItem();    // check for errors
+            item.Save();
             e.Handled = true;
         }
         // save as
@@ -148,7 +194,7 @@ namespace MTS
             // check if testing is running otherwise ..
 
             // true when selected tab is a TestFile
-            e.CanExecute = (getActiveTestFile() != null);  // it must not be saved to execute save as
+            e.CanExecute = (getActiveItem() != null);  // it must not be saved to execute save as
             e.Handled = true;
         }
         private void saveAsExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -160,13 +206,14 @@ namespace MTS
             {
                 try
                 {
-                    var file = getActiveTestFile();
+                    TestFile file = getActiveTestFile();
                     file.SaveAs(dialog.FileName);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    ExceptionManager.ShowError(ex);
                     // move this to FileManager
-                    MessageBox.Show("File could not be saved", "File error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    //MessageBox.Show("File could not be saved", "File error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             e.Handled = true;
@@ -193,7 +240,16 @@ namespace MTS
         }
 
         /// <summary>
-        /// Get an instance of document content of type TestFile that is currently active inside the main area -
+        /// Get an instance of document content of type  <see cref="DocumentItem"/> that is currently active inside the main area -
+        /// <paramref name="filePane"/>.
+        /// Return null if there is no such a document content
+        /// </summary>
+        private DocumentItem getActiveItem()
+        {
+            return (filePane == null) ? null : (filePane.SelectedItem as DocumentItem);
+        }
+        /// <summary>
+        /// Get an instance of document content of type <see cref="TestFile"/> that is currently active inside the main area -
         /// <paramref name="filePane"/>.
         /// Return null if there is no such a document content
         /// </summary>
@@ -215,8 +271,8 @@ namespace MTS
                         e.Handled = true;
                         return;
                     }
-                // there is no test window - could be opened
-                e.CanExecute = true;
+                // there is no test window - could be opened, but only if some operator is logged in
+                e.CanExecute = Admin.Operator.IsLogedIn();
             }
         }
         private void viewTesterExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -289,18 +345,26 @@ namespace MTS
 
         #endregion
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            Admin.Operator.DebugLogin();
-            //login();
-        }
+        /// <summary>
+        /// Open login window (this will block the application) and ask user for login and password.
+        /// This window will be opened until user is loged in successfully or it is manually closed by user
+        /// </summary>
         private void login()
         {
+            Admin.Operator.TryLogin("admin", "admin");
+            return;
             LoginWindow loginWindow = new LoginWindow(this, false);
-            bool result;
-            while ((result = (bool)loginWindow.ShowDialog()) != true)
-                loginWindow = new LoginWindow(this, !result);
-            //Admin.Operator.TryLogin("admin", "admin");
+            loginWindow.ShowDialog();   // show window for first time
+
+            // if result is null this loop will end without logging in
+            while (loginWindow.Result == LoginResult.Fail)
+            {
+                loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
+                loginWindow.ShowDialog();
+            }
+
+            if (Admin.Operator.IsLogedIn())
+                Output.WriteLine("Login {0}", Admin.Operator.Instance.Login);
         }
     }
 }

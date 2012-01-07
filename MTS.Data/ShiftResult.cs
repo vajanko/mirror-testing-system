@@ -18,7 +18,6 @@ namespace MTS.Data
         public System.DateTime Finish { get; set; }
         public string Mirror { get; set; }
         public string Operator { get; set; }
-        public Nullable<int> TotalTests { get; set; }
         public int Completed { get; set; }
         public int Failed { get; set; }
         public int Aborted { get; set; }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -52,7 +54,11 @@ namespace MTS.Data
                 ShiftResult res = shiftResultDataGrid.SelectedValue as ShiftResult;
                 if (res != null)
                 {   // load test results for selected shift
-                    testResultDataGrid.DataContext = context.GetTestResult(res.Id).ToList();
+                    var testResults = new ObservableCollection<DbTestResult>(context.GetTestResult(res.Id).ToList());
+                    var testResultsView = CollectionViewSource.GetDefaultView(testResults);
+                    testResultsView.GroupDescriptions.Add(new PropertyGroupDescription("Sequence"));
+                    testResultDataGrid.ItemsSource = testResultsView;
+                    DataGridTextColumn tc;
                 }
             }
         }
@@ -69,6 +75,17 @@ namespace MTS.Data
                     paramResultDataGrid.DataContext = context.GetParamResult(res.Id).ToList();
                 }
             }
+        }
+        /// <summary>
+        /// This method is called when size of the main grid in data window is changed. Each datagrid in the main window
+        /// get half size of the window so scrollbars will be visible on them
+        /// </summary>
+        private void mainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double height = e.NewSize.Height / 2;
+            shiftResultDataGrid.MaxHeight = height;
+            testResultDataGrid.MaxHeight = height;
+            paramResultDataGrid.MaxHeight = height;
         }
 
         #endregion

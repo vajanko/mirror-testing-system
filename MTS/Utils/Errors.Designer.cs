@@ -115,6 +115,15 @@ namespace MTS.Utils {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string ErrorTitle {
+            get {
+                return ResourceManager.GetString("ErrorTitle", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap ExclamationIcon {
             get {
                 object obj = ResourceManager.GetObject("ExclamationIcon", resourceCulture);

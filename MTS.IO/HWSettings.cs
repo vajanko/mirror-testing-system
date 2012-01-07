@@ -21,6 +21,7 @@ namespace MTS.IO {
             //
 
             this.SettingsLoaded += new System.Configuration.SettingsLoadedEventHandler(HWSettings_SettingsLoaded);
+            calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
         }
 
         void HWSettings_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)

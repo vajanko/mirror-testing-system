@@ -467,6 +467,29 @@
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\loginWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\errorWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\login.png" />
+    <Resource Include="Resources\icons\logout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\about.png" />
+    <Resource Include="Resources\icons\help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\delete.png" />
+    <Resource Include="Resources\icons\exit.png" />
+    <Resource Include="Resources\icons\saveAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\redo.png" />
+    <Resource Include="Resources\icons\undo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

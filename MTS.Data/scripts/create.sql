@@ -269,88 +269,45 @@ END
 GO
 --#endregion
 
---#region CREATE PROCEDURE udpDeleteShift
-IF OBJECT_ID('udpDeleteShift') IS NOT NULL
-	DROP PROCEDURE udpDeleteShift;
+--#region CREATE VIEW udfShiftResults
+-- For each shift get these information: Date and time when shift was started
+-- and finished, name of test mirror, full name of operator who has executed
+-- that shift, total number of excuted test and number of completed, failed and
+-- aborted tests
+IF OBJECT_ID('ShiftResults') IS NOT NULL
+	DROP VIEW ShiftResults;
 GO
-CREATE PROCEDURE udpDeleteShift(@shiftId INT)
-AS
-BEGIN
-	DELETE FROM ParamOutput
-	WHERE ParamOutput.Id 
-	DELETE FROM Operator WHERE Id = @operatorId;
-END
+CREATE VIEW [ShiftResults] AS 
+	SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Name AS Mirror,
+	Operator.Name + ' ' + Operator.Surname AS Operator,
+	ISNULL(Completed, 0) + ISNULL(Failed, 0) + ISNULL(Aborted,0) AS TotalTests,
+	ISNULL(Completed, 0) AS Completed, ISNULL(Failed, 0) AS Failed, 
+	ISNULL(Aborted, 0) AS Aborted FROM
+	-- Get mirror which was tested in each shift and operator who has executed
+	-- it
+	(Shift JOIN Mirror ON (Shift.MirrorId = Mirror.Id)
+		JOIN Operator ON (Shift.OperatorId = Operator.Id))
+	JOIN -- For each shift count number of completed/failed/aborted tests
+	-- Count number of completed tests in each shift
+	(SELECT ShiftId, COUNT(*) AS Completed FROM TestOutput
+		WHERE TestOutput.Result = 0
+		GROUP BY TestOutput.ShiftId) t1
+	ON (Shift.Id = t1.ShiftId)
+	LEFT OUTER JOIN
+	-- Count number of failed tests in each shift
+	(SELECT ShiftId, COUNT(*) AS Failed FROM TestOutput
+		WHERE TestOutput.Result = 1
+		GROUP BY TestOutput.ShiftId) t2
+	ON (t1.ShiftId = t2.ShiftId)
+	LEFT OUTER JOIN
+	-- Count number of aborted tests in each shift
+	(SELECT ShiftId, COUNT(*) AS Aborted FROM TestOutput
+		WHERE TestOutput.Result = 2
+		GROUP BY TestOutput.ShiftId) t3
+	ON (t2.ShiftId = t3.ShiftId);
 GO
---#endregion
 
---#region CREATE PROCEDURE udpDeleteOperator
-IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
-	DROP PROCEDURE udpDeleteOperator;
-GO
-CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
-AS
-BEGIN
-	DELETE FROM ParamOutput
-	WHERE ParamOutput.Id 
-	DELETE FROM Operator WHERE Id = @operatorId;
-END
-GO
 --#endregion
 
 -- CREATE VIEWS
 
---#region CREATE VIEW ShiftResults
--- For each shift get these information: Date and time when shift was started
--- and finished, name of tested mirror, full name of operator who has executed
--- that shift, number of sequences where all tests have been completed (correctly),
--- number of tests where at least one failed, and where at least one was aborted
-IF OBJECT_ID('ShiftResults') IS NOT NULL
-	DROP VIEW ShiftResults;
-GO
-CREATE VIEW ShiftResults(Id, Start, Finish, Mirror, Operator, Completed, Failed, Aborted)
-	AS 
--- this table will contain ShiftId and number of sequences in this shift
--- where all tests in sequence are completed, number of sequences where
--- at least one test is failed or aborted and number of sequences where
--- at least one test is aborted	
-SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Name, 
-	Operator.Name + ' ' + Operator.Surname,
-	-- from the parent select command we have obtained ShiftId. we are going to
-	-- get only outputs with this shift id, grouping it by sequence. then we
-	-- will find the maximum of result in one group (sequence). if it is 0 (all
-	-- of them are 0) all test is this sequence are completed
-	(SELECT COUNT(*) FROM 
-		(SELECT Sequence FROM TestOutput AS t2
-			WHERE t2.ShiftId = Shift.Id
-			GROUP BY t2.Sequence HAVING MAX(Result) = 0) AS C) AS Completed,
-	-- this is same as finding sequences with all tests completed, just find
-	-- such a sequence where at least one test is not failed
-	(SELECT COUNT(*) FROM
-		(SELECT Sequence FROM TestOutput AS t2
-			WHERE t2.ShiftId = Shift.Id
-			GROUP BY t2.Sequence HAVING MAX(Result) = 1) AS C) AS Failed,
-	-- find such a sequence where at least one test is aborted
-	(SELECT COUNT(*) FROM
-		(SELECT Sequence FROM TestOutput AS t2
-			WHERE t2.ShiftId = Shift.Id
-			GROUP BY t2.Sequence HAVING MAX(Result) = 2) AS C) AS Aborted
-	FROM Shift
-	JOIN Mirror ON (Shift.MirrorId = Mirror.Id)
-	JOIN Operator ON (Shift.OperatorId = Operator.Id);
-GO		
---#endregion
-
---#region CREATE VIEW TestResults
-IF OBJECT_ID('TestResults') IS NOT NULL
-	DROP VIEW TestResults;
-GO
-CREATE VIEW TestResults(Id, Name, Result, Duration, Sequence) AS
-	SELECT TestOutput.Id, Test.Name, TestOutput.Result, 
-	CAST (TestOutput.Finish - TestOutput.Start AS TIME),
-	TestOutput.Sequence
-	FROM Shift 
-		JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
-		JOIN Test ON (TestOutput.TestId = Test.Id) 
-GO
-SELECT * FROM TestResults;
---#endregion
