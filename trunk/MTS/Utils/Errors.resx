@@ -176,4 +176,7 @@
     <value>File {0} not found</value>
     <comment>Parameters: File name</comment>
   </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
 </root>

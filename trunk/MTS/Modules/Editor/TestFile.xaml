@@ -7,22 +7,19 @@
     xmlns:ed="clr-namespace:MTS.Editor"
     Height="400" Width="400" x:Name="root" Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}">
 
-    <DockPanel LastChildFill="True">
-        <ListBox ItemsSource="{Binding Tests}" DisplayMemberPath="Name" DockPanel.Dock="Left"/>
-        <!-- Main area where all controls for setting testin paramater are placed -->
-        <ScrollViewer>
-            <ListBox ItemsSource="{Binding Tests}"
-                     DockPanel.Dock="Left" x:Name="testList">
+    <ScrollViewer>
+        <DockPanel LastChildFill="True" DataContext="{Binding Tests}">
+            <ListBox DockPanel.Dock="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="False"/>
+            <!-- Main area where all controls for setting testin paramater are placed -->
+            <ListBox ItemsSource="{Binding}" IsHitTestVisible="False"
+                     DockPanel.Dock="Left" x:Name="testList" IsSynchronizedWithCurrentItem="True">
                 <ListBox.Resources>
                     <!-- Styles -->
                     <Style TargetType="{x:Type ListBox}">
                         <Setter Property="BorderThickness" Value="0"/>
                     </Style>
                     <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Margin" Value="3"/>                    
-                    </Style>
-                    <Style TargetType="{x:Type ctrl:UpDownButton}">
-                        <Setter Property="MinWidth" Value="100"/>
+                        <Setter Property="Margin" Value="3"/>
                     </Style>
 
                     <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -45,18 +42,19 @@
                     <DataTemplate DataType="{x:Type ed:IntParam}">
                         <ctrl:UpDownButton Value="{Binding IntValue, Mode=TwoWay}" Decimals="0"
                                            MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
-                                           Unit="{Binding Unit}"/>
+                                           Unit="{Binding Unit}" Width="80"/>
                     </DataTemplate>
                     <!-- UpDownButton for real numeric parameter -->
                     <DataTemplate DataType="{x:Type ed:DoubleParam}">
                         <ctrl:UpDownButton Value="{Binding DoubleValue, Mode=TwoWay}" Decimals="1"
                                            MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
-                                           Unit="{Binding Unit}"/>
+                                           Unit="{Binding Unit}" Width="70"/>
                     </DataTemplate>
                     <!-- ChechBox for bool parameter -->
                     <DataTemplate DataType="{x:Type ed:BoolParam}">
                         <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay}">
-                            <Label Content="{Binding Text}"/>   <!-- BoolParameterMetadata has additional property for chech box description -->
+                            <Label Content="{Binding Text}"/>
+                            <!-- BoolParameterMetadata has additional property for chech box description -->
                         </CheckBox>
                     </DataTemplate>
                     <!-- TextBox for string parameter -->
@@ -69,12 +67,14 @@
                     </DataTemplate>
                     <!-- Add new data templates here if new type of paramter is necessary ... -->
                 </ListBox.Resources>
-                
+
                 <ListBox.ItemContainerStyle>
                     <!-- Style applied to each test (panel with header) -->
                     <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="VerticalAlignment" Value="Top"/>  <!-- in group different test are aligned top -->
-                        <Setter Property="Focusable" Value="False"/>    <!-- disable selection-->
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <!-- in group different test are aligned top -->
+                        <Setter Property="Focusable" Value="False"/>
+                        <!-- disable selection-->
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <!-- Items fo this ListBox are Tests -->
@@ -87,21 +87,25 @@
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListViewItem}">
                                     <Setter Property="VerticalAlignment" Value="Top"/>
-                                    <Setter Property="Focusable" Value="False"/>    <!-- disable selection-->
+                                    <Setter Property="Focusable" Value="False"/>
+                                    <!-- disable selection-->
                                 </Style>
                             </ListView.ItemContainerStyle>
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Name}">  <!-- This Name refers to parameters name -->
-                                        <GridViewColumnHeader>  <!-- In this case data context is entire test -->
-                                            <Label Content="{Binding Name}"/>   <!-- Name of test is dispalyed in header -->
+                                    <GridViewColumn DisplayMemberBinding="{Binding Name}">
+                                        <!-- This Name refers to parameters name -->
+                                        <GridViewColumnHeader>
+                                            <!-- In this case data context is entire test -->
+                                            <Label Content="{Binding Name}"/>
+                                            <!-- Name of test is dispalyed in header -->
                                         </GridViewColumnHeader>
                                     </GridViewColumn>
                                     <GridViewColumn>
                                         <!-- Here no DisplayMemberBinding is used, so this column is binded to entire parameter
                                              value and data templates are applied -->
-                                        <GridViewColumnHeader> 
-                                            <CheckBox IsChecked="{Binding Enabled}" Content="{Binding Text}"/>
+                                        <GridViewColumnHeader>
+                                            <CheckBox IsChecked="{Binding Enabled}" Content="Enabled" /><!--="{Binding Text}"/>-->
                                         </GridViewColumnHeader>
                                     </GridViewColumn>
                                 </GridView>
@@ -109,13 +113,14 @@
                         </ListView>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-                
+
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel VerticalAlignment="Top"/>    <!-- Items in one group are displayed vertically -->
+                        <!-- Items in one group are displayed vertically -->
+                        <WrapPanel VerticalAlignment="Top"/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
-                
+
                 <ListBox.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
@@ -131,7 +136,7 @@
                     </GroupStyle>
                 </ListBox.GroupStyle>
             </ListBox>
-        </ScrollViewer>
-    </DockPanel>
+        </DockPanel>
+    </ScrollViewer>
 
 </ctrl:DocumentItem>

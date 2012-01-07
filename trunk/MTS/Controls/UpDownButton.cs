@@ -39,31 +39,16 @@ namespace MTS.Controls
                 Binding bind = new Binding("Value")
                 {
                     Source = this,
-                    StringFormat = this.StringFormat
+                    StringFormat = this.StringFormat,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged   // this is specially for TextBox
                 };
                 tb.SetBinding(TextBox.TextProperty, bind);
-                // initialize handler that will be executed when value of value text box change
-                tb.TextChanged += new TextChangedEventHandler(tb_TextChanged);
-            }
-        }
-
-        private void tb_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox)
-            {
-                // text of text box has been changed - raise event of value changed
-                OnValueChanged(this, new RoutedEventArgs(ValueChangedEvent));
-                // do this event will an event of TextBox but only inside UpDownButton
-                e.Handled = true;
             }
         }
 
         public string StringFormat
         {
-            get
-            {
-                return "F" + Decimals.ToString();
-            }
+            get { return "F" + Decimals.ToString(); }
         }
 
         #region Dependency Properties
@@ -85,12 +70,26 @@ namespace MTS.Controls
 
         private static void valueChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {   // validate Value property
-            decimal value = (decimal)args.NewValue;
+            decimal newValue = (decimal)args.NewValue;
+            decimal oldValue = (decimal)args.OldValue;
             UpDownButton btn = (obj as UpDownButton);
-            if (value < btn.MinValue)          // if less than min, set to min
-                btn.Value = btn.MinValue;
-            else if (value > btn.MaxValue)     // if more than max, set to max
-                btn.Value = btn.MaxValue;
+            if (btn != null)    // check if value is inside the allowed range
+            {
+                if (newValue < btn.MinValue)          // if less than min, set to min
+                    btn.Value = btn.MinValue;
+                else if (newValue > btn.MaxValue)     // if more than max, set to max
+                    btn.Value = btn.MaxValue;
+
+                // raise value changed event, but only if value has been changed
+                if (newValue != oldValue)
+                {
+                    btn.OnValueChanged(new RoutedEventArgs(ValueChangedEvent, btn));
+                    if (newValue > oldValue)        // value has been incremented
+                        btn.OnIncrement(new RoutedEventArgs(IncrementEvent, btn));
+                    else if (newValue < oldValue)   // value has been decremented
+                        btn.OnDecrement(new RoutedEventArgs(DecrementEvent, btn));
+                }
+            }
         }
 
         #endregion
@@ -129,19 +128,19 @@ namespace MTS.Controls
 
         #endregion
 
-        #region IncrementValue Property
+        #region StepValue Property
 
-        public static readonly DependencyProperty IncrementValueProperty =
-            DependencyProperty.Register("IncrementValue", typeof(decimal), typeof(UpDownButton),
+        public static readonly DependencyProperty StepValueProperty =
+            DependencyProperty.Register("StepValue", typeof(decimal), typeof(UpDownButton),
             new PropertyMetadata(decimal.One));
 
         /// <summary>
-        /// (Get/Set DP) Value by which value property is incremented/decremented when increment/decremnt event raised
+        /// (Get/Set) Value by which value property is incremented/decremented when increment/decremnt event is raised
         /// </summary>
-        public decimal IncrementValue
+        public decimal StepValue
         {
-            get { return (decimal)GetValue(IncrementValueProperty); }
-            set { SetValue(IncrementValueProperty, value); }
+            get { return (decimal)GetValue(StepValueProperty); }
+            set { SetValue(StepValueProperty, value); }
         }
 
         #endregion
@@ -205,17 +204,26 @@ namespace MTS.Controls
 
         #region ValueChanged Event
 
+        /// <summary>
+        /// Event that is raised when <see cref="Value"/> of <see cref="UpDownButton"/> is changed
+        /// </summary>
         public static readonly RoutedEvent ValueChangedEvent =
             EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Direct,
             typeof(RoutedEventHandler), typeof(UpDownButton));
 
+        /// <summary>
+        /// Occures when <see cref="Value"/> of <see cref="UpDownButton"/> change
+        /// </summary>
         public event RoutedEventHandler ValueChanged
         {
             add { AddHandler(ValueChangedEvent, value); }
             remove { RemoveHandler(ValueChangedEvent, value); }
         }
-
-        protected virtual void OnValueChanged(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Raise <see cref="ValueChanged"/> event
+        /// </summary>
+        /// <param name="e">Routed event argument</param>
+        protected virtual void OnValueChanged(RoutedEventArgs e)
         {
             RaiseEvent(e);
         }
@@ -224,28 +232,47 @@ namespace MTS.Controls
 
         #region Increment Event
 
+        /// <summary>
+        /// Event that is raised when <see cref="Value"/> of <see cref="UpDownButton"/> is incremented
+        /// </summary>
         public static readonly RoutedEvent IncrementEvent =
             EventManager.RegisterRoutedEvent("Increment", RoutingStrategy.Direct, 
             typeof(RoutedEventHandler), typeof(UpDownButton));
 
+        /// <summary>
+        /// Occures when <see cref="Value"/> of <see cref="UpDownButton"/> is incremented
+        /// </summary>
         public event RoutedEventHandler Increment
         {
             add { AddHandler(IncrementEvent, value); }
             remove { RemoveHandler(IncrementEvent, value); }
         }
 
-        private void increment(object sender, RoutedEventArgs e)
-        {   // increment the value and raise on increment events
-            Value += IncrementValue;
-            OnIncrement(this, new RoutedEventArgs(IncrementEvent));
-        }
-
-        protected virtual void OnIncrement(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Raise <see cref="Increment"/> event
+        /// </summary>
+        /// <param name="e">Routed event argument</param>
+        protected virtual void OnIncrement(RoutedEventArgs e)
         {
             RaiseEvent(e);
-            OnValueChanged(sender, new RoutedEventArgs(ValueChangedEvent));
         }
 
+        /// <summary>
+        /// Increment <see cref="Value"/> by <see cref="StepValue"/>
+        /// </summary>
+        /// <param name="sender">Down button</param>
+        /// <param name="e">Click routed event args</param>
+        private void increment(object sender, RoutedEventArgs e)
+        {   // increment the value and raise on increment events
+            Value += StepValue;
+        }
+
+        /// <summary>
+        /// Handler for <see cref="IncrementCommand"/>
+        /// </summary>
+        /// <param name="target">Instance of <see cref="UpDownButton"/> on which <see cref="IncrementCommand"/>
+        /// will be executed</param>
+        /// <param name="e">Routed event argument</param>
         static private void handleMoveUpCommand(object target, ExecutedRoutedEventArgs e)
         {
             UpDownButton bt = target as UpDownButton;
@@ -257,30 +284,46 @@ namespace MTS.Controls
 
         #region Decrement Event
 
+        /// <summary>
+        /// Event that is raised when <see cref="Value"/> of <see cref="UpDownButton"/> is decremented
+        /// </summary>
         public static readonly RoutedEvent DecrementEvent =
             EventManager.RegisterRoutedEvent("Decrement", RoutingStrategy.Direct,
             typeof(RoutedEventHandler), typeof(UpDownButton));
 
+        /// <summary>
+        /// Occures when <see cref="Value"/> of <see cref="UpDownButton"/> is decremented.
+        /// </summary>
         public event RoutedEventHandler Decrement
         {
             add { AddHandler(DecrementEvent, value); }
             remove { RemoveHandler(DecrementEvent, value); }
         }
 
-        private void decrement(object sender, RoutedEventArgs e)
-        {   // decrement the value and raise on decrement events
-            Value -= IncrementValue;
-            OnDecrement(this, new RoutedEventArgs(DecrementEvent));
-        }
         /// <summary>
-        /// Called when Value is decremented
+        /// Raise <see cref="Decrement"/> event
         /// </summary>
-        protected virtual void OnDecrement(object sender, RoutedEventArgs e)
+        /// <param name="e">Routed event argument</param>
+        protected virtual void OnDecrement(RoutedEventArgs e)
         {
             RaiseEvent(e);
-            OnValueChanged(sender, new RoutedEventArgs(ValueChangedEvent));
         }
 
+        /// <summary>
+        /// Decrement <see cref="Value"/> by <see cref="StepValue"/>
+        /// </summary>
+        /// <param name="sender">Down button</param>
+        /// <param name="e">Click routed event args</param>
+        private void decrement(object sender, RoutedEventArgs e)
+        {   // decrement the value and raise on decrement events
+            Value -= StepValue;
+        }
+        /// <summary>
+        /// Handler for <see cref="DecrementCommand"/>
+        /// </summary>
+        /// <param name="target">Instance of <see cref="UpDownButton"/> on which <see cref="DecrementCommand"/>
+        /// will be executed</param>
+        /// <param name="e">Routed event argument</param>
         static private void handleMoveDownCommand(object target, ExecutedRoutedEventArgs e)
         {   // handle the call of decrement command
             UpDownButton bt = target as UpDownButton;
@@ -297,7 +340,7 @@ namespace MTS.Controls
         private static RoutedUICommand incrementCommand =
             new RoutedUICommand("Increment", "IncrementCommand", typeof(UpDownButton));
         /// <summary>
-        /// (Get DP) Command is invoked when value should be incremnented
+        /// (Get) Command is invoked when value should be incremnented
         /// </summary>
         public static RoutedUICommand IncrementCommand
         {
@@ -307,7 +350,7 @@ namespace MTS.Controls
         private static RoutedUICommand decrementCommand =
             new RoutedUICommand("Decrement", "DecrementCommand", typeof(UpDownButton));
         /// <summary>
-        /// (Get DP) Command is invoked when value should be decremented
+        /// (Get) Command is invoked when value should be decremented
         /// </summary>
         public static RoutedUICommand DecrementCommand
         {

@@ -7,7 +7,7 @@
         <Style x:Key="commonWindow" TargetType="{x:Type Window}">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
             <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
-            <Setter Property="ResizeMode" Value="CanResizeWithGrip"/>
+            <Setter Property="ResizeMode" Value="CanResize"/>
             <Setter Property="ShowInTaskbar" Value="False"/>
         </Style>
     </Application.Resources>
