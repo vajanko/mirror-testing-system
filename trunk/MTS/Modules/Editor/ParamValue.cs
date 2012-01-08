@@ -111,6 +111,10 @@ namespace MTS.Editor
         /// (Get/Set) Unit of this parameter value
         /// </summary>
         public Unit Unit { get; set; }
+        /// <summary>
+        /// (Get/Set) Number of allowes decimals for this parameter value
+        /// </summary>
+        public int Decimals { get; set; }
 
         public override void ValueFromString(string value)
         {

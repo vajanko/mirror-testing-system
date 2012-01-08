@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using System.Windows;
@@ -51,6 +53,10 @@ namespace MTS.Editor
         /// Attribute that holds value of unit of parameter value
         /// </summary>
         private static readonly XName TypeAttr = "type";
+        /// <summary>
+        /// Attribute that holds number of allowed decimals of parameter value
+        /// </summary>
+        private static readonly XName DecimalasAtrr = "decimals";
 
         /// <summary>
         /// Element that holds value of test or parameter name. This is short description of test or
@@ -143,11 +149,47 @@ namespace MTS.Editor
         /// </summary>
         private static int lastNewFileIndex = 0;
 
+        public static readonly XElement TemplateRoot;
+
         #endregion
 
         #region Methods
 
         #region Xml Format
+
+        public static string GetTestName(string testId)
+        {
+            string name = null;
+            if (TemplateRoot != null)
+            {
+                XElement test = TemplateRoot.Elements(TestElem)
+                    .Where(t => t.Attribute(IdAttr) != null && t.Attribute(IdAttr).Value == testId)
+                    .FirstOrDefault();
+                if (test.Element(NameElem) != null)
+                    name = test.Element(NameElem).Value;
+            }
+
+            return name;
+        }
+        public static string GetParamName(string testId, string paramId)
+        {
+            string name = null;
+            if (TemplateRoot != null)
+            {
+                XElement test = TemplateRoot.Elements(TestElem)
+                    .FirstOrDefault(t => t.Attribute(IdAttr) != null && t.Attribute(IdAttr).Value == testId);
+                if (test != null)
+                {
+                    XElement param = test.Elements(ParamElem)
+                        .FirstOrDefault(p => p.Attribute(IdAttr) != null && p.Attribute(IdAttr).Value == paramId);
+                    if (param.Element(NameElem) != null)
+                        name = param.Element(NameElem).Value;
+                }
+            }
+
+            return name;
+        }
+
 
         /// <summary>
         /// Create a new instance of <paramref name="TestValue"/> from xml description (this contains
@@ -190,17 +232,13 @@ namespace MTS.Editor
         /// <exception cref="System.FormatException">Format of input file is not recognized</exception>
         private static ParamValue getParamInstance(XElement tmplParam)
         {
-            // even if user may add values in his/her culture, template of testing parameters
-            // files are writen in english (US) culture
-            // save current culture
-            System.Globalization.CultureInfo currentCulture = 
-                System.Threading.Thread.CurrentThread.CurrentCulture;
-            // use american culture to parse double values
-            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            // use invariant culture to parse double values
+            CultureInfo iCulture = CultureInfo.InvariantCulture;
 
             ParamValue param;
+            XElement typeElem = tmplParam.Element(TypeElem);
             // name of parameter type (int, string, double, enum, ...)
-            string type = tmplParam.Element(TypeElem).Value;
+            string type = typeElem.Value;
             // unique identifier of parameter inside a test, there can be parameter with same id but in a
             // different test
             string id = tmplParam.Attribute(IdAttr).Value;
@@ -212,22 +250,29 @@ namespace MTS.Editor
                     param = new IntParam(id)
                     {
                         // minimal allowed value of this numeric parameter
-                        MinValue = int.Parse(tmplParam.Element(MinElem).Value),
+                        MinValue = int.Parse(tmplParam.Element(MinElem).Value, iCulture),
                         // maximal allowed value of this numeric parameter
-                        MaxValue = int.Parse(tmplParam.Element(MaxElem).Value),
+                        MaxValue = int.Parse(tmplParam.Element(MaxElem).Value, iCulture),
                         // description of unit of this numeric parameter
                         Unit = Units.UnitFromString(tmplParam.Element(UnitElem).Attribute(TypeAttr).Value)
                     };
                     break;
                 case doubleType:
+                    // get decimals attribute from type element - if it exists save number of allowed decimals
+                    XAttribute dec = typeElem.Attribute(DecimalasAtrr);
+                    int decimals = 1;
+                    if (dec != null)
+                        decimals = int.Parse(dec.Value, iCulture);
                     param = new DoubleParam(id)
                     {
                         // minimal allowed value of this numeric parameter
-                        MinValue = double.Parse(tmplParam.Element(MinElem).Value),
+                        MinValue = double.Parse(tmplParam.Element(MinElem).Value, iCulture),
                         // maximal allowed value of this numeric parameter
-                        MaxValue = double.Parse(tmplParam.Element(MaxElem).Value),
+                        MaxValue = double.Parse(tmplParam.Element(MaxElem).Value, iCulture),
                         // description of unit of this numeric parameter
-                        Unit = Units.UnitFromString(tmplParam.Element(UnitElem).Attribute(TypeAttr).Value)
+                        Unit = Units.UnitFromString(tmplParam.Element(UnitElem).Attribute(TypeAttr).Value),
+                        // number of allowed decimals of this numeric parameter
+                        Decimals = decimals
                     };
                     break;
                 case boolType:
@@ -255,9 +300,6 @@ namespace MTS.Editor
             param.Description = tmplParam.Element(DescriptionElem).Value;
             // parse default param value from string
             param.ValueFromString(tmplParam.Element(ValueElem).Value);
-
-            // resotre previous culture
-            System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture;
 
             return param;
         }
@@ -354,9 +396,11 @@ namespace MTS.Editor
                 }
             }
             catch (Exception ex)
-            {   // file could not be dederialized - it is an unkown format
-                // this hides the impementation details (that file is serialized), noone knows about the serializetion
+            {   // file could not be readed - it is an unkown format
+                // this hides the impementation details (that file is serialized or xml), noone knows about the format
                 // except of the FileManager
+                if (ex is IOException)  // if it is IOException (file protection etc.) leave exception as it is, other wise
+                    throw ex;           // generate exception telling that file format is corrupted
                 throw new FileLoadException("File may be corrupted or is in incorrect format", 
                     Path.GetFileName(path), ex);
             }
@@ -540,5 +584,16 @@ namespace MTS.Editor
         #endregion
 
         #endregion
+
+        static FileManager()
+        {
+            try
+            {
+                TemplateRoot = XElement.Load(Settings.Default.GetTemplatePath());
+            }
+            catch (Exception ex)
+            {
+            }
+        }
     }
 }

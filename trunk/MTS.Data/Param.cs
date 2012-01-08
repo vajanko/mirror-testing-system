@@ -24,6 +24,7 @@ namespace MTS.Data
         public string Name { get; set; }
         public string Value { get; set; }
         public byte Type { get; set; }
+        public string Unit { get; set; }
     
         public virtual ICollection<ParamOutput> ParamOutputs { get; set; }
         public virtual ICollection<TestParam> TestParams { get; set; }

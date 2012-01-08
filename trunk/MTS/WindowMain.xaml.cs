@@ -66,6 +66,7 @@ namespace MTS
             // now all document items are closed - operator will be loged out
             Output.WriteLine("Logout {0}", Admin.Operator.Instance.Login);
             Admin.Operator.LogOut();
+            IsLoggedIn = false;
         }
 
         #endregion
@@ -73,7 +74,7 @@ namespace MTS
         #region Window Events
 
         /// <summary>
-        /// This method is called once when window is loaded.
+        /// This method is called once when window is loaded. Login dialog is displayed to used imediatelly.
         /// </summary>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {   // open login windows for user, so he or she should not manualy click this menu item at startup
@@ -345,6 +346,20 @@ namespace MTS
 
         #endregion
 
+        #region IsLoggedIn Property
+
+        public static readonly DependencyProperty IsLoggedInProperty =
+            DependencyProperty.Register("IsLoggedIn", typeof(bool), typeof(WindowMain),
+            new PropertyMetadata(false));
+
+        public bool IsLoggedIn
+        {
+            get { return (bool)GetValue(IsLoggedInProperty); }
+            set { SetValue(IsLoggedInProperty, value); }
+        }
+
+        #endregion
+
         /// <summary>
         /// Open login window (this will block the application) and ask user for login and password.
         /// This window will be opened until user is loged in successfully or it is manually closed by user
@@ -352,19 +367,27 @@ namespace MTS
         private void login()
         {
             Admin.Operator.TryLogin("admin", "admin");
-            return;
-            LoginWindow loginWindow = new LoginWindow(this, false);
-            loginWindow.ShowDialog();   // show window for first time
+            
+            //LoginWindow loginWindow = new LoginWindow(this, false);
+            //loginWindow.ShowDialog();   // show window for first time
 
-            // if result is null this loop will end without logging in
-            while (loginWindow.Result == LoginResult.Fail)
-            {
-                loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
-                loginWindow.ShowDialog();
-            }
+            //// if result is null this loop will end without logging in
+            //while (loginWindow.Result == LoginResult.Fail)
+            //{
+            //    loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
+            //    loginWindow.ShowDialog();
+            //}
 
             if (Admin.Operator.IsLogedIn())
+            {
                 Output.WriteLine("Login {0}", Admin.Operator.Instance.Login);
+                IsLoggedIn = true;
+            }
+        }
+
+        private void profile_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

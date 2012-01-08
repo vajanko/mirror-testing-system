@@ -199,7 +199,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Converters\IdToTitleConverter.cs" />
+    <Compile Include="Controls\Converters\ParamIdToNameConverter.cs" />
     <Compile Include="Controls\Converters\TaskResultCodeConverter.cs" />
+    <Compile Include="Controls\Converters\TestIdToNameConverter.cs" />
     <Compile Include="Controls\DocumentTab.cs" />
     <Compile Include="Controls\IPAddressControl.xaml.cs">
       <DependentUpon>IPAddressControl.xaml</DependentUpon>
@@ -217,6 +219,8 @@
       <DependentUpon>EditOperatorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Data\OperatorSource.cs" />
+    <Compile Include="Controls\Converters\ParamValueConverter.cs" />
+    <Compile Include="Modules\Data\ResultStyleSelector.cs" />
     <Compile Include="Modules\Tester\Result\ParamResult.cs" />
     <Compile Include="Modules\Tester\Result\ResultBase.cs" />
     <Compile Include="Modules\Tester\Result\TaskExecutedEventArgs.cs" />
@@ -489,6 +493,9 @@
   <ItemGroup>
     <Resource Include="Resources\icons\redo.png" />
     <Resource Include="Resources\icons\undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\profile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

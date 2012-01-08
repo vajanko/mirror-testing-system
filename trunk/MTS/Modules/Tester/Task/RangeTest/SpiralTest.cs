@@ -74,7 +74,9 @@ namespace MTS.Tester
         {
             // from test parameters get TestingTime item
             testingTime = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
-            // convert testig time to miliampheres
+            if (testingTime == null)
+                throw new ParamNotFoundException(TestValue.TestingTime);
+            // convert testing time to miliampheres
             maxTime = testingTime.Unit.ConvertTo(Units.Miliseconds, testingTime.DoubleValue);
         }
 

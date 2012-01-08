@@ -21,9 +21,14 @@ namespace MTS.Tester
         /// Maximal value of current that has been measured during this task
         /// </summary>
         protected double maxMeasuredCurrent;
-
-        protected IntParam minCurrent;
-        protected IntParam maxCurrent;
+        /// <summary>
+        /// Mininal allowed current for this test
+        /// </summary>
+        protected DoubleParam minCurrent;
+        /// <summary>
+        /// Maximal allowed current for this test
+        /// </summary>
+        protected DoubleParam maxCurrent;
 
         #endregion
 
@@ -32,11 +37,11 @@ namespace MTS.Tester
         /// <summary>
         /// (Get) Mininal allowed current for this test
         /// </summary>
-        protected int MinCurrent { get { return minCurrent.IntValue; } }
+        protected double MinCurrent { get { return minCurrent.DoubleValue; } }
         /// <summary>
         /// (Get) Maximal allowed current for this test
         /// </summary>
-        protected int MaxCurrent { get { return maxCurrent.IntValue; } }
+        protected double MaxCurrent { get { return maxCurrent.DoubleValue; } }
 
         #endregion
 
@@ -52,7 +57,7 @@ namespace MTS.Tester
             // save max a min measured values of current
             if (measuredCurrent > maxMeasuredCurrent)
                 maxMeasuredCurrent = measuredCurrent;
-            else if (measuredCurrent < minMeasuredCurrent)
+            if (measuredCurrent < minMeasuredCurrent)
                 minMeasuredCurrent = measuredCurrent;
         }
         /// <summary>
@@ -84,9 +89,13 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MinCurrent parameter
-            minCurrent = testParam.GetParam<IntParam>(TestValue.MinCurrent);
+            minCurrent = testParam.GetParam<DoubleParam>(TestValue.MinCurrent);
+            if (minCurrent == null)
+                throw new ParamNotFoundException(TestValue.MinCurrent);
             // from test parameters get MaxCurrent parameter
-            maxCurrent = testParam.GetParam<IntParam>(TestValue.MaxCurrent);
+            maxCurrent = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
+            if (maxCurrent == null)
+                throw new ParamNotFoundException(TestValue.MaxCurrent);
         }
 
         #endregion

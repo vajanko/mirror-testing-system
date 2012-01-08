@@ -38,6 +38,9 @@
 
 <!ATTLIST unit type (none|miliseconds|seconds|miliampheres|degrees|volts|milimeters) "none">
 
+<!ATTLIST type decimals CDATA "0"
+               step CDATA "1">
+
 
 
 

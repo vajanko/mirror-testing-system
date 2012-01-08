@@ -341,11 +341,15 @@ namespace MTS.Tester
                 {
                     // 2.2.1) save used parameter to database
                     string strValue = param.ValueToString();
+                    string unit = null;
+                    if (param is DoubleParam) unit = (param as DoubleParam).Unit.Name;
+                    else if (param is IntParam) unit = (param as IntParam).Unit.Name;
+
                     Param dbParam = context.Params.FirstOrDefault(p => p.Name == param.ValueId && p.Value == strValue);
                     if (dbParam == null)
                     {   // if it does not exists create a new one
                         byte valueType = (byte)param.ValueType();
-                        dbParam = context.Params.Add(new Param { Name = param.ValueId, Type = valueType, Value = strValue });
+                        dbParam = context.Params.Add(new Param { Name = param.ValueId, Type = valueType, Value = strValue, Unit = unit });
                         context.SaveChanges();
                     }
 

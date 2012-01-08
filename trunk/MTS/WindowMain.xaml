@@ -34,6 +34,7 @@
                 <Style TargetType="{x:Type MenuItem}">
                     <Setter Property="Header" Value="{Binding Command.Text, RelativeSource={RelativeSource self}}"/>
                 </Style>
+                <ctrl:BoolNegationConverter x:Key="boolNegationConverter"/>
             </Menu.Resources>
             <MenuItem Header="_File">
                 <!-- File Commands for Editor -->
@@ -121,14 +122,19 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Option">
-                <MenuItem Header="Log in" Click="login_Click">
+                <MenuItem Header="Log in" Click="login_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow, Converter={StaticResource boolNegationConverter}}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/login.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Log out" Click="logout_Click">
+                <MenuItem Header="Log out" Click="logout_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/logout.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Profile ..." Click="profile_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
+                    <MenuItem.Icon>
+                        <Image Source="/MTS;component/Resources/icons/profile.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

@@ -11,7 +11,7 @@
         <DockPanel LastChildFill="True" DataContext="{Binding Tests}">
             <ListBox DockPanel.Dock="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="False"/>
             <!-- Main area where all controls for setting testin paramater are placed -->
-            <ListBox ItemsSource="{Binding}" IsHitTestVisible="False"
+            <ListBox ItemsSource="{Binding}"
                      DockPanel.Dock="Left" x:Name="testList" IsSynchronizedWithCurrentItem="True">
                 <ListBox.Resources>
                     <!-- Styles -->
@@ -46,7 +46,7 @@
                     </DataTemplate>
                     <!-- UpDownButton for real numeric parameter -->
                     <DataTemplate DataType="{x:Type ed:DoubleParam}">
-                        <ctrl:UpDownButton Value="{Binding DoubleValue, Mode=TwoWay}" Decimals="1"
+                        <ctrl:UpDownButton Value="{Binding DoubleValue, Mode=TwoWay}" Decimals="{Binding Decimals}"
                                            MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
                                            Unit="{Binding Unit}" Width="70"/>
                     </DataTemplate>
@@ -138,5 +138,4 @@
             </ListBox>
         </DockPanel>
     </ScrollViewer>
-
 </ctrl:DocumentItem>
