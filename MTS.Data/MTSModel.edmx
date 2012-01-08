@@ -103,6 +103,7 @@
           <Property Name="Name" Type="varchar" Nullable="false" MaxLength="25" />
           <Property Name="Value" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="Type" Type="tinyint" Nullable="false" />
+          <Property Name="Unit" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="ParamOutput">
           <Key>
@@ -148,11 +149,11 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Result" Type="tinyint" Nullable="false" />
+          <Property Name="Sequence" Type="smallint" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="Finish" Type="datetime" Nullable="false" />
           <Property Name="TestId" Type="int" Nullable="false" />
           <Property Name="ShiftId" Type="int" Nullable="false" />
-          <Property Name="Sequence" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="TestParam">
           <Key>
@@ -458,6 +459,7 @@
           <NavigationProperty Name="ParamOutputs" Relationship="MTS.Data.fk_paramOutput_paramId" FromRole="Param" ToRole="ParamOutput" />
           <Property Type="Byte" Name="Type" Nullable="false" />
           <NavigationProperty Name="TestParams" Relationship="MTS.Data.fk_testParam_paramId" FromRole="Param" ToRole="TestParam" />
+          <Property Type="String" Name="Unit" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ParamOutput">
           <Key>
@@ -674,6 +676,8 @@
           <Property Type="String" Name="Value" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="OutputValue" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Byte" Name="ValueType" Nullable="false" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="2" />
         </ComplexType>
         <ComplexType Name="DbTestResult">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -720,6 +724,7 @@
           <EntitySetMapping Name="Params">
             <EntityTypeMapping TypeName="MTS.Data.Param">
               <MappingFragment StoreEntitySet="Param">
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -819,6 +824,8 @@
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="OutputValue" ColumnName="OutputValue" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ValueType" ColumnName="ValueType" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

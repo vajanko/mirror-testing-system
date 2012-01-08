@@ -13,7 +13,7 @@ namespace MTS.Tester
         /// <summary>
         /// Maximal duration allowed for this test
         /// </summary>
-        private int maxTestingTime;
+        private readonly DoubleParam maxTestingTime;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace MTS.Tester
             // will not be finished
 
             // measure time - end if enought time has elapsed
-            if (Duration.TotalMilliseconds > maxTestingTime)
+            if (Duration.TotalMilliseconds > maxTestingTime.DoubleValue)
                 exState = ExState.Aborting;
 
             switch (exState)
@@ -63,9 +63,9 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MAX_TESTING_TIME item
-            IntParam iValue = testParam.GetParam<IntParam>(TestValue.MaxTestingTime);
-            if (iValue != null)     // it must be of type int
-                maxTestingTime = iValue.IntValue;
+            maxTestingTime = testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
+            if (maxTestingTime == null)
+                throw new ParamNotFoundException(TestValue.MaxTestingTime);
         }
 
         #endregion

@@ -8,7 +8,7 @@ using MTS.Data.Types;
 namespace MTS.Data.Converters
 {
     /// <summary>
-    /// Converter that convert parameter string representation to its strongly typed instance
+    /// Converter that converts parameter string representation to its strongly typed instance
     /// f.e.: "123.456" converts to 123.456 as double. Also conversion to string is supported
     /// </summary>
     public class ParamTypeConverter
@@ -22,16 +22,26 @@ namespace MTS.Data.Converters
                 default: return value.ToString();
             }
         }
-        public object ConvertFromString(ParamType type, string value)
+        public object ConvertFromString(ParamType type, string value, CultureInfo cultureInfo)
         {
             switch (type)
             {
-                case ParamType.Int: return int.Parse(value, CultureInfo.InvariantCulture);
-                case ParamType.Double: return double.Parse(value, CultureInfo.InvariantCulture);
+                case ParamType.Int: return int.Parse(value, cultureInfo);
+                case ParamType.Double: return double.Parse(value, cultureInfo);
                 case ParamType.Bool: return bool.Parse(value);
                 case ParamType.String: return value;
                 default: return null;
             }
+        }
+        /// <summary>
+        /// Convert given value using invariant culture (see <see cref="CultureInfo.InvariantCulture"/>
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public object ConvertFromString(ParamType type, string value)
+        {
+            return ConvertFromString(type, value, CultureInfo.InvariantCulture);
         }
     }
 }

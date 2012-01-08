@@ -20,6 +20,7 @@ using System.Data.Entity.Infrastructure;
 using AvalonDock;
 
 using MTS.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace MTS.Data
 {
@@ -31,18 +32,29 @@ namespace MTS.Data
         /// <summary>
         /// Database context for this window (Entity Framework)
         /// </summary>
-        private MTSContext context;
+        private MTSContext context = new MTSContext();
 
         #region Events
 
         /// <summary>
-        /// This method is called when data window is loaded first time
+        /// This method is called when data window is loaded first time. Data from database are loaded to the window
         /// </summary>
         private void root_Loaded(object sender, RoutedEventArgs e)
-        {   // create databse connection
-            context = new MTSContext();
-            // load shift result data
+        {   // load shift result data
             shiftResultDataGrid.DataContext = context.ShiftResults.ToList();
+        }
+        /// <summary>
+        /// This method is called when data document item is activated or deactivated. When activated data
+        /// content is reloaded from database.
+        /// </summary>
+        /// <param name="sender">Data document content</param>
+        private void root_IsActiveDocumentChanged(object sender, EventArgs e)
+        {
+            DocumentContent doc = sender as DocumentContent;
+            if (doc != null && doc.IsActiveDocument)        // document has been activated - reload data
+            {   // load shift result data
+                shiftResultDataGrid.DataContext = context.ShiftResults.ToList();
+            }
         }
         /// <summary>
         /// This method is called when row in shift grid is selected
@@ -53,14 +65,23 @@ namespace MTS.Data
             {   // get selected shift data
                 ShiftResult res = shiftResultDataGrid.SelectedValue as ShiftResult;
                 if (res != null)
-                {   // load test results for selected shift
-                    var testResults = new ObservableCollection<DbTestResult>(context.GetTestResult(res.Id).ToList());
-                    var testResultsView = CollectionViewSource.GetDefaultView(testResults);
+                {   // load test results for selected shift and group them by sequence
+                    var testResultsView = CollectionViewSource.GetDefaultView(context.GetTestResult(res.Id).ToList());
                     testResultsView.GroupDescriptions.Add(new PropertyGroupDescription("Sequence"));
                     testResultDataGrid.ItemsSource = testResultsView;
-                    DataGridTextColumn tc;
+                    // select first item in test results
+                    if (testResultDataGrid.Items.Count > 0)
+                        testResultDataGrid.SelectedIndex = 0;
                 }
             }
+        }
+        /// <summary>
+        /// This method is called when row of shift result grid is loaded. At this time index of row is generated and added
+        /// as row header
+        /// </summary>
+        private void shiftResultDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {   // in xaml binding to header of row
+            e.Row.Header = e.Row.GetIndex() + 1;
         }
         /// <summary>
         /// This method is called when row in test grid is selected

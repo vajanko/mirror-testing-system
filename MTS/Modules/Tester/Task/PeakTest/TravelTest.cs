@@ -11,9 +11,7 @@ namespace MTS.Tester
     {
         #region Fields
 
-        //private double minAngle;
         private double angleAchieved;
-        //private int maxTestingTime;
         private DoubleParam minAngle;
         private DoubleParam maxTestingTime;
 

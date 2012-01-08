@@ -18,6 +18,8 @@ namespace MTS.Data
         public string Value { get; set; }
         public string OutputValue { get; set; }
         public int Id { get; set; }
+        public byte ValueType { get; set; }
+        public string Unit { get; set; }
     }
     
 }

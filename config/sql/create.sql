@@ -105,6 +105,8 @@ CREATE TABLE Param (
 	Value VARCHAR(50) NOT NULL,
 	-- type of value data (int, string, bool, ...)
 	Type TINYINT DEFAULT(0) NOT NULL,
+	-- unit of numeric parameter (some parameters are witout unit)
+	Unit VARCHAR(2),
 	
 	-- primary key Id
 	CONSTRAINT pk_param_id PRIMARY KEY (Id),
@@ -240,14 +242,17 @@ GO
 CREATE PROCEDURE udpParamResults(@testId INT)
 AS
 BEGIN
-	SELECT Param.Id, Param.Name, Param.Value, ParamOutput.Value AS OutputValue 
+	SELECT Param.Id, Param.Name, Param.Value, Param.Type AS ValueType, Param.Unit,
+		ParamOutput.Value AS OutputValue
 		FROM TestOutput 
 		JOIN ParamOutput ON (TestOutput.Id = ParamOutput.TestOutputId)
 		JOIN Param ON (ParamOutput.ParamId = Param.Id)
 		WHERE TestOutput.Id = @testId;
 END
 GO
-EXEC udpParamResults 27;
+EXEC udpParamResults 28;
+select * from param;
+select * from paramOutput;
 --#endregion
 
 --#region CREATE PROCEDURE udpTestResults
@@ -270,31 +275,31 @@ GO
 --#endregion
 
 --#region CREATE PROCEDURE udpDeleteShift
-IF OBJECT_ID('udpDeleteShift') IS NOT NULL
-	DROP PROCEDURE udpDeleteShift;
-GO
-CREATE PROCEDURE udpDeleteShift(@shiftId INT)
-AS
-BEGIN
-	DELETE FROM ParamOutput
-	WHERE ParamOutput.Id 
-	DELETE FROM Operator WHERE Id = @operatorId;
-END
-GO
+--IF OBJECT_ID('udpDeleteShift') IS NOT NULL
+--	DROP PROCEDURE udpDeleteShift;
+--GO
+--CREATE PROCEDURE udpDeleteShift(@shiftId INT)
+--AS
+--BEGIN
+--	DELETE FROM ParamOutput
+--	WHERE ParamOutput.Id 
+--	DELETE FROM Operator WHERE Id = @operatorId;
+--END
+--GO
 --#endregion
 
 --#region CREATE PROCEDURE udpDeleteOperator
-IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
-	DROP PROCEDURE udpDeleteOperator;
-GO
-CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
-AS
-BEGIN
-	DELETE FROM ParamOutput
-	WHERE ParamOutput.Id 
-	DELETE FROM Operator WHERE Id = @operatorId;
-END
-GO
+--IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
+--	DROP PROCEDURE udpDeleteOperator;
+--GO
+--CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
+--AS
+--BEGIN
+--	DELETE FROM ParamOutput
+--	WHERE ParamOutput.Id 
+--	DELETE FROM Operator WHERE Id = @operatorId;
+--END
+--GO
 --#endregion
 
 -- CREATE VIEWS

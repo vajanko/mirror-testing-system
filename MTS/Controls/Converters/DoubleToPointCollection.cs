@@ -10,7 +10,7 @@ namespace MTS.Controls
         #region IValueConverter Members
 
         /// <summary>
-        /// Universal method, bet it is only used for converting DoubleQueue to PointCollection
+        /// Universal method, but it is only used for converting DoubleQueue to PointCollection
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

@@ -15,8 +15,8 @@ namespace MTS.Tester
         protected bool isOverloaded = false;
         protected DateTime overloaded;
 
-        IntParam maxCurrent;
-        IntParam maxOverloadTime;
+        DoubleParam maxCurrent;
+        DoubleParam maxOverloadTime;
 
         #endregion
 
@@ -82,11 +82,11 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MaxCurrent item and throw exception if it is not found
-            maxCurrent = testParam.GetParam<IntParam>(TestValue.MaxCurrent);
+            maxCurrent = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
             if (maxCurrent == null)
                 throw new ParamNotFoundException(TestValue.MaxCurrent);
             // from test parameters get MaxOverloadTime item and throw exception if it is not found
-            maxOverloadTime = testParam.GetParam<IntParam>(TestValue.MaxOverloadTime);
+            maxOverloadTime = testParam.GetParam<DoubleParam>(TestValue.MaxOverloadTime);
             if (maxOverloadTime == null)
                 throw new ParamNotFoundException(TestValue.MaxOverloadTime);
         }
