@@ -68,7 +68,7 @@
 
         <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" ResizeDirection="Rows"  Height="5" HorizontalAlignment="Stretch" />
 
-        <DataGrid Grid.Column="0" Grid.Row="2" Name="testResultDataGrid" SelectionChanged="testResultDataGrid_SelectionChanged">
+        <DataGrid Grid.Column="0" Grid.Row="2" x:Name="testResultDataGrid" SelectionChanged="testResultDataGrid_SelectionChanged" Tag="hello">
             <DataGrid.RowStyleSelector>
                 <dt:ResultStyleSelector>
                     <dt:ResultStyleSelector.FailedStyle>
@@ -84,7 +84,7 @@
                 </dt:ResultStyleSelector>
             </DataGrid.RowStyleSelector>
             <DataGrid.Resources>
-                <ctrl:TaskResultCodeConverter x:Key="resultConverter"/>
+                <ctrl:TaskResultTypeConverter x:Key="resultConverter"/>
                 <ctrl:TestIdToNameConverter x:Key="testNameConverter"/>
             </DataGrid.Resources>
             <DataGrid.GroupStyle>
@@ -138,7 +138,7 @@
 
         <GridSplitter Grid.Column="1" Grid.Row="2" ResizeDirection="Columns" Width="5" HorizontalAlignment="Stretch" />
 
-        <DataGrid Grid.Column="2" Grid.Row="2" ItemsSource="{Binding}" Name="paramResultDataGrid">
+        <DataGrid Grid.Column="2" Grid.Row="2" ItemsSource="{Binding}" x:Name="paramResultDataGrid">
             <DataGrid.Resources>
                 <ctrl:ParamValueConverter x:Key="paramValueConverter"/>
                 <ctrl:ParamIdToNameConverter x:Key="paramNameConverter"/>
@@ -148,7 +148,7 @@
                     <DataGridTextColumn.Binding>
                         <MultiBinding Converter="{StaticResource paramNameConverter}">
                             <MultiBinding.Bindings>
-                                <Binding ElementName="testResultDataGrid" Path="SelectedValue.Name"/>
+                                <Binding Path="TestName"/>
                                 <Binding Path="Name"/>
                             </MultiBinding.Bindings>
                         </MultiBinding>

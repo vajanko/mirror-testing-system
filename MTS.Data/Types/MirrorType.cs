@@ -48,9 +48,6 @@ namespace MTS.Data.Types
             this.Name = name;
             this.Description = description;
         }
-        public MirrorType()
-        {
-        }
 
         #endregion
     }

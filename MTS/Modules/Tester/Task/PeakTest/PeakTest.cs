@@ -4,6 +4,7 @@ using MTS.IO;
 using MTS.Editor;
 using MTS.Tester;
 using MTS.Tester.Result;
+using MTS.Data.Types;
 
 namespace MTS.Tester
 {
@@ -31,14 +32,14 @@ namespace MTS.Tester
         /// Generate the result (final state) of this test after it has been finished
         /// </summary>
         /// <returns></returns>
-        protected TaskResultCode getTaskState()
+        protected TaskResultType getTaskState()
         {
             if (exState == ExState.Aborting)
-                return TaskResultCode.Aborted;
+                return TaskResultType.Aborted;
             else if (maxMeasuredOverloadTime > MaxOverloadTime)
-                return TaskResultCode.Failed;    // current was overloaded for a certain period of time
-            else 
-                return TaskResultCode.Completed;
+                return TaskResultType.Failed;    // current was overloaded for a certain period of time
+            else
+                return TaskResultType.Completed;
         }
         /// <summary>
         /// Measure current on a particular channel. It is checked if current is not overloaded

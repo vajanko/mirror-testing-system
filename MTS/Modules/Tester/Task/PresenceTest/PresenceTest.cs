@@ -2,7 +2,7 @@
 
 using MTS.IO;
 using MTS.Editor;
-using MTS.Tester.Result;
+using MTS.Data.Types;
 
 namespace MTS.Tester
 {
@@ -24,9 +24,9 @@ namespace MTS.Tester
         public override void Update(DateTime time)
         {
             if (PresenceChannel.Value == shouldBePresent)
-                resultCode = TaskResultCode.Completed;
+                resultCode = TaskResultType.Completed;
             else
-                resultCode = TaskResultCode.Failed;
+                resultCode = TaskResultType.Failed;
 
             Finish(time);
         }

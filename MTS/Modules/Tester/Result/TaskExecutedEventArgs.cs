@@ -1,4 +1,5 @@
 ﻿using System;
+using MTS.Data.Types;
 
 namespace MTS.Tester.Result
 {
@@ -6,7 +7,7 @@ namespace MTS.Tester.Result
     {
         public TaskResult Result { get; protected set; }
 
-        public TaskResultCode ResultCode { get { return Result.ResultCode; } }
+        public TaskResultType ResultCode { get { return Result.ResultCode; } }
 
         public TaskExecutedEventArgs(TaskResult result)
         {

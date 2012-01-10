@@ -1,9 +1,9 @@
-﻿namespace MTS.Tester.Result
+﻿namespace MTS.Data.Types
 {
     /// <summary>
     /// Describes state of any task after its execution
     /// </summary>
-    public enum TaskResultCode
+    public enum TaskResultType : byte
     {
         /// <summary>
         /// Task has been executed and completed correctly. Integer value is 0

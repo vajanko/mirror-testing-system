@@ -6,6 +6,7 @@ using System.Text;
 using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
+using MTS.Data.Types;
 
 namespace MTS.Tester
 {
@@ -404,24 +405,24 @@ namespace MTS.Tester
 
         #endregion
 
-        public TaskResultCode GetResultCode()
+        public TaskResultType GetResultCode()
         {
             // check if scheduler has been aborted by some external force
             if (IsAborting)
-                return TaskResultCode.Aborted;
+                return TaskResultType.Aborted;
 
             // check if there is some failed task - then result is Failed
             foreach (TaskResult result in results)
-                if (result.ResultCode == TaskResultCode.Failed)
-                    return TaskResultCode.Failed;
+                if (result.ResultCode == TaskResultType.Failed)
+                    return TaskResultType.Failed;
             // otherwise everythig finished correctly
-            return TaskResultCode.Completed;
+            return TaskResultType.Completed;
         }
         public bool AreAllPassed()
         {
             bool ret = true;
             foreach (TaskResult result in results)
-                if (result != null && result.ResultCode == TaskResultCode.Completed)
+                if (result != null && result.ResultCode == TaskResultType.Completed)
                     ret = false;
             return ret;
         }

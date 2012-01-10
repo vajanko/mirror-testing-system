@@ -9,7 +9,7 @@ namespace MTS.Data.Types
     /// Possbile values of operator types. Notice this definition of operator types is strongly
     /// connected with this application and is independen of the database.
     /// </summary>
-    public enum OperatorType
+    public enum OperatorType : byte
     {
         /// <summary>
         /// Operator - administrator of the application

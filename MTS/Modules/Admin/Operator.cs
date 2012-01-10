@@ -9,13 +9,11 @@ using MTS.Data.Types;
 namespace MTS.Admin
 {
     /// <summary>
-    /// Singelton
+    /// Singelton: Provide access to logged in operator and allow operations such as log in and log out
     /// </summary>
     public class Operator
     {
-
         private static Operator instance = null;
-
         /// <summary>
         /// Singelton instance of operator
         /// </summary>
@@ -79,17 +77,30 @@ namespace MTS.Admin
 
             return result;
         }
+        /// <summary>
+        /// Logout operator. Singelton instance will be deleted. At the time of calling this method all tabs must be
+        /// closed.
+        /// </summary>
         public static void LogOut()
         {
             instance = null;
         }
-        public static bool IsLogedIn()
+        /// <summary>
+        /// Get value indicating whether some operator is logged in
+        /// </summary>
+        /// <returns>True if operator is logged in (<see cref="Operator.Instance"/> is not null)</returns>
+        public static bool IsLoggedIn()
         {
             return instance != null;
         }
+        /// <summary>
+        /// Get value indicatin wheter logged in operator is in given role. Return false if no operator is logged in.
+        /// </summary>
+        /// <param name="role">Operator role to test if operator is in</param>
+        /// <returns>True if some operator is logged in and is in given role</returns>
         public static bool IsInRole(OperatorType role)
         {
-            if (IsLogedIn())
+            if (IsLoggedIn())
                 return instance.Type == role;
             return false;
         }
@@ -107,19 +118,38 @@ namespace MTS.Admin
 
         #region Properties
 
+        /// <summary>
+        /// (Get) Operator first name
+        /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// (Get) Operator seconde name
+        /// </summary>
         public string Surname { get; private set; }
-
+        /// <summary>
+        /// (Get) Operator full name. Concatenation of <see cref="Name"/> and <see cref="Surname"/>
+        /// </summary>
         public string FullName { get { return string.Join(" ", Name, Surname); } }
-
+        /// <summary>
+        /// (Get) Operator login
+        /// </summary>
         public string Login { get; private set; }
+        /// <summary>
+        /// (Get) Operator database id. Primary key in Operator table
+        /// </summary>
         public int Id { get; private set; }
+        /// <summary>
+        /// (Get) Operator type or role. This type defines operator priviledges
+        /// </summary>
         public OperatorType Type { get; private set; }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Operator instance can be only created in static method
+        /// </summary>
         private Operator() { }
 
         #endregion

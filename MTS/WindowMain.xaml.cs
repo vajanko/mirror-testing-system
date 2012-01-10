@@ -273,7 +273,7 @@ namespace MTS
                         return;
                     }
                 // there is no test window - could be opened, but only if some operator is logged in
-                e.CanExecute = Admin.Operator.IsLogedIn();
+                e.CanExecute = Admin.Operator.IsLoggedIn();
             }
         }
         private void viewTesterExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -336,22 +336,15 @@ namespace MTS
 
         #endregion
 
-        #region Constructors
-
-        public WindowMain()
-        {
-            InitializeComponent();
-            Output.TextBox = outputConsole;    // initialize output console
-        }
-
-        #endregion
-
         #region IsLoggedIn Property
 
         public static readonly DependencyProperty IsLoggedInProperty =
             DependencyProperty.Register("IsLoggedIn", typeof(bool), typeof(WindowMain),
             new PropertyMetadata(false));
 
+        /// <summary>
+        /// (Get/Set) Value indicating whether an operator is logged in. This is a depedenty property.
+        /// </summary>
         public bool IsLoggedIn
         {
             get { return (bool)GetValue(IsLoggedInProperty); }
@@ -377,8 +370,7 @@ namespace MTS
             //    loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
             //    loginWindow.ShowDialog();
             //}
-
-            if (Admin.Operator.IsLogedIn())
+            if (Admin.Operator.IsLoggedIn())
             {
                 Output.WriteLine("Login {0}", Admin.Operator.Instance.Login);
                 IsLoggedIn = true;
@@ -389,5 +381,15 @@ namespace MTS
         {
 
         }
+
+        #region Constructors
+
+        public WindowMain()
+        {
+            InitializeComponent();
+            Output.TextBox = outputConsole;    // initialize output console
+        }
+
+        #endregion
     }
 }

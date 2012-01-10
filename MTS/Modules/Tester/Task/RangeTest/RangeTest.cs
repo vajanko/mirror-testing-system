@@ -3,6 +3,7 @@
 using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
+using MTS.Data.Types;
 
 namespace MTS.Tester
 {
@@ -63,14 +64,14 @@ namespace MTS.Tester
         /// <summary>
         /// Get the final state of this task: Completed if everythig is OK, Failed otherwise
         /// </summary>
-        protected override TaskResultCode getResultCode()
+        protected override TaskResultType getResultCode()
         {
             if (exState == ExState.Aborting)    // execution state is aborting - so result is aborted
-                return TaskResultCode.Aborted;
+                return TaskResultType.Aborted;
             else if (maxMeasuredCurrent > MaxCurrent || minMeasuredCurrent < MinCurrent)
-                return TaskResultCode.Failed;
+                return TaskResultType.Failed;
             else
-                return TaskResultCode.Completed;
+                return TaskResultType.Completed;
         }
         protected override TaskResult getResult()
         {

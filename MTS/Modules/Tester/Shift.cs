@@ -273,14 +273,14 @@ namespace MTS.Tester
         {
             // first of all display result to user - saveing may be spent some period of time
             string msg;
-            TaskResultCode resultCode = scheduler.GetResultCode();
-            if (resultCode == TaskResultCode.Completed)
+            TaskResultType resultCode = scheduler.GetResultCode();
+            if (resultCode == TaskResultType.Completed)
             {
                 msg = "Mirror passed!";
                 channels.GreenLightOn.On();
                 Passed++;
             }
-            else if (resultCode == TaskResultCode.Failed)
+            else if (resultCode == TaskResultType.Failed)
             {
                 msg = "Mirror failed!";
                 channels.RedLightOn.On();
