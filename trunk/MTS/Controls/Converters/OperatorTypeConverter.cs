@@ -1,40 +1,43 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
+using MTS.Data.Types;
 
 namespace MTS.Controls
 {
-    public class TaskResultCodeConverter : IValueConverter
+    public class OperatorTypeConverter : IValueConverter
     {
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
+
             if (targetType != typeof(string))
                 throw new InvalidOperationException("Target type must be of type string");
 
-            switch ((byte)value)
+            switch ((OperatorType)(byte)value)
             {
-                case 0: return "Completed";
-                case 1: return "Failed";
-                case 2: return "Aborted";
+                case OperatorType.Admin: return "Admin";
+                case OperatorType.User: return "User";
                 default: return null;
             }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (targetType != typeof(string))
-                throw new InvalidOperationException("Target type must be of type string");
+            if (value == null) return null;
 
-            string res = (value as string).ToLower();
+            if (targetType != typeof(OperatorType))
+                throw new InvalidOperationException(
+                    string.Format("Target type must be of type {0}", typeof(OperatorType).Name));
+
+            string res = value.ToString().ToLower();
 
             switch (res)
             {
-                case "completed": return 0;
-                case "failed": return 1;
-                case "aborted": return 2;
+                case "admin": return OperatorType.Admin;
+                case "user": return OperatorType.User;
                 default: return null;
             }
         }

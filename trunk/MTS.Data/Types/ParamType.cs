@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MTS.Data.Types
 {
-    public enum ParamType
+    public enum ParamType : byte
     {
         Double,
         Int,

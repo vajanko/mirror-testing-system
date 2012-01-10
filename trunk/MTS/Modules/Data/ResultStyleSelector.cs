@@ -2,7 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using MTS.Tester.Result;
+using MTS.Data.Types;
+
 
 namespace MTS.Data
 {
@@ -19,12 +20,12 @@ namespace MTS.Data
                 return base.SelectStyle(item, container);
 
             Style style = null;
-            TaskResultCode code = (TaskResultCode)result.Result;
-            if (code == TaskResultCode.Completed)
+            TaskResultType code = (TaskResultType)result.Result;
+            if (code == TaskResultType.Completed)
                 style = CompletedStyle;
-            else if (code == TaskResultCode.Failed)
+            else if (code == TaskResultType.Failed)
                 style = FailedStyle;
-            else if (code == TaskResultCode.Aborted)
+            else if (code == TaskResultType.Aborted)
                 style = AbortedStyle;
 
             if (style == null)

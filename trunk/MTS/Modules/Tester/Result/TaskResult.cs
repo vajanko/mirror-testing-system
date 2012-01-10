@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MTS.Editor;
+using MTS.Data.Types;
 
 namespace MTS.Tester.Result
 {
@@ -27,7 +28,7 @@ namespace MTS.Tester.Result
         /// (Get/Set) Value describing final state of task execution. For more information see list of values
         /// of <see cref="TaskResultCode"/> enumerator
         /// </summary>
-        public TaskResultCode ResultCode { get; set; }
+        public TaskResultType ResultCode { get; set; }
         /// <summary>
         /// (Get) Collection of parameter results for this test. This values contains parameter identifier
         /// and its value in string representation. It is expected that these values will be saved in database.

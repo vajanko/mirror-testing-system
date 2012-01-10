@@ -20,6 +20,7 @@ namespace MTS.Data
         public int Id { get; set; }
         public byte ValueType { get; set; }
         public string Unit { get; set; }
+        public string TestName { get; set; }
     }
     
 }

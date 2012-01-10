@@ -242,17 +242,20 @@ GO
 CREATE PROCEDURE udpParamResults(@testId INT)
 AS
 BEGIN
-	SELECT Param.Id, Param.Name, Param.Value, Param.Type AS ValueType, Param.Unit,
-		ParamOutput.Value AS OutputValue
+	SELECT Param.Id, Param.Name, Param.Value, 
+		Param.Type AS ValueType, Param.Unit, ParamOutput.Value AS OutputValue,
+		Test.Name AS TestName
 		FROM TestOutput 
 		JOIN ParamOutput ON (TestOutput.Id = ParamOutput.TestOutputId)
 		JOIN Param ON (ParamOutput.ParamId = Param.Id)
+		JOIN Test ON (Test.Id = TestOutput.TestId)
 		WHERE TestOutput.Id = @testId;
 END
 GO
-EXEC udpParamResults 28;
+EXEC udpParamResults 2;
 select * from param;
 select * from paramOutput;
+select * from testoutput;
 --#endregion
 
 --#region CREATE PROCEDURE udpTestResults

@@ -195,11 +195,14 @@
                               CanUserReorderColumns="True" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False"
                               AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray" VerticalGridLinesBrush="DarkGray"
                               SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0">
+                        <DataGrid.Resources>
+                            <ctrl:OperatorTypeConverter x:Key="operatorTypeConverter"/>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Login" Binding="{Binding Login}"/>
                             <DataGridTextColumn Header="Name"  Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="Surname" Binding="{Binding Surname}"/>
-                            <DataGridTextColumn Header="Group" Binding="{Binding Type}"/>
+                            <DataGridTextColumn Header="Group" Binding="{Binding Type, Converter={StaticResource operatorTypeConverter}}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

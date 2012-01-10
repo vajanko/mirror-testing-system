@@ -17,7 +17,8 @@ namespace MTS.Controls
 
             string testId = values[0] as string;
             if (testId == null)
-                throw new InvalidOperationException("First binding value must be a string");
+                return null;
+                //throw new InvalidOperationException("First binding value must be a string");
 
             string paramId = values[1] as string;
             if (paramId == null)

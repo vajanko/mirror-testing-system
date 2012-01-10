@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using MTS.IO;
 using MTS.Tester.Result;
+using MTS.Data.Types;
 
 
 namespace MTS.Tester
@@ -32,7 +33,7 @@ namespace MTS.Tester
         /// <summary>
         /// Value describing result state of this task
         /// </summary>
-        protected TaskResultCode resultCode;
+        protected TaskResultType resultCode;
 
         #endregion
 
@@ -118,11 +119,11 @@ namespace MTS.Tester
             exState = ExState.None;         // prevent to do anythig else
         }
 
-        protected void chCode(TaskResultCode resultCode)
+        protected void chCode(TaskResultType resultCode)
         {
             this.resultCode = resultCode;
         }
-        protected virtual TaskResultCode getResultCode()
+        protected virtual TaskResultType getResultCode()
         {
             return resultCode;
         }
