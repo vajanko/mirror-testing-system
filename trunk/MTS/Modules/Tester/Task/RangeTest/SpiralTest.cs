@@ -12,11 +12,18 @@ namespace MTS.Tester
         #region Private fields
 
         /// <summary>
-        /// Required duration in seconds of spiral to be swtiched on during this test
+        /// Time of measuring current on the spiral. This value should be initialized when test is beging executed.
         /// </summary>
-        private readonly double maxTime;
+        private double testingTimeMeasured;
 
-        private readonly DoubleParam testingTime;
+        /// <summary>
+        /// Required duration of this task in miliseconds
+        /// </summary>
+        private readonly double testingTime;
+        /// <summary>
+        /// Required duration of this task
+        /// </summary>
+        private readonly DoubleParam testingTimeParam;
 
         #endregion
 
@@ -30,15 +37,18 @@ namespace MTS.Tester
             switch (exState)
             {
                 case ExState.Initializing:
-                    minMeasuredCurrent = double.MaxValue;             // initialize max and min
-                    maxMeasuredCurrent = double.MinValue;             // measured values
+                    minCurrentMeasured = double.MaxValue;             // initialize max and min
+                    maxCurrentMeasured = double.MinValue;             // measured values
+                    testingTimeMeasured = 0;
+
                     channels.HeatingFoilOn.On();                      // switch on spiral
                     StartWatch(time);                                 // start measuring time                                      
                     goTo(ExState.Measuring);                          // start measuring
                     break;
                 case ExState.Measuring:
                     measureCurrent(channels.HeatingFoilCurrent);      // measure spiral current
-                    if (TimeElapsed(time) > maxTime)                  // if testing time elapsed
+                    testingTimeMeasured = TimeElapsed(time);          // measure time
+                    if (testingTimeMeasured >= testingTime)           // if testing time elapsed
                         goTo(ExState.Finalizing);                     // go to next state                     
                     break;
                 case ExState.Finalizing:
@@ -52,11 +62,19 @@ namespace MTS.Tester
             }
         }
 
+        /// <summary>
+        /// Generate object holding result data for this task such as time of execution and results of 
+        /// used parameters.
+        /// </summary>
+        /// <returns>Object describing all results of this task</returns>
         protected override TaskResult getResult()
         {
             TaskResult result = base.getResult();
-            // this parametes has been used, but no output has been generated
-            result.Params.Add(new ParamResult(testingTime, Duration.TotalMilliseconds));
+
+            // we have been measuring time in miliseconds, now convert it back to parameter unit
+            // in this state will be saved to database
+            double time = convertBack(testingTimeParam, Units.Miliseconds, testingTimeMeasured);
+            result.Params.Add(new ParamResult(testingTimeParam, time));
 
             return result;
         }
@@ -73,11 +91,10 @@ namespace MTS.Tester
             : base(channels, testParam) 
         {
             // from test parameters get TestingTime item
-            testingTime = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
-            if (testingTime == null)
-                throw new ParamNotFoundException(TestValue.TestingTime);
-            // convert testing time to miliampheres
-            maxTime = testingTime.Unit.ConvertTo(Units.Miliseconds, testingTime.DoubleValue);
+            testingTimeParam = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
+
+            // for measuring time we only use miliseconds
+            testingTime = convert(testingTimeParam, Units.Miliseconds);
         }
 
         #endregion

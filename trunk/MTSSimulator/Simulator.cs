@@ -70,6 +70,7 @@ namespace MTS.Simulator
         {
             if (slave != null)
                 slave.Disconnect();
+            Properties.Settings.Default.Save();
         }
 
         private void initializeChannels()
@@ -93,7 +94,6 @@ namespace MTS.Simulator
                 }
             }
         }
-
 
         void updateTester()
         {
@@ -209,19 +209,19 @@ namespace MTS.Simulator
 
             if (channels.IsMirrorMoveingUp)
             {
-                channels.DistanceY.SetValue(channels.DistanceX.Value - 5);
+                channels.DistanceX.SetValue(channels.DistanceX.Value - 1);
             }
             else if (channels.IsMirrorMoveingDown)
             {
-                channels.DistanceY.SetValue(channels.DistanceX.Value + 5);
+                channels.DistanceX.SetValue(channels.DistanceX.Value + 1);
             }
             else if (channels.IsMirrorMoveingLeft)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 5);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 1);
             }
             else if (channels.IsMirrorMoveingRight)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 5);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 1);
             }
         }
         private void simulateDistanceSensors()

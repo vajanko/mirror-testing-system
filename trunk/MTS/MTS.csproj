@@ -216,6 +216,10 @@
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\Admin\Operator.cs" />
+    <Compile Include="Modules\Admin\Printing\PrintingLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Modules\Admin\Printing\PrintingManager.cs" />
     <Compile Include="Modules\Data\EditOperatorWindow.xaml.cs">
       <DependentUpon>EditOperatorWindow.xaml</DependentUpon>
     </Compile>
@@ -226,8 +230,8 @@
     <Compile Include="Modules\Tester\Result\ResultBase.cs" />
     <Compile Include="Modules\Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Modules\Tester\Result\TaskResult.cs" />
-    <Compile Include="Modules\Tester\Task\Exception\ParamNotFoundException.cs" />
-    <Compile Include="Modules\Tester\Task\Exception\TestException.cs" />
+    <Compile Include="Modules\Editor\Exception\ParamNotFoundException.cs" />
+    <Compile Include="Modules\Editor\Exception\TestException.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>

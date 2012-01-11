@@ -29,11 +29,11 @@
     <Setting Name="ModbusConfigFile" Description="Absolute path to configuration file of channels for modbus protocol are stored" Type="System.String" Scope="User">
       <Value Profile="(Default)">moxaConfig.csv</Value>
     </Setting>
-    <Setting Name="PrinterWidth" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="PrinterWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
     </Setting>
-    <Setting Name="PrinterHeight" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="PrinterHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="PrinterName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -41,8 +41,8 @@
     <Setting Name="ChannelsConfigFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">analog_channels.xml</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="PrintLabels" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DummyPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">1234</Value>

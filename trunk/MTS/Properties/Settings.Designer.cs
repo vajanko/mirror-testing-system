@@ -136,10 +136,10 @@ namespace MTS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal PrinterWidth {
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int PrinterWidth {
             get {
-                return ((decimal)(this["PrinterWidth"]));
+                return ((int)(this["PrinterWidth"]));
             }
             set {
                 this["PrinterWidth"] = value;
@@ -148,10 +148,10 @@ namespace MTS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal PrinterHeight {
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int PrinterHeight {
             get {
-                return ((decimal)(this["PrinterHeight"]));
+                return ((int)(this["PrinterHeight"]));
             }
             set {
                 this["PrinterHeight"] = value;
@@ -184,13 +184,13 @@ namespace MTS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PrintLabels {
             get {
-                return ((string)(this["Setting"]));
+                return ((bool)(this["PrintLabels"]));
             }
             set {
-                this["Setting"] = value;
+                this["PrintLabels"] = value;
             }
         }
         

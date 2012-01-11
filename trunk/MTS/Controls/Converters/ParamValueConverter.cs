@@ -21,7 +21,9 @@ namespace MTS.Controls
                 return null;
             string str = values[0] as string;
             if (str == null)
-                throw new InvalidOperationException("First binding value must be a string");
+                return null;
+                     
+                //throw new InvalidOperationException("First binding value must be a string");
             byte type = (byte)values[1];
 
             object value = converter.ConvertFromString((ParamType)type, str, culture);
