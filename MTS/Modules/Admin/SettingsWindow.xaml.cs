@@ -144,6 +144,7 @@ namespace MTS.Admin
             // load paper size setting
             paperWidth.Value = Settings.Default.PrinterWidth;
             paperHeight.Value = Settings.Default.PrinterHeight;
+            printLabels.IsChecked = Settings.Default.PrintLabels;
 
             // initialize PROTOCOL section
             initializeProtocol();
@@ -179,8 +180,9 @@ namespace MTS.Admin
             // save selected printer name
             if (printers.SelectedItem != null)
                 Settings.Default.PrinterName = printers.SelectedItem.ToString();
-            Settings.Default.PrinterWidth = paperWidth.Value;
-            Settings.Default.PrinterHeight = paperHeight.Value;
+            Settings.Default.PrinterWidth = (int)paperWidth.Value;
+            Settings.Default.PrinterHeight = (int)paperHeight.Value;
+            Settings.Default.PrintLabels = (bool)printLabels.IsChecked;
 
             // PROTOCOL
             // save selected protocol name

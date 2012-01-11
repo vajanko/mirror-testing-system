@@ -255,7 +255,7 @@ namespace MTS.Tester
         /// <param name="time">Current time - time of system clock when this method is called</param>
         protected void StartWatch(DateTime time) { start = time; }
         /// <summary>
-        /// Calculate time elapsed since time measurement has been started
+        /// Calculate time (in miliseconds) elapsed since time measurement has been started
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
         /// <returns>Time elapsed since StartWatch has been called</returns>

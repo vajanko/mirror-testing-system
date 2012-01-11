@@ -11,9 +11,13 @@ namespace MTS.Tester
         #region Private fields
 
         /// <summary>
+        /// Max duration allowed fot this test in miliseconds
+        /// </summary>
+        private readonly double maxTestingTime;
+        /// <summary>
         /// Maximal duration allowed for this test
         /// </summary>
-        private readonly DoubleParam maxTestingTime;
+        private readonly DoubleParam maxTestingTimeParam;
 
         #endregion
 
@@ -24,12 +28,15 @@ namespace MTS.Tester
             // will not be finished
 
             // measure time - end if enought time has elapsed
-            if (Duration.TotalMilliseconds > maxTestingTime.DoubleValue)
+            if (Duration.TotalMilliseconds > maxTestingTime)
                 exState = ExState.Aborting;
 
             switch (exState)
             {
                 case ExState.Initializing:
+                    maxMeasuredOverloadTime = 0;                 // initialize variables
+                    isOverloaded = false;
+
                     channels.StartUnfolding();                   // start to unfold
                     goTo(ExState.Unfolding);                     // switch to next state
                     break;
@@ -63,9 +70,9 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MAX_TESTING_TIME item
-            maxTestingTime = testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
-            if (maxTestingTime == null)
-                throw new ParamNotFoundException(TestValue.MaxTestingTime);
+            maxTestingTimeParam = testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
+            // for measuring time only use miliseconds
+            maxTestingTime = convert(maxTestingTimeParam, Units.Miliseconds);
         }
 
         #endregion

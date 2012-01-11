@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MTS.Tester
+namespace MTS.Editor
 {
-    public class TestException : Exception
+    public class TestValueException : Exception
     {
 
         #region Constructors
 
-        public TestException() : base() { }
+        public TestValueException() : base() { }
 
         #endregion
     }

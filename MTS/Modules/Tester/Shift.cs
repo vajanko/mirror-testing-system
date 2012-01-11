@@ -250,8 +250,8 @@ namespace MTS.Tester
                 while (!scheduler.IsFinished)
                 {
                     Thread.Sleep(200);              // for presentation purpose only
-                    time += watch.Elapsed;          // caluculate current time (DateTime.Now is not very exactly)
-                    scheduler.Update(time);         // execute tasks
+                    //time += watch.Elapsed;          // caluculate current time (DateTime.Now is not very exactly)
+                    scheduler.Update(time + watch.Elapsed);         // execute tasks
                 }
 
                 Output.WriteLine("Test sequence {0} finished", Finished + 1);
@@ -301,6 +301,15 @@ namespace MTS.Tester
             List<TaskResult> results = scheduler.GetResultData();
             saveShiftResult(results, (Int16)Finished);
             Output.WriteLine("Saved!");
+
+            if (Properties.Settings.Default.PrintLabels)
+            {   // if printing of labels is required
+                // print label for test mirror
+                if (resultCode == TaskResultType.Completed)
+                    Admin.Printing.PrintingManager.Print("mirror", "Passed");
+                else if (resultCode == TaskResultType.Failed)
+                    Admin.Printing.PrintingManager.Print("mirror", "Failed");
+            }
 
             // wait a moment to display light
             Thread.Sleep(1000);

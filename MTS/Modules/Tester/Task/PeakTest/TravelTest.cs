@@ -4,16 +4,40 @@ using System.Windows.Media.Media3D;
 using MTS.IO;
 using MTS.Editor;
 using MTS.Tester.Result;
+using MTS.Data.Types;
 
 namespace MTS.Tester
 {
-    public sealed class TravelTest : PeakTest
+    sealed class TravelTest : PeakTest
     {
         #region Fields
 
-        private double angleAchieved;
-        private DoubleParam minAngle;
-        private DoubleParam maxTestingTime;
+        /// <summary>
+        /// Currently achieved angle. This value should be initialized when test is beging executed.
+        /// </summary>
+        private double angleMeasured;
+        /// <summary>
+        /// Currently time of traveling. This value should be initialized when test is beging executed.
+        /// </summary>
+        private double testingTimeMeasured;
+
+        /// <summary>
+        /// Minimal angle to achieve
+        /// </summary>
+        private readonly DoubleParam minAngleParam;
+        /// <summary>
+        /// Maximal duration allowed for this test
+        /// </summary>
+        private readonly DoubleParam maxTestingTimeParam;
+
+        /// <summary>
+        /// Maximal duration allowed for this test in miliseconds
+        /// </summary>
+        private readonly double maxTestingTime;
+        /// <summary>
+        /// Minimal angle to achieve in degrees
+        /// </summary>
+        private readonly double minAngle;
 
         private MoveDirection travelDirection;
         private IAnalogInput actuatorChannel;
@@ -22,15 +46,18 @@ namespace MTS.Tester
 
         public override void Update(DateTime time)
         {
-            // In this case, if max time elapsed, task has to be aborted. The final position has not been reached,
+            // In this case, if max time elapsed, task has to be finished. The final position has not been reached,
             // but we already know that this is a bed pieace
-            if (Duration.TotalMilliseconds > maxTestingTime.DoubleValue)
-                exState = ExState.Aborting;
+            if (testingTimeMeasured > maxTestingTime)
+                goTo(ExState.Finalizing);
 
             switch (exState)
             {
                 case ExState.Initializing:
-                    angleAchieved = 0;                              // initialize variables - default values
+                    angleMeasured = 0;                              // initialize variables
+                    testingTimeMeasured = 0;
+                    StartWatch(time);                               // start to measure time
+
                     channels.MoveMirror(travelDirection);           // start to move mirror glass
                     actuatorChannel = travelDirection.IsHorizontal() ?
                         channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
@@ -39,9 +66,10 @@ namespace MTS.Tester
                     Output.WriteLine("Moveing in direction: {0}", travelDirection);
                     break;
                 case ExState.Measuring:
+                    testingTimeMeasured = TimeElapsed(time);        // measure time
                     measureCurrent(time, actuatorChannel);          // measure current
-                    angleAchieved = channels.GetRotationAngle();    // measure angle
-                    if (angleAchieved > minAngle.DoubleValue)       // final position reached
+                    angleMeasured = channels.GetRotationAngle();    // measure angle
+                    if (angleMeasured >= minAngle)                  // final position reached
                         goTo(ExState.Finalizing);                   // finish
                     break;
                 case ExState.Finalizing:
@@ -60,10 +88,23 @@ namespace MTS.Tester
         {
             TaskResult result = base.getResult();
 
-            result.Params.Add(new ParamResult(minAngle, angleAchieved));
-            result.Params.Add(new ParamResult(maxTestingTime, Duration.TotalMilliseconds));
+            // we have been measuring angle in degrees, now convert it back to parameter unit
+            // in this state will be saved to database
+            double angle = convertBack(minAngleParam, Units.Degrees, angleMeasured);
+            result.Params.Add(new ParamResult(minAngleParam, angle));
+            // we have been measuring time in miliseconds, now convert it back to parameter unit
+            // in this state will be saved to database
+            double time = convertBack(maxTestingTimeParam, Units.Miliseconds, testingTimeMeasured);
+            result.Params.Add(new ParamResult(maxTestingTimeParam, time));
 
             return result;
+        }
+        protected override TaskResultType getResultCode()
+        {
+            if (angleMeasured >= minAngle)
+                return base.getResultCode();
+            else
+                return Data.Types.TaskResultType.Failed;    // angle was not achieved
         }
 
         #region Constructors
@@ -76,13 +117,14 @@ namespace MTS.Tester
 
             // initialization of testing parameters
             // from test parameters get MinAngle item
-            minAngle = testParam.GetParam<DoubleParam>(TestValue.MinAngle);
-            if (minAngle == null)
-                throw new ParamNotFoundException(TestValue.MinAngle);
+            minAngleParam = testParam.GetParam<DoubleParam>(TestValue.MinAngle);
             // from test parameters get MaxTestingTime item
-            maxTestingTime= testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
-            if (maxTestingTime == null)
-                throw new ParamNotFoundException(TestValue.MaxTestingTime);
+            maxTestingTimeParam= testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
+
+            // for measuring angle only use degrees
+            minAngle = convert(minAngleParam, Units.Degrees);
+            // for measuring time only use miliseconds
+            maxTestingTime = convert(maxTestingTimeParam, Units.Miliseconds);
         }
 
         #endregion

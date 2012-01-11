@@ -8,7 +8,7 @@
     <name>Information</name>
     <group>Informative Settings</group>
     <description>This setting will not be used for testing.</description>
-    <param id="orientation">
+    <param id="Orientation">
       <name>Orientation</name>
       <description></description>
       <type>enum</type>
@@ -20,19 +20,19 @@
         <value>Right right-handed</value>
       </values>
     </param>
-    <param id="partNumber">
+    <param id="PartNumber">
       <name>Part Number</name>
       <description></description>
       <type>string</type>
       <value></value>
     </param>
-    <param id="supplierName">
+    <param id="SupplierName">
       <name>Supplier Name</name>
       <description></description>
       <type>string</type>
       <value></value>      
     </param>
-    <param id="description">
+    <param id="Description">
       <name>Description</name>
       <description></description>
       <type>string</type>

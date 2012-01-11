@@ -105,10 +105,13 @@
                                 <ComboBox x:Name="printers" Grid.Row="0" Grid.Column="1"></ComboBox>
 
                                 <Label Grid.Row="1" Grid.Column="0">Width:</Label>
-                                <ctrl:UpDownButton x:Name="paperWidth" Grid.Row="1" Grid.Column="1"/>
+                                <ctrl:UpDownButton x:Name="paperWidth" Grid.Row="1" Grid.Column="1" MinValue="30"/>
 
                                 <Label Grid.Row="2" Grid.Column="0">Height:</Label>
-                                <ctrl:UpDownButton x:Name="paperHeight" Grid.Row="2" Grid.Column="1"/>
+                                <ctrl:UpDownButton x:Name="paperHeight" Grid.Row="2" Grid.Column="1" MinValue="30"/>
+                                
+                                <Label Grid.Row="3" Content="Print labels:"/>
+                                <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" x:Name="printLabels"/>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -230,16 +233,16 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0" Grid.Column="0">Raw minimum:</Label>
-                        <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" Value="{Binding RawLow, Mode=TwoWay}" Decimals="0"/>
+                        <ctrl:UpDownButton Grid.Row="0" Grid.Column="1" Value="{Binding RawLow, Mode=TwoWay}" MinValue="0" MaxValue="65536" Decimals="0"/>
 
                         <Label Grid.Row="1" Grid.Column="0">Raw maximum:</Label>
-                        <ctrl:UpDownButton Grid.Row="1" Grid.Column="1" Value="{Binding RawHigh, Mode=TwoWay}" Decimals="0"/>
+                        <ctrl:UpDownButton Grid.Row="1" Grid.Column="1" Value="{Binding RawHigh, Mode=TwoWay}" MinValue="0" MaxValue="65536" Decimals="0"/>
 
                         <Label Grid.Row="2" Grid.Column="0">Real minimum:</Label>
-                        <ctrl:UpDownButton Grid.Row="2" Grid.Column="1" Value="{Binding RealLow, Mode=TwoWay}"/>
+                        <ctrl:UpDownButton Grid.Row="2" Grid.Column="1" Value="{Binding RealLow, Mode=TwoWay}" MinValue="0" MaxValue="65536"/>
 
                         <Label Grid.Row="3" Grid.Column="0">Real maximum:</Label>
-                        <ctrl:UpDownButton Grid.Row="3" Grid.Column="1" Value="{Binding RealHigh, Mode=TwoWay}"/>
+                        <ctrl:UpDownButton Grid.Row="3" Grid.Column="1" Value="{Binding RealHigh, Mode=TwoWay}" MinValue="0" MaxValue="65536"/>
                     </Grid>
                     <Label DockPanel.Dock="Top" Content="{Binding Description}"/>
                     <!--<ItemsControl ItemsSource="{Binding ChannelSettings, ElementName=root}">

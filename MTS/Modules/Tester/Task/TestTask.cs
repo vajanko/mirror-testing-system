@@ -23,15 +23,57 @@ namespace MTS.Tester
         /// </summary>
         protected bool Enabled { get; private set; }
 
+        /// <summary>
+        /// Generate object holding result data for this task such as time of execution and results of 
+        /// used parameters.
+        /// </summary>
+        /// <returns>Object describing all results of this task</returns>
         protected override TaskResult getResult()
         {
             return new TaskResult(testParam)
             {
                 Begin = Begin,
                 End = End,
-                ResultCode = getResultCode(),
-                HasData = true
+                ResultCode = getResultCode(),   // this method may be overrided and return result depending on test
+                HasData = true                  // value indicating that this result has data to be saved to database
             };
+        }
+
+        /// <summary>
+        /// Validate given value. This value will saved as a string to database later parsed back to double.
+        /// When parsing a value it can not be <see cref="double.MinValue"/> or <see cref="double.MaxValue"/>.
+        /// If so given value will be changed by <see cref="double.Epsilon"/>
+        /// </summary>
+        /// <param name="value">Value to validate if it can be saved to database. If not value is changed
+        /// by <see cref="double.Epsilon"/></param>
+        protected static void validate(ref double value)
+        {
+            if (value == double.MinValue)
+                value += double.Epsilon;
+            else if (value == double.MaxValue)
+                value -= double.Epsilon;
+        }
+
+        /// <summary>
+        /// Convert value of given parameter to given unit
+        /// </summary>
+        /// <param name="param">Parameter which value wa want to convert</param>
+        /// <param name="unit">Unit to convert value of given parameter to</param>
+        /// <returns>Value converted to given unit</returns>
+        protected static double convert(DoubleParam param, Unit unit)
+        {
+            return param.Unit.ConvertTo(unit, param.DoubleValue);
+        }
+        /// <summary>
+        /// Convert output value back to its parameter unit
+        /// </summary>
+        /// <param name="param">Parameter for wich output value was measured</param>
+        /// <param name="unit">Unit in which output value was measured</param>
+        /// <param name="value">Measured value</param>
+        /// <returns>Output value in given parameter unit</returns>
+        protected static double convertBack(DoubleParam param, Unit unit, double value)
+        {
+            return unit.ConvertTo(param.Unit, value);
         }
 
         #region Constructors

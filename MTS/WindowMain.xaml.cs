@@ -379,7 +379,7 @@ namespace MTS
 
         private void profile_Click(object sender, RoutedEventArgs e)
         {
-
+            Admin.Printing.PrintingManager.Print("Mirror", "Passed");
         }
 
         #region Constructors

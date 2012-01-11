@@ -12,18 +12,6 @@ namespace MTS.Tester
         #region Private fields
 
         /// <summary>
-        /// Time (in seconds) of blinker switched on. This is a testing parameter, not a measured value
-        /// </summary>
-        private double lightingTime = 0;
-        /// <summary>
-        /// Time (in seconds) of blinker switched off. This is a testing parameter, not a measured value
-        /// </summary>
-        private double breakTime = 0;
-        /// <summary>
-        /// Number of blinks. Blinker is cyclically switched on ond off.
-        /// </summary>
-        private int blinksCount = 0;
-        /// <summary>
         /// Time when blinker was switched on. This is measured value.
         /// </summary>
         private TimeSpan blinkerOn;
@@ -31,6 +19,35 @@ namespace MTS.Tester
         /// Time when blinker was switched off. This is measured value.
         /// </summary>
         private TimeSpan blinkerOff;
+        /// <summary>
+        /// Number of blinks that are not executed yet. This value should be initialized when test is beging executed.
+        /// </summary>
+        private int blinksCountMeasured;
+
+        /// <summary>
+        /// Time of blinker switched on
+        /// </summary>
+        private readonly DoubleParam lighteningTimeParam;
+        /// <summary>
+        /// Time of blinker switched off
+        /// </summary>
+        private readonly DoubleParam breakTimeParam;
+        /// <summary>
+        /// Number of blinks. Blinker is cyclically switched on ond off.
+        /// </summary>
+        private readonly IntParam blinksCountParam;
+        /// <summary>
+        /// Time of blinker switched on in miliseconds
+        /// </summary>
+        private readonly double lightingTime;
+        /// <summary>
+        /// Time of blinker switched off in miliseconds
+        /// </summary>
+        private readonly double breakTime;
+        /// <summary>
+        /// Number of blinks. Blinker is cyclically switched on ond off.
+        /// </summary>
+        private readonly int blinksCount;
 
         #endregion
 
@@ -39,21 +56,24 @@ namespace MTS.Tester
             switch (exState)
             {
                 case ExState.Initializing:
-                    maxMeasuredCurrent = double.MinValue;                   // initialize max and min
-                    minMeasuredCurrent = double.MaxValue;                   // measured values
-                    channels.DirectionLightOn.On();                   // switch on direction light
+                    maxCurrentMeasured = double.MinValue;                   // initialize measured variable
+                    minCurrentMeasured = double.MaxValue;
+                    blinksCountMeasured = 0;
+
+                    channels.DirectionLightOn.On();                         // switch on direction light
                     StartWatch(time);                                       // start measuring time of light on
                     goTo(ExState.BlinkerOn);                                // go to next state
                     Output.WriteLine("Switchig direction light on");
                     break;
                 case ExState.BlinkerOn:   // measure current
                     measureCurrent(channels.DirectionLightCurrent);         // measure current
-                    if (TimeElapsed(time) >= lightingTime)                   // if lighting time elapsed
+                    if (TimeElapsed(time) >= lightingTime)                  // if lighting time elapsed
                     {
                         channels.DirectionLightOn.SwitchOff();              // switch off light
                         StartWatch(time);                                   // start to measure time of light off
-                        blinksCount--;                                      // decrease one lighting period
-                        goTo(blinksCount <= 0 ? ExState.Finalizing : ExState.BlinkerOff);
+                        ++blinksCountMeasured;                              // increase one lighting period
+                        goTo(blinksCountMeasured < blinksCount ? 
+                            ExState.BlinkerOff : ExState.Finalizing);
                         if (exState == ExState.BlinkerOff)
                             Output.WriteLine("Switching direction light off");
                     }                                                       // off blinker
@@ -79,6 +99,23 @@ namespace MTS.Tester
             }
         }
 
+        /// <summary>
+        /// Generate object holding result data for this task such as time of execution and results of 
+        /// used parameters.
+        /// </summary>
+        /// <returns>Object describing all results of this task</returns>
+        protected override TaskResult getResult()
+        {
+            TaskResult result = base.getResult();
+
+            // these values have been used but not output has been generated
+            result.Params.Add(new ParamResult(lighteningTimeParam));
+            result.Params.Add(new ParamResult(breakTimeParam));
+            result.Params.Add(new ParamResult(blinksCountParam));
+
+            return result;
+        }
+
         #region Constructors
 
         /// <summary>
@@ -90,17 +127,17 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get LighteningTime item
-            DoubleParam dValue = testParam.GetParam<DoubleParam>(TestValue.LighteningTime);
-            if (dValue != null)     // it must be of type int
-                lightingTime = dValue.DoubleValue * 1000;   // convert to miliseconds
+            lighteningTimeParam = testParam.GetParam<DoubleParam>(TestValue.LighteningTime);
             // from test parameters get BreakTime item
-            dValue = testParam.GetParam<DoubleParam>(TestValue.BreakTime);
-            if (dValue != null)     // it must be of type int
-                breakTime = dValue.DoubleValue * 1000;      // convert to miliseconds
+            breakTimeParam = testParam.GetParam<DoubleParam>(TestValue.BreakTime);
             // from test parameters get BlinksTime item
-            IntParam iValue = testParam.GetParam<IntParam>(TestValue.BlinkCount);
-            if (dValue != null)     // it must be of type int
-                blinksCount = iValue.IntValue;
+            blinksCountParam = testParam.GetParam<IntParam>(TestValue.BlinkCount);
+
+            // for measuring time we only use miliseconds
+            lightingTime = convert(lighteningTimeParam, Units.Miliseconds);
+            breakTime = convert(breakTimeParam, Units.Miliseconds);
+            // this value does not need to be converted
+            blinksCount = blinksCountParam.IntValue;
         }
 
         #endregion

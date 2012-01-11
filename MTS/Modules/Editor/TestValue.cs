@@ -70,22 +70,23 @@ namespace MTS.Editor
         {
             parameters.Add(key, param);
         }
-        public ParamValue GetParam(string key)
-        {
-            return parameters[key];
-        }
+        //public ParamValue GetParam(string key)
+        //{
+        //    return parameters[key];
+        //}
         /// <summary>
         /// Finds parameter value in collection of parameters in this test identified by its key.
         /// Return null if it doesn't exists
         /// </summary>
         /// <typeparam name="T">Type of parameter value</typeparam>
         /// <param name="key">Name (identifier) of required parameter</param>
-        /// <returns></returns>
+        /// <exception cref="ParamNotFoundException">Parameter with given key was not found</exception>
+        /// <returns>Value of required parameter of type <typeparamref name="T"/></returns>
         public T GetParam<T>(string key) where T : ParamValue
         {
             if (parameters.ContainsKey(key))
                 return parameters[key] as T;
-            else return null;
+            else throw new ParamNotFoundException(key);
         }
         public bool ContainsParam(string key)
         {

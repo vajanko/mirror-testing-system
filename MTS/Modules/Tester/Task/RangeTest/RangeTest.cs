@@ -15,34 +15,32 @@ namespace MTS.Tester
         #region Fields
 
         /// <summary>
-        /// Minimal value of current that has been measured during this task
+        /// Minimal value of current that has been measured during this task. This value should be initialized 
+        /// when test is beging executed.
         /// </summary>
-        protected double minMeasuredCurrent;
+        protected double minCurrentMeasured;
         /// <summary>
-        /// Maximal value of current that has been measured during this task
+        /// Maximal value of current that has been measured during this task. This value should be initialized 
+        /// when test is beging executed.
         /// </summary>
-        protected double maxMeasuredCurrent;
-        /// <summary>
-        /// Mininal allowed current for this test
-        /// </summary>
-        protected DoubleParam minCurrent;
-        /// <summary>
-        /// Maximal allowed current for this test
-        /// </summary>
-        protected DoubleParam maxCurrent;
-
-        #endregion
-
-        #region Properties
+        protected double maxCurrentMeasured;
 
         /// <summary>
-        /// (Get) Mininal allowed current for this test
+        /// Mininal allowed current
         /// </summary>
-        protected double MinCurrent { get { return minCurrent.DoubleValue; } }
+        private readonly DoubleParam minCurrentParam;
         /// <summary>
-        /// (Get) Maximal allowed current for this test
+        /// Maximal allowed current
         /// </summary>
-        protected double MaxCurrent { get { return maxCurrent.DoubleValue; } }
+        private readonly DoubleParam maxCurrentParam;
+        /// <summary>
+        /// Mininal allowed current in miliampheres
+        /// </summary>
+        private readonly double minCurrent;
+        /// <summary>
+        /// Maximal allowed current in miliampheres
+        /// </summary>
+        private readonly double maxCurrent;
 
         #endregion
 
@@ -56,10 +54,10 @@ namespace MTS.Tester
             double measuredCurrent = channel.RealValue;
 
             // save max a min measured values of current
-            if (measuredCurrent > maxMeasuredCurrent)
-                maxMeasuredCurrent = measuredCurrent;
-            if (measuredCurrent < minMeasuredCurrent)
-                minMeasuredCurrent = measuredCurrent;
+            if (measuredCurrent > maxCurrentMeasured)
+                maxCurrentMeasured = measuredCurrent;
+            if (measuredCurrent < minCurrentMeasured)
+                minCurrentMeasured = measuredCurrent;
         }
         /// <summary>
         /// Get the final state of this task: Completed if everythig is OK, Failed otherwise
@@ -68,18 +66,32 @@ namespace MTS.Tester
         {
             if (exState == ExState.Aborting)    // execution state is aborting - so result is aborted
                 return TaskResultType.Aborted;
-            else if (maxMeasuredCurrent > MaxCurrent || minMeasuredCurrent < MinCurrent)
+            else if (maxCurrentMeasured > maxCurrent || minCurrentMeasured < minCurrent)
                 return TaskResultType.Failed;
             else
                 return TaskResultType.Completed;
         }
+        /// <summary>
+        /// Generate object holding result data for this task such as time of execution and results of 
+        /// used parameters.
+        /// </summary>
+        /// <returns>Object describing all results of this task</returns>
         protected override TaskResult getResult()
-        {
-            // only add parameters to already creatred test result
+        {   // only add parameters to already creatred test result
             TaskResult result = base.getResult();
 
-            result.Params.Add(new ParamResult(minCurrent, minMeasuredCurrent));
-            result.Params.Add(new ParamResult(maxCurrent, maxMeasuredCurrent));
+            // correct values if they are to small or too big - if some of these values is double.MaxValue
+            // or double.MinValue it means that testing time has been set to 0
+            // max and min value can not be parsed from string
+            validate(ref minCurrentMeasured);
+            validate(ref maxCurrentMeasured);
+
+            // we have been measuring current in miliampheres, now convert it back to parameter unit
+            // in this state will be saved to database
+            double min = convertBack(minCurrentParam, Units.Miliampheres, minCurrentMeasured);
+            result.Params.Add(new ParamResult(minCurrentParam, min));
+            double max = convertBack(maxCurrentParam, Units.Miliampheres, maxCurrentMeasured);
+            result.Params.Add(new ParamResult(maxCurrentParam, max));
 
             return result;
         }
@@ -90,13 +102,13 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MinCurrent parameter
-            minCurrent = testParam.GetParam<DoubleParam>(TestValue.MinCurrent);
-            if (minCurrent == null)
-                throw new ParamNotFoundException(TestValue.MinCurrent);
+            minCurrentParam = testParam.GetParam<DoubleParam>(TestValue.MinCurrent);
             // from test parameters get MaxCurrent parameter
-            maxCurrent = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
-            if (maxCurrent == null)
-                throw new ParamNotFoundException(TestValue.MaxCurrent);
+            maxCurrentParam = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
+
+            // for measuring current only use miliampheres
+            maxCurrent = convert(maxCurrentParam, Units.Miliampheres);
+            minCurrent = convert(maxCurrentParam, Units.Miliampheres);
         }
 
         #endregion
