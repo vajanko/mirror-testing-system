@@ -16,17 +16,30 @@ namespace MTS.Tester
     {
         #region Private Fields
 
+        /// <summary>
+        /// Communication layer - connection with hw module
+        /// </summary>
         private Channels channels;
 
-        // these tasks should be executed
+        /// <summary>
+        /// These tasks should be executed
+        /// </summary>
         private LinkedList<Task> toExecute = new LinkedList<Task>();
-        // tasks that can be executed right now, but its method BeginExecute was not called yet
+        /// <summary>
+        /// Tasks that can be executed right now, but its method Initialize has not called yet
+        /// </summary>
         private LinkedList<Task> prepared = new LinkedList<Task>();
-        // these tasks are executing at this time
+        /// <summary>
+        /// These tasks are executing at this time
+        /// </summary>
         private LinkedList<Task> executing = new LinkedList<Task>();
-        // these tasks are already executed - necessary to collect data
+        /// <summary>
+        /// These tasks are already executed - necessary to collect data
+        /// </summary>
         private LinkedList<Task> executed = new LinkedList<Task>();
-        // result of all executed tasks
+        /// <summary>
+        /// Result of all executed tasks
+        /// </summary>
         private List<TaskResult> results = new List<TaskResult>();       
 
         #endregion
@@ -42,10 +55,26 @@ namespace MTS.Tester
         /// </summary>
         public bool IsAborting { get; private set; }
 
+        /// <summary>
+        /// (Get) Number of executed tasks
+        /// </summary>
+        public int ExecutedTasks { get { return executed.Count; } }
+        /// <summary>
+        /// (Get) Number of currently executing tasks
+        /// </summary>
+        public int ExecutingTasks { get { return executing.Count; } }
 
         #endregion
 
-        public event SchedulerExecutedHandler Executed;
+        private event SchedulerExecutedHandler exec;
+        /// <summary>
+        /// Occures when scheduler executed all tasks
+        /// </summary>
+        public event SchedulerExecutedHandler Executed
+        {
+            add { exec += value; }
+            remove { exec -= value; }
+        }
 
         /// <summary>
         /// Raise task executed event
@@ -53,8 +82,8 @@ namespace MTS.Tester
         protected void RaiseExecuted()
         {
             IsFinished = true;
-            if (Executed != null)
-                Executed(this, new EventArgs());
+            if (exec != null)
+                exec(this, new EventArgs());
         }
 
         #region Task Sequences
@@ -379,7 +408,7 @@ namespace MTS.Tester
         /// <summary>
         /// Update all executing tasks
         /// </summary>
-        /// <param name="time">Time at moment of calling this method</param>
+        /// <param name="time">Current system time</param>
         public void Update(DateTime time)
         {
             // begin execute all prepared tasks and add them to executing colletion
@@ -402,9 +431,39 @@ namespace MTS.Tester
                 node1 = node2;              // because of that we hold next node = node2
             }
         }
+        /// <summary>
+        /// Abort all executing tasks and set safe state on the channels
+        /// </summary>
+        /// <param name="time">Current system time</param>
+        public void Abort(DateTime time)
+        {   // change state of scheduler to aborting
+            IsAborting = true;
+
+            // swtich the module to save state - swtich off all dangerous channels
+            channels.SetupSafeState();
+            // remove all tasks that have not been initialized yet
+            toExecute.Clear();
+            prepared.Clear();
+
+            // change states of all executing tasks to aborting
+            foreach (Task task in executing)
+                task.Abort();
+            // update all executing tasks to abort themselfs
+            Update(time);
+
+            // scheduler has finished its execution
+            IsFinished = true;
+        }
 
         #endregion
 
+        /// <summary>
+        /// Calculate value indicating whether all task have been executed correctly and finished with
+        /// <see cref="TaskResultType.Completed"/> state
+        /// </summary>
+        /// <returns><see cref="TaskResultType.Completed"/> if all task have been executed correctly
+        /// or <see cref="TaskResultType.Failed"/> if at least one task failed or 
+        /// <see cref="TaskResultType.Aborted"/> if scheduler was aborted by calling <see cref="Abort"/> method</returns>
         public TaskResultType GetResultCode()
         {
             // check if scheduler has been aborted by some external force
@@ -418,6 +477,11 @@ namespace MTS.Tester
             // otherwise everythig finished correctly
             return TaskResultType.Completed;
         }
+        /// <summary>
+        /// Calculate value indicating whether all task have been executed correctly and finished with
+        /// <see cref="TaskResultType.Completed"/> state
+        /// </summary>
+        /// <returns>True if all task have been executed correctly</returns>
         public bool AreAllPassed()
         {
             bool ret = true;
@@ -426,7 +490,11 @@ namespace MTS.Tester
                     ret = false;
             return ret;
         }
-
+        /// <summary>
+        /// Get result data of all task that have been executed or at least aborted during the execution.
+        /// This data does not include task that have been scheduled to be executed but weren't
+        /// </summary>
+        /// <returns>Collection of result data for all executed (finished or aborted) tasks</returns>
         public List<TaskResult> GetResultData()
         {
             return results;
@@ -436,6 +504,11 @@ namespace MTS.Tester
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of task scheduler passing it a communication layer for hardare module
+        /// </summary>
+        /// <param name="channels">Communication layer of hardware module. Collection of all channels used to 
+        /// read or write value from or to hardware module</param>
         public TaskScheduler(Channels channels)
         {
             this.channels = channels;

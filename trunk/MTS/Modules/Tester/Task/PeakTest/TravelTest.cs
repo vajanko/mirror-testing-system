@@ -68,7 +68,8 @@ namespace MTS.Tester
                 case ExState.Measuring:
                     testingTimeMeasured = TimeElapsed(time);        // measure time
                     measureCurrent(time, actuatorChannel);          // measure current
-                    angleMeasured = channels.GetRotationAngle();    // measure angle
+                    angleMeasured = channels.GetRotationAngle(travelDirection);                        
+                        //channels.GetRotationAngle();    // measure angle
                     if (angleMeasured >= minAngle)                  // final position reached
                         goTo(ExState.Finalizing);                   // finish
                     break;

@@ -81,8 +81,19 @@
             this.tester1 = new MTS.Simulator.Tester();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.portBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.calibratorZ = new System.Windows.Forms.Label();
+            this.calibratorY = new System.Windows.Forms.Label();
+            this.calibratorX = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).BeginInit();
@@ -108,6 +119,7 @@
             this.groupBox15.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox14.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // startButton
@@ -709,6 +721,14 @@
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Setup";
             // 
+            // portBox
+            // 
+            this.portBox.Location = new System.Drawing.Point(41, 13);
+            this.portBox.Name = "portBox";
+            this.portBox.Size = new System.Drawing.Size(66, 20);
+            this.portBox.TabIndex = 13;
+            this.portBox.Text = "1234";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -718,19 +738,126 @@
             this.label11.TabIndex = 12;
             this.label11.Text = "Port:";
             // 
-            // portBox
+            // groupBox16
             // 
-            this.portBox.Location = new System.Drawing.Point(41, 13);
-            this.portBox.Name = "portBox";
-            this.portBox.Size = new System.Drawing.Size(66, 20);
-            this.portBox.TabIndex = 13;
-            this.portBox.Text = "1234";
+            this.groupBox16.Controls.Add(this.calibratorZ);
+            this.groupBox16.Controls.Add(this.calibratorY);
+            this.groupBox16.Controls.Add(this.calibratorX);
+            this.groupBox16.Controls.Add(this.label14);
+            this.groupBox16.Controls.Add(this.label13);
+            this.groupBox16.Controls.Add(this.label12);
+            this.groupBox16.Location = new System.Drawing.Point(187, 448);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(141, 79);
+            this.groupBox16.TabIndex = 25;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Calibrators";
+            // 
+            // calibratorZ
+            // 
+            this.calibratorZ.AutoSize = true;
+            this.calibratorZ.Location = new System.Drawing.Point(29, 57);
+            this.calibratorZ.Name = "calibratorZ";
+            this.calibratorZ.Size = new System.Drawing.Size(41, 13);
+            this.calibratorZ.TabIndex = 5;
+            this.calibratorZ.Text = "label17";
+            // 
+            // calibratorY
+            // 
+            this.calibratorY.AutoSize = true;
+            this.calibratorY.Location = new System.Drawing.Point(29, 38);
+            this.calibratorY.Name = "calibratorY";
+            this.calibratorY.Size = new System.Drawing.Size(41, 13);
+            this.calibratorY.TabIndex = 4;
+            this.calibratorY.Text = "label16";
+            // 
+            // calibratorX
+            // 
+            this.calibratorX.AutoSize = true;
+            this.calibratorX.Location = new System.Drawing.Point(29, 18);
+            this.calibratorX.Name = "calibratorX";
+            this.calibratorX.Size = new System.Drawing.Size(41, 13);
+            this.calibratorX.TabIndex = 3;
+            this.calibratorX.Text = "label15";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 57);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(17, 13);
+            this.label14.TabIndex = 2;
+            this.label14.Text = "Z:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 38);
+            this.label13.Name = "label13";
+            this.label13.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label13.Size = new System.Drawing.Size(17, 13);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "Y:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 18);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(17, 13);
+            this.label12.TabIndex = 0;
+            this.label12.Text = "X:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(379, 417);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(78, 23);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "UP";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.moveMirror_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(379, 475);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(78, 23);
+            this.button2.TabIndex = 27;
+            this.button2.Text = "DOWN";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.moveMirror_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(337, 446);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(78, 23);
+            this.button3.TabIndex = 28;
+            this.button3.Text = "LEFT";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.moveMirror_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(421, 446);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(78, 23);
+            this.button4.TabIndex = 29;
+            this.button4.Text = "RIGHT";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.moveMirror_Click);
             // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(647, 568);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.groupBox16);
             this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox15);
@@ -781,6 +908,8 @@
             this.groupBox12.ResumeLayout(false);
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -842,6 +971,17 @@
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.TextBox portBox;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.Label calibratorZ;
+        private System.Windows.Forms.Label calibratorY;
+        private System.Windows.Forms.Label calibratorX;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 

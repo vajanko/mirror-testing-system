@@ -119,10 +119,15 @@ namespace MTS.Tester
             exState = ExState.None;         // prevent to do anythig else
         }
 
-        protected void chCode(TaskResultType resultCode)
-        {
-            this.resultCode = resultCode;
+        /// <summary>
+        /// Abort this task. It will not be aborted imediatelly. But the aborting state will be saved and
+        /// task will be finished at the next update (call of <see cref="Update"/> method)
+        /// </summary>
+        public void Abort()
+        {   // task will be aborted at the next update
+            goTo(ExState.Aborting);
         }
+
         protected virtual TaskResultType getResultCode()
         {
             return resultCode;
@@ -270,8 +275,9 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="channels">Instance of channels collection for communication with hardware</param>
         public Task(Channels channels)
-        {            
+        {
             this.channels = channels;       // channels are used for communication with HW
+            Name = this.GetType().Name;
         }
 
         #endregion

@@ -52,11 +52,11 @@ namespace MTS.Tester
                         goTo(ExState.Finalizing);                     // go to next state                     
                     break;
                 case ExState.Finalizing:
-                    channels.HeatingFoilOn.SwitchOff();               // swtich off spiral
+                    channels.HeatingFoilOn.Off();               // swtich off spiral
                     Finish(time);
                     break;
                 case ExState.Aborting:
-                    channels.HeatingFoilOn.SwitchOff();               // swtich off spiral
+                    channels.HeatingFoilOn.Off();               // swtich off spiral
                     Finish(time);
                     break;
             }

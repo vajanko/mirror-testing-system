@@ -217,11 +217,21 @@ namespace MTS.IO
         public bool IsConnected { get { return module.IsConnected; } }
 
         /// <summary>
-        /// Not implemented yet
+        /// Switch all channels to safe state. This includes operations such as stoping mirror movement,
+        /// powerfold, heating foil, ..., or moveing calibratos down, ...
         /// </summary>
-        public void SwitchOffDigitalOutputs()
+        public void SetupSafeState()
         {
-            throw new NotImplementedException("Method which switch all ouputs to safe state is not implemented yet!");
+            HeatingFoilOn.Off();
+            DirectionLightOn.Off();
+            StopPowerfold();
+            StopMirror();
+            StopAir();
+            MoveCalibratorsDown();
+            AllowMirrorMovement.Off();
+
+            // write just changed values
+            UpdateOutputs();
         }
 
         #region IEnumerable Members
@@ -383,6 +393,24 @@ namespace MTS.IO
             }
         }
 
+        /// <summary>
+        /// Start to move calibrators used for measuring mirror rotation angle up
+        /// </summary>
+        public void MoveCalibratorsUp()
+        {
+            MoveDistanceSensorUp.On();
+            MoveDistanceSensorDown.Off();
+        }
+        /// <summary>
+        /// Start to move calibrators used for measuring mirror rotation angle down
+        /// </summary>
+        public void MoveCalibratorsDown()
+        {
+            MoveDistanceSensorDown.On();
+            MoveDistanceSensorUp.Off();
+        }
+             
+
         #endregion
 
         #region Sucker
@@ -521,14 +549,10 @@ namespace MTS.IO
 
         public double GetRotationAngle()
         {
-            return Vector3D.AngleBetween(GetMirrorNormal(), ZeroPlaneNormal);
-
-            //// read distance values
-            //PointX.Z = DistanceX.RealValue;
-            //PointY.Z = DistanceY.RealValue;
-            //PointZ.Z = DistanceZ.RealValue;
-
-            //return Vector3D.AngleBetween(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal);
+            Vector3D normal = GetMirrorNormal();
+            normal.Normalize();
+            double angle = Vector3D.AngleBetween(normal, ZeroPlaneNormal);
+            return angle;
         }
 
         /// <summary>
@@ -537,23 +561,29 @@ namespace MTS.IO
         /// </summary>
         public Vector3D GetRotationAxis()
         {
-            return Vector3D.CrossProduct(GetMirrorNormal(), ZeroPlaneNormal);
-            //return Vector3D.CrossProduct(getPlaneNormal(PointX, PointY, PointZ), ZeroPlaneNormal);
+            Vector3D normal = GetMirrorNormal();
+            Vector3D axis = Vector3D.CrossProduct(normal, ZeroPlaneNormal);            
+            return axis;
         }
 
         public double GetHorizontalAngle()
         {
             double rotationAngle = GetRotationAngle();
             Vector3D rotationAxis = GetRotationAxis();
+
             double horizontalAngle = rotationAngle * Math.Cos(Vector3D.AngleBetween(rotationAxis, YAxis) / 180 * Math.PI);
+            if (double.IsNaN(horizontalAngle))
+                horizontalAngle = 0;
             return horizontalAngle;
             //return GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), YAxis) / 180 * Math.PI);
         }
         public double GetVerticalAngle()
         {
-            double rotationAngle = -GetRotationAngle();
+            double rotationAngle = GetRotationAngle();
             Vector3D rotationAxis = GetRotationAxis();
             double verticalAngle = rotationAngle * Math.Cos(Vector3D.AngleBetween(rotationAxis, XAxis) / 180 * Math.PI);
+            if (double.IsNaN(verticalAngle))
+                verticalAngle = 0;
             return verticalAngle;
             //return -GetRotationAngle() * Math.Cos(Vector3D.AngleBetween(GetRotationAxis(), XAxis) / 180 * Math.PI);
         }
@@ -568,7 +598,8 @@ namespace MTS.IO
             PointX.Z = DistanceX.RealValue;
             PointY.Z = DistanceY.RealValue;
             PointZ.Z = DistanceZ.RealValue;
-            return getPlaneNormal(PointX, PointY, PointZ);
+            Vector3D normal = getPlaneNormal(PointX, PointY, PointZ);            
+            return normal;
         }
 
         /// <summary>
@@ -596,6 +627,14 @@ namespace MTS.IO
             this.PointX = calibratorX;
             this.PointY = calibratorY;
             this.PointZ = calibratorZ;
+        }
+
+        public double GetRotationAngle(MoveDirection dir)
+        {
+            if (dir.IsHorizontal())
+                return dir == MoveDirection.Left ? GetHorizontalAngle() : -GetHorizontalAngle();
+            else
+                return dir == MoveDirection.Up ? -GetVerticalAngle() : GetVerticalAngle();
         }
 
         #endregion

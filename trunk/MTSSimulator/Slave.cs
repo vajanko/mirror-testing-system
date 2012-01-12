@@ -110,6 +110,7 @@ namespace MTS.Simulator
             NetworkStream stream = master.GetStream();
             StreamReader reader = new StreamReader(stream);
             StreamWriter writer = new StreamWriter(stream);
+            ASCIIEncoding enc = new ASCIIEncoding();
             while (true)
             {
                 try
@@ -123,9 +124,19 @@ namespace MTS.Simulator
                         lock (module)
                         {
                             foreach (IChannel channel in module)
-                            {
-                                writer.Write("{0}:{1}\n", channel.Name, 
-                                    ASCIIEncoding.ASCII.GetString(channel.ValueBytes));
+                            {       
+                                //List<char> val = new List<char>();
+                                //foreach (byte b in channel.ValueBytes)
+                                //    val.Add((char)b);
+
+                                if (channel is IAnalogInput)
+                                    writer.Write("{0}:{1}\n", channel.Name, (channel as IAnalogInput).Value);
+                                else if (channel is IDigitalInput)
+                                    writer.Write("{0}:{1}\n", channel.Name, (channel as IDigitalInput).Value);
+
+                                //string value = enc.GetString(channel.ValueBytes);
+                                    //ASCIIEncoding.ASCII.GetString(channel.ValueBytes);
+                                //writer.Write("{0}:{1}\n", channel.Name, value);
                             }
                         }
                         writer.WriteLine("end");
@@ -143,11 +154,22 @@ namespace MTS.Simulator
                             {
                                 string name = tmp[0];
                                 string value = tmp[1];
+                                //List<byte> val = new List<byte>();
+                                //foreach (char c in tmp[1])
+                                //    val.Add((byte)c);
                                 lock (module)
                                 {
                                     IChannel channel = module.GetChannelByName(name);
                                     if (channel != null)
-                                        channel.ValueBytes = ASCIIEncoding.ASCII.GetBytes(value);
+                                    {
+                                        if (channel is IAnalogInput)
+                                            (channel as IAnalogInput).SetValue(uint.Parse(value));
+                                        else if (channel is IDigitalInput)
+                                            (channel as IDigitalInput).SetValue(bool.Parse(value));
+                                        //channel.ValueBytes = enc.GetBytes(tmp[1]);
+                                    }
+                                            //val.ToArray();
+                                            //ASCIIEncoding.ASCII.GetBytes(value);
                                 }
                             }
                         }
