@@ -405,7 +405,8 @@ namespace MTS.Tester
         private void shiftExecuted(Shift sender, EventArgs args)
         {
             IsRunning = false;
-            timer.Stop();
+            if (timer != null)
+                timer.Stop();
 
             ShiftStatusMessage = "Stoped";
         }
@@ -522,35 +523,6 @@ namespace MTS.Tester
 
             return channels;
         }
-
-        //private bool loadChannelSettings(out ChannelSettings settings)
-        //{
-        //    settings = null;
-        //    // get path where configuration setting for analog channels are stored
-        //    string path = Settings.Default.GetChannelsConfigPath();
-        //    try
-        //    {
-        //        // load settings of analog channels from configuration path saved in settgins
-        //        settings = HWSettings.Default.LoadChannelSettings(path);
-        //    }
-        //    catch (System.IO.FileNotFoundException ex)
-        //    {
-
-        //    }
-        //    catch (System.IO.IOException ex)
-        //    {
-        //        showError(ex, "Config error", "Configuration file for analog channels could not be loaded");
-        //        return false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        showError(ex, "Config error",
-        //            "Configuration file for analog channels may be corrupted, ", path);
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
 
         /// <summary>
         /// Create a new connection with given channels and return value indicating if it was successfull.
@@ -703,30 +675,30 @@ namespace MTS.Tester
 
         }
 
-        // test
+        //// test
 
-        /// <summary>
-        /// Position in the 3D space of the surface which position is measured by calibretor X
-        /// </summary>
-        protected Point3D PointX;
-        /// <summary>
-        /// Position in the 3D space of the surface which position is measured by calibretor Y
-        /// </summary>
-        protected Point3D PointY;
-        /// <summary>
-        /// Position in the 3D space of the surface which position is measured by calibretor Z
-        /// </summary>
-        protected Point3D PointZ;
+        ///// <summary>
+        ///// Position in the 3D space of the surface which position is measured by calibretor X
+        ///// </summary>
+        //protected Point3D PointX;
+        ///// <summary>
+        ///// Position in the 3D space of the surface which position is measured by calibretor Y
+        ///// </summary>
+        //protected Point3D PointY;
+        ///// <summary>
+        ///// Position in the 3D space of the surface which position is measured by calibretor Z
+        ///// </summary>
+        //protected Point3D PointZ;
 
-        /// <summary>
-        /// (Get) Normal vector of mirror plane in the zero position. This is the moment when mirror
-        /// is not rotated
-        /// </summary>
-        protected Vector3D ZeroPlaneNormal { get; private set; }
-        private Vector3D getPlaneNormal(Point3D x, Point3D y, Point3D z)
-        {   // get two vectors from tree points. Cross product gives us a pependicular vector to both of them
-            return Vector3D.CrossProduct(new Vector3D(y.X - x.X, y.Y - x.Y, y.Z - x.Z), new Vector3D(z.X - x.X, z.Y - x.Y, z.Z - x.Z));
-        }
+        ///// <summary>
+        ///// (Get) Normal vector of mirror plane in the zero position. This is the moment when mirror
+        ///// is not rotated
+        ///// </summary>
+        //protected Vector3D ZeroPlaneNormal { get; private set; }
+        //private Vector3D getPlaneNormal(Point3D x, Point3D y, Point3D z)
+        //{   // get two vectors from tree points. Cross product gives us a pependicular vector to both of them
+        //    return Vector3D.CrossProduct(new Vector3D(y.X - x.X, y.Y - x.Y, y.Z - x.Z), new Vector3D(z.X - x.X, z.Y - x.Y, z.Z - x.Z));
+        //}
 
         #endregion
 
@@ -746,11 +718,11 @@ namespace MTS.Tester
             DeviceStatusMessage = "Disconnected";
 
             // load hardware settings
-            PointX = HWSettings.Default.CalibretorX;
-            PointY = HWSettings.Default.CalibretorY;
-            PointZ = HWSettings.Default.CalibretorZ;
+            //PointX = HWSettings.Default.CalibretorX;
+            //PointY = HWSettings.Default.CalibretorY;
+            //PointZ = HWSettings.Default.CalibretorZ;
 
-            ZeroPlaneNormal = HWSettings.Default.ZeroPlaneNormal;
+            //ZeroPlaneNormal = HWSettings.Default.ZeroPlaneNormal;
         }
 
         #endregion        

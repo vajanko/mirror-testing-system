@@ -16,6 +16,6 @@ namespace MTS.IO
         /// <summary>
         /// Set logical value of this channel to false
         /// </summary>
-        void SwitchOff();
+        void Off();
     }
 }

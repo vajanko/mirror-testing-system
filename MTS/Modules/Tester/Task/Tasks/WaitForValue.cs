@@ -38,6 +38,7 @@ namespace MTS.Tester
                     break;
                 case ExState.Aborting:
                     Finish(time);
+                    Output.WriteLine("Aborting waiting for {0} to be {1}", Name, value);
                     break;
             }
 

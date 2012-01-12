@@ -90,7 +90,7 @@ namespace MTS.Simulator
                     channels.IsPowerSupplyOff.SetValue(powerOff.Checked);
                     channels.DistanceX.SetValue(2200);
                     channels.DistanceY.SetValue(2000);
-                    channels.DistanceZ.SetValue(1800);
+                    channels.DistanceZ.SetValue(2000);
                 }
             }
         }
@@ -113,6 +113,9 @@ namespace MTS.Simulator
                         tester1.IsDeviceOpened = false;
                     else if (unlockTimer.Running)
                         tester1.IsDeviceOpened = true;
+                    calibratorX.Text = channels.DistanceX.RealValue.ToString();
+                    calibratorY.Text = channels.DistanceY.RealValue.ToString();
+                    calibratorZ.Text = channels.DistanceZ.RealValue.ToString();
                 }
             }
         }
@@ -209,19 +212,19 @@ namespace MTS.Simulator
 
             if (channels.IsMirrorMoveingUp)
             {
-                channels.DistanceX.SetValue(channels.DistanceX.Value - 1);
+                channels.DistanceX.SetValue(channels.DistanceX.Value - 5);
             }
             else if (channels.IsMirrorMoveingDown)
             {
-                channels.DistanceX.SetValue(channels.DistanceX.Value + 1);
+                channels.DistanceX.SetValue(channels.DistanceX.Value + 5);
             }
             else if (channels.IsMirrorMoveingLeft)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 1);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 5);
             }
             else if (channels.IsMirrorMoveingRight)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 1);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 5);
             }
         }
         private void simulateDistanceSensors()
@@ -451,6 +454,34 @@ namespace MTS.Simulator
         #endregion
 
         #endregion
+
+
+        private void moveMirror_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            if (b != null)
+            {
+                lock (channels)
+                {
+                    string text = b.Text;
+                    switch (text)
+                    {
+                        case "UP":
+                            channels.DistanceX.SetValue(channels.DistanceX.Value + 5);
+                            break;
+                        case "DOWN":
+                            channels.DistanceX.SetValue(channels.DistanceX.Value - 5);
+                            break;
+                        case "LEFT":
+                            channels.DistanceZ.SetValue(channels.DistanceZ.Value + 5);
+                            break;
+                        case "RIGHT":
+                            channels.DistanceZ.SetValue(channels.DistanceZ.Value - 5);
+                            break;
+                    }
+                }
+            }
+        }
 
 
 

@@ -22,7 +22,7 @@
         /// <summary>
         /// Set logical value of this channel to false. Setting value does not raise an event
         /// </summary>
-        public void SwitchOff()
+        public void Off()
         {
             Value = false;
         }

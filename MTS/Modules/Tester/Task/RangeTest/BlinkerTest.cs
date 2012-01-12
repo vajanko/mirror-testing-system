@@ -69,7 +69,7 @@ namespace MTS.Tester
                     measureCurrent(channels.DirectionLightCurrent);         // measure current
                     if (TimeElapsed(time) >= lightingTime)                  // if lighting time elapsed
                     {
-                        channels.DirectionLightOn.SwitchOff();              // switch off light
+                        channels.DirectionLightOn.Off();              // switch off light
                         StartWatch(time);                                   // start to measure time of light off
                         ++blinksCountMeasured;                              // increase one lighting period
                         goTo(blinksCountMeasured < blinksCount ? 
@@ -88,12 +88,12 @@ namespace MTS.Tester
                     }   // after blinker is off always come a period when blinker is on
                     break;
                 case ExState.Finalizing:
-                    channels.DirectionLightOn.SwitchOff();                  // switch off light
+                    channels.DirectionLightOn.Off();                  // switch off light
                     Finish(time);                                           // finish and do not update any more
                     Output.WriteLine("Switching direction light off");
                     break;
                 case ExState.Aborting:
-                    channels.DirectionLightOn.SwitchOff();
+                    channels.DirectionLightOn.Off();
                     Finish(time);
                     break;
             }
