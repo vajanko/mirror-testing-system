@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using MTS.IO;
-using MTS;
-using MTS.Utils;
+using MTS.Base;
+using MTS.Base.Properties;
 
 namespace MTS.Properties {
     
@@ -46,22 +46,13 @@ namespace MTS.Properties {
         /// <returns></returns>
         public string GetConfigDirectory()
         {
-            // if in application settings absolute path to configuration direcotry is defined, just return
-            // otherwise get path to executiong directory and combine it with relative configuration 
+            // if in application settings absolute path to configuration directory is defined, just return
+            // otherwise get path to executing directory and combine it with relative configuration 
             // directory from application settings
             if (Path.IsPathRooted(Default.ConfigDir))
                 return Default.ConfigDir;
             else
                 return Path.Combine(GetExecutingDirectory(), Default.ConfigDir);
-        }
-
-        /// <summary>
-        /// Get absolute system path to file where template for test collection file is stored
-        /// </summary>
-        /// <returns>Absolute path to template file</returns>
-        public string GetTemplatePath()
-        {
-            return Path.Combine(GetConfigDirectory(), Settings.Default.TemplateFile);
         }
 
         public string GetChannelsConfigPath()
@@ -88,7 +79,7 @@ namespace MTS.Properties {
         }
 
         /// <summary>
-        /// Create an open file dialog that will handle opening of caonfiguration file
+        /// Create an open file dialog that will handle opening of configuration file
         /// </summary>
         /// <returns>Instance of open file dialog initialized for opening configuration files</returns>
         public Microsoft.Win32.OpenFileDialog CreateOpenFileDialog()
@@ -139,11 +130,11 @@ namespace MTS.Properties {
             return module;
         }
         /// <summary>
-        /// Create an instance of channels for communication with testr hardware based on current protocol settings.
-        /// For example if current protocol is EtherCAT, this method will create an instace of channels using
-        /// <see cref="ECModule"/> and load its configuration from file wich is defined in this settings as configuration file
-        /// for EtherCAT procotol. This method will handle all exception and show error window to user if necessary.
-        /// At the momemnt of calling this method no connection is established with the tester hardware.
+        /// Create an instance of channels for communication with tester hardware based on current protocol settings.
+        /// For example if current protocol is EtherCAT, this method will create an instance of channels using
+        /// <see cref="ECModule"/> and load its configuration from file which is defined in this settings as configuration file
+        /// for EtherCAT protocol. This method will handle all exception and show error window to user if necessary.
+        /// At the moment of calling this method no connection is established with the tester hardware.
         /// </summary>
         /// <returns>Instance of <see cref="Channels"/> with loaded channels or null if channels couldn't be created</returns>
         public Channels GetChannelsInstance()
@@ -155,9 +146,9 @@ namespace MTS.Properties {
             // load channel settings from hardware settings file
             ChannelSettings settings = HWSettings.Default.ChannelSettings;
 
-            // create just instace of channel collection, without any initialization or connection
+            // create just instance of channel collection, without any initialization or connection
             Channels channels = new Channels(module, settings);
-            // initialize calibraetors positions
+            // initialize calibrators positions
             channels.InitializeCalibratorsSettings(HWSettings.Default.ZeroPlaneNormal,
                 HWSettings.Default.CalibretorX, HWSettings.Default.CalibretorY, HWSettings.Default.CalibretorZ);
             try

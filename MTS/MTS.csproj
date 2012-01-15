@@ -89,6 +89,10 @@
     <Reference Include="UIAutomationProvider">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="VIBlend.WPF.Editors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5f568d4f9cd901f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\VIBlend.WPF.Editors.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -106,7 +110,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\IPAddressControl.xaml">
+    <Page Include="Admin\Controls\ChangePasswordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\Controls\IPAddressControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\Controls\ProfileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,63 +126,45 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TestControl1.xaml">
+    <Page Include="Admin\Controls\CalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Modules\Admin\CalibrationWindow.xaml">
+    <Page Include="Admin\Controls\EthercatSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Modules\Admin\EthercatSettings.xaml">
+    <Page Include="Admin\Controls\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\Controls\ModbusSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Modules\Admin\LoginWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Modules\Admin\ModbusSettings.xaml">
+    <Page Include="Admin\SettingsItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Modules\Admin\SettingsWindow.xaml">
+    <Page Include="Data\DataWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Modules\Data\DataWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Modules\Data\EditOperatorWindow.xaml">
+    <Page Include="Data\EditOperatorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Modules\Editor\TestFile.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Mirror.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Modules\Tester\TestWindow.xaml">
+    <Page Include="Tester\TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -182,29 +176,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Utils\ErrorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="WindowMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Admin\Controls\ChangePasswordControl.xaml.cs">
+      <DependentUpon>ChangePasswordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Controls\ProfileWindow.xaml.cs">
+      <DependentUpon>ProfileWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\Converters\IdToTitleConverter.cs" />
-    <Compile Include="Controls\Converters\OperatorTypeConverter.cs" />
+    <Compile Include="Admin\Controls\OperatorTypeConverter.cs" />
     <Compile Include="Controls\Converters\ParamIdToNameConverter.cs" />
     <Compile Include="Controls\Converters\TaskResultTypeConverter.cs" />
     <Compile Include="Controls\Converters\TestIdToNameConverter.cs" />
-    <Compile Include="Controls\DocumentTab.cs" />
-    <Compile Include="Controls\IPAddressControl.xaml.cs">
+    <Compile Include="Admin\Controls\IPAddressControl.xaml.cs">
       <DependentUpon>IPAddressControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PopupWindow.xaml.cs">
@@ -212,102 +204,72 @@
     </Compile>
     <Compile Include="Controls\Validators\PasswordEqualityValidator.cs" />
     <Compile Include="Controls\Validators\RequiredFieldValidator.cs" />
-    <Compile Include="Modules\Admin\LoginWindow.xaml.cs">
+    <Compile Include="Admin\Controls\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Admin\Operator.cs" />
-    <Compile Include="Modules\Admin\Printing\PrintingLabel.cs">
+    <Compile Include="Admin\Operator.cs" />
+    <Compile Include="Admin\Printing\PrintingLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Modules\Admin\Printing\PrintingManager.cs" />
-    <Compile Include="Modules\Data\EditOperatorWindow.xaml.cs">
+    <Compile Include="Admin\Printing\PrintingManager.cs" />
+    <Compile Include="Data\EditOperatorWindow.xaml.cs">
       <DependentUpon>EditOperatorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Data\OperatorSource.cs" />
+    <Compile Include="Data\OperatorSource.cs" />
     <Compile Include="Controls\Converters\ParamValueConverter.cs" />
-    <Compile Include="Modules\Data\ResultStyleSelector.cs" />
-    <Compile Include="Modules\Tester\Result\ParamResult.cs" />
-    <Compile Include="Modules\Tester\Result\ResultBase.cs" />
-    <Compile Include="Modules\Tester\Result\TaskExecutedEventArgs.cs" />
-    <Compile Include="Modules\Tester\Result\TaskResult.cs" />
-    <Compile Include="Modules\Editor\Exception\ParamNotFoundException.cs" />
-    <Compile Include="Modules\Editor\Exception\TestException.cs" />
+    <Compile Include="Data\ResultStyleSelector.cs" />
+    <Compile Include="Tester\Result\ParamResult.cs" />
+    <Compile Include="Tester\Result\ResultBase.cs" />
+    <Compile Include="Tester\Result\TaskExecutedEventArgs.cs" />
+    <Compile Include="Tester\Result\TaskResult.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\Data\DataWindow.xaml.cs">
+    <Compile Include="Data\DataWindow.xaml.cs">
       <DependentUpon>DataWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\Errors.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Errors.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\ErrorWindow.xaml.cs">
-      <DependentUpon>ErrorWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\ExceptionManager.cs" />
-    <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\Unit.cs" />
-    <Compile Include="Controls\Converters\BoolNegationConverter.cs" />
-    <Compile Include="Controls\Converters\DoubleAmplifierConverter.cs" />
-    <Compile Include="Controls\Converters\DoubleToPointCollection.cs" />
-    <Compile Include="Controls\FlowControl.cs" />
-    <Compile Include="Controls\MirrorView.cs" />
-    <Compile Include="Controls\TestControl1.xaml.cs">
-      <DependentUpon>TestControl1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\Admin\CalibrationWindow.xaml.cs">
+    <Compile Include="Tester\Controls\DoubleAmplifierConverter.cs" />
+    <Compile Include="Tester\Controls\DoubleToPointCollection.cs" />
+    <Compile Include="Tester\Controls\FlowControl.cs" />
+    <Compile Include="Tester\Controls\MirrorView.cs" />
+    <Compile Include="Admin\Controls\CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Admin\EthercatSettings.xaml.cs">
+    <Compile Include="Admin\Controls\EthercatSettings.xaml.cs">
       <DependentUpon>EthercatSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Admin\ModbusSettings.xaml.cs">
+    <Compile Include="Admin\Controls\ModbusSettings.xaml.cs">
       <DependentUpon>ModbusSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Admin\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="Admin\SettingsItem.xaml.cs">
+      <DependentUpon>SettingsItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\Editor\FileManager.cs" />
-    <Compile Include="Modules\Editor\ParamValue.cs" />
-    <Compile Include="Modules\Editor\TestCollection.cs" />
-    <Compile Include="Modules\Editor\TestValue.cs" />
-    <Compile Include="Controls\UpDownButton.cs" />
-    <Compile Include="Controls\Mirror.xaml.cs">
-      <DependentUpon>Mirror.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\Editor\TestFile.xaml.cs">
-      <DependentUpon>TestFile.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Modules\Editor\ValueBase.cs" />
-    <Compile Include="Modules\Tester\Shift.cs" />
-    <Compile Include="Modules\Tester\Task\PresenceTest\PresenceTest.cs" />
-    <Compile Include="Modules\Tester\Task\RangeTest\BlinkerTest.cs" />
-    <Compile Include="Modules\Tester\Task\PeakTest\PeakTest.cs" />
-    <Compile Include="Modules\Tester\Task\PeakTest\PowerfoldTest.cs" />
-    <Compile Include="Modules\Tester\Task\RangeTest\RangeTest.cs" />
-    <Compile Include="Modules\Tester\Task\Scheduler.cs" />
-    <Compile Include="Modules\Tester\Task\RangeTest\SpiralTest.cs" />
-    <Compile Include="Modules\Tester\Task\PulloffTest.cs" />
-    <Compile Include="Modules\Tester\Task\Task.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\Calibrate.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\CenterTask.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\SetMultipleValues.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\SetValue.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\Wait.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\WaitForValue.cs" />
-    <Compile Include="Modules\Tester\Task\Tasks\ExecuteIf.cs" />
-    <Compile Include="Modules\Tester\Task\TestTask.cs" />
-    <Compile Include="Modules\Tester\Task\PeakTest\TravelTest.cs" />
-    <Compile Include="Modules\Tester\TestWindow.xaml.cs">
+    <Compile Include="Tester\Shift.cs" />
+    <Compile Include="Tester\Task\PresenceTest\PresenceTest.cs" />
+    <Compile Include="Tester\Task\RangeTest\BlinkerTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\PeakTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\PowerfoldTest.cs" />
+    <Compile Include="Tester\Task\RangeTest\RangeTest.cs" />
+    <Compile Include="Tester\Task\Scheduler.cs" />
+    <Compile Include="Tester\Task\RangeTest\SpiralTest.cs" />
+    <Compile Include="Tester\Task\PulloffTest.cs" />
+    <Compile Include="Tester\Task\Task.cs" />
+    <Compile Include="Tester\Task\Tasks\Calibrate.cs" />
+    <Compile Include="Tester\Task\Tasks\CenterTask.cs" />
+    <Compile Include="Tester\Task\Tasks\SetMultipleValues.cs" />
+    <Compile Include="Tester\Task\Tasks\SetValue.cs" />
+    <Compile Include="Tester\Task\Tasks\Wait.cs" />
+    <Compile Include="Tester\Task\Tasks\WaitForValue.cs" />
+    <Compile Include="Tester\Task\Tasks\ExecuteIf.cs" />
+    <Compile Include="Tester\Task\TestTask.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelTest.cs" />
+    <Compile Include="Tester\TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\MTSCommands.cs" />
-    <Compile Include="Utils\Output.cs" />
+    <Compile Include="Controls\MTSCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -327,10 +289,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Utils\Errors.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="app.config">
       <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
     </None>
@@ -343,7 +301,7 @@
     <None Include="config\template.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Editor\test.dtd" />
+    <None Include="config\test.dtd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -372,7 +330,7 @@
     <Resource Include="Resources\icons\newFile.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Modules\Editor\test.xml" />
+    <Resource Include="config\test.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\template.xml">
@@ -392,38 +350,22 @@
       <Project>{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}</Project>
       <Name>IO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTS.Base\MTS.Base.csproj">
+      <Project>{0AE7820B-31EC-4D62-B36B-E8CD63369ABC}</Project>
+      <Name>MTS.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTS.Data\MTS.Data.csproj">
       <Project>{2EB96BD9-B33C-4116-ADD3-7E43E5D4B101}</Project>
       <Name>MTS.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS.Editor\MTS.Editor.csproj">
+      <Project>{D497E8F2-AC8A-49E7-9BF8-8147888DB90A}</Project>
+      <Name>MTS.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="..\MTS.IO\MTS.IO.csproj">
       <Project>{F97F01D8-FF45-4879-A3C9-1326AB3E66CA}</Project>
       <Name>MTS.IO</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\exclamation.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cross.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cancel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\database_error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\server_error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\printer_error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\page_error.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

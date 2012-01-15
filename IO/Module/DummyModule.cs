@@ -152,7 +152,7 @@ namespace MTS.IO.Module
         public void LoadConfiguration(string filename)
         {
             string str;         // temporary value for string while parsing
-            int value;          // temporary value fot integer while parsing
+            int value;          // temporary value for integer while parsing
             string[] items;     // parsed items on one line 
 
             // reference to just created channel
@@ -170,7 +170,7 @@ namespace MTS.IO.Module
             {
                 // parse line with CSV separator
                 items = reader.ReadLine().Split(csvSep, StringSplitOptions.RemoveEmptyEntries);
-                // not enought items per line - skip it
+                // not enough items per line - skip it
                 if (items.Length < itemsPerLine) continue;
 
                 // parsing length of channel value (in bits and hexadecimal format)

@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 
+using MTS.Base;
 using MTS.Controls;
 using MTS.Editor;
 using MTS.Admin;
@@ -61,12 +62,19 @@ namespace MTS
                 DocumentItem item = toClose[0];
                 toClose.RemoveAt(0);
                 if (!item.Close())
-                    return; // this DocumentItem could not be closed - logout is not successfull
+                    return; // this DocumentItem could not be closed - logout is not successful
             }
-            // now all document items are closed - operator will be loged out
+            // now all document items are closed - operator will be logged out
             Output.WriteLine("Logout {0}", Admin.Operator.Instance.Login);
             Admin.Operator.LogOut();
             IsLoggedIn = false;
+        }
+
+        private void profile_Click(object sender, RoutedEventArgs e)
+        {
+            Admin.Controls.ProfileWindow wnd = new Admin.Controls.ProfileWindow();
+            wnd.ShowDialog();
+            //Admin.Printing.PrintingManager.Print("Mirror", "Passed");
         }
 
         #endregion
@@ -291,7 +299,7 @@ namespace MTS
             {
                 // setting window could be opened just once
                 foreach (var item in filePane.Items)
-                    if (item is SettingsWindow)    // one of tab is a settings window
+                    if (item is SettingsItem)    // one of tab is a settings window
                     {
                         e.CanExecute = false;   // could not open next one
                         e.Handled = true;
@@ -303,7 +311,7 @@ namespace MTS
         }
         private void viewSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var tab = new SettingsWindow(); // create new settings window
+            var tab = new SettingsItem(); // create new settings window
             filePane.Items.Add(tab);        // add it to tab colleciton
             filePane.SelectedItem = tab;    // select just created tab
         }
@@ -355,7 +363,7 @@ namespace MTS
 
         /// <summary>
         /// Open login window (this will block the application) and ask user for login and password.
-        /// This window will be opened until user is loged in successfully or it is manually closed by user
+        /// This window will be opened until user is logged in successfully or it is manually closed by user
         /// </summary>
         private void login()
         {
@@ -375,11 +383,6 @@ namespace MTS
                 Output.WriteLine("Login {0}", Admin.Operator.Instance.Login);
                 IsLoggedIn = true;
             }
-        }
-
-        private void profile_Click(object sender, RoutedEventArgs e)
-        {
-            Admin.Printing.PrintingManager.Print("Mirror", "Passed");
         }
 
         #region Constructors

@@ -2,24 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 
-using MTS.IO.Properties;
-
-namespace MTS.IO 
+namespace MTS.IO
 {
 
     /// <summary>
-    /// This class is only a thin cover oover some IModule implementation
-    /// It allows access to channels directrly by properties
+    /// This class is only a thin cover over some IModule implementation
+    /// It allows access to channels directly by properties
     /// </summary>
     public partial class Channels : IModule
     {
         /// <summary>
-        /// Instance of layer that is resposible for communication with hardware
+        /// Instance of layer that is responsible for communication with hardware
         /// </summary>
         private IModule module;
 
         /// <summary>
-        /// Collection of setting for all analog channels. This includes raw/real low/high vlaues
+        /// Collection of setting for all analog channels. This includes raw/real low/high values
         /// </summary>
         private ChannelSettings settings;
 
