@@ -76,15 +76,6 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("logs.txt")]
-        public string LogFile {
-            get {
-                return ((string)(this["LogFile"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("task1.csv")]
@@ -94,15 +85,6 @@ namespace MTS.Properties {
             }
             set {
                 this["EthercatConfigFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("template.xml")]
-        public string TemplateFile {
-            get {
-                return ((string)(this["TemplateFile"]));
             }
         }
         

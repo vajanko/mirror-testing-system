@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:MTS"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:ctrl="clr-namespace:MTS.Controls"
-        xmlns:ed="clr-namespace:MTS.Editor"
+        xmlns:base="clr-namespace:MTS.Base;assembly=MTS.Base"
         xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
         Title="MTS" Height="800" Width="800" Left="0" Top="0" Loaded="MainWindow_Loaded"
         >
@@ -18,9 +18,9 @@
         <CommandBinding Command="SaveAs" CanExecute="saveAsCanExecute" Executed="saveAsExecuted"/>
         <CommandBinding Command="Close" CanExecute="closeCanExecute" Executed="closeExecuted"/>
         <!-- MTS (own) commands -->
-        <CommandBinding Command="{x:Static local:MTSCommands.ViewTester}" CanExecute="viewTesterCanExecute" Executed="viewTesterExecuted"/>
-        <CommandBinding Command="{x:Static local:MTSCommands.ViewSettings}" CanExecute="viewSettingsCanExecute" Executed="viewSettingsExecuted"/>
-        <CommandBinding Command="{x:Static local:MTSCommands.ViewData}" CanExecute="viewDataCanExecute" Executed="viewDataExecuted"/>
+        <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewTester}" CanExecute="viewTesterCanExecute" Executed="viewTesterExecuted"/>
+        <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewSettings}" CanExecute="viewSettingsCanExecute" Executed="viewSettingsExecuted"/>
+        <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewData}" CanExecute="viewDataCanExecute" Executed="viewDataExecuted"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Close" Key="F4" Modifiers="Ctrl"/>
@@ -34,7 +34,7 @@
                 <Style TargetType="{x:Type MenuItem}">
                     <Setter Property="Header" Value="{Binding Command.Text, RelativeSource={RelativeSource self}}"/>
                 </Style>
-                <ctrl:BoolNegationConverter x:Key="boolNegationConverter"/>
+                <base:BoolNegationConverter x:Key="boolNegationConverter"/>
             </Menu.Resources>
             <MenuItem Header="_File">
                 <!-- File Commands for Editor -->
@@ -105,17 +105,17 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_View">        <!-- Application commands - display windows -->
-                <MenuItem Command="{x:Static local:MTSCommands.ViewTester}">
+                <MenuItem Command="{x:Static ctrl:MTSCommands.ViewTester}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/viewTester.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{x:Static local:MTSCommands.ViewSettings}">
+                <MenuItem Command="{x:Static ctrl:MTSCommands.ViewSettings}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/viewSettings.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{x:Static local:MTSCommands.ViewData}">
+                <MenuItem Command="{x:Static ctrl:MTSCommands.ViewData}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/viewData.png" />
                     </MenuItem.Icon>
@@ -182,13 +182,13 @@
             </ToolBar>
             <!-- Window ToolBar -->
             <ToolBar>
-                <Button Command="{x:Static local:MTSCommands.ViewTester}">
+                <Button Command="{x:Static ctrl:MTSCommands.ViewTester}">
                     <Image Source="/MTS;component/Resources/icons/viewTester.png"/>
                 </Button>
-                <Button Command="{x:Static local:MTSCommands.ViewData}">
+                <Button Command="{x:Static ctrl:MTSCommands.ViewData}">
                     <Image Source="/MTS;component/Resources/icons/viewData.png"/>
                 </Button>
-                <Button Command="{x:Static local:MTSCommands.ViewSettings}">
+                <Button Command="{x:Static ctrl:MTSCommands.ViewSettings}">
                     <Image Source="/MTS;component/Resources/icons/viewSettings.png"/>
                 </Button>
             </ToolBar>

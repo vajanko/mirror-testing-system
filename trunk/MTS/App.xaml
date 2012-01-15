@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     StartupUri="WindowMain.xaml">
     <Application.Resources>
-        <!-- Setup style for all windows in this aplication -->
+        <!-- Setup style for all windows in this application -->
         <Style x:Key="commonWindow" TargetType="{x:Type Window}">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
             <Setter Property="WindowStyle" Value="SingleBorderWindow"/>

@@ -14,14 +14,8 @@
     <Setting Name="ModbusPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">502</Value>
     </Setting>
-    <Setting Name="LogFile" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">logs.txt</Value>
-    </Setting>
     <Setting Name="EthercatConfigFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">task1.csv</Value>
-    </Setting>
-    <Setting Name="TemplateFile" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">template.xml</Value>
     </Setting>
     <Setting Name="ConfigDir" Type="System.String" Scope="User">
       <Value Profile="(Default)">config</Value>
