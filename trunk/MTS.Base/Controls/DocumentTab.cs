@@ -154,7 +154,7 @@ namespace MTS.Base
         /// <summary>
         /// This method is called when user is trying to save current item. It could be also
         /// called from <see cref="Close()"/> method when item is not saved and user agree with saving it.
-        /// At the end <see cref="IsSaved"/> property is changed to true. When overring call this method
+        /// At the end <see cref="IsSaved"/> property is changed to true. When overriding call this method
         /// at the end of your code.
         /// </summary>
         public virtual void Save()

@@ -32,8 +32,13 @@ namespace MTS.Admin.Controls
         /// </summary>
         public ushort Port
         {
-            get { return (ushort)port.Value; }
-            set { port.Value = value; }
+            get
+            {
+                ushort value = 0;
+                ushort.TryParse(port.Text, out value);
+                return value;
+            }
+            set { port.Text = value.ToString(); }
         }
         /// <summary>
         /// (Get/Set) Absolute path to ethercat module configuration file

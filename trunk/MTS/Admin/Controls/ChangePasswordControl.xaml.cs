@@ -68,6 +68,12 @@ namespace MTS.Admin.Controls
                 passwordFailed(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// This method is called when change button is clicked. This event will try to changed user password
+        /// and display appropriate message to user.
+        /// </summary>
+        /// <param name="sender">Instance of change button which has been clicked</param>
+        /// <param name="e">Event argument of button clicked</param>
         private void changeButton_Click(object sender, RoutedEventArgs e)
         {
             // check if given password is correct - exists in database
@@ -79,6 +85,13 @@ namespace MTS.Admin.Controls
                 OnPasswordFailed();
         }
 
+        /// <summary>
+        /// Initialize <see cref="ChangePasswordControl"/> by passing it user login which password could be changed
+        /// with this control and function which will validate old used password. This method should be only used
+        /// when instance of <see cref="ChangePasswordControl"/> is created in XAML. Otherwise use constructor.
+        /// </summary>
+        /// <param name="login">Login of user which password could be changed with this control</param>
+        /// <param name="passValidator">Function that will validate old used password</param>
         public void Init(string login, Func<string, string, bool> passValidator)
         {
             this.login = login;
@@ -87,9 +100,24 @@ namespace MTS.Admin.Controls
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of <see cref="ChangePasswordControl"/> which allows user to change his or her password
+        /// by validating current password and confirming twice entered new password.
+        /// </summary>
         public ChangePasswordControl()
         {
             InitializeComponent();
+        }
+        /// <summary>
+        /// Create a new instance of <see cref="ChangePasswordControl"/> which allows user to change his or her password
+        /// by validating current password and confirming twice entered new password.
+        /// </summary>
+        /// <param name="login">Login of user which password could be changed with this control</param>
+        /// <param name="passValidator">Function that will validate old used password</param>
+        public ChangePasswordControl(string login, Func<string, string, bool> passValidator)
+            : this()
+        {
+            Init(login, passValidator);
         }
 
         #endregion
@@ -97,7 +125,9 @@ namespace MTS.Admin.Controls
 
     public class ChangedPasswordEventArgs : EventArgs
     {
-
+        /// <summary>
+        /// (Get) Previous user password
+        /// </summary>
         public string OldPassword { get; private set; }
         /// <summary>
         /// (Get) New password successfully changed
@@ -108,7 +138,13 @@ namespace MTS.Admin.Controls
         /// </summary>
         public string Login { get; private set; }
 
-
+        /// <summary>
+        /// Create a new instance of <see cref="ChangedPasswordEventArgs"/> containing event data for password
+        /// changed event
+        /// </summary>
+        /// <param name="login">Login of used who's password has been changed</param>
+        /// <param name="oldPassword">Previous user password</param>
+        /// <param name="newPassword">New password successfully changed</param>
         public ChangedPasswordEventArgs(string login, string oldPassword, string newPassword)
         {
             Login = login;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Controls;
@@ -13,13 +14,14 @@ using Microsoft.Win32;
 
 using MTS.Base;
 using MTS.Editor;
+using MTS.Editor.Properties;
 
 namespace MTS.Editor
 {
     /// <summary>
     /// Interaction logic for TestFile.xaml
     /// </summary>
-    public partial class TestFile : DocumentItem
+    public partial class TestFileItem : DocumentItem
     {
         #region Properties
 
@@ -40,13 +42,8 @@ namespace MTS.Editor
         #region Tests Property
 
         public static readonly DependencyProperty TestsProperty =
-            DependencyProperty.Register("Tests", typeof(TestCollection), typeof(TestFile),
-            new PropertyMetadata(null, testPropertyChanged));
+            DependencyProperty.Register("Tests", typeof(TestCollection), typeof(TestFileItem));
 
-        private static void testPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
-        {
-            //(source as TestFile).Saved = false;
-        }
         public TestCollection Tests
         {
             get { return (TestCollection)GetValue(TestsProperty); }
@@ -60,26 +57,27 @@ namespace MTS.Editor
         #region Private Methods
 
         /// <summary>
-        /// Create default view of tests. By default tests are sorted by Name and grouped byt its
+        /// Create default view of tests. By default tests are sorted by Name and grouped by its
         /// property GroupName
         /// </summary>
         /// <param name="tests">Collection of tests</param>
-        private void createTestView(TestCollection tests)
+        private static void createTestView(TestCollection tests)
         {
             // This method is called whenever a collection of test is loaded and displayed in a document
             // content. This happens when new file is created or already created file is opened
 
             // By default every collection has a view. Just take its default view and modify it
-            var view = CollectionViewSource.GetDefaultView(Tests);
+            var view = CollectionViewSource.GetDefaultView(tests);
 
             // sort tests by Name
             //view.SortDescriptions.Clear();
             //view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
-            // gorup them by its property GroupName
+            // group them by its property GroupName
             view.GroupDescriptions.Clear();
             view.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
         }
+
 
         #endregion
 
@@ -89,28 +87,39 @@ namespace MTS.Editor
         /// Create a new test collection and add it to the document content.
         /// New filename will be generated
         /// </summary>
-        public void New()
+        /// <returns>Value indicating whether new file could be created</returns>
+        public bool New()
         {
-            // create new unsaved file
-            IsSaved = false;
+            try
+            {
+                // create new unsaved file
+                IsSaved = false;
+                // which does not exists
+                Exists = false;
+                // fill with default collection
+                Tests = FileManager.CreateNew();
+                // create view of tests - grouping and sorting
+                createTestView(Tests);
+                // register method that is called when any property is changed
+                Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
+                // newly created file gets some unique name
+                ItemId = FileManager.GetNewName();
 
-            //// create new unsaved file
-            //Saved = false;
+                Output.WriteLine("New file \"" + ItemId + "\" created.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                FileManager.HandleException(ex);
+            }
 
-            // which does not exists
-            Exists = false;
-            // fill with default collection
-            Tests = FileManager.CreateNew();
-            // create view of tests - grouping and sorting
-            createTestView(Tests);
-            // register method that is called when any property is changed
-            Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
-            // newly created file gets some unique name
-            ItemId = FileManager.GetNewName();            
-
-            Output.WriteLine("New file \"" + ItemId + "\" created.");
+            return false;
         }
-        // This method is called whenever any of test parameters change
+        /// <summary>
+        /// This method is called whenever any of test parameters change. Status of file will be changed to unsaved
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TestFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (IsSaved)  // this raises an event - only change if necessary
@@ -121,21 +130,31 @@ namespace MTS.Editor
         /// Open a new file, read test collection from it and display in this document content
         /// </summary>
         /// <param name="path">Absolute path to the file</param>
-        public void Open(string path)
+        /// <returns>Value indicating whether opening file was successful</returns>
+        public bool Open(string path)
         {
-            // read file - let the error handling to the main window
-            // this is a dependency property - user interface will be generated when test collection is added to it
-            Tests = FileManager.ReadFile(path);
-            // create a view of tests - grouping and sorting
-            createTestView(Tests);
-            // this handler will be executed when any of test property or test parameter property change
-            // so we will be notified when file is not saved
-            Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);            
-            Exists = true;
+            try
+            {
+                // read file - let the error handling to the main window
+                // this is a dependency property - user interface will be generated when test collection is added to it
+                Tests = FileManager.ReadFile(path);
+                // create a view of tests - grouping and sorting
+                createTestView(Tests);
+                // this handler will be executed when any of test property or test parameter property change
+                // so we will be notified when file is not saved
+                Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
+                Exists = true;
 
-            ItemId = path;      // here an event is raised - displayed name is changed 
+                ItemId = path;      // here an event is raised - displayed name is changed 
 
-            Output.WriteLine("Opened file " + path);
+                Output.WriteLine("Opened file " + path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                FileManager.HandleException(ex);
+            }
+            return false;
         }
         /// <summary>
         /// Save file to a new location. Even if file is already saved, ask user for a new location.
@@ -231,7 +250,7 @@ namespace MTS.Editor
 
         #region Constructors
 
-        public TestFile()
+        public TestFileItem()
         {
             this.DataContext = this;
             InitializeComponent();

@@ -466,7 +466,7 @@ namespace MTS.Admin
         /// </summary>
         private void initializeOperators()
         {
-            // hide operators if loged user is not admin
+            // hide operators if logged user is not admin
             if (Operator.IsInRole(Data.Types.OperatorType.Admin))
             {
                 operatorsExpander.Visibility = System.Windows.Visibility.Visible;
@@ -587,7 +587,7 @@ namespace MTS.Admin
         #region Constructors
 
         /// <summary>
-        /// Create a new instance of <see cref="SettingsItem"/> and initialize its componens
+        /// Create a new instance of <see cref="SettingsItem"/> and initialize its components
         /// </summary>
         public SettingsItem()
         {
