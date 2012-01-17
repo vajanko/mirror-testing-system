@@ -122,17 +122,17 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Option">
-                <MenuItem Header="Log in" Click="login_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow, Converter={StaticResource boolNegationConverter}}">
+                <MenuItem Header="Log _in" Click="login_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow, Converter={StaticResource boolNegationConverter}}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/login.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Log out" Click="logout_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
+                <MenuItem Header="Log _out" Click="logout_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/logout.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Profile ..." Click="profile_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
+                <MenuItem Header="_Profile ..." Click="profile_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/profile.png" />
                     </MenuItem.Icon>

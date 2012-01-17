@@ -49,13 +49,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VIBlend.WPF.Editors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5f568d4f9cd901f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\VIBlend.WPF.Editors.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigException.cs" />
+    <Compile Include="ConfigNotFoundException.cs" />
     <Compile Include="Controls\BoolNegationConverter.cs" />
     <Compile Include="Controls\DocumentTab.cs" />
     <Compile Include="Controls\ErrorWindow.xaml.cs">
@@ -78,6 +76,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,28 +111,34 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\cancel.png" />
+    <Resource Include="Resources\cancel.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\server_error.png" />
+    <Resource Include="Resources\server_error.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\cross.png" />
+    <Resource Include="Resources\cross.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\database_error.png" />
+    <Resource Include="Resources\database_error.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\error.png" />
+    <Resource Include="Resources\error.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\exclamation.png" />
+    <Resource Include="Resources\exclamation.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\page_error.png" />
+    <Resource Include="Resources\page_error.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\printer_error.png" />
+    <Resource Include="Resources\printer_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\SendErrorIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\ViewLogIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

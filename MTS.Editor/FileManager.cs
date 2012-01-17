@@ -159,33 +159,54 @@ namespace MTS.Editor
 
         #region Xml Format
 
+        /// <summary>
+        /// Get name of a test identified by it's string id. Null is returned if such a test does not exist.
+        /// No exceptions should be thrown
+        /// </summary>
+        /// <param name="testId">Id of test which name is required to be found</param>
+        /// <returns>Localized name of required test identified by it's id</returns>
         public static string GetTestName(string testId)
         {
             string name = null;
             if (TemplateRoot != null)
-            {
+            {   // from template file load test element with required id
                 XElement test = TemplateRoot.Elements(TestElem)
                     .Where(t => t.Attribute(IdAttr) != null && t.Attribute(IdAttr).Value == testId)
                     .FirstOrDefault();
-                if (test.Element(NameElem) != null)
-                    name = test.Element(NameElem).Value;
+                if (test != null)
+                {   // if it exists get it's name
+                    XElement n = test.Element(NameElem);
+                    if (n != null)  // do not throw exception - if name exists return
+                        name = n.Value;
+                }
             }
 
             return name;
         }
+        /// <summary>
+        /// Get name of a test parameter identified by it's string id and id of test to which this parameter belongs.
+        /// Null if returned if such a parameter does not exist. No exception should be thrown.
+        /// </summary>
+        /// <param name="testId">Id of test which parameter name is required to be found</param>
+        /// <param name="paramId">Id of parameter which name is required to be found</param>
+        /// <returns>Localized name of required parameter identified by it's id and id of test to which it belongs</returns>
         public static string GetParamName(string testId, string paramId)
         {
             string name = null;
             if (TemplateRoot != null)
-            {
+            {   // from template file load test element with required id
                 XElement test = TemplateRoot.Elements(TestElem)
                     .FirstOrDefault(t => t.Attribute(IdAttr) != null && t.Attribute(IdAttr).Value == testId);
                 if (test != null)
-                {
+                {   // if such a test exists get from is parameter with required id
                     XElement param = test.Elements(ParamElem)
                         .FirstOrDefault(p => p.Attribute(IdAttr) != null && p.Attribute(IdAttr).Value == paramId);
-                    if (param.Element(NameElem) != null)
-                        name = param.Element(NameElem).Value;
+                    if (param != null)
+                    {   // if such a parameter exists get it's name
+                        XElement n = param.Element(NameElem);
+                        if (n != null)  // do not throw exception - if name exists return
+                            name = n.Value;
+                    }
                 }
             }
 
@@ -198,7 +219,7 @@ namespace MTS.Editor
         /// values of <paramref name="TestValue"/> instance in string format)
         /// <paramref name="TestValue"/> contains properties that may be set up on test by user, 
         /// collection of parameters and values that are displayed in user interface such as description
-        /// of name of current test. In this method only empty instace of <paramref name="TestValue"/> 
+        /// of name of current test. In this method only empty instance of <paramref name="TestValue"/> 
         /// is created, parameters are added later.
         /// Throws exception if xml is in incorrect format
         /// </summary>
@@ -207,7 +228,7 @@ namespace MTS.Editor
         /// <returns>A new instance of <paramref name="TestValue"/> created from xml description</returns>
         private static TestValue getTestInstance(XElement tmplTest)
         {
-            // create empty test just identified by unic id
+            // create empty test just identified by unique id
             TestValue test = new TestValue(tmplTest.Attribute(IdAttr).Value);
             
             // set test properties - these values are independent on test values
@@ -215,7 +236,7 @@ namespace MTS.Editor
             test.Name = tmplTest.Element(NameElem).Value;
             // longer description of test - may be added as a tooltip on some user control
             test.Description = tmplTest.Element(DescriptionElem).Value;
-            // all test are devided to groups according their funcionality
+            // all test are divided to groups according their functionality
             test.GroupName = tmplTest.Element(GroupElem).Value;
             return test;
         }
@@ -289,8 +310,8 @@ namespace MTS.Editor
                         tmplParam.Element(ValuesElem).Elements(ValueElem).Select(el => el.Value).ToArray());
                     break;
                 default: 
-                    // unkown type of parameter
-                    throw new ArgumentException("Unkown parameter type - " + type);
+                    // unknown type of parameter
+                    throw new ArgumentException("Unknown parameter type - " + type);
             }
 
 
@@ -311,8 +332,8 @@ namespace MTS.Editor
         #region Input/Output
 
         /// <summary>
-        /// Generate a new unic file name - used when creating a new file. This only default name with
-        /// unique numeric sufix without direcotry name.
+        /// Generate a new unique file name - used when creating a new file. This only default name with
+        /// unique numeric suffix without directory name.
         /// </summary>
         public static string GetNewName()
         {
@@ -321,20 +342,25 @@ namespace MTS.Editor
 
         /// <summary>
         /// Read a particular file from given path and return its content as o collection of tests.
-        /// Throws an exception if given path does not exists or file is in incorrect format or currupted
+        /// Throws an exception if given path does not exists or file is in incorrect format or corrupted
         /// </summary>
         /// <param name="path">Path to file to read</param>
-        /// <returns>Collection of <paramref name="TestValue"/> instances readed from given file</returns>
+        /// <returns>Collection of <paramref name="TestValue"/> instances read from given file</returns>
+        /// <exception cref="System.IO.FileFormatException">File is corrupted and could not be loaded</exception>
+        /// <exception cref="System.IO.IOException">File could not be read because of insufficient privileges or other
+        /// IO error</exception>
+        /// <exception cref="System.IO.FileNotFoundException">File does not exist</exception>
+        /// <exception cref="MTS.Base.ConfigException">Template file was not found</exception>
         public static TestCollection ReadFile(string path)
         {
-            // notice that TestValue and ParamValue instaces do not know anythig about file format
+            // notice that TestValue and ParamValue instances do not know anything about file format
             // this is the only place (also method for saving and creating new file) where the format of test 
             // collection file is described
-
-            // load file to memory
-            XElement fileRoot = XElement.Load(path);
+            if (!File.Exists(path))
+                throw new FileNotFoundException(Errors.FileNotFoundEx, path);
+            
             // load template to memory
-            XElement tmplRoot = XElement.Load(Settings.Default.GetTemplatePath());
+            XElement tmplRoot = loadTemplate();
             // throw an exception if any of these two files does not exist
 
             // crate a new empty instance of test collection and add items from file
@@ -342,6 +368,9 @@ namespace MTS.Editor
 
             try     // catch exception while reading xml file - any mistake in input file
             {       // will be represented as an error in file format and would not be loaded                
+                // load file to memory
+                XElement fileRoot = XElement.Load(path);
+
                 foreach (XElement tmplTest in tmplRoot.Elements(TestElem))
                 {
                     // create instance of test from template test (do not consider test parameters)
@@ -369,7 +398,7 @@ namespace MTS.Editor
 
                     foreach (XElement tmplParam in tmplTest.Elements(ParamElem))
                     {
-                        // create an parameter instace acording its properties in xml template
+                        // create an parameter instance according its properties in xml template
                         ParamValue pv = getParamInstance(tmplParam);
                         // get template param id attribute
                         string paramId = tmplParam.Attribute(IdAttr).Value;
@@ -398,27 +427,24 @@ namespace MTS.Editor
                 }
             }
             catch (Exception ex)
-            {   // file could not be readed - it is an unkown format
-                // this hides the impementation details (that file is serialized or xml), noone knows about the format
+            {   // file could not be read - it is an unknown format
+                // this hides the implementation details (that file is serialized or xml), no one knows about the format
                 // except of the FileManager
-                if (ex is IOException)  // if it is IOException (file protection etc.) leave exception as it is, other wise
-                    throw ex;           // generate exception telling that file format is corrupted
-                throw new FileLoadException("File may be corrupted or is in incorrect format", 
-                    Path.GetFileName(path), ex);
+                throw new FileFormatException(new Uri(path), Errors.FileFormatErrorEx, ex);
             }
 
             return tc;
         }
         /// <summary>
-        /// Save a collection of test to a file in given path. File is overwrited if it already exists and
+        /// Save a collection of test to a file in given path. File is overwritten if it already exists and
         /// created new if it does not.
-        /// An exception is thrown if file could not be created or given collectio of test vlaues is corrupted
+        /// An exception is thrown if file could not be created or given collection of test values is corrupted
         /// </summary>
         /// <param name="path">Absolute path to the file, where collection will be saved</param>
         /// <param name="collection">Collection of tests to save</param>
         public static void SaveFile(string path, TestCollection collection)
         {
-            // notice that TestValue and ParamValue instaces do not know anythig about file format
+            // notice that TestValue and ParamValue instances do not know anything about file format
             // this is the only place (also method for reading and creating new file) where the format of test 
             // collection file is described
 
@@ -430,7 +456,7 @@ namespace MTS.Editor
                 XElement testElem = new XElement(TestElem,
                     new XAttribute(IdAttr, test.ValueId),
                     new XAttribute(EnabledElem, test.Enabled));
-                // add param childs elements to test
+                // add param child's elements to test
                 foreach (ParamValue param in test)
                 {
                     // create param element with id attribute and its string value representation
@@ -449,48 +475,78 @@ namespace MTS.Editor
         }
 
         /// <summary>
-        /// Create and return new default instance of test collection with default properties and defualt
+        /// Create and return new default instance of test collection with default properties and default
         /// values of test parameters. This method use template file to create default instance. An exception
         /// is thrown if template does not exists.
         /// </summary>
         /// <returns>Collection of <paramref name="TestValue"/> loaded from template file initialized
         /// with default values</returns>
+        /// <exception cref="MTS.Base.ConfigException">Template file not found or is corrupted</exception>
         public static TestCollection CreateNew()
         {
-            // notice that TestValue and ParamValue instaces do not know anythig about file format
+            // notice that TestValue and ParamValue instances do not know anything about file format
             // this is the only place (also method for saving and reading) where the format of test 
             // collection file is described
 
             //TODO: check for an exception (error in template file)
 
-            // absolute path to firecotry where template file is stored
+            // absolute path to directory where template file is stored
             string templatePath = Settings.Default.GetTemplatePath();
             // check if file exists - otherwise throw special exception so user may check configuration of
             // his application for bad settings
             if (!File.Exists(templatePath))
-                throw new FileNotFoundException("Template file does not exists. Check application configuration.");
-
-            // load template file - root element is <tests>
-            XDocument template = XDocument.Load(templatePath);
-            XElement tmplRoot = template.Root;
+                throw new ConfigNotFoundException(templatePath, Errors.ConfigNotFoundEx);
 
             // create a new empty instance of test collection
             TestCollection tc = new TestCollection();
 
-            foreach (XElement tmplTest in tmplRoot.Elements(TestElem))
+            try
             {
-                // get empty instance of test (without properties) with default properties
-                TestValue tv = getTestInstance(tmplTest);
+                // load template file - root element is <tests>
+                XDocument template = XDocument.Load(templatePath);
+                XElement tmplRoot = template.Root;
 
-                // add parameters from template to just created TestValue instance
-                foreach (XElement tmplParam in tmplTest.Elements(ParamElem))
-                    tv.AddParam(getParamInstance(tmplParam));   // create parameter from xml description
+                foreach (XElement tmplTest in tmplRoot.Elements(TestElem))
+                {
+                    // get empty instance of test (without properties) with default properties
+                    TestValue tv = getTestInstance(tmplTest);
 
-                // add test to collection
-                tc.AddTest(tv);
+                    // add parameters from template to just created TestValue instance
+                    foreach (XElement tmplParam in tmplTest.Elements(ParamElem))
+                        tv.AddParam(getParamInstance(tmplParam));   // create parameter from xml description
+
+                    // add test to collection
+                    tc.AddTest(tv);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is IOException)
+                    throw ex;
+                throw new ConfigException(templatePath, Errors.ConfigCorruptedEx, ex);
             }
 
             return tc;
+        }
+
+        private static XElement loadTemplate()
+        {   // get path from application settings where template path is stored
+            string path = Settings.Default.GetTemplatePath();
+            XElement root = null;
+
+            try
+            {   // load template to memory
+                root = XElement.Load(path);
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+                throw new ConfigNotFoundException(path, Errors.ConfigNotFoundEx, ex);
+            }
+            catch (System.Xml.XmlException ex)
+            {
+                throw new ConfigException(path, Errors.ConfigCorruptedEx, ex);
+            }
+            return root;
         }
 
         #endregion
@@ -541,52 +597,67 @@ namespace MTS.Editor
         #region Error handling
 
         /// <summary>
-        /// Handle exception that has been thrown while saving a file. This consists of recognizing type of
-        /// exception and showing an apropriate message to user or rethrowing exception if it is not recognized
-        /// for <paramref name="FileManager"/>
+        /// Show editor related exception that has been thrown to user in a window. If given exception is unknown
+        /// by editor the exception is re-thrown
         /// </summary>
-        /// <param name="ex">An instace of exception that was thrown</param>
-        public static void HandleSaveException(Exception ex)
+        /// <param name="ex">Instance of exception to be displayed to user in a window dialog</param>
+        public static void HandleException(Exception ex)
         {
-            // this message will be displayed to user
-            // will be modified according to exception type
-            string message = "An error occured while saveing file:\n";
-
-            if (ex is IOException)          // any type of input/output exception
-                message += ex.Message;      // display IO exception message
-            else
-                throw ex;                   // we are not able to handle this exception
-
-            // display MessageBox with created message
-            MessageBox.Show(message, fileError, MessageBoxButton.OK,
-                MessageBoxImage.Error, MessageBoxResult.OK);
+            if (ex is ApplicationException)
+            {
+                if (ex is ConfigException)
+                {   // template file either does not exist or is corrupted
+                    ConfigException ce = ex as ConfigException;
+                    if (ex is ConfigNotFoundException)
+                        showError(ex, Errors.ConfigNotFoundMsg, ce.ConfigPath);
+                    else
+                        showError(ex, Errors.ConfigCorruptedMsg, ce.ConfigPath);
+                }
+                else if (ex is ValueException)
+                {   // required parameter was not found in the file
+                    if (ex is ParamNotFoundException)
+                    {
+                        ParamNotFoundException pe = ex as ParamNotFoundException;
+                        showFileError(ex, Errors.ParamNotFoundMsg, pe.ParamName, pe.TestName);
+                    }
+                    else throw ex;
+                }
+            }
+            else if (ex is SystemException)
+            {   // file format is corrupted
+                if (ex is FormatException)
+                {
+                    if (ex is FileFormatException)
+                        showFileError(ex, Errors.FileFormatErrorMsg, (ex as FileFormatException).SourceUri.AbsolutePath);
+                    else throw ex;
+                }
+                else if (ex is IOException)
+                {   // required file was not found
+                    if (ex is FileNotFoundException)
+                        showFileError(ex, Errors.FileNotFoundMsg, (ex as FileNotFoundException).FileName);
+                    // file privileges could be added
+                    else throw ex;
+                }
+                else throw ex;
+            }
+            else throw ex;
         }
+        private static void showFileError(Exception ex, string formatedMesssage, params string[] args)
+        {
+            ExceptionManager.ShowError(ex, Errors.FileErrorTitle, Errors.FileErrorIcon, formatedMesssage, args);
+        }
+        private static void showError(Exception ex, string formatedMesssage, params string[] args)
+        {
+            ExceptionManager.ShowError(ex, Errors.ErrorTitle, Errors.ErrorIcon, formatedMesssage, args);
+        }
+
+        #endregion
+
+        #endregion
+
         /// <summary>
-        /// Handle exception that has been thrown while opening a file. This consists of recognizing type of
-        /// exception and showing an apropriate message to user or rethrowing exception if it is not recognized
-        /// for <paramref name="FileManager"/>
+        /// FileManager static constructor
         /// </summary>
-        /// <param name="ex">An instace of exception that was thrown</param>
-        public static void HandleOpenException(Exception ex)
-        {
-            // this message will be displayed to user
-            // will be modified according to exception type
-            string message = "An error occured while opening file:\n";
-
-            if (ex is IOException)          // any type of input/output exception
-                message += ex.Message;      // display IO exception message
-            else
-                throw ex;                   // we are not able to handle this exception
-
-            // display MessageBox with created message
-            MessageBox.Show(message, fileError, MessageBoxButton.OK,
-                MessageBoxImage.Error, MessageBoxResult.OK);
-        }
-
-        #endregion
-
-        #endregion
-
         static FileManager()
         {
             try
@@ -595,6 +666,7 @@ namespace MTS.Editor
             }
             catch (Exception ex)
             {
+                ExceptionManager.LogException(ex);
             }
         }
     }

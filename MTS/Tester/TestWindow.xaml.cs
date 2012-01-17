@@ -291,16 +291,13 @@ namespace MTS.Tester
                         TestValue test = Tests.GetTest(TestCollection.Info);
 
                         StringParam param = test.GetParam<StringParam>(TestValue.PartNumber);
-                        if (param != null)
-                            partNumber.Content = param.StringValue;
+                        partNumber.Content = param.StringValue;
 
                         param = test.GetParam<StringParam>(TestValue.SupplierName);
-                        if (param != null)
-                            supplierName.Content = param.StringValue;
+                        supplierName.Content = param.StringValue;
 
                         param = test.GetParam<StringParam>(TestValue.DescriptionId);
-                        if (param != null)
-                            description.Content = param.StringValue;
+                        description.Content = param.StringValue;
 
                         paramFile.Content = filename;
                     }
@@ -311,8 +308,8 @@ namespace MTS.Tester
                     }
                 }
                 catch (Exception ex)
-                {   // display message to user if an error occured
-                    FileManager.HandleOpenException(ex);
+                {   // display message to user if an error occurred
+                    FileManager.HandleException(ex);
                     IsParamLoaded = false;
                 }
 
@@ -321,14 +318,14 @@ namespace MTS.Tester
             }
         }
         /// <summary>
-        /// Connect the device. This method initialize the connection and will cyclicaly watch for
+        /// Connect the device. This method initialize the connection and will cyclically watch for
         /// hardware changes
         /// </summary>
         private void connectClick(object sender, RoutedEventArgs e)
         {
             // try to initialize connection to HW
             if (initializeHardware(out channels))
-            {   // initialization was successfull
+            {   // initialization was successful
                 IsDeviceConnected = true;
                 //DeviceStatusMessage = "Device Listening";
                 Output.WriteLine("Device connected successfully");

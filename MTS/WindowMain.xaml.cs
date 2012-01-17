@@ -16,6 +16,7 @@ using MTS.Base;
 using MTS.Controls;
 using MTS.Editor;
 using MTS.Admin;
+using MTS.Admin.Controls;
 using MTS.Data;
 using MTS.Tester;
 
@@ -106,13 +107,16 @@ namespace MTS
         private void newExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             // create new tab
-            TestFile file = new TestFile();
+            TestFileItem file = new TestFileItem();
             // fill it with new test collection
-            file.New();
-            // add to the main pane
-            filePane.Items.Add(file);
-            // activate it - show to user
-            filePane.SelectedItem = file;
+            if (file.New())
+            {
+                // add to the main pane
+                filePane.Items.Add(file);
+                // activate it - show to user
+                filePane.SelectedItem = file;
+            }
+            e.Handled = true;
         }
         // open
         private void openCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -124,7 +128,7 @@ namespace MTS
         }
         private void openExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // at this time tab cotaning the opening document does not exist so window must handle this command
+            // at this time tab containing the opening document does not exist so window must handle this command
             // create a configured open file dialog
             var dialog = FileManager.CreateOpenFileDialog();
 
@@ -132,12 +136,12 @@ namespace MTS
             if (dialog.ShowDialog() == true)
             {
                 string filename = dialog.FileName;  // path to open
-                TestFile file;
+                TestFileItem file;
 
                 // check each content in the main pane (file pane) if document is not opened yet
                 foreach (DocumentContent content in filePane.Items)
                 {
-                    file = (content as TestFile);   // only chceck TestFile
+                    file = (content as TestFileItem);   // only check TestFile
                     if (file != null && file.ItemId == filename)
                     {   // file is already opened - do not open it again, but show it to the user
                         file.Activate();
@@ -146,19 +150,13 @@ namespace MTS
                 }
 
                 // file is not opened yet - new tab will be created
-                try
+                file = new TestFileItem();          // create new tab
+                if (file.Open(dialog.FileName))     // read content to it
                 {
-                    file = new TestFile();          // create new tab
-                    file.Open(dialog.FileName);     // read content to it
                     filePane.Items.Add(file);       // add to dockable pane
                     file.Activate();                // show it to user
                 }
-                catch (Exception ex)
-                {   // some error occured while opening the file
-                    FileManager.HandleOpenException(ex);    // error could depend on the file format - FileManager
-                                                            // should know
-                }
-                e.Handled = true;   // opening file has finished
+                e.Handled = true;   // opening file has been finished
             }
         }
         // close
@@ -182,7 +180,7 @@ namespace MTS
         // save
         private void saveCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // filePane exists so get its active document (tab), it must be a DocumentItem (Saveable)
+            // filePane exists so get its active document (tab), it must be a DocumentItem (Savable)
             DocumentItem item = getActiveItem();
 
             // file exists, it is a test file and is not saved
@@ -215,7 +213,7 @@ namespace MTS
             {
                 try
                 {
-                    TestFile file = getActiveTestFile();
+                    TestFileItem file = getActiveTestFile();
                     file.SaveAs(dialog.FileName);
                 }
                 catch (Exception ex)
@@ -258,13 +256,13 @@ namespace MTS
             return (filePane == null) ? null : (filePane.SelectedItem as DocumentItem);
         }
         /// <summary>
-        /// Get an instance of document content of type <see cref="TestFile"/> that is currently active inside the main area -
+        /// Get an instance of document content of type <see cref="TestFileItem"/> that is currently active inside the main area -
         /// <paramref name="filePane"/>.
         /// Return null if there is no such a document content
         /// </summary>
-        private TestFile getActiveTestFile()
+        private TestFileItem getActiveTestFile()
         {
-            return (filePane == null) ? null : (filePane.SelectedItem as TestFile);
+            return (filePane == null) ? null : (filePane.SelectedItem as TestFileItem);
         }
 
         //viewTester
@@ -367,17 +365,18 @@ namespace MTS
         /// </summary>
         private void login()
         {
-            Admin.Operator.TryLogin("admin", "admin");
-            
-            //LoginWindow loginWindow = new LoginWindow(this, false);
-            //loginWindow.ShowDialog();   // show window for first time
+            if (!Admin.Operator.TryLogin("admin", "admin"))
+            {   // for debugging: try to login as admin, if it is not possible display login window
+                LoginWindow loginWindow = new LoginWindow(this, false);
+                loginWindow.ShowDialog();   // show window for first time
 
-            //// if result is null this loop will end without logging in
-            //while (loginWindow.Result == LoginResult.Fail)
-            //{
-            //    loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
-            //    loginWindow.ShowDialog();
-            //}
+                // if result is null this loop will end without logging in
+                while (loginWindow.Result == LoginResult.Fail)
+                {
+                    loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
+                    loginWindow.ShowDialog();
+                }
+            }
             if (Admin.Operator.IsLoggedIn())
             {
                 Output.WriteLine("Login {0}", Admin.Operator.Instance.Login);
