@@ -6,7 +6,7 @@
         Style="{StaticResource commonWindow}" Icon="/MTS;component/Resources/icons/errorWindow.png">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="70"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -14,7 +14,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         
-        <Image Grid.Column="0" Grid.Row="0" Margin="20" Stretch="None" x:Name="errorIcon" VerticalAlignment="Top"/>          
+        <Image Grid.Column="0" Grid.Row="0" Margin="10" Stretch="None" x:Name="errorIcon" VerticalAlignment="Top"/>          
 
         <TextBlock Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" Padding="5" LineHeight="15"
                    Text="{Binding Message, ElementName=root}"/>
@@ -51,11 +51,12 @@
             <Button ToolTip="Send error" Click="sendError_Click" x:Name="sendErrorButton">
                 <Image Source="/MTS.Base;component/Resources/icons/SendErrorIcon.png" />
             </Button>
-            <Button>
-                <Image/>
+            <Button ToolTip="View details" Click="viewDetails_Click" x:Name="viewDetailsButton">
+                <Image Source="/MTS.Base;component/Resources/icons/ErrorDetailsIcon.png" />
             </Button>
         </StackPanel>
-        <Button Grid.Column="1" Grid.Row="1" MinWidth="60" MaxWidth="70" Margin="5" VerticalAlignment="Bottom" 
+        <TextBlock TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" Margin="3,3,80,3" x:Name="shortMsgBlock"/>
+        <Button Grid.Column="1" Grid.Row="1" MinWidth="60" MaxWidth="70" Margin="5" VerticalAlignment="Bottom"
                 HorizontalAlignment="Right" IsDefault="True" Click="okButton_Click">OK</Button>
     </Grid>
 </Window>

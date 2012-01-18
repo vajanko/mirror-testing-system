@@ -36,6 +36,13 @@ namespace MTS.Base
             wnd.ErrorIcon = icon;
             wnd.ShowDialog();
         }
+        public static void ShowError(Exception ex)
+        {
+            LogException(ex);
+            ErrorWindow wnd = new ErrorWindow(Errors.ErrorTitle, ex.Message, ex);
+            wnd.ErrorIcon = Errors.ErrorIcon;
+            wnd.ShowDialog();
+        }
 
         //private static void showError(System.SystemException ex)
         //{
@@ -94,22 +101,22 @@ namespace MTS.Base
         //    }
         //}
 
-        public static void ShowError(Exception ex)
-        {
-            //if (ex is System.SystemException)
-            //{
-            //    showError(ex as System.SystemException);
-            //}
-            //else if (ex is MTS.IO.IOException)  // hardware communication exception
-            //{
-            //    showError(ex as MTS.IO.IOException);
-            //}
-            //else
-            //{   // when something very bad has happened and we do not know what
-            //    ShowError(Errors.UnknownErrorTitle, "An unknown error occurred. Check log file for more information");
-            //}
+        //public static void ShowError(Exception ex)
+        //{
+        //    //if (ex is System.SystemException)
+        //    //{
+        //    //    showError(ex as System.SystemException);
+        //    //}
+        //    //else if (ex is MTS.IO.IOException)  // hardware communication exception
+        //    //{
+        //    //    showError(ex as MTS.IO.IOException);
+        //    //}
+        //    //else
+        //    //{   // when something very bad has happened and we do not know what
+        //    //    ShowError(Errors.UnknownErrorTitle, "An unknown error occurred. Check log file for more information");
+        //    //}
 
-        }
+        //}
         /// <summary>
         /// Logger thrown exception to logger file
         /// </summary>

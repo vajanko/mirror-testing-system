@@ -4,33 +4,68 @@
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
     xmlns:base="clr-namespace:MTS.Base;assembly=MTS.Base"
     xmlns:ctrl="clr-namespace:MTS.Tester.Controls"
-    Title="Tester" x:Name="root" Width="800">
+    xmlns:tester="clr-namespace:MTS.Tester"
+    Title="Tester" x:Name="root" Width="800">    
     <DockPanel>
+
         <Grid DockPanel.Dock="Top" Margin="3">
             <Grid.Resources>
                 <base:BoolNegationConverter x:Key="boolNegation"/>
+                <base:BoolBindingSelector x:Key="boolSelector"/>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="MinWidth" Value="70"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="Margin" Value="3"/>
+                </Style>
             </Grid.Resources>
+            
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition MinWidth="80" MaxWidth="160"/>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" MinWidth="150"/>
                 <ColumnDefinition Width="Auto" MaxWidth="160"/>
                 <ColumnDefinition MinWidth="80" MaxWidth="160"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition MaxWidth="160"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
+
+            <Button Content="Load file..." Grid.Column="0" Grid.Row="0" Click="loadParameters"
+                    IsEnabled="{Binding IsRunning, ElementName=root, Converter={StaticResource boolNegation}}"/>
+            <Label Grid.Column="1" Grid.Row="0" x:Name="paramFile"/>
+
+            <Label Content="Mirrors:" Grid.Row="1" Grid.Column="0" IsEnabled="{Binding IsNotRunning, ElementName=root}"/>
+            <base:UpDownButton Grid.Column="1" Grid.Row="1" ToolTip="Number of mirrors to be tested"
+                               Value="{Binding Mirrors, ElementName=root, Mode=TwoWay}"
+                               IsEnabled="{Binding IsNotRunning, ElementName=root}"
+                               Decimals="0" MinWidth="60" MinValue="1" HorizontalAlignment="Left"/>
+
+            <Button Content="Start Shift" Grid.Column="0" Grid.Row="2" Click="startClick"
+                    IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
+            <Button Content="Stop Shift" Grid.Column="0" Grid.Row="3" Click="stopClick"
+                    IsEnabled="{Binding IsRunning, ElementName=root}"/>
+
+            <!-- Shift properties -->
+            <Label Content="Shift:" Grid.Column="2"/>
+            <Label x:Name="shiftStatus" Grid.Column="3" Content="{Binding ShiftStatusMessage, ElementName=root}"/>
+
+            <!-- These controls are enabled only if shift is running -->
+            <Label Content="Finished:" Grid.Row="1" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
+            <Label Content="{Binding Finished, ElementName=root}" Grid.Row="2" Grid.Column="3"/>
+
+            <Label Content="Correct:" Grid.Row="2" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
+            <Label Content="{Binding Correct, ElementName=root}" Grid.Row="3" Grid.Column="3"/>
+
+            <Label Content="Defective:" Grid.Row="3" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
+            <Label Content="{Binding Defective, ElementName=root}" Grid.Row="4" Grid.Column="3"/>
 
             <!-- Parameters properties -->
             <Label Content="Parameters:" IsEnabled="True" Grid.Column="0"/>
             <Label Grid.Column="1" x:Name="parametersStatus" Content="{Binding ParamStatusMessage, ElementName=root}"/>
-
+            
             <Label Content="Part number:" Grid.Row="1" Grid.Column="0" IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
             <Label Grid.Column="1" Grid.Row="1" x:Name="partNumber"/>
 
@@ -39,46 +74,6 @@
 
             <Label Content="Description:" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
             <Label Grid.Row="3" Grid.Column="1" x:Name="description" Grid.RowSpan="2"/>
-            
-            <Button Content="Load Parameters ..." Grid.Column="0" Grid.Row="4" Click="loadParameters"
-                    IsEnabled="{Binding IsRunning, ElementName=root, Converter={StaticResource boolNegation}}"/>
-            <Label Grid.Column="1" Grid.Row="4" x:Name="paramFile"/>
-
-            <!-- Shift properties -->
-            <Label Content="Shift:" Grid.Column="2"/>
-            <Label x:Name="shiftStatus" Grid.Column="3" Content="{Binding ShiftStatusMessage, ElementName=root}"/>
-            
-            <Label Content="Mirrors:" Grid.Row="1" Grid.Column="2" IsEnabled="{Binding IsNotRunning, ElementName=root}"/>
-            <base:UpDownButton Grid.Column="3" Grid.Row="1" Value="{Binding Mirrors, ElementName=root, Mode=TwoWay}"
-                               IsEnabled="{Binding IsNotRunning, ElementName=root}"
-                               Decimals="0" MinWidth="80" MaxWidth="80" MinValue="1" HorizontalAlignment="Left"/>
-            <!-- These controls are enabled only if shift is running -->
-            <Label Content="Finished:" Grid.Row="2" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            <Label Content="{Binding Finished, ElementName=root}" Grid.Row="2" Grid.Column="3"/>
-            
-            <Label Content="Correct:" Grid.Row="3" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            <Label Content="{Binding Correct, ElementName=root}" Grid.Row="3" Grid.Column="3"/>
-            
-            <Label Content="Defective:" Grid.Row="4" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            <Label Content="{Binding Defective, ElementName=root}" Grid.Row="4" Grid.Column="3"/>
-            
-            <!-- Buttons -->
-            <Button Content="Connect" Grid.Column="4" Grid.Row="0" Click="connectClick" 
-                    IsEnabled="{Binding IsDeviceConnected, ElementName=root, Converter={StaticResource boolNegation}}"/>
-            <Button Content="Disconnect" Grid.Column="4" Grid.Row="1" Click="disconnectClick"
-                    IsEnabled="{Binding IsDeviceConnected, ElementName=root}"/>
-            <Button Content="Start Shift" Grid.Column="4" Grid.Row="3" Click="startClick"
-                    IsEnabled="{Binding IsParamLoaded, ElementName=root}">
-            </Button>
-            <Button Content="Stop Shift" Grid.Column="4" Grid.Row="4" Click="stopClick"
-                    IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            
-            <!-- Device state -->
-            <Label Content="Device:" Grid.Column="5"/>
-            <Label Content="{Binding DeviceStatusMessage, ElementName=root}" Grid.Column="6"/>
-            
-            <Label Content="Power supply:" Grid.Column="5" Grid.Row="1"/>
-            <Label Grid.Column="6" Grid.Row="1" x:Name="powerSupplyStatus"/>
         </Grid>        
         
         <ctrl:MirrorView DockPanel.Dock="Left" 

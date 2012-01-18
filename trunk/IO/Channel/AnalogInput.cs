@@ -42,13 +42,13 @@ namespace MTS.IO.Channel
         /// </summary>
         protected uint value;
         /// <summary>
-        /// (Get) Integer (raw) value of this channel. Setting this value efects <see cref="RealValue"/>
+        /// (Get) Integer (raw) value of this channel. Setting this value effects <see cref="RealValue"/>
         /// Minimum possible value is <see cref="RawLow"/>. Maximum possible value is <see cref="RawHigh"/>
         /// </summary>
         public uint Value { get { return value; } }
 
         /// <summary>
-        /// (Get/Set) Real value of this channel. Setting this value efects <see cref="Value"/>
+        /// (Get/Set) Real value of this channel. Setting this value effects <see cref="Value"/>
         /// Minimum possible value is <see cref="RealLow"/>. Maximum possible value is <see cref="RealHigh"/>
         /// </summary>
         public double RealValue
@@ -73,7 +73,7 @@ namespace MTS.IO.Channel
             if (this.value != value)    // only change if necessary - no event will be raised
             {
                 this.value = value;
-                NotifyPropretyChanged(RealValueString);
+                OnValueChanged();
             }
         }
 
@@ -102,10 +102,10 @@ namespace MTS.IO.Channel
         /// <summary>
         /// Default method for converting raw values to real
         /// </summary>
-        /// <param name="rawValue">Interger (raw) value to convert to double (real)</param>
+        /// <param name="rawValue">Integer (raw) value to convert to double (real)</param>
         public double ConvertLinear(uint rawValue)
         {
-            //if (RawHigh - RawLow == 0) return Value;    // prevent to devide by zero
+            //if (RawHigh - RawLow == 0) return Value;    // prevent to divide by zero
             return (double)(((rawValue - RawLow) * (RealHigh - RealLow)) / (double)(RawHigh - RawLow) + RealLow);
         }
 

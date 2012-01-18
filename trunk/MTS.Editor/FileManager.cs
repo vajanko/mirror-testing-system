@@ -357,7 +357,8 @@ namespace MTS.Editor
             // this is the only place (also method for saving and creating new file) where the format of test 
             // collection file is described
             if (!File.Exists(path))
-                throw new FileNotFoundException(Errors.FileNotFoundEx, path);
+                throw new FileNotFoundException(
+                    string.Format(Errors.FileNotFoundMsg, Path.GetFileName(path)), path);
             
             // load template to memory
             XElement tmplRoot = loadTemplate();
@@ -430,7 +431,8 @@ namespace MTS.Editor
             {   // file could not be read - it is an unknown format
                 // this hides the implementation details (that file is serialized or xml), no one knows about the format
                 // except of the FileManager
-                throw new FileFormatException(new Uri(path), Errors.FileFormatErrorEx, ex);
+                throw new FileFormatException(new Uri(path), 
+                    string.Format(Errors.FileFormatErrorMsg, Path.GetFileName(path)), ex);
             }
 
             return tc;
@@ -495,7 +497,8 @@ namespace MTS.Editor
             // check if file exists - otherwise throw special exception so user may check configuration of
             // his application for bad settings
             if (!File.Exists(templatePath))
-                throw new ConfigNotFoundException(templatePath, Errors.ConfigNotFoundEx);
+                throw new ConfigNotFoundException(templatePath, 
+                    string.Format(Errors.ConfigNotFoundMsg, Path.GetFileName(templatePath)));
 
             // create a new empty instance of test collection
             TestCollection tc = new TestCollection();
@@ -523,12 +526,19 @@ namespace MTS.Editor
             {
                 if (ex is IOException)
                     throw ex;
-                throw new ConfigException(templatePath, Errors.ConfigCorruptedEx, ex);
+                throw new ConfigException(templatePath, 
+                    string.Format(Errors.ConfigCorruptedMsg, Path.GetFileName(templatePath)), ex);
             }
 
             return tc;
         }
 
+        /// <summary>
+        /// Load template file from path saved in application settings
+        /// </summary>
+        /// <returns>XML root of template file document</returns>
+        /// <exception cref="MTS.Base.ConfigNotFoundException">Template file doest not exist</exception>
+        /// <exception cref="MTS.Base.ConfigException">Template file is corrupted</exception>
         private static XElement loadTemplate()
         {   // get path from application settings where template path is stored
             string path = Settings.Default.GetTemplatePath();
@@ -540,11 +550,13 @@ namespace MTS.Editor
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                throw new ConfigNotFoundException(path, Errors.ConfigNotFoundEx, ex);
+                throw new ConfigNotFoundException(path, 
+                    string.Format(Errors.ConfigNotFoundMsg, Path.GetFileName(path)), ex);
             }
             catch (System.Xml.XmlException ex)
             {
-                throw new ConfigException(path, Errors.ConfigCorruptedEx, ex);
+                throw new ConfigException(path, 
+                    string.Format(Errors.ConfigCorruptedMsg, Path.GetFileName(path)), ex);
             }
             return root;
         }
@@ -590,65 +602,6 @@ namespace MTS.Editor
             dialog.Title = "Save test collection file"; // specify title of open file dialog
 
             return dialog;
-        }
-
-        #endregion
-
-        #region Error handling
-
-        /// <summary>
-        /// Show editor related exception that has been thrown to user in a window. If given exception is unknown
-        /// by editor the exception is re-thrown
-        /// </summary>
-        /// <param name="ex">Instance of exception to be displayed to user in a window dialog</param>
-        public static void HandleException(Exception ex)
-        {
-            if (ex is ApplicationException)
-            {
-                if (ex is ConfigException)
-                {   // template file either does not exist or is corrupted
-                    ConfigException ce = ex as ConfigException;
-                    if (ex is ConfigNotFoundException)
-                        showError(ex, Errors.ConfigNotFoundMsg, ce.ConfigPath);
-                    else
-                        showError(ex, Errors.ConfigCorruptedMsg, ce.ConfigPath);
-                }
-                else if (ex is ValueException)
-                {   // required parameter was not found in the file
-                    if (ex is ParamNotFoundException)
-                    {
-                        ParamNotFoundException pe = ex as ParamNotFoundException;
-                        showFileError(ex, Errors.ParamNotFoundMsg, pe.ParamName, pe.TestName);
-                    }
-                    else throw ex;
-                }
-            }
-            else if (ex is SystemException)
-            {   // file format is corrupted
-                if (ex is FormatException)
-                {
-                    if (ex is FileFormatException)
-                        showFileError(ex, Errors.FileFormatErrorMsg, (ex as FileFormatException).SourceUri.AbsolutePath);
-                    else throw ex;
-                }
-                else if (ex is IOException)
-                {   // required file was not found
-                    if (ex is FileNotFoundException)
-                        showFileError(ex, Errors.FileNotFoundMsg, (ex as FileNotFoundException).FileName);
-                    // file privileges could be added
-                    else throw ex;
-                }
-                else throw ex;
-            }
-            else throw ex;
-        }
-        private static void showFileError(Exception ex, string formatedMesssage, params string[] args)
-        {
-            ExceptionManager.ShowError(ex, Errors.FileErrorTitle, Errors.FileErrorIcon, formatedMesssage, args);
-        }
-        private static void showError(Exception ex, string formatedMesssage, params string[] args)
-        {
-            ExceptionManager.ShowError(ex, Errors.ErrorTitle, Errors.ErrorIcon, formatedMesssage, args);
         }
 
         #endregion

@@ -68,29 +68,11 @@ namespace MTS.Editor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration file is corrupted.
-        /// </summary>
-        internal static string ConfigCorruptedEx {
-            get {
-                return ResourceManager.GetString("ConfigCorruptedEx", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Template file {0} is corrupted.
         /// </summary>
         internal static string ConfigCorruptedMsg {
             get {
                 return ResourceManager.GetString("ConfigCorruptedMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Template file is missing.
-        /// </summary>
-        internal static string ConfigNotFoundEx {
-            get {
-                return ResourceManager.GetString("ConfigNotFoundEx", resourceCulture);
             }
         }
         
@@ -150,15 +132,6 @@ namespace MTS.Editor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File may be corrupted or is in incorrect format.
-        /// </summary>
-        internal static string FileFormatErrorEx {
-            get {
-                return ResourceManager.GetString("FileFormatErrorEx", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File {0} may be corrcupted and could not be readed.
         /// </summary>
         internal static string FileFormatErrorMsg {
@@ -168,29 +141,11 @@ namespace MTS.Editor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File could not be found.
-        /// </summary>
-        internal static string FileNotFoundEx {
-            get {
-                return ResourceManager.GetString("FileNotFoundEx", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File {0} could not be found.
         /// </summary>
         internal static string FileNotFoundMsg {
             get {
                 return ResourceManager.GetString("FileNotFoundMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required parameter was not found on current test.
-        /// </summary>
-        internal static string ParamNotFoundEx {
-            get {
-                return ResourceManager.GetString("ParamNotFoundEx", resourceCulture);
             }
         }
         

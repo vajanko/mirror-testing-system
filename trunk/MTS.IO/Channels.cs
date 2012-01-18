@@ -35,6 +35,7 @@ namespace MTS.IO
         /// Create a new connection between local computer and some hardware component. At the beginning of
         /// the communication this method must be called.
         /// </summary>
+        /// <exception cref="MTS.IO.Module.ConnectionException">Connection could not be established</exception>
         public void Connect()
         {
             module.Connect();
@@ -43,6 +44,7 @@ namespace MTS.IO
         /// Prepare (initialize) channels for reading and writing. When this method is called, connection
         /// must be established already.
         /// </summary>
+        /// <exception cref="MTS.IO.Address.AddressException">Address of some channel does not exists</exception>
         public void Initialize()
         {
             module.Initialize();
@@ -52,7 +54,7 @@ namespace MTS.IO
             // Consider this when setting variable names in TwinCAT IO Server or 
             // editing configuration file for Moxa
 
-            // setting channels propety here is only temporary a will be changed in the future
+            // setting channels property here is only temporary a will be changed in the future
 
             //// analog inputs - also initialize its settings raw/real low/high values
             DistanceX = (IAnalogInput)module.GetChannelByName("DistanceX");
@@ -172,7 +174,7 @@ namespace MTS.IO
             IsPowerSupplyOff = (IDigitalInput)module.GetChannelByName("IsPowerSupplyOff");
         }
         /// <summary>
-        /// Write all ouput and read all input channels (in this order)
+        /// Write all output and read all input channels (in this order)
         /// </summary>
         public void Update()
         {   // update all channels: read in/out and write out channels
@@ -202,9 +204,9 @@ namespace MTS.IO
                 module.Disconnect();
         }
         /// <summary>
-        /// Get an instance of paricular channel identified by its name. Return null if ther is no such a channel
+        /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
         /// </summary>
-        /// <param name="name">Unic name (identifier) of required channel</param>
+        /// <param name="name">Unique name (identifier) of required channel</param>
         public IChannel GetChannelByName(string name)
         {
             return module.GetChannelByName(name);
@@ -215,8 +217,8 @@ namespace MTS.IO
         public bool IsConnected { get { return module.IsConnected; } }
 
         /// <summary>
-        /// Switch all channels to safe state. This includes operations such as stoping mirror movement,
-        /// powerfold, heating foil, ..., or moveing calibratos down, ...
+        /// Switch all channels to safe state. This includes operations such as stopping mirror movement,
+        /// powerfold, heating foil, ..., or moving calibrators down, ...
         /// </summary>
         public void SetupSafeState()
         {

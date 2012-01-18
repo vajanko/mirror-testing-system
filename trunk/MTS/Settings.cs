@@ -157,11 +157,11 @@ namespace MTS.Properties {
             }
             catch (FileNotFoundException ex)
             {   // exception was thrown because configuration file was not found
-                ExceptionManager.ShowError(Errors.FileErrorTitle, Errors.FileErrorIcon, Errors.ConfigFileNotFoundMsg, ex.FileName);
+                ExceptionManager.ShowError(ex, Errors.ErrorTitle, Errors.ErrorIcon, Errors.ConfigFileNotFoundMsg, ex.FileName);
                 channels = null;
             }
             catch (Exception ex)
-            {   // other error raised when configuration file was readed
+            {   // other error raised when configuration file was read
                 ExceptionManager.ShowError(ex);
                 channels = null;    // return null indicating that channels was not created
             }

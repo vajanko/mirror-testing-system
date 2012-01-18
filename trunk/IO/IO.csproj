@@ -54,6 +54,7 @@
     <Compile Include="ChannelSetting.cs" />
     <Compile Include="ChannelSettings.cs" />
     <Compile Include="Channel\ChannelException.cs" />
+    <Compile Include="ValueChangedEventArgs.cs" />
     <Compile Include="IAnalogInput.cs" />
     <Compile Include="IAnalogOutput.cs" />
     <Compile Include="IDigitalInput.cs" />

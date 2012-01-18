@@ -54,7 +54,9 @@
   <ItemGroup>
     <Compile Include="ConfigException.cs" />
     <Compile Include="ConfigNotFoundException.cs" />
+    <Compile Include="Controls\BoolBindingSelector.cs" />
     <Compile Include="Controls\BoolNegationConverter.cs" />
+    <Compile Include="Controls\ConditionalLabel.cs" />
     <Compile Include="Controls\DocumentTab.cs" />
     <Compile Include="Controls\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
@@ -139,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\ViewLogIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\ErrorDetailsIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

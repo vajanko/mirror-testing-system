@@ -129,6 +129,7 @@ namespace MTS.IO.Module
         /// <summary>
         /// Establish a connection to ADS device
         /// </summary>
+        /// <exception cref="MTS.IO.Module.ConnectionException">Connection could not be established</exception>
         public void Connect()
         {
             // notice that we are connecting to local server which by the way handle any communication 
@@ -159,7 +160,7 @@ namespace MTS.IO.Module
             foreach (ChannelBase channel in inputs)
             {
                 ECAddress addr = channel.Address as ECAddress;
-                if (addr != null)   // specifiy address of each channel - it must be ethercat address
+                if (addr != null)   // specify address of each channel - it must be ethercat address
                 {
                     try
                     {
@@ -178,7 +179,7 @@ namespace MTS.IO.Module
                 }
             }
 
-            alocateChannels();  // alocat memory for reading a writing channels
+            alocateChannels();  // allocate memory for reading a writing channels
         }
 
         /// <summary>
@@ -192,7 +193,6 @@ namespace MTS.IO.Module
         /// <summary>
         /// Read all inputs and outputs channels
         /// </summary>
-        /// <exception cref="ChannelException">An error ocured while reading some channel</exception>
         public void UpdateInputs()
         {
             // do not read if there are no inputs
@@ -218,7 +218,6 @@ namespace MTS.IO.Module
         /// <summary>
         /// Write all outputs channels
         /// </summary>
-        /// <exception cref="ChannelException">An error ocured while writing some channel</exception>
         public void UpdateOutputs()
         {
             // do not write if there are no outputs
@@ -233,7 +232,7 @@ namespace MTS.IO.Module
             // write values from stream to hardware
             client.ReadWrite(writeCommand, outputs.Count, oReadStream, (AdsStream)oWriter.BaseStream);
 
-            // check error codes and throw exception if some error ocures
+            // check error codes and throw exception if some error occurs
         }
 
         /// <summary>
