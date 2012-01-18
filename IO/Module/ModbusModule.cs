@@ -158,6 +158,9 @@ namespace MTS.IO.Module
             }
         }
 
+        /// <summary>
+        /// TODO: throw exceptions
+        /// </summary>
         public void Connect()
         {
             // initialize Modbus connection - allocate Modbus resources

@@ -110,7 +110,7 @@ namespace MTS.Editor
             }
             catch (Exception ex)
             {
-                FileManager.HandleException(ex);
+                ExceptionManager.ShowError(ex);
             }
 
             return false;
@@ -152,7 +152,7 @@ namespace MTS.Editor
             }
             catch (Exception ex)
             {
-                FileManager.HandleException(ex);
+                ExceptionManager.ShowError(ex);
             }
             return false;
         }

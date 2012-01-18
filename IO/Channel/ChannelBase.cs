@@ -13,10 +13,25 @@ namespace MTS.IO.Channel
 
         #endregion
 
+
+        private event ValueChangedEventHandler valueChanged;
         /// <summary>
-        /// Event that is raised when property of this channel change
+        /// Occurs when channel value changed
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event ValueChangedEventHandler ValueChanged
+        {
+            add { valueChanged += value; }
+            remove { valueChanged -= value; }
+        }
+
+        /// <summary>
+        /// Raise <see cref="ValueChanged"/> event
+        /// </summary>
+        protected void OnValueChanged()
+        {
+            if (valueChanged != null)
+                valueChanged(this, new ValueChangedEventArgs(this));
+        }
 
         #region IChannel Members
 
@@ -25,15 +40,6 @@ namespace MTS.IO.Channel
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Raise an PropertyChanged event that signalized that some property has been changed
-        /// </summary>
-        /// <param name="name">Name of the property that has been changed</param>
-        public void NotifyPropretyChanged(string name)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-        }
         /// <summary>
         /// (Get/Set) Array of memory bytes containing <see cref="Value"/> of this channel. This 
         /// is necessary for network communication

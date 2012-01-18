@@ -19,12 +19,14 @@ namespace MTS.IO
         /// Create a new connection between local computer and some hardware component. At the beginning of
         /// the communication this method must be called.
         /// </summary>
+        /// <exception cref="MTS.IO.Module.ConnectionException">Connection could not be established</exception>
         void Connect();
 
         /// <summary>
         /// Prepare (initialize) channels for reading and writing. When this method is called, connection
         /// must be established already.
         /// </summary>
+        /// <exception cref="MTS.IO.Address.AddressException">Address of some channel does not exists</exception>
         void Initialize();
 
         /// <summary>
@@ -52,6 +54,8 @@ namespace MTS.IO
         /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
         /// </summary>
         /// <param name="name">Unique name (identifier) of required channel</param>
+        /// <exception cref="ChannelException">Channel identified by its name does not exists in current
+        /// module</exception>
         IChannel GetChannelByName(string name);
 
         /// <summary>

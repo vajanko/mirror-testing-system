@@ -272,7 +272,7 @@ namespace MTS.Tester
 
         private void handleResults(TaskScheduler scheduler)
         {
-            // first of all display result to user - saveing may be spent some period of time
+            // first of all display result to user - saving may be spent some period of time
             string msg;
             TaskResultType resultCode = scheduler.GetResultCode();
             if (resultCode == TaskResultType.Completed)
@@ -298,7 +298,7 @@ namespace MTS.Tester
 
             this.End = DateTime.Now;
 
-            Output.Write("Saveing results do database ... ");
+            Output.Write("Saving results do database ... ");
             List<TaskResult> results = scheduler.GetResultData();
             saveShiftResult(results, (Int16)Finished);
             Output.WriteLine("Saved!");
@@ -476,7 +476,7 @@ namespace MTS.Tester
             Passed = 0;     // nothing is finished yet
             Failed = 0;
 
-            // first update, so we do not use uninitialzed values
+            // first update, so we do not use uninitialized values
             channels.UpdateInputs();
 
             // setting value as this does not raise an event
@@ -520,7 +520,7 @@ namespace MTS.Tester
         }
         public void Finish()    // must be private method
         {
-            // switch off everythig dangerous
+            // switch off everything dangerous
             setSafeStateOutputs(channels);
 
             // save date and time when shift has been finished - necessary for database

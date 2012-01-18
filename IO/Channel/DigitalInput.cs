@@ -23,7 +23,7 @@ namespace MTS.IO.Channel
             if (this.value != value)    // only change if necessary - no event will be raised
             {
                 this.value = value;
-                NotifyPropretyChanged(ValueString);
+                OnValueChanged();
             }
         }
         /// <summary>
