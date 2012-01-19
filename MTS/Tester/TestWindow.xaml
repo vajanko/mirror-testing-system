@@ -5,13 +5,15 @@
     xmlns:base="clr-namespace:MTS.Base;assembly=MTS.Base"
     xmlns:ctrl="clr-namespace:MTS.Tester.Controls"
     xmlns:tester="clr-namespace:MTS.Tester"
-    Title="Tester" x:Name="root" Width="800">    
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    Title="Tester" x:Name="root" Width="800">
     <DockPanel>
-
         <Grid DockPanel.Dock="Top" Margin="3">
             <Grid.Resources>
                 <base:BoolNegationConverter x:Key="boolNegation"/>
                 <base:BoolBindingSelector x:Key="boolSelector"/>
+                <base:StringFormatConverter x:Key="stringFormatConvertor"/>
+
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="MinWidth" Value="70"/>
                     <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -23,8 +25,7 @@
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" MinWidth="150"/>
                 <ColumnDefinition Width="Auto" MaxWidth="160"/>
-                <ColumnDefinition MinWidth="80" MaxWidth="160"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -39,7 +40,7 @@
 
             <Label Content="Mirrors:" Grid.Row="1" Grid.Column="0" IsEnabled="{Binding IsNotRunning, ElementName=root}"/>
             <base:UpDownButton Grid.Column="1" Grid.Row="1" ToolTip="Number of mirrors to be tested"
-                               Value="{Binding Mirrors, ElementName=root, Mode=TwoWay}"
+                               Value="{Binding Total, ElementName=root, Mode=TwoWay}"
                                IsEnabled="{Binding IsNotRunning, ElementName=root}"
                                Decimals="0" MinWidth="60" MinValue="1" HorizontalAlignment="Left"/>
 
@@ -50,34 +51,39 @@
 
             <!-- Shift properties -->
             <Label Content="Shift:" Grid.Column="2"/>
-            <Label x:Name="shiftStatus" Grid.Column="3" Content="{Binding ShiftStatusMessage, ElementName=root}"/>
+            <Label Grid.Column="3">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Content" Value="Not running"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRunning, ElementName=root}" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource stringFormatConvertor}" 
+                                          ConverterParameter="Finished {0} of {1}">
+                                            <MultiBinding.Bindings>
+                                                <Binding Path="Finished" ElementName="root"/>
+                                                <Binding Path="Total" ElementName="root"/>
+                                            </MultiBinding.Bindings>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
 
             <!-- These controls are enabled only if shift is running -->
-            <Label Content="Finished:" Grid.Row="1" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            <Label Content="{Binding Finished, ElementName=root}" Grid.Row="2" Grid.Column="3"/>
+            <Label Content="Passed:" Grid.Row="1" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
+            <Label Content="{Binding Passed, ElementName=root}" Grid.Row="1" Grid.Column="3"/>
 
-            <Label Content="Correct:" Grid.Row="2" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            <Label Content="{Binding Correct, ElementName=root}" Grid.Row="3" Grid.Column="3"/>
-
-            <Label Content="Defective:" Grid.Row="3" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
-            <Label Content="{Binding Defective, ElementName=root}" Grid.Row="4" Grid.Column="3"/>
-
-            <!-- Parameters properties -->
-            <Label Content="Parameters:" IsEnabled="True" Grid.Column="0"/>
-            <Label Grid.Column="1" x:Name="parametersStatus" Content="{Binding ParamStatusMessage, ElementName=root}"/>
-            
-            <Label Content="Part number:" Grid.Row="1" Grid.Column="0" IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
-            <Label Grid.Column="1" Grid.Row="1" x:Name="partNumber"/>
-
-            <Label Content="Supplier name:" Grid.Row="2" Grid.Column="0" IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
-            <Label Grid.Row="2" Grid.Column="1" x:Name="supplierName"/>
-
-            <Label Content="Description:" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
-            <Label Grid.Row="3" Grid.Column="1" x:Name="description" Grid.RowSpan="2"/>
+            <Label Content="Failed:" Grid.Row="2" Grid.Column="2" IsEnabled="{Binding IsRunning, ElementName=root}"/>
+            <Label Content="{Binding Failed, ElementName=root}" Grid.Row="2" Grid.Column="3"/>
         </Grid>        
         
-        <ctrl:MirrorView DockPanel.Dock="Left" 
-                         Width="350" Height="350" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left"
+        <ctrl:MirrorView DockPanel.Dock="Left" VerticalAlignment="Top"
+                         Width="350" Height="350" BorderBrush="Black" BorderThickness="1"
                          x:Name="mirrorView"/>
         <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal">
             <WrapPanel.Resources>
