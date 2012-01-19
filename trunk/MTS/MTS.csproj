@@ -218,10 +218,16 @@
     <Compile Include="Data\OperatorSource.cs" />
     <Compile Include="Controls\Converters\ParamValueConverter.cs" />
     <Compile Include="Data\ResultStyleSelector.cs" />
+    <Compile Include="Tester\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Tester\Result\ParamResult.cs" />
     <Compile Include="Tester\Result\ResultBase.cs" />
     <Compile Include="Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Tester\Result\TaskResult.cs" />
+    <Compile Include="Tester\ShiftExecutedEventArgs.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -288,6 +294,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tester\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config">
       <CustomToolNamespace>MTS.Properties</CustomToolNamespace>

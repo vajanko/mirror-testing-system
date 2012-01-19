@@ -80,7 +80,7 @@ namespace MTS.Tester
         /// <summary>
         /// Raise task executed event
         /// </summary>
-        protected void RaiseExecuted()
+        protected void OnExecuted()
         {
             IsFinished = true;
             if (exec != null)
@@ -210,11 +210,11 @@ namespace MTS.Tester
             TestValue west = tests.GetTest(TestCollection.TravelWest);
             TestValue east = tests.GetTest(TestCollection.TravelEast);
 
-            // if all travel tests are disabled, no prerequsities are necessary to be done
+            // if all travel tests are disabled, no prerequisites are necessary to be done
             if (north == null && south == null && west == null && east == null)
                 return;
 
-            // prerequisities:
+            // prerequisites:
             // move distance sensors up for measuring
             this.AddDistanceSensorsUp();
             // allow mirror movement
@@ -257,7 +257,7 @@ namespace MTS.Tester
             // disable mirror movement
             this.AddTask(new SetValue(channels, channels.AllowMirrorMovement, false));
 
-            // move distance sensors down - not necesary at all
+            // move distance sensors down - not necessary at all
             this.AddDistanceSensorsDown();
         }
 
@@ -324,7 +324,7 @@ namespace MTS.Tester
 
             // check if there are more tasks to be executed
             if (executing.Count == 0 && toExecute.Count == 0)
-                RaiseExecuted();
+                OnExecuted();
 
             // one task finished - we may add new one or more
             Task task;
@@ -367,7 +367,7 @@ namespace MTS.Tester
             toExecute.AddLast(task);    // only task that will be executed are added
         }
         /// <summary>
-        /// Change currently executing taks for another one
+        /// Change currently executing tasks for another one
         /// </summary>
         /// <param name="executingTask">Task that is currently being executed</param>
         /// <param name="newTask">Task that shall be executed instead of this one</param>
@@ -397,7 +397,7 @@ namespace MTS.Tester
             // nothing to execute
             if (toExecute.Count <= 0)
             {   // raise event that execution has finished
-                RaiseExecuted();
+                OnExecuted();
                 return;
             }
             // initialize tasks if necessary
@@ -412,7 +412,7 @@ namespace MTS.Tester
         /// <param name="time">Current system time</param>
         public void Update(DateTime time)
         {
-            // begin execute all prepared tasks and add them to executing colletion
+            // begin execute all prepared tasks and add them to executing collection
             foreach (Task task in prepared)
             {
                 task.Initialize(time);
@@ -440,7 +440,7 @@ namespace MTS.Tester
         {   // change state of scheduler to aborting
             IsAborting = true;
 
-            // swtich the module to save state - swtich off all dangerous channels
+            // switch the module to save state - switch off all dangerous channels
             channels.SetupSafeState();
             // remove all tasks that have not been initialized yet
             toExecute.Clear();
@@ -449,7 +449,7 @@ namespace MTS.Tester
             // change states of all executing tasks to aborting
             foreach (Task task in executing)
                 task.Abort();
-            // update all executing tasks to abort themselfs
+            // update all executing tasks to abort themselves
             Update(time);
 
             // scheduler has finished its execution
@@ -475,7 +475,7 @@ namespace MTS.Tester
             foreach (TaskResult result in results)
                 if (result.ResultCode == TaskResultType.Failed)
                     return TaskResultType.Failed;
-            // otherwise everythig finished correctly
+            // otherwise everything finished correctly
             return TaskResultType.Completed;
         }
         /// <summary>

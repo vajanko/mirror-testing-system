@@ -62,6 +62,7 @@
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FormatValueToStringConverter.cs" />
+    <Compile Include="Controls\StringFormatConverter.cs" />
     <Compile Include="Controls\UpDownButton.cs" />
     <Compile Include="ExceptionManager.cs" />
     <Compile Include="Controls\IdToTitleConverter.cs" />

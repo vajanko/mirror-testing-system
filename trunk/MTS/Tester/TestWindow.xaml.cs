@@ -44,59 +44,52 @@ namespace MTS.Tester
 
         #region Mirror Count
 
-        private int mirrors = 1;
+        private int total = 1;
         /// <summary>
         /// (Get/Set) Number of mirrors to test
         /// </summary>
-        public int Mirrors
+        public int Total
         {
-            get { return mirrors; }
+            get { return total; }
             set
             {
-                mirrors = value;
-                RaisePropertyChanged("Mirrors");
+                total = value;
+                RaisePropertyChanged("Total");
             }
         }
 
-        private int finished = 0;
         /// <summary>
-        /// (Get/Set) Number of finished tests
+        /// (Get) Number of finished tests. When value is changed property changed event is raised
         /// </summary>
-        public int Finished
+        public int Finished { get { return Passed + Failed; } }
+
+        private int passed = 0;
+        /// <summary>
+        /// (Get/Set) Number of correctly finished tests. When value is changed property changed event is raised
+        /// </summary>
+        public int Passed
         {
-            get { return finished; }
+            get { return passed; }
             set
             {
-                finished = value;
+                passed = value;
+                RaisePropertyChanged("Passed");
                 RaisePropertyChanged("Finished");
             }
         }
 
-        private int correct = 0;
+        private int failed = 0;
         /// <summary>
-        /// (Get/Set) Number of correct finished tests
+        /// (Get/Set) Number of defective finished tests. When value is changed property changed event is raised
         /// </summary>
-        public int Correct
+        public int Failed
         {
-            get { return correct; }
+            get { return failed; }
             set
             {
-                correct = value;
-                RaisePropertyChanged("Correct");
-            }
-        }
-
-        private int defective = 0;
-        /// <summary>
-        /// (Get/Set) Number of defective finished tests
-        /// </summary>
-        public int Defective
-        {
-            get { return defective; }
-            set
-            {
-                defective = value;
-                RaisePropertyChanged("Defective");
+                failed = value;
+                RaisePropertyChanged("Failed");
+                RaisePropertyChanged("Finished");
             }
         }
 
@@ -104,20 +97,22 @@ namespace MTS.Tester
 
         #region State
 
-        private bool isRunning = false;
+        #region IsRunning Property
+
+        public static readonly DependencyProperty IsRunningProperty =
+            DependencyProperty.Register("IsRunning", typeof(bool), typeof(TestWindow),
+            new PropertyMetadata(false));
+
         /// <summary>
-        /// (Get/Set) True if testing is running (shift is started)
+        /// (Get/Set) True if testing is running (shift is started). This is dependency property
         /// </summary>
         public bool IsRunning
         {
-            get { return isRunning; }
-            set
-            {
-                isRunning = value;  // raise notify event - necessary for binding
-                RaisePropertyChanged("IsRunning");
-                ShiftStatusMessage = value ? "Running" : "Stopped";
-            }
+            get { return (bool)GetValue(IsRunningProperty); }
+            set { SetValue(IsRunningProperty, value); }
         }
+
+        #endregion
 
         private bool isParamLoaded = false;
         /// <summary>
@@ -130,39 +125,10 @@ namespace MTS.Tester
             {
                 isParamLoaded = value; 
                 RaisePropertyChanged("IsParamLoaded");
-                ParamStatusMessage = value ? "Loaded" : "Not loaded";
             }
         }
 
         #endregion
-
-        private string shiftStatusMessage;
-        /// <summary>
-        /// (Get/Set) Message describing shift status
-        /// </summary>
-        public string ShiftStatusMessage
-        {
-            get { return shiftStatusMessage; }
-            set
-            {
-                shiftStatusMessage = value;
-                RaisePropertyChanged("ShiftStatusMessage");
-            }
-        }
-
-        private string paramStatusMessage;
-        /// <summary>
-        /// (Get/Set) Message describing status of file with parameters
-        /// </summary>
-        public string ParamStatusMessage
-        {
-            get { return paramStatusMessage; }
-            set
-            {
-                paramStatusMessage = value;
-                RaisePropertyChanged("ParamStatusMessage");
-            }
-        }
 
         #endregion
 
@@ -216,27 +182,8 @@ namespace MTS.Tester
                 IsParamLoaded = true;   // this will enable some buttons
 
                 string filename = System.IO.Path.GetFileName(file.FileName);
-                Output.WriteLine("Parameters loaded from file: {0}", filename);
-                try
-                {   // copy some parameters to testing window
-                    TestValue test = Tests.GetTest(TestCollection.Info);
-
-                    StringParam param = test.GetParam<StringParam>(TestValue.PartNumber);
-                    partNumber.Content = param.StringValue;
-
-                    param = test.GetParam<StringParam>(TestValue.SupplierName);
-                    supplierName.Content = param.StringValue;
-
-                    param = test.GetParam<StringParam>(TestValue.DescriptionId);
-                    description.Content = param.StringValue;
-
-                    paramFile.Content = filename;
-                }
-                catch (Exception ex)
-                {   // this happens when some parameters are missing
-                    ExceptionManager.ShowError(ex); // show to user that some parameters are missing
-                    // but do not abort - these are only informative parameters
-                }
+                paramFile.Content = filename;
+                Output.WriteLine(Resource.ParamLoadedMsg, filename);
             }
             catch (Exception ex)
             {   // display message to user if an error occurred
@@ -244,9 +191,6 @@ namespace MTS.Tester
                 // if file manager does not know what kind of exception is this, it will be re-thrown
                 ExceptionManager.ShowError(ex);
             }
-
-            if (IsParamLoaded)
-                ParamStatusMessage = "Loaded";
         }
 
         /// <summary>
@@ -259,17 +203,19 @@ namespace MTS.Tester
 
             try
             {
-                Output.Write("Creating communication channels ... ");
                 // load channels configuration from application settings
-                Channels channels = Settings.Default.GetChannelsInstance();
+                Output.Write(Resource.CreatingChannelsMsg);                
+                channels = Settings.Default.GetChannelsInstance();
                 channels.Connect();     // create connection to hardware
                 channels.Initialize();  // initialize each channel and channels properties
                 bindChannels(channels); // bind events to channel (when some value of channel change)
-                Output.WriteLine("OK");
+                Output.WriteLine(Resource.OKMsg);
 
-                Output.Write("Starting shift ... ");
-                shift = new Shift(channels, Tests) { Mirrors = this.Mirrors };
-                shift.Executed += new ShiftExecutedHandler(shiftExecuted);
+                // create shift and register its handlers
+                Output.Write(Resource.StartingShiftMsg);
+                shift = new Shift(channels, Tests) { Total = this.Total };
+                shift.SequenceExecuted += new ShiftExecutedHandler(sequenceExecuted);
+                shift.ShiftExecuted += new ShiftExecutedHandler(shiftExecuted);
                 shift.Initialize();     // prepare channels for execution - power supply must be on
 
                 timer = new Timer(400);     // this timer will update user interface
@@ -278,14 +224,36 @@ namespace MTS.Tester
                 IsRunning = true;   // disable other buttons                
                 shift.Start();      // start execution loop (new thread - return immediately)
                 timer.Start();      // start to update user interface
-                Output.WriteLine("OK");
+                Output.WriteLine(Resource.OKMsg);
             }
             catch (Exception ex)
             {
-                Output.WriteLine("\nStarting shift failed");
+                Output.WriteLine(Resource.StartingShiftFailedMsg);
                 ExceptionManager.ShowError(ex);
             }
         }
+        /// <summary>
+        /// This method is called when one sequence of shift is executed
+        /// </summary>
+        /// <param name="sender">Instance of shift that has been executed</param>
+        /// <param name="args">Sequence executed event arguments. Hold data about current shift state</param>
+        private void sequenceExecuted(object sender, ShiftExecutedEventArgs args)
+        {
+            Passed = args.Passed;
+            Failed = args.Failed;
+        }
+        /// <summary>
+        /// This method is called when shift get executed
+        /// </summary>
+        /// <param name="sender">Instance of shift that has been executed</param>
+        /// <param name="args">Shift executed event arguments. Hold data about final shift state</param>
+        private void shiftExecuted(object sender, ShiftExecutedEventArgs args)
+        {
+            disconnect();
+            Passed = args.Passed;
+            Failed = args.Failed;
+        }
+
         /// <summary>
         /// This method is called when stop button is clicked. Abort shift if it is running
         /// </summary>
@@ -295,15 +263,6 @@ namespace MTS.Tester
         {
             if (shift != null)
                 shift.Abort();
-            disconnect();
-        }
-        /// <summary>
-        /// This method is called when shift get executed
-        /// </summary>
-        /// <param name="sender">Instance of shift that has been executed</param>
-        /// <param name="args">Shift executed event arguments</param>
-        private void shiftExecuted(Shift sender, EventArgs args)
-        {
             disconnect();
         }
         /// <summary>
@@ -322,9 +281,9 @@ namespace MTS.Tester
         {
             if (channels != null)
             {
-                Output.Write("Closing connection ... ");
+                Output.Write(Resource.ClosingConnectionMsg);
                 channels.Disconnect();
-                Output.WriteLine("OK");
+                Output.WriteLine(Resource.OKMsg);
             }
             if (timer != null)
                 timer.Stop();

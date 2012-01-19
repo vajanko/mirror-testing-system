@@ -17,9 +17,9 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    public delegate void ShiftExecutedHandler(Shift sender, EventArgs args);
+    public delegate void ShiftExecutedHandler(object sender, ShiftExecutedEventArgs args);
 
-    public class Shift : INotifyPropertyChanged
+    public class Shift //: INotifyPropertyChanged
     {
         #region Private Fields
 
@@ -41,80 +41,101 @@ namespace MTS.Tester
 
         #endregion
 
-        public event ShiftExecutedHandler Executed;
+        #region Events
 
+        private event ShiftExecutedHandler shiftExecuted;
         /// <summary>
-        /// Raise task executed event
+        /// Occurs when shift is executed
         /// </summary>
-        protected void RaiseExecuted()
+        public event ShiftExecutedHandler ShiftExecuted
         {
-            if (Executed != null)
-                Executed(this, new EventArgs());
+            add { shiftExecuted += value; }
+            remove { shiftExecuted -= value; }
         }
+        /// <summary>
+        /// Raise <see cref="ShiftExecuted"/> event
+        /// </summary>
+        protected void OnShiftExecuted()
+        {
+            if (shiftExecuted != null)
+                shiftExecuted(this, new ShiftExecutedEventArgs() { Total = this.Total, Failed = this.Failed, 
+                    Passed = this.Passed, Duration = End - Begin });
+        }
+
+        private event ShiftExecutedHandler sequenceExecuted;
+        /// <summary>
+        /// Occurs when sequence of test is executed. One peace of mirror is tested
+        /// </summary>
+        public event ShiftExecutedHandler SequenceExecuted
+        {
+            add { sequenceExecuted += value; }
+            remove { sequenceExecuted -= value; }
+        }
+        /// <summary>
+        /// Raise <see cref="SequenceExecuted"/> event
+        /// </summary>
+        protected void OnSequenceExecuted()
+        {
+            if (sequenceExecuted != null)
+                sequenceExecuted(this, new ShiftExecutedEventArgs() { Total = this.Total, Failed = this.Failed, 
+                    Passed = this.Passed });
+        }
+
+        #endregion
 
         #region Properties
 
-        private int mirrors = 1;
+        private int total = 1;
         /// <summary>
-        /// (Get/Set) Number of mirrors to test
+        /// (Get/Set) Number of mirrors to be tested
         /// </summary>
-        public int Mirrors
+        public int Total
         {
-            get { return mirrors; }
+            get { return total; }
             set
             {
                 if (value < 1) value = 1;
-                mirrors = value;
-                NotifyPropretyChanged("Mirrors");
+                total = value;
             }
         }
         /// <summary>
-        /// (Get) Number of finised tests
+        /// (Get) Number of finished tests
         /// </summary>
         public int Finished
         {
             get { return Passed + Failed; }
         }
-        private int passed = 0;
         /// <summary>
-        /// (Get/Set) Number of correnct finished tests
+        /// (Get) Number of correct finished tests
         /// </summary>
-        public int Passed
-        {
-            get { return passed; }
-            private set
-            {
-                passed = value;
-                NotifyPropretyChanged("Passed");
-            }
-        }
-        private int failed = 0;
+        public int Passed { get; private set; }
         /// <summary>
-        /// (Get/Set) Number of finished tests that have failed
+        /// (Get) Number of finished tests that have failed
         /// </summary>
-        public int Failed
-        {
-            get { return failed; }
-            private set
-            {
-                failed = value;
-                NotifyPropretyChanged("Failed");
-            }
-        }
+        public int Failed { get; private set; }
         /// <summary>
         /// (Get) Number of mirror that remain to be tested
         /// </summary>
-        public int Remained
-        {
-            get { return Mirrors - Finished; }
-        }
+        public int Remained { get { return Total - Finished; } }
         /// <summary>
-        /// (Get) Value indicating if schift is running or not
+        /// (Get) Value indicating if shift is running or not
         /// </summary>
         public bool IsRunning
         {
             get {  return (loop != null) ? loop.IsAlive : false; }  // true is thread is alive
         }
+        private bool isAborting;
+        private object lockIsAborting = new object();
+        /// <summary>
+        /// Value indicating whether shift is being aborted. This means that scheduler will be aborted in 
+        /// the next loop of execution. This property is thread safe
+        /// </summary>
+        public bool IsAborting
+        {
+            get { return isAborting; }
+            private set { lock (lockIsAborting) { isAborting = value; } }
+        }
+
         /// <summary>
         /// (Get) Date and time when shift has been started
         /// </summary>
@@ -123,23 +144,10 @@ namespace MTS.Tester
         /// (Get) Date and time when shift has been finished
         /// </summary>
         public DateTime End { get; private set; }
-
-
-        #endregion
-
-        #region INotifyPropertyChanged members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
-        /// Raise an PropertyChanged event that signalized that some property has been changed
+        /// (Get) Duration of shift execution
         /// </summary>
-        /// <param name="name">Name of the propety that has been changed</param>
-        public void NotifyPropretyChanged(string name)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-        }
+        public TimeSpan Duration { get { return End - Begin; } }
 
         #endregion
 
@@ -235,14 +243,12 @@ namespace MTS.Tester
         {
             Stopwatch watch = new Stopwatch();  // time elapsed since last loop
             DateTime time = DateTime.Now;       // current time of updating scheduler
-
-            Output.WriteLine("Execution loop started!");
-            watch.Start();      // start measuring execution time
+            watch.Start();                      // start measuring execution time
 
             // while there are some mirrors to be tested
             while (Remained > 0)
             {
-                Output.WriteLine("Test sequence {0} started", Finished + 1);
+                Output.WriteLine(Resource.SequenceStartedMsg, Finished + 1);
 
                 // create scheduler with tasks to be executed
                 scheduler = createScheduler(channels, shiftTests);
@@ -250,24 +256,35 @@ namespace MTS.Tester
                 // this loop tests one mirror
                 while (!scheduler.IsFinished)
                 {
-                    Thread.Sleep(200);              // for presentation purpose only
-                    //time += watch.Elapsed;          // caluculate current time (DateTime.Now is not very exactly)
-                    scheduler.Update(time + watch.Elapsed);         // execute tasks
+                    if (IsAborting)
+                    {
+                        scheduler.Abort(time + watch.Elapsed);
+                        break;
+                    }
+                    else
+                    {
+                        scheduler.Update(time + watch.Elapsed);         // execute tasks
+                        Thread.Sleep(200);              // for presentation purpose only                    
+                    }
                 }
 
-                Output.WriteLine("Test sequence {0} finished", Finished + 1);
+                // raise sequence executed event
+                OnSequenceExecuted();
+                Output.WriteLine(Resource.SequenceFinishedMsg, Finished + 1);
 
                 // write outputs to safe state
                 setSafeStateOutputs(channels);
 
                 // handle results
                 handleResults(scheduler);
+
+                if (IsAborting)
+                    break;
             }
-            watch.Stop();       // stop measuring execution time
+            watch.Stop();       // stop measuring execution time           
 
             // finalize shift execution
             Finish();
-            Output.WriteLine("Execution loop finished!");
         }
 
         private void handleResults(TaskScheduler scheduler)
@@ -277,39 +294,39 @@ namespace MTS.Tester
             TaskResultType resultCode = scheduler.GetResultCode();
             if (resultCode == TaskResultType.Completed)
             {
-                msg = "Mirror passed!";
+                msg = Resource.MirrorPassedMsg;
                 channels.GreenLightOn.On();
                 Passed++;
             }
             else if (resultCode == TaskResultType.Failed)
             {
-                msg = "Mirror failed!";
+                msg = Resource.MirrorFailedMsg;
                 channels.RedLightOn.On();
                 Failed++;
             }
             else
             {
-                msg = "Aborted!";
+                msg = Resource.AbortedMsg;
             }
 
-            Output.WriteLine("Result: " + msg);
+            Output.WriteLine(Resource.ResultMsg, msg);
             // switch light (green or red) on
             channels.UpdateOutputs();
 
             this.End = DateTime.Now;
 
-            Output.Write("Saving results do database ... ");
+            Output.Write(Resource.SavingDataMsg);
             List<TaskResult> results = scheduler.GetResultData();
             saveShiftResult(results, (Int16)Finished);
-            Output.WriteLine("Saved!");
+            Output.WriteLine(Resource.OKMsg);
 
             if (Properties.Settings.Default.PrintLabels)
             {   // if printing of labels is required
                 // print label for test mirror
                 if (resultCode == TaskResultType.Completed)
-                    Admin.Printing.PrintingManager.Print("mirror", "Passed");
+                    Admin.Printing.PrintingManager.Print("mirror", Resource.PassedMsg);
                 else if (resultCode == TaskResultType.Failed)
-                    Admin.Printing.PrintingManager.Print("mirror", "Failed");
+                    Admin.Printing.PrintingManager.Print("mirror", Resource.FailedMsg);
             }
 
             // wait a moment to display light
@@ -321,7 +338,7 @@ namespace MTS.Tester
         /// <summary>
         /// Initialize test that are going to be used in this shift. Remove disabled test, save tests and their
         /// parameters that are going to be used to database. Use test or parameter database id as auxiliary property
-        /// of test or parameter value. Those will be used when generating test or parameter results and saveing them
+        /// of test or parameter value. Those will be used when generating test or parameter results and saving them
         /// to database
         /// </summary>
         private void initTests()
@@ -385,7 +402,7 @@ namespace MTS.Tester
         {
             // 1) create a new instance of shift and save it to database
             mirrorId = context.Mirrors.Select(m => m.Id).First();   // depends on parameter settings
-            operatorId = Admin.Operator.Instance.Id;                // loged in operator id
+            operatorId = Admin.Operator.Instance.Id;                // logged in operator id
             dbShift = context.Shifts.Add(new Data.Shift
             {
                 Start = DateTime.Now,       // date and time when shift has been started
@@ -393,7 +410,7 @@ namespace MTS.Tester
                 MirrorId = mirrorId,        // mirror which is tested in this shift
                 OperatorId = operatorId     // operator who has executed this shift
             });
-            // by saveing shift new id will be generated - this is necessary for saveing test used in this shift
+            // by saving shift new id will be generated - this is necessary for saving test used in this shift
             context.SaveChanges();
 
             // 2) save information about used tests in current shift
@@ -404,17 +421,17 @@ namespace MTS.Tester
         }
         /// <summary>
         /// Save produced results from one sequence of tests. One shift contains many sequences. At this time
-        /// shift is already saved in database and we reference it when saveing ouputs
+        /// shift is already saved in database and we reference it when saving outputs
         /// </summary>
         /// <param name="results">Collection of <see cref="TaskResult"/> containing data to be saved for
         /// each test and its parameters</param>
-        /// <param name="sequence">Number of test sequnece within current shift</param>
+        /// <param name="sequence">Number of test sequence within current shift</param>
         private void saveShiftResult(IEnumerable<TaskResult> results, Int16 sequence)
         {
             try
             {
                 // this converter is used to convert object value to its string representation when
-                // saveing to and retriving from database
+                // saving to and retrieving from database
                 ParamTypeConverter converter = new ParamTypeConverter();
 
                 foreach (TaskResult tRes in results.Where(t => t.HasData))
@@ -429,7 +446,7 @@ namespace MTS.Tester
                         TestId = tRes.DatabaseId,           // test used for this output
                         Sequence = sequence                 // number of test sequence within this shift
                     });
-                    // generate new id of TestOutput, this is necessary for saveing parameters output
+                    // generate new id of TestOutput, this is necessary for saving parameters output
                     context.SaveChanges();
 
                     // only save parameter outputs which have data to be saved
@@ -456,7 +473,7 @@ namespace MTS.Tester
             }
         }
         /// <summary>
-        /// Modify and save shift to database. This method shuld be called at the end of shift execution.
+        /// Modify and save shift to database. This method should be called at the end of shift execution.
         /// Current data and time is used for end time of shift.
         /// </summary>
         private void saveShift()
@@ -473,8 +490,9 @@ namespace MTS.Tester
 
         public void Initialize()
         {
-            Passed = 0;     // nothing is finished yet
+            Passed = 0;         // nothing is finished yet
             Failed = 0;
+            IsAborting = false;
 
             // first update, so we do not use uninitialized values
             channels.UpdateInputs();
@@ -520,31 +538,20 @@ namespace MTS.Tester
         }
         public void Finish()    // must be private method
         {
-            // switch off everything dangerous
-            setSafeStateOutputs(channels);
-
             // save date and time when shift has been finished - necessary for database
             saveShift();
             // release database layer
             context.Dispose();
 
-            Output.WriteLine("Shift finished!");
+            if (IsAborting) Output.WriteLine(Resource.ShiftAbortedMsg);
+            else Output.WriteLine(Resource.ShiftFinishedMsg);
 
             // raise notify event that shift has been finished
-            RaiseExecuted();
+            OnShiftExecuted();
         }
         public void Abort()
-        {
-            // abort executing thread
-            // revision needed !!!
-            if (loop != null)
-                loop.Abort();
-
-            setSafeStateOutputs(channels);
-
-            Output.WriteLine("Shift aborted!");
-
-            RaiseExecuted();
+        {   // this property is thread safe - executing loop will abort scheduler in the next update
+            IsAborting = true;
         }
 
         #endregion
