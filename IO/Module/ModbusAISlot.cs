@@ -4,7 +4,7 @@ using MTS.IO.Channel;
 
 namespace MTS.IO.Module
 {
-    class ModbusAISlot : ModbusSlot
+    class ModbusAISlot<TAddress> : ModbusSlot<TAddress> where TAddress:IAddress
     {
         /// <summary>
         /// Array of integer values for reading analog inputs. Item with zero index is value of
@@ -19,7 +19,7 @@ namespace MTS.IO.Module
         /// </summary>
         public override void Read(int hConnection)
         {
-            AnalogInput channel;
+            AnalogInput<TAddress> channel;
             // read values from hardware channels to integer array
 
             // maximum 4 values can read
@@ -32,7 +32,7 @@ namespace MTS.IO.Module
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)
             {   // some of channels may be unused
-                channel = Channels[i] as AnalogInput;
+                channel = Channels[i] as AnalogInput<TAddress>;
                 if (channel != null)
                     channel.SetValue(inputs[i]);    // for unused channel value of inputs[i] is unspecified
             }
@@ -50,7 +50,7 @@ namespace MTS.IO.Module
             : base(slot, startChannel, channelsCount)
         {
             // allocate as much memory as necessary
-            Channels = new AnalogInput[channelsCount];
+            Channels = new AnalogInput<TAddress>[channelsCount];
             inputs = new ushort[channelsCount];
             dInputs = new double[channelsCount];
         }

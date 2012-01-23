@@ -3,7 +3,7 @@ using MTS.IO;
 
 namespace MTS.IO.Channel
 {
-    class AnalogInput : ChannelBase, IAnalogInput
+    public class AnalogInput<TAddress> : ChannelBase<TAddress>, IAnalogInput where TAddress :IAddress
     {
         #region Constants
 

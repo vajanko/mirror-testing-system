@@ -1,13 +1,13 @@
-Name; ;Type;Size;>Address;In/Out;User ID;Linked to
-HeatingFoilCurrent;X;UINT;2.0;0.0;Input;0;Data In . Channel 1 . Term 2 (KL3162) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-VerticalActuatorCurrent;X;UINT;2.0;5.0;Input;0;Data In . Channel 2 . Term 2 (KL3162) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-IsPowerSupplyOn;X;BOOL;0.1;7.0;Input;0;Input . Channel 1 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-IsStartPressed;X;BOOL;0.1;8.0;Input;0;Input . Channel 2 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-IsSuckerDown;X;BOOL;0.1;9.0;Input;0;Input . Channel 3 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-IsDistanceSensorUp;X;BOOL;0.1;10.0;Input;0;Input . Channel 4 . Term 3 (KL1809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-AllowPowerSupply;X;BOOL;0.1;0.0;Output;0;Output . Channel 1 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-LockWeak;X;BOOL;0.1;1.0;Output;0;Output . Channel 2 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-LockStrong;X;BOOL;0.1;2.0;Output;0;Output . Channel 3 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-MoveSuckerDown;X;BOOL;0.1;3.0;Output;0;Output . Channel 4 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-MoveDistanceSensorUp;X;BOOL;0.1;4.0;Output;0;Output . Channel 5 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
-AllowMirrorMovement;X;BOOL;0.1;5.0;Output;0;Output . Channel 6 . Term 4 (KL2809) . Box 1 (BK1120) . Device 1 (EtherCAT) . I/O Devices
+Name;Type;Size;>Address;In/Out
+HeatingFoilCurrent;UINT;2.0;0.0;Input
+VerticalActuatorCurrent;UINT;2.0;5.0;Input
+IsPowerSupplyOn;BOOL;0.1;7.0;Input
+IsStartPressed;BOOL;0.1;8.0;Input
+IsSuckerDown;BOOL;0.1;9.0;Input
+IsDistanceSensorUp;BOOL;0.1;10.0;Input
+AllowPowerSupply;BOOL;0.1;0.0;Output
+LockWeak;BOOL;0.1;1.0;Output
+LockStrong;BOOL;0.1;2.0;Output
+MoveSuckerDown;BOOL;0.1;3.0;Output
+MoveDistanceSensorUp;BOOL;0.1;4.0;Output
+AllowMirrorMovement;BOOL;0.1;5.0;Output

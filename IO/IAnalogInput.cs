@@ -26,13 +26,13 @@ namespace MTS.IO
         double RealHigh { get; set; }
 
         /// <summary>
-        /// (Get) Integer value of this channel. Setting this value afects <see cref="RealValue"/>
+        /// (Get) Integer value of this channel. Setting this value effects <see cref="RealValue"/>
         /// Minimum possible value is <see cref="RawLow"/>. Maximum possible value is <see cref="RawHigh"/>
         /// </summary>
         uint Value { get; }
 
         /// <summary>
-        /// (Get) Real value of this channel. Setting this value afects <see cref="Value"/>
+        /// (Get) Real value of this channel. Setting this value effects <see cref="Value"/>
         /// Minimum possible value is <see cref="RealLow"/>. Maximum possible value is <see cref="RealHigh"/>
         /// </summary>
         double RealValue { get; }

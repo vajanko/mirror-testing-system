@@ -1,29 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Timers;
-
+using System.Windows;
+using AvalonDock;
 using MTS.Base;
 using MTS.Editor;
-using MTS.Properties;
 using MTS.IO;
-using MTS.IO.Module;
-
-using AvalonDock;
-
-using Microsoft.Win32;
+using MTS.Properties;
+using System.Windows.Controls;
 
 namespace MTS.Tester
 {
@@ -140,6 +124,17 @@ namespace MTS.Tester
             protected set;
         }
 
+        public IEnumerable<IAnalogInput> AnalogChannels
+        {
+            get { return channels.GetChannels<IAnalogInput>(); }
+        }
+
+        private List<Controls.FlowControl> analogControls = new List<Controls.FlowControl>();
+        public IEnumerable<Controls.FlowControl> AnalogControls
+        {
+            get { return analogControls; }
+        }
+
         #endregion
 
         #region Overrided Methods
@@ -205,7 +200,7 @@ namespace MTS.Tester
             {
                 // load channels configuration from application settings
                 Output.Write(Resource.CreatingChannelsMsg);                
-                channels = Settings.Default.GetChannelsInstance();
+                //channels = Settings.Default.GetChannelsInstance();
                 channels.Connect();     // create connection to hardware
                 channels.Initialize();  // initialize each channel and channels properties
                 bindChannels(channels); // bind events to channel (when some value of channel change)
@@ -248,8 +243,8 @@ namespace MTS.Tester
         /// <param name="sender">Instance of shift that has been executed</param>
         /// <param name="args">Shift executed event arguments. Hold data about final shift state</param>
         private void shiftExecuted(object sender, ShiftExecutedEventArgs args)
-        {
-            disconnect();
+        {   // run disconnect method on GUI thread
+            this.Dispatcher.Invoke(new Action(disconnect));
             Passed = args.Passed;
             Failed = args.Failed;
         }
@@ -275,7 +270,8 @@ namespace MTS.Tester
             spiralCurrent.Dispatcher.BeginInvoke(new Action(updateGui));
         }
         /// <summary>
-        /// Close connection with tester hardware if it exists
+        /// Close connection with tester hardware if it exists. This method must be called only on same thread
+        /// as graphical user interface is running
         /// </summary>
         private void disconnect()
         {
@@ -287,6 +283,7 @@ namespace MTS.Tester
             }
             if (timer != null)
                 timer.Stop();
+            IsRunning = false;
         }
         
         #endregion
@@ -311,13 +308,18 @@ namespace MTS.Tester
             if (channels.IsDistanceSensorUp.Value)  // measuring is activated
                 setRotation();
 
-            spiralCurrent.AddValue(channels.HeatingFoilCurrent.RealValue);
-            blinkerCurrent.AddValue(channels.DirectionLightCurrent.RealValue);
-            actuatorACurrent.AddValue(channels.VerticalActuatorCurrent.RealValue);
-            actuatorBCurrent.AddValue(channels.HorizontalActuatorCurrent.RealValue);
-            powerfoldCurrent.AddValue(channels.PowerfoldCurrent.RealValue);
-            powerSupplyVoltage1.AddValue(channels.PowerSupplyVoltage1.RealValue);
-            powerSupplyVoltage2.AddValue(channels.PowerSupplyVoltage2.RealValue);
+
+            foreach (Controls.FlowControl ctrl in analogControls)
+            {
+                ctrl.Update();
+            }
+            //spiralCurrent.AddValue(channels.HeatingFoilCurrent.RealValue);
+            //blinkerCurrent.AddValue(channels.DirectionLightCurrent.RealValue);
+            //actuatorACurrent.AddValue(channels.VerticalActuatorCurrent.RealValue);
+            //actuatorBCurrent.AddValue(channels.HorizontalActuatorCurrent.RealValue);
+            //powerfoldCurrent.AddValue(channels.PowerfoldCurrent.RealValue);
+            //powerSupplyVoltage1.AddValue(channels.PowerSupplyVoltage1.RealValue);
+            //powerSupplyVoltage2.AddValue(channels.PowerSupplyVoltage2.RealValue);
         }
         private void setRotation()
         {
@@ -332,9 +334,17 @@ namespace MTS.Tester
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of tester window that allows user to manage and follow providing tests
+        /// </summary>
         public TestWindow()
         {
-            InitializeComponent();
+            channels = Settings.Default.GetChannelsInstance();
+            analogControls.Clear();
+            foreach (IAnalogInput input in AnalogChannels)
+                analogControls.Add(new Controls.FlowControl() { Channel = input, Title = input.Name });
+
+            InitializeComponent();            
         }
 
         #endregion        

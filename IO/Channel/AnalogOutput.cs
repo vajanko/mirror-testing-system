@@ -2,12 +2,12 @@
 
 namespace MTS.IO.Channel
 {
-    class AnalogOutput : AnalogInput, IAnalogOutput
+    public class AnalogOutput<TAddress> : AnalogInput<TAddress>, IAnalogOutput where TAddress : IAddress
     {
         #region IAnalogOutput Members
 
         /// <summary>
-        /// (Get/Set) Integer value of this channel. Setting this value efects <see cref="RealValue"/>
+        /// (Get/Set) Integer value of this channel. Setting this value effects <see cref="RealValue"/>
         /// Minimum possible value is <see cref="RawLow"/>. Maximum possible value is <see cref="RawHigh"/>
         /// </summary>
         public new uint Value

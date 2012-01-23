@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 
@@ -9,7 +11,7 @@ namespace MTS.IO
     /// This class is only a thin cover over some IModule implementation
     /// It allows access to channels directly by properties
     /// </summary>
-    public partial class Channels : IModule
+    public class Channels : IModule
     {
         /// <summary>
         /// Instance of layer that is responsible for communication with hardware
@@ -55,123 +57,138 @@ namespace MTS.IO
             // editing configuration file for Moxa
 
             // setting channels property here is only temporary a will be changed in the future
+            // this could be also done with reflection
+            Type thisType = this.GetType();
+            foreach (var channel in module.Inputs)
+            {
+                PropertyInfo prop = thisType.GetProperty(channel.Id);
+                prop.SetValue(this, channel, null);
+            }
+            foreach (var channel in module.Inputs)
+            {
+                if (channel is IAnalogInput)
+                {
+                    PropertyInfo prop = thisType.GetProperty(channel.Id);
+                    initializeChannel((IAnalogInput)prop.GetValue(this, null), settings.GetSetting(channel.Id));
+                }
+            }
 
             //// analog inputs - also initialize its settings raw/real low/high values
-            DistanceX = (IAnalogInput)module.GetChannelByName("DistanceX");
-            initializeChannel(DistanceX, settings.GetSetting("DistanceX"));
+            //DistanceX = module.GetChannel<IAnalogInput<TAddress>>("DistanceX");
+            //initializeChannel(DistanceX, settings.GetSetting("DistanceX"));
 
-            DistanceY = (IAnalogInput)module.GetChannelByName("DistanceY");
-            initializeChannel(DistanceY, settings.GetSetting("DistanceY"));
+            //DistanceY = module.GetChannel<IAnalogInput<TAddress>>("DistanceY");
+            //initializeChannel(DistanceY, settings.GetSetting("DistanceY"));
 
-            DistanceZ = (IAnalogInput)module.GetChannelByName("DistanceZ");
-            initializeChannel(DistanceZ, settings.GetSetting("DistanceZ"));
+            //DistanceZ = module.GetChannel<IAnalogInput<TAddress>>("DistanceZ");
+            //initializeChannel(DistanceZ, settings.GetSetting("DistanceZ"));
 
-            PowerfoldCurrent = (IAnalogInput)module.GetChannelByName("PowerfoldCurrent");
-            initializeChannel(PowerfoldCurrent, settings.GetSetting("PowerfoldCurrent"));
+            //PowerfoldCurrent = module.GetChannel<IAnalogInput<TAddress>>("PowerfoldCurrent");
+            //initializeChannel(PowerfoldCurrent, settings.GetSetting("PowerfoldCurrent"));
 
-            HeatingFoilCurrent = (IAnalogInput)module.GetChannelByName("HeatingFoilCurrent");
-            initializeChannel(HeatingFoilCurrent, settings.GetSetting("HeatingFoilCurrent"));
+            //HeatingFoilCurrent = module.GetChannel<IAnalogInput<TAddress>>("HeatingFoilCurrent");
+            //initializeChannel(HeatingFoilCurrent, settings.GetSetting("HeatingFoilCurrent"));
 
-            VerticalActuatorCurrent = (IAnalogInput)module.GetChannelByName("VerticalActuatorCurrent");
-            initializeChannel(VerticalActuatorCurrent, settings.GetSetting("VerticalActuatorCurrent"));
+            //VerticalActuatorCurrent = module.GetChannel<IAnalogInput<TAddress>>("VerticalActuatorCurrent");
+            //initializeChannel(VerticalActuatorCurrent, settings.GetSetting("VerticalActuatorCurrent"));
 
-            HorizontalActuatorCurrent = (IAnalogInput)module.GetChannelByName("HorizontalActuatorCurrent");
-            initializeChannel(HorizontalActuatorCurrent, settings.GetSetting("HorizontalActuatorCurrent"));
+            //HorizontalActuatorCurrent = module.GetChannel<IAnalogInput<TAddress>>("HorizontalActuatorCurrent");
+            //initializeChannel(HorizontalActuatorCurrent, settings.GetSetting("HorizontalActuatorCurrent"));
 
-            DirectionLightCurrent = (IAnalogInput)module.GetChannelByName("DirectionLightCurrent");
-            initializeChannel(DirectionLightCurrent, settings.GetSetting("DirectionLightCurrent"));
+            //DirectionLightCurrent = module.GetChannel<IAnalogInput<TAddress>>("DirectionLightCurrent");
+            //initializeChannel(DirectionLightCurrent, settings.GetSetting("DirectionLightCurrent"));
 
-            PowerSupplyVoltage1 = (IAnalogInput)module.GetChannelByName("PowerSupplyVoltage1");
-            initializeChannel(PowerSupplyVoltage1, settings.GetSetting("PowerSupplyVoltage1"));
+            //PowerSupplyVoltage1 = module.GetChannel<IAnalogInput<TAddress>>("PowerSupplyVoltage1");
+            //initializeChannel(PowerSupplyVoltage1, settings.GetSetting("PowerSupplyVoltage1"));
 
-            PowerSupplyVoltage2 = (IAnalogInput)module.GetChannelByName("PowerSupplyVoltage2");
-            initializeChannel(PowerSupplyVoltage2, settings.GetSetting("PowerSupplyVoltage2"));
-            //// analog inputs
+            //PowerSupplyVoltage2 = module.GetChannel<IAnalogInput<TAddress>>("PowerSupplyVoltage2");
+            //initializeChannel(PowerSupplyVoltage2, settings.GetSetting("PowerSupplyVoltage2"));
+            ////// analog inputs
 
-            // digital inputs
-            IsDistanceSensorUp = (IDigitalInput)module.GetChannelByName("IsDistanceSensorUp");
-            IsDistanceSensorDown = (IDigitalInput)module.GetChannelByName("IsDistanceSensorDown");
-            IsSuckerUp = (IDigitalInput)module.GetChannelByName("IsSuckerUp");
-            IsSuckerDown = (IDigitalInput)module.GetChannelByName("IsSuckerDown");
-            IsVacuum = (IDigitalInput)module.GetChannelByName("IsVacuum");
-            IsLeftRubberPresent = (IDigitalInput)module.GetChannelByName("IsLeftRubberPresent");
+            //// digital inputs
+            //IsDistanceSensorUp = module.GetChannel<IDigitalInput<TAddress>>("IsDistanceSensorUp");
+            //IsDistanceSensorDown = module.GetChannel<IDigitalInput<TAddress>>("IsDistanceSensorDown");
+            //IsSuckerUp = module.GetChannel<IDigitalInput<TAddress>>("IsSuckerUp");
+            //IsSuckerDown = module.GetChannel<IDigitalInput<TAddress>>("IsSuckerDown");
+            //IsVacuum = module.GetChannel<IDigitalInput<TAddress>>("IsVacuum");
+            //IsLeftRubberPresent = module.GetChannel<IDigitalInput<TAddress>>("IsLeftRubberPresent");
 
-            IsPowerfoldDown = (IDigitalInput)module.GetChannelByName("IsPowerfoldDown");
-            IsPowerfoldUp = (IDigitalInput)module.GetChannelByName("IsPowerfoldUp");
-            IsOldPowerfoldUp = (IDigitalInput)module.GetChannelByName("IsOldPowerfoldUp");
-            IsRightRubberPresent = (IDigitalInput)module.GetChannelByName("IsRightRubberPresent");
+            //IsPowerfoldDown = module.GetChannel<IDigitalInput<TAddress>>("IsPowerfoldDown");
+            //IsPowerfoldUp = module.GetChannel<IDigitalInput<TAddress>>("IsPowerfoldUp");
+            //IsOldPowerfoldUp = module.GetChannel<IDigitalInput<TAddress>>("IsOldPowerfoldUp");
+            //IsRightRubberPresent = module.GetChannel<IDigitalInput<TAddress>>("IsRightRubberPresent");
 
-            IsLeftMirror = (IDigitalInput)module.GetChannelByName("IsLeftMirror");
-            IsOldMirror = (IDigitalInput)module.GetChannelByName("IsOldMirror");
-            IsOldPowerfoldDown = (IDigitalInput)module.GetChannelByName("IsOldPowerfoldDown");
-            IsStartPressed = (IDigitalInput)module.GetChannelByName("IsStartPressed");
-            IsAckPressed = (IDigitalInput)module.GetChannelByName("IsAckPressed");
+            //IsLeftMirror = module.GetChannel<IDigitalInput<TAddress>>("IsLeftMirror");
+            //IsOldMirror = module.GetChannel<IDigitalInput<TAddress>>("IsOldMirror");
+            //IsOldPowerfoldDown = module.GetChannel<IDigitalInput<TAddress>>("IsOldPowerfoldDown");
+            //IsStartPressed = module.GetChannel<IDigitalInput<TAddress>>("IsStartPressed");
+            //IsAckPressed = module.GetChannel<IDigitalInput<TAddress>>("IsAckPressed");
 
-            IsLocked = (IDigitalInput)module.GetChannelByName("IsLocked");
-            IsOldLocked = (IDigitalInput)module.GetChannelByName("IsOldLocked");
-            // digital inputs
+            //IsLocked = module.GetChannel<IDigitalInput<TAddress>>("IsLocked");
+            //IsOldLocked = module.GetChannel<IDigitalInput<TAddress>>("IsOldLocked");
+
+            //IsPowerSupplyOff = module.GetChannel<IDigitalInput<TAddress>>("IsPowerSupplyOff");
+            //// digital inputs
+
+            //// digital outputs
+            //AllowMirrorMovement = module.GetChannel<IDigitalOutput<TAddress>>("AllowMirrorMovement");
+            //MoveMirrorVertical = module.GetChannel<IDigitalOutput<TAddress>>("MoveMirrorVertical");
+            //MoveMirrorHorizontal = module.GetChannel<IDigitalOutput<TAddress>>("MoveMirrorHorizontal");
+            //MoveMirrorReverse = module.GetChannel<IDigitalOutput<TAddress>>("MoveMirrorReverse");
+            //FoldPowerfold = module.GetChannel<IDigitalOutput<TAddress>>("FoldPowerfold");
+            //UnfoldPowerfold = module.GetChannel<IDigitalOutput<TAddress>>("UnfoldPowerfold");
+            //HeatingFoilOn = module.GetChannel<IDigitalOutput<TAddress>>("HeatingFoilOn");
+            //DirectionLightOn = module.GetChannel<IDigitalOutput<TAddress>>("DirectionLightOn");
+
+            //LockWeak = module.GetChannel<IDigitalOutput<TAddress>>("LockWeak");
+            //UnlockWeak = module.GetChannel<IDigitalOutput<TAddress>>("UnlockWeak");
+            //MoveDistanceSensorUp = module.GetChannel<IDigitalOutput<TAddress>>("MoveDistanceSensorUp");
+            //MoveDistanceSensorDown = module.GetChannel<IDigitalOutput<TAddress>>("MoveDistanceSensorDown");
+            //MoveSuckerUp = module.GetChannel<IDigitalOutput<TAddress>>("MoveSuckerUp");
+            //MoveSuckerDown = module.GetChannel<IDigitalOutput<TAddress>>("MoveSuckerDown");
+            //SuckOn = module.GetChannel<IDigitalOutput<TAddress>>("SuckOn");
+            //BlowOn = module.GetChannel<IDigitalOutput<TAddress>>("BlowOn");
+
+            //AllowPowerSupply = module.GetChannel<IDigitalOutput<TAddress>>("AllowPowerSupply");
+            //LockStrong = module.GetChannel<IDigitalOutput<TAddress>>("LockStrong");
+            //UnlockStrong = module.GetChannel<IDigitalOutput<TAddress>>("UnlockStrong");
+            //GreenLightOn = module.GetChannel<IDigitalOutput<TAddress>>("GreenLightOn");
+            //RedLightOn = module.GetChannel<IDigitalOutput<TAddress>>("RedLightOn");
+            //BuzzerOn = module.GetChannel<IDigitalOutput<TAddress>>("BuzzerOn");
 
             // digital outputs
-            AllowMirrorMovement = (IDigitalOutput)module.GetChannelByName("AllowMirrorMovement");
-            MoveMirrorVertical = (IDigitalOutput)module.GetChannelByName("MoveMirrorVertical");
-            MoveMirrorHorizontal = (IDigitalOutput)module.GetChannelByName("MoveMirrorHorizontal");
-            MoveMirrorReverse = (IDigitalOutput)module.GetChannelByName("MoveMirrorReverse");
-            FoldPowerfold = (IDigitalOutput)module.GetChannelByName("FoldPowerfold");
-            UnfoldPowerfold = (IDigitalOutput)module.GetChannelByName("UnfoldPowerfold");
-            HeatingFoilOn = (IDigitalOutput)module.GetChannelByName("HeatingFoilOn");
-            DirectionLightOn = (IDigitalOutput)module.GetChannelByName("DirectionLightOn");
 
-            LockWeak = (IDigitalOutput)module.GetChannelByName("LockWeak");
-            UnlockWeak = (IDigitalOutput)module.GetChannelByName("UnlockWeak");
-            MoveDistanceSensorUp = (IDigitalOutput)module.GetChannelByName("MoveDistanceSensorUp");
-            MoveDistanceSensorDown = (IDigitalOutput)module.GetChannelByName("MoveDistanceSensorDown");
-            MoveSuckerUp = (IDigitalOutput)module.GetChannelByName("MoveSuckerUp");
-            MoveSuckerDown = (IDigitalOutput)module.GetChannelByName("MoveSuckerDown");
-            SuckOn = (IDigitalOutput)module.GetChannelByName("SuckOn");
-            BlowOn = (IDigitalOutput)module.GetChannelByName("BlowOn");
+            //// ???
+            //TestingDeviceOpened = module.GetChannel("TestingDeviceOpened");
+            //TestingDeviceClosed = module.GetChannel("TestingDeviceClosed");
+            //ErrorAcknButton = module.GetChannel("ErrorAcknButton");
 
-            AllowPowerSupply = (IDigitalOutput)module.GetChannelByName("AllowPowerSupply");
-            LockStrong = (IDigitalOutput)module.GetChannelByName("LockStrong");
-            UnlockStrong = (IDigitalOutput)module.GetChannelByName("UnlockStrong");
-            GreenLightOn = (IDigitalOutput)module.GetChannelByName("GreenLightOn");
-            RedLightOn = (IDigitalOutput)module.GetChannelByName("RedLightOn");
-            BuzzerOn = (IDigitalOutput)module.GetChannelByName("BuzzerOn");
-
-            // digital outputs
-
-            // ???
-            TestingDeviceOpened = (IDigitalInput)module.GetChannelByName("TestingDeviceOpened");
-            TestingDeviceClosed = (IDigitalInput)module.GetChannelByName("TestingDeviceClosed");
-            ErrorAcknButton = (IDigitalInput)module.GetChannelByName("ErrorAcknButton");
+            //// powerfold
+            //PowerFoldUnfoldedPositionSensor1 = module.GetChannel("PowerFoldUnfoldedPositionSensor1");
+            //PowerFoldUnfoldedPositionSensor2 = module.GetChannel("PowerFoldUnfoldedPositionSensor2");
+            //PowerFoldFoldedPositionSensor = module.GetChannel("PowerFoldFoldedPositionSensor");
             
 
-            // powerfold
-            PowerFoldUnfoldedPositionSensor1 = (IDigitalInput)module.GetChannelByName("PowerFoldUnfoldedPositionSensor1");
-            PowerFoldUnfoldedPositionSensor2 = (IDigitalInput)module.GetChannelByName("PowerFoldUnfoldedPositionSensor2");
-            PowerFoldFoldedPositionSensor = (IDigitalInput)module.GetChannelByName("PowerFoldFoldedPositionSensor");
-            
+            //HeatingFoilSignSensor = module.GetChannel("HeatingFoilSignSensor");
 
-            HeatingFoilSignSensor = (IDigitalInput)module.GetChannelByName("HeatingFoilSignSensor");
-
-            SensorHeadOut = (IDigitalInput)module.GetChannelByName("SensorHeadOut");
-            SensorHeadIn = (IDigitalInput)module.GetChannelByName("SensorHeadIn");
-            InsCheck1 = (IDigitalInput)module.GetChannelByName("InsCheck1");
-            InsCheck2 = (IDigitalInput)module.GetChannelByName("InsCheck2");
-            InsCheck3 = (IDigitalInput)module.GetChannelByName("InsCheck3");
-            InsCheck4 = (IDigitalInput)module.GetChannelByName("InsCheck4");
-            InsCheck5 = (IDigitalInput)module.GetChannelByName("InsCheck5");
-            InsCheck6 = (IDigitalInput)module.GetChannelByName("InsCheck6");
-            InsCheck7 = (IDigitalInput)module.GetChannelByName("InsCheck7");
-            InsCheck8 = (IDigitalInput)module.GetChannelByName("InsCheck8");
-            InsCheck9 = (IDigitalInput)module.GetChannelByName("InsCheck9");
-            InsCheck10 = (IDigitalInput)module.GetChannelByName("InsCheck10");
-            InsCheck11 = (IDigitalInput)module.GetChannelByName("InsCheck11");
-            InsCheck12 = (IDigitalInput)module.GetChannelByName("InsCheck12");
-            InsCheck13 = (IDigitalInput)module.GetChannelByName("InsCheck13");
-            InsCheck14 = (IDigitalInput)module.GetChannelByName("InsCheck14");
-            InsCheck15 = (IDigitalInput)module.GetChannelByName("InsCheck15");
-            InsCheck16 = (IDigitalInput)module.GetChannelByName("InsCheck16");
-            IsPowerSupplyOff = (IDigitalInput)module.GetChannelByName("IsPowerSupplyOff");
+            //SensorHeadOut = module.GetChannel("SensorHeadOut");
+            //SensorHeadIn = module.GetChannel("SensorHeadIn");
+            //InsCheck1 = module.GetChannel("InsCheck1");
+            //InsCheck2 = module.GetChannel("InsCheck2");
+            //InsCheck3 = module.GetChannel("InsCheck3");
+            //InsCheck4 = module.GetChannel("InsCheck4");
+            //InsCheck5 = module.GetChannel("InsCheck5");
+            //InsCheck6 = module.GetChannel("InsCheck6");
+            //InsCheck7 = module.GetChannel("InsCheck7");
+            //InsCheck8 = module.GetChannel("InsCheck8");
+            //InsCheck9 = module.GetChannel("InsCheck9");
+            //InsCheck10 = module.GetChannel("InsCheck10");
+            //InsCheck11 = module.GetChannel("InsCheck11");
+            //InsCheck12 = module.GetChannel("InsCheck12");
+            //InsCheck13 = module.GetChannel("InsCheck13");
+            //InsCheck14 = module.GetChannel("InsCheck14");
+            //InsCheck15 = module.GetChannel("InsCheck15");
+            //InsCheck16 = module.GetChannel("InsCheck16");            
         }
         /// <summary>
         /// Write all output and read all input channels (in this order)
@@ -204,14 +221,6 @@ namespace MTS.IO
                 module.Disconnect();
         }
         /// <summary>
-        /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
-        /// </summary>
-        /// <param name="name">Unique name (identifier) of required channel</param>
-        public IChannel GetChannelByName(string name)
-        {
-            return module.GetChannelByName(name);
-        }
-        /// <summary>
         /// (Get) Value indicating that this module is Listening to remote hardware
         /// </summary>
         public bool IsConnected { get { return module.IsConnected; } }
@@ -234,6 +243,44 @@ namespace MTS.IO
             UpdateOutputs();
         }
 
+        /// <summary>
+        /// (Get) Name of underlying module communication protocol
+        /// </summary>
+        public string ProtocolName { get { return module.ProtocolName; } }
+
+        public IEnumerable<IChannel> Inputs
+        {
+            get { return module.Inputs; }
+        }
+
+        public IEnumerable<IChannel> Outputs
+        {
+            get { return module.Outputs; }
+        }
+        /// <summary>
+        /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
+        /// </summary>
+        /// <param name="name">Unique name (identifier) of required channel</param>
+        public IChannel GetChannel(string name)
+        {
+            return module.GetChannel(name);
+        }
+        /// <summary>
+        /// Get all channels contained in this current module of <typeparamref name="TChannel"/> type
+        /// </summary>
+        /// <typeparam name="TChannel">Type of channels to get. For example <see cref="IAnalogInput"/>
+        /// or <see cref="IDigitalOutput"/> channels.</typeparam>
+        /// <returns>Collection of channel of type <typeparamref name="TChannel"/></returns>
+        public IEnumerable<TChannel> GetChannels<TChannel>() where TChannel : IChannel
+        {
+            foreach (var channel in module.GetChannels<TChannel>())
+                yield return channel;
+        }
+        public TChannel GetChannel<TChannel>(string id) where TChannel : IChannel
+        {
+            return module.GetChannel<TChannel>(id);
+        }
+
         #region IEnumerable Members
 
         public System.Collections.IEnumerator GetEnumerator()
@@ -246,7 +293,7 @@ namespace MTS.IO
         #region IDisposable Members
 
         /// <summary>
-        /// Release resources allocated by underlaying module instance. Disconnect module if it is connected
+        /// Release resources allocated by underlying module instance. Disconnect module if it is connected
         /// </summary>
         public void Dispose()
         {
@@ -260,14 +307,6 @@ namespace MTS.IO
         #endregion
 
         #endregion
-
-        private void initializeChannel(IAnalogInput channel, ChannelSetting setting)
-        {
-            channel.RawLow = setting.RawLow;
-            channel.RawHigh = setting.RawHigh;
-            channel.RealLow = setting.RealLow;
-            channel.RealHigh = setting.RealHigh;
-        }        
 
         #region Public methods
 
@@ -288,7 +327,7 @@ namespace MTS.IO
         #region Mirror glass
 
         /// <summary>
-        /// (Get) Value indicating whether mirror glass is moveing up
+        /// (Get) Value indicating whether mirror glass is moving up
         /// </summary>
         public bool IsMirrorMoveingUp
         {
@@ -416,7 +455,7 @@ namespace MTS.IO
         #region Sucker
 
         /// <summary>
-        /// Start to move sucker down. Does not need to be stoped.
+        /// Start to move sucker down. Does not need to be stopped.
         /// </summary>
         public void SuckerDown()
         {
@@ -424,7 +463,7 @@ namespace MTS.IO
             MoveSuckerDown.Value = true;
         }
         /// <summary>
-        /// Start to move sucker up. Does not need to be stoped.
+        /// Start to move sucker up. Does not need to be stopped.
         /// </summary>
         public void SuckerUp()
         {
@@ -432,7 +471,7 @@ namespace MTS.IO
             MoveSuckerDown.Value = false;
         }
         /// <summary>
-        /// Start to suck air from the sucker disk. If air is being blowed, it will be stoped
+        /// Start to suck air from the sucker disk. If air is being blew, it will be stopped
         /// </summary>
         public void StartSucking()
         {
@@ -441,7 +480,7 @@ namespace MTS.IO
             BlowOn.Value = false;
         }
         /// <summary>
-        /// Start to blow air form the sucker disk. If air is being sucked, it will be stoped
+        /// Start to blow air form the sucker disk. If air is being sucked, it will be stopped
         /// </summary>
         public void StartBlowing()
         {
@@ -489,7 +528,8 @@ namespace MTS.IO
             UnfoldPowerfold.Value = false;
         }
         /// <summary>
-        /// Get value indicating whether is powerfold folded
+        /// Get value indicating whether is powerfold folded. This value depends on type of mirror which is recognized
+        /// by value of <see cref="IsOldMirror"/> channel
         /// </summary>
         public bool IsFolded()
         {   // if it is old mirror type, check for old powerfold sensor
@@ -499,7 +539,8 @@ namespace MTS.IO
                 return IsPowerfoldDown.Value;
         }
         /// <summary>
-        /// Get value indicating whether is powerfold unfolded
+        /// Get value indicating whether is powerfold unfolded. This value depends on type of mirror which is recognized
+        /// by value of <see cref="IsOldMirror"/> channel
         /// </summary>
         public bool IsUnfolded()
         {
@@ -508,7 +549,6 @@ namespace MTS.IO
             else
                 return IsPowerfoldUp.Value;
         }
-
 
         #endregion
 
@@ -542,8 +582,8 @@ namespace MTS.IO
         /// <param name="x">X-coordinate of plane</param>
         /// <param name="y">Y-coordinate of plane</param>
         /// <param name="z">Z-coordinate of plane</param>
-        private Vector3D getPlaneNormal(Point3D x, Point3D y, Point3D z)
-        {   // Get two vectors from tree points. Cross product gives us a pependicular vector to both of them
+        private static Vector3D getPlaneNormal(Point3D x, Point3D y, Point3D z)
+        {   // Get two vectors from tree points. Cross product gives us a perpendicular vector to both of them
             return Vector3D.CrossProduct(new Vector3D(y.X - x.X, y.Y - x.Y, y.Z - x.Z), new Vector3D(z.X - x.X, z.Y - x.Y, z.Z - x.Z));
         }
 
@@ -608,22 +648,22 @@ namespace MTS.IO
         /// Their are necessary for correct measurement of mirror glass rotation.
         /// </summary>
         /// <param name="zeroPlaneNormal">Normal of plane which is considered to be a default position. 
-        /// In this position mirror is centred</param>
-        /// <param name="calibratorX">Position of X calibrator in 2D space. Z coordinate of thie structure 
+        /// In this position mirror is centered</param>
+        /// <param name="calibratorX">Position of X calibrator in 2D space. Z coordinate of this structure 
         /// is ignored</param>
-        /// <param name="calibratorY">Position of Y calibrator in 2D space. Z coordinate of thie structure
+        /// <param name="calibratorY">Position of Y calibrator in 2D space. Z coordinate of this structure
         /// is ignored</param>
-        /// <param name="calibratorZ">Position of Z calibrator in 2D space. Z coordinate of thie structure
+        /// <param name="calibratorZ">Position of Z calibrator in 2D space. Z coordinate of this structure
         /// is ignored</param>
         public void InitializeCalibratorsSettings(Vector3D zeroPlaneNormal, Point3D calibratorX,
             Point3D calibratorY, Point3D calibratorZ)
         {
             // Normal of plane which is considered to be a default position. In this position
-            // mirror is centred
+            // mirror is centered
             this.ZeroPlaneNormal = zeroPlaneNormal;
             // These setting comes from application settings
-            // X and Y coordinates of these points are positions of measuring sonds
-            // Z cooridnates are distances of the mirror surface
+            // X and Y coordinates of these points are positions of measuring calibrators
+            // Z coordinates are distances of the mirror surface
             this.PointX = calibratorX;
             this.PointY = calibratorY;
             this.PointZ = calibratorZ;
@@ -744,15 +784,28 @@ namespace MTS.IO
 
         #endregion
 
+        /// <summary>
+        /// Initialize given channel with given channel settings
+        /// </summary>
+        /// <param name="channel">Analog channel to initialize</param>
+        /// <param name="setting">Setting to apply on given analog channel</param>
+        private static void initializeChannel(IAnalogInput channel, ChannelSetting setting)
+        {
+            channel.RawLow = setting.RawLow;
+            channel.RawHigh = setting.RawHigh;
+            channel.RealLow = setting.RealLow;
+            channel.RealHigh = setting.RealHigh;
+        }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Create a new instance of wrapper over IModule impelmentation. It allows access to channels
-        /// through properties, not throught names as IModule does.
+        /// Create a new instance of wrapper over IModule implementation. It allows access to channels
+        /// through properties, not thought names as IModule does.
         /// </summary>
-        /// <param name="module">Impelmentation of <typeparamref name="IModule"/> for a particular
+        /// <param name="module">Implementation of <typeparamref name="IModule"/> for a particular
         /// protocol, such as EtherCAT or Modbus TCP/IP (...)</param>
         /// <param name="settings">Collection of setting for all analog channels</param>
         public Channels(IModule module, ChannelSettings settings)

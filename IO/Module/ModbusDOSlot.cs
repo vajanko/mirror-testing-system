@@ -4,7 +4,7 @@ using MTS.IO.Channel;
 
 namespace MTS.IO.Module
 {
-    class ModbusDOSlot : ModbusOutputSlot
+    class ModbusDOSlot<TAddress> : ModbusOutputSlot<TAddress> where TAddress : IAddress
     {
         /// <summary>
         /// 32 bits for writing binary values. Zero bit in this number is value of StartChannel and so on ...
@@ -43,14 +43,14 @@ namespace MTS.IO.Module
         /// </summary>
         public override void Read(int hConnection)
         {
-            DigitalOutput channel;
+            DigitalOutput<TAddress> channel;
 
             // read value from hardware channels to integer vector
             Mxio.DO_Reads(hConnection, Slot, StartChannel, ChannelsCount, ref outputs);
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)         // get logical values at particular position in
             {   // some of channels may be unused
-                channel = Channels[i] as DigitalOutput;
+                channel = Channels[i] as DigitalOutput<TAddress>;
                 if (channel != null)
                     channel.SetValue(getValue(outputs, i)); // read input values
             }
@@ -61,12 +61,12 @@ namespace MTS.IO.Module
         /// <param name="hConnection">Handle of connection to which to write</param>
         public override void Write(int hConnection)
         {
-            DigitalOutput channel;
+            DigitalOutput<TAddress> channel;
 
             // copy value from channels to outputs vector
             for (int i = 0; i < ChannelsCount; i++)
             {   // some of channels may be unused
-                channel = Channels[i] as DigitalOutput;
+                channel = Channels[i] as DigitalOutput<TAddress>;
                 if (channel != null)                        // set zero/one values at particular position in
                     setValue(ref outputs, i, channel.Value);// output vector
             }
@@ -86,7 +86,7 @@ namespace MTS.IO.Module
             : base(slot, startChannel, channelsCount)
         {
             // allocate as much memory as necessary
-            Channels = new DigitalOutput[channelsCount];
+            Channels = new DigitalOutput<TAddress>[channelsCount];
         }
 
         #endregion

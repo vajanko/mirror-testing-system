@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using System.ComponentModel;
 
 namespace MTS.IO
@@ -10,17 +11,23 @@ namespace MTS.IO
     /// Output channel may be wrote by user (programmer). Program reads this value and writes it to hardware
     /// terminal.
     /// </summary>
+    /// <typeparam name="TAddress"></typeparam>
     public interface IChannel
     {
+        /// <summary>
+        /// (Get/Set) Unique identifier of channel. This value should be used when referencing channel from it's module
+        /// </summary>
+        string Id { get; set; }
+
         /// <summary>
         /// (Get/Set) Name or short description of this channel
         /// </summary>
         string Name { get; set; }
-
+        
         /// <summary>
-        /// Event that occurs when value of channel is changed
+        /// (Get/Set) Long description of this channel
         /// </summary>
-        event ValueChangedEventHandler ValueChanged;
+        string Decsription { get; set; }
 
         /// <summary>
         /// (Get/Set) Array of memory bytes containing <paramref name="Value"/> of this channel. This 
@@ -34,10 +41,17 @@ namespace MTS.IO
         int Size { get; set; }
 
         /// <summary>
+        /// Event that occurs when value of channel is changed
+        /// </summary>
+        event ValueChangedEventHandler ValueChanged;
+    }
+    public interface IChannelAddress<TAddress> where TAddress : IAddress
+    {
+        /// <summary>
         /// (Get/Set) Address of channel inside the hardware. This allows us to access (read/write)
         /// data (from/to) this channel
         /// </summary>
-        object Address { get; set; }
+        TAddress Address { get; set; }
     }
 
     public delegate void ValueChangedEventHandler(object sender, ValueChangedEventArgs args);

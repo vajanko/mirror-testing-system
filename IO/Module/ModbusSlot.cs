@@ -8,7 +8,7 @@ namespace MTS.IO.Module
     /// <summary>
     /// Base class for all Modbus slots
     /// </summary>
-    abstract class ModbusSlot
+    abstract class ModbusSlot<TAddress> where TAddress : IAddress
     {
         #region Properties
 
@@ -27,7 +27,7 @@ namespace MTS.IO.Module
 
         #endregion
 
-        public ChannelBase[] Channels { get; protected set; }
+        public ChannelBase<TAddress>[] Channels { get; protected set; }
 
         /// <summary>
         /// Read values of all channels
@@ -39,7 +39,7 @@ namespace MTS.IO.Module
         /// Insert a channel to this slot
         /// </summary>
         /// <param name="channel">Modbus channel to insert</param>
-        public void AddChannel(ChannelBase channel)
+        public void AddChannel(ChannelBase<TAddress> channel)
         {
             // this is the only place where modbus address is used
             ModbusAddress addr = channel.Address as ModbusAddress;
@@ -50,7 +50,7 @@ namespace MTS.IO.Module
         /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
         /// </summary>
         /// <param name="name">Unique name (identifier) of required channel</param>
-        public ChannelBase GetChannelByName(string name)
+        public ChannelBase<TAddress> GetChannelByName(string name)
         {
             for (int i = 0; i < Channels.Length; i++)
                 if (Channels[i] != null && Channels[i].Name == name)       

@@ -8,6 +8,8 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Runtime.Serialization;
 using MTS.IO;
+using MTS.IO.Module;
+using MTS.IO.Address;
 
 namespace MTS.Simulator
 {
@@ -38,7 +40,7 @@ namespace MTS.Simulator
             timer.Start();
             running = true;
 
-            // create a new thread for listeninng incomming connections
+            // create a new thread for listening incoming connections
             listenerThread = new Thread(new ParameterizedThreadStart(loop));
             listenerThread.Start(slave);
         }
@@ -62,7 +64,7 @@ namespace MTS.Simulator
         }
 
         /// <summary>
-        /// Listening loop for incomming connections
+        /// Listening loop for incoming connections
         /// </summary>
         /// <param name="slave"></param>
         private void loop(object slaveListener)
@@ -159,7 +161,7 @@ namespace MTS.Simulator
                                 //    val.Add((byte)c);
                                 lock (module)
                                 {
-                                    IChannel channel = module.GetChannelByName(name);
+                                    IChannel channel = module.GetChannel(name);
                                     if (channel != null)
                                     {
                                         if (channel is IAnalogInput)
