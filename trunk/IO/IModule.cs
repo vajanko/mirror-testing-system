@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections;
 
 namespace MTS.IO
@@ -51,16 +52,46 @@ namespace MTS.IO
         void Disconnect();
 
         /// <summary>
+        /// Enumerate collection of input channels. All outputs are inputs as well
+        /// </summary>
+        IEnumerable<IChannel> Inputs { get; }
+        /// <summary>
+        /// Enumerate collection of output channels
+        /// </summary>
+        IEnumerable<IChannel> Outputs { get; }
+        /// <summary>
+        /// Enumerate collection of channels of given type. For example all analog input channels
+        /// </summary>
+        /// <typeparam name="TChannel">Type of channel to enumerate</typeparam>
+        /// <returns>Collection of channels of particular type</returns>
+        IEnumerable<TChannel> GetChannels<TChannel>() where TChannel : IChannel;
+
+        /// <summary>
         /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
         /// </summary>
-        /// <param name="name">Unique name (identifier) of required channel</param>
+        /// <param name="id">Unique identifier of required channel. For more information see <see cref="IChannel"/>
+        /// interface and configuration settings</param>
         /// <exception cref="ChannelException">Channel identified by its name does not exists in current
         /// module</exception>
-        IChannel GetChannelByName(string name);
+        IChannel GetChannel(string id);
+        /// <summary>
+        /// Get an instance of particular channel of a particular type identified by its name. Return null if there is 
+        /// no such a channel
+        /// </summary>
+        /// <param name="id">Unique identifier of required channel. For more information see <see cref="IChannel"/>
+        /// interface and configuration settings</param>
+        /// <exception cref="ChannelException">Channel identified by its name does not exists in current
+        /// module</exception>
+        TChannel GetChannel<TChannel>(string id) where TChannel : IChannel;
 
         /// <summary>
         /// (Get) Value indicating that this module is Listening to remote hardware
         /// </summary>
         bool IsConnected { get; }
+
+        /// <summary>
+        /// (Get) Name of this module communication protocol
+        /// </summary>
+        string ProtocolName { get; }
     }
 }

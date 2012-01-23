@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Globalization;
+using System.Xml.Linq;
+using System.ComponentModel;
 
 namespace MTS.IO.Channel
 {
-    abstract class ChannelBase : IChannel
+    public abstract class ChannelBase<TAddress> : IChannel, IChannelAddress<TAddress> where TAddress:IAddress
     {
         #region Constants
 
@@ -13,6 +16,36 @@ namespace MTS.IO.Channel
 
         #endregion
 
+        #region IChannel Members
+
+        /// <summary>
+        /// (Get/Set) Unique identifier of channel. This value should be used when referencing channel from it's module
+        /// </summary>
+        public string Id { get; set; }
+        /// <summary>
+        /// (Get/Set) Name or short description of this channel
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// (Get/Set) Long description of this channel
+        /// </summary>
+        public string Decsription { get; set; }
+
+        /// <summary>
+        /// (Get/Set) Array of memory bytes containing <see cref="Value"/> of this channel. This 
+        /// is necessary for network communication
+        /// </summary>
+        public abstract byte[] ValueBytes
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// (Get/Set) Size of channel value in bytes. (Size of <see cref="ValueBytes"/> array)
+        /// </summary>
+        public int Size { get; set; }
 
         private event ValueChangedEventHandler valueChanged;
         /// <summary>
@@ -33,34 +66,12 @@ namespace MTS.IO.Channel
                 valueChanged(this, new ValueChangedEventArgs(this));
         }
 
-        #region IChannel Members
-
-        /// <summary>
-        /// (Get/Set) Name or short description of this channel
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// (Get/Set) Array of memory bytes containing <see cref="Value"/> of this channel. This 
-        /// is necessary for network communication
-        /// </summary>
-        public abstract byte[] ValueBytes
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// (Get/Set) Size of channel value in bytes. (Size of <see cref="ValueBytes"/> array)
-        /// </summary>
-        public int Size { get; set; }
+        #endregion
 
         /// <summary>
         /// (Get/Set) Address of channel in the hardware module. This allows us to access (read/write)
         /// data (from/to) this channel
         /// </summary>
-        public object Address { get; set; }
-
-        #endregion
+        public TAddress Address { get; set; }
     }
 }

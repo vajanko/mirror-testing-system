@@ -2,7 +2,7 @@
 
 namespace MTS.IO.Channel
 {
-    class DigitalInput : ChannelBase, IDigitalInput
+    public class DigitalInput<TAddress> : ChannelBase<TAddress>, IDigitalInput where TAddress : IAddress
     {
         #region IDigitalInput Members
 

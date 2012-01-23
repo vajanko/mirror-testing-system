@@ -3,7 +3,7 @@ using MTS.IO.Channel;
 
 namespace MTS.IO.Module
 {
-    class ModbusDISlot : ModbusSlot
+    class ModbusDISlot<TAddress> : ModbusSlot<TAddress> where TAddress : IAddress
     {
         /// <summary>
         /// 32 bits for reading binary values. Zero bit in this number is value of StartChannel and so on ...
@@ -29,14 +29,14 @@ namespace MTS.IO.Module
         /// </summary>
         public override void Read(int hConnection)
         {
-            DigitalInput channel;
+            DigitalInput<TAddress> channel;
 
             // read value from channels to integer vector
             Mxio.DI_Reads(hConnection, Slot, StartChannel, ChannelsCount, ref inputs);
             // copy values to channels
             for (int i = 0; i < ChannelsCount; i++)
             {   // some of channels may be unused
-                channel = Channels[i] as DigitalInput;
+                channel = Channels[i] as DigitalInput<TAddress>;
                 if (channel != null)                        // get logical values at particular position in
                     channel.SetValue(getValue(inputs, i));  // read input values
             }
@@ -54,7 +54,7 @@ namespace MTS.IO.Module
             : base(slot, startChannel, channelsCount)
         {
             // allocate as much memory as necessary
-            Channels = new DigitalInput[channelsCount];
+            Channels = new DigitalInput<TAddress>[channelsCount];
         }
 
         #endregion

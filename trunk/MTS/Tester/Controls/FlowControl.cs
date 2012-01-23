@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 
 using MTS.Base;
+using MTS.IO;
 
 namespace MTS.Tester.Controls
 {
@@ -33,19 +34,6 @@ namespace MTS.Tester.Controls
             protected set;
         }
 
-        private string title;
-        /// <summary>
-        /// (Get/Set) Short description that is displayed inside this control
-        /// </summary>
-        public string Title
-        {
-            get { return title; }
-            set
-            {
-                title = value;
-                RaisePropertyChanged("Title");
-            }
-        }
         private double currentValue;
         /// <summary>
         /// (Get/Set) Last value added
@@ -58,6 +46,15 @@ namespace MTS.Tester.Controls
                 currentValue = value;
                 RaisePropertyChanged("CurrentValue");
             }
+        }
+
+        public double MaxValue { get; set;  }
+
+        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        public void Update()
+        {
+            if (Channel != null && Channel != DependencyProperty.UnsetValue)
+                AddValue(Channel.RealValue);
         }
 
         #endregion
@@ -151,6 +148,38 @@ namespace MTS.Tester.Controls
 
         #endregion
 
+        #region Title Property
+
+        static public readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register("Title", typeof(string), typeof(FlowControl));
+
+        /// <summary>
+        /// (Get/Set) Short description that is displayed inside this control
+        /// </summary>
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
+        #endregion
+
+        #region Channel Property
+
+        static public readonly DependencyProperty ChannelProperty =
+            DependencyProperty.Register("Channel", typeof(IAnalogInput), typeof(FlowControl));
+
+        /// <summary>
+        /// (Get/Set) Short description that is displayed inside this control
+        /// </summary>
+        public IAnalogInput Channel
+        {
+            get { return (IAnalogInput)GetValue(ChannelProperty); }
+            set { SetValue(ChannelProperty, value); }
+        }
+
+        #endregion
+
         #endregion
 
         #region INotifyPropertyChanged Members
@@ -197,6 +226,15 @@ namespace MTS.Tester.Controls
             // bind ValuesCapacity dependency property on this FlowControl with Capacity property on Values
             bind = new Binding("Capacity") { Source = Values, Mode = BindingMode.OneWay };
             SetBinding(ValuesCapacityProperty, bind);
+
+            timer.Interval = 200;
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Start();
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            Update();
         }
 
         static FlowControl()

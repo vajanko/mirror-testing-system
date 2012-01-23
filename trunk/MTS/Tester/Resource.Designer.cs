@@ -142,6 +142,24 @@ namespace MTS.Tester {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Power Supply.
+        /// </summary>
+        internal static string PowerSupplyMsg {
+            get {
+                return ResourceManager.GetString("PowerSupplyMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch on power supply!.
+        /// </summary>
+        internal static string PowerSupplyOnMsg {
+            get {
+                return ResourceManager.GetString("PowerSupplyOnMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Result: {0}.
         /// </summary>
         internal static string ResultMsg {

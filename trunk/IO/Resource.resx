@@ -117,65 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AbortedMsg" xml:space="preserve">
-    <value>Aborted</value>
+  <data name="AddrNotFoundMsg" xml:space="preserve">
+    <value>{0} address on channel {1} not found</value>
+    <comment>Parameters: Protocol name, Channel name</comment>
   </data>
-  <data name="ClosingConnectionMsg" xml:space="preserve">
-    <value>Closing connection ...</value>
+  <data name="AddrParsingFailedMsg" xml:space="preserve">
+    <value>{0} address can not be parsed from xml format</value>
+    <comment>Parameters: Protocol name</comment>
   </data>
-  <data name="CreatingChannelsMsg" xml:space="preserve">
-    <value>Creating communication channels ...</value>
+  <data name="ChannelNotFoundMsg" xml:space="preserve">
+    <value>Channel {0} could not be found</value>
+    <comment>Parameters: Channel name</comment>
   </data>
-  <data name="FailedMsg" xml:space="preserve">
-    <value>Failed</value>
+  <data name="ChannelOfTypeNotFoundMsg" xml:space="preserve">
+    <value>{0} channel {1} could not be found</value>
+    <comment>Parameters: Channel type, Channel name</comment>
   </data>
-  <data name="MirrorFailedMsg" xml:space="preserve">
-    <value>Mirror failed</value>
+  <data name="ConnectionFailedMsg" xml:space="preserve">
+    <value>Connection to the module could not be established</value>
   </data>
-  <data name="MirrorPassedMsg" xml:space="preserve">
-    <value>Mirror passed</value>
+  <data name="EtherCATAddrStr" xml:space="preserve">
+    <value>Index group: {0}, Index offset: {1}</value>
+    <comment>Parameters: Index group, Index offset</comment>
   </data>
-  <data name="OKMsg" xml:space="preserve">
-    <value>OK</value>
+  <data name="UnkownChannelIOTypeMsg" xml:space="preserve">
+    <value>Channel in/out type {0} is uknown</value>
+    <comment>Parameters: Channel in/out type</comment>
   </data>
-  <data name="ParamLoadedMsg" xml:space="preserve">
-    <value>Parameters loaded from file {0}</value>
-    <comment>Parameters: Parameters file path</comment>
-  </data>
-  <data name="PassedMsg" xml:space="preserve">
-    <value>Passed</value>
-  </data>
-  <data name="PowerSupplyMsg" xml:space="preserve">
-    <value>Power Supply</value>
-  </data>
-  <data name="PowerSupplyOnMsg" xml:space="preserve">
-    <value>Switch on power supply!</value>
-  </data>
-  <data name="ResultMsg" xml:space="preserve">
-    <value>Result: {0}</value>
-    <comment>Parameters: Result description</comment>
-  </data>
-  <data name="SavingDataMsg" xml:space="preserve">
-    <value>Saving results do database ... </value>
-  </data>
-  <data name="SequenceFinishedMsg" xml:space="preserve">
-    <value>Test sequence {0} finished</value>
-    <comment>Parameters: Sequence number starting from 1</comment>
-  </data>
-  <data name="SequenceStartedMsg" xml:space="preserve">
-    <value>Test sequence {0} started</value>
-    <comment>Parameters: Sequence number starting from 1</comment>
-  </data>
-  <data name="ShiftAbortedMsg" xml:space="preserve">
-    <value>Shift aborted!</value>
-  </data>
-  <data name="ShiftFinishedMsg" xml:space="preserve">
-    <value>Shift finished!</value>
-  </data>
-  <data name="StartingShiftFailedMsg" xml:space="preserve">
-    <value>Starting shift failed</value>
-  </data>
-  <data name="StartingShiftMsg" xml:space="preserve">
-    <value>Starting shift ... </value>
+  <data name="VarNotFoundMsg" xml:space="preserve">
+    <value>Variable handle of {0} address ({1}) could not be found</value>
+    <comment>Parameters: Protocol name, Variable address</comment>
   </data>
 </root>

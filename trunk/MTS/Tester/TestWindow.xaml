@@ -6,6 +6,7 @@
     xmlns:ctrl="clr-namespace:MTS.Tester.Controls"
     xmlns:tester="clr-namespace:MTS.Tester"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:io="clr-namespace:MTS.IO;assembly=IO"
     Title="Tester" x:Name="root" Width="800">
     <DockPanel>
         <Grid DockPanel.Dock="Top" Margin="3">
@@ -85,7 +86,32 @@
         <ctrl:MirrorView DockPanel.Dock="Left" VerticalAlignment="Top"
                          Width="350" Height="350" BorderBrush="Black" BorderThickness="1"
                          x:Name="mirrorView"/>
-        <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal">
+        <ListBox ItemsSource="{Binding AnalogControls, ElementName=root}" DockPanel.Dock="Right" x:Name="analogChannelsControls">
+            <ListBox.Resources>
+                <Style TargetType="{x:Type ctrl:FlowControl}">
+                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="MinWidth" Value="200"/>
+                    <Setter Property="MinHeight" Value="120"/>
+                    <Setter Property="TextBrush" Value="White"/>
+                    <Setter Property="Margin" Value="4"/>
+                    <Setter Property="BorderBrush" Value="Green"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ListBoxItem Content="{Binding}"/>
+                    <!--<ctrl:FlowControl Title="{Binding Name}" Unit="{Binding Unit}" Channel="{Binding}"/>-->
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+        
+        <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" Visibility="Collapsed">
             <WrapPanel.Resources>
                 <Style TargetType="{x:Type ctrl:FlowControl}">
                     <Setter Property="Background" Value="Black"/>

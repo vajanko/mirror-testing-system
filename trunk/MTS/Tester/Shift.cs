@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Threading;
 using System.Diagnostics;
@@ -19,7 +18,7 @@ namespace MTS.Tester
 {
     public delegate void ShiftExecutedHandler(object sender, ShiftExecutedEventArgs args);
 
-    public class Shift //: INotifyPropertyChanged
+    public class Shift
     {
         #region Private Fields
 
@@ -153,31 +152,37 @@ namespace MTS.Tester
 
         #region Private Methods
 
-        private void setSafeStateOutputs(Channels channels)
+        /// <summary>
+        /// Set all digital outputs to safe state. This method should be called at the end of testing
+        /// or if some error occurs and testing must be aborted. Everything what may cause a damage on tester
+        /// hardware must be switch off in this method such as moving actuators, etc. Event if everything has 
+        /// finished correctly tester will be put to its default state so that mirror may be removed easily.
+        /// </summary>
+        private void setSafeStateOutputs()
         {
             if (channels != null)
-            {
-                channels.StopMirror();
-                channels.StopPowerfold();
-                channels.StopAir();
+                return;
+            // stop mirror moving
+            channels.StopMirror();
+            // stop powerfold current
+            channels.StopPowerfold();
+            // stop blowing or sucking air
+            channels.StopAir();
 
-                // stop direction light
-                channels.DirectionLightOn.Value = false;
-                // stop heating
-                channels.HeatingFoilOn.Value = false;
+            // stop direction light
+            channels.DirectionLightOn.Off();
+            // stop heating
+            channels.HeatingFoilOn.Off();
 
-                // move distance sensors down
-                channels.MoveDistanceSensorUp.Value = false;
-                channels.MoveDistanceSensorDown.Value = true;
+            // move distance sensors down
+            channels.MoveCalibratorsDown();
 
+            // switch off lights
+            channels.RedLightOn.Off();
+            channels.GreenLightOn.Off();
 
-                // switch off lights
-                channels.RedLightOn.Value = false;
-                channels.GreenLightOn.Value = false;
-
-                // write to HW
-                channels.UpdateOutputs();
-            }
+            // write to HW
+            channels.UpdateOutputs();
         }
 
         /// <summary>
@@ -185,10 +190,9 @@ namespace MTS.Tester
         /// and connection must be established.
         /// No exception should be thrown!
         /// </summary>
-        /// <param name="channels">Collection of hardware channels for task initialization</param>
         /// <param name="tests">Collection of enabled tests</param>
         /// <returns>New instance of initialized TaskScheduler</returns>
-        private TaskScheduler createScheduler(Channels channels, TestCollection tests)
+        private TaskScheduler createScheduler(TestCollection tests)
         {
             TaskScheduler scheduler = new TaskScheduler(channels);
 
@@ -251,7 +255,7 @@ namespace MTS.Tester
                 Output.WriteLine(Resource.SequenceStartedMsg, Finished + 1);
 
                 // create scheduler with tasks to be executed
-                scheduler = createScheduler(channels, shiftTests);
+                scheduler = createScheduler(shiftTests);
 
                 // this loop tests one mirror
                 while (!scheduler.IsFinished)
@@ -273,7 +277,7 @@ namespace MTS.Tester
                 Output.WriteLine(Resource.SequenceFinishedMsg, Finished + 1);
 
                 // write outputs to safe state
-                setSafeStateOutputs(channels);
+                setSafeStateOutputs();
 
                 // handle results
                 handleResults(scheduler);
@@ -499,7 +503,7 @@ namespace MTS.Tester
 
             // setting value as this does not raise an event
             // an event is raised after that channels are updated
-            channels.AllowPowerSupply.Value = true;
+            channels.AllowPowerSupply.On();
 
             // write to hardware value allowing power supply
             channels.UpdateOutputs();
@@ -508,7 +512,7 @@ namespace MTS.Tester
             while (channels.IsPowerSupplyOff.Value == true)
             {
                 // if power supply is not switch on, ask user to switch it on
-                MessageBoxResult result = MessageBox.Show("Switch on power supply!", "Power supply",
+                MessageBoxResult result = MessageBox.Show(Resource.PowerSupplyOnMsg, Resource.PowerSupplyMsg,
                     MessageBoxButton.OKCancel, MessageBoxImage.Information, MessageBoxResult.OK);
                 if (result == MessageBoxResult.Cancel)  // abort if user does not switched on power supply
                 {
@@ -568,6 +572,7 @@ namespace MTS.Tester
         {
             this.channels = channels;
             this.shiftTests = tests;
+            
         }
 
         #endregion

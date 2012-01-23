@@ -1,6 +1,6 @@
 ﻿namespace MTS.IO.Channel
 {
-    class DigitalOutput : DigitalInput, IDigitalOutput
+    public class DigitalOutput<TAddress> : DigitalInput<TAddress>, IDigitalOutput where TAddress : IAddress
     {
         #region IDigitalOutput Members
 
@@ -29,4 +29,5 @@
 
         #endregion
     }
+
 }

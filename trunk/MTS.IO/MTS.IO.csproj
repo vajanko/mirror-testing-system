@@ -46,6 +46,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>HWSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="IChannels.cs" />
     <Compile Include="MoveDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingEditor.cs" />
