@@ -77,6 +77,8 @@ namespace MTS.IO.Channel
             }
         }
 
+        public double GetRealValue() { return RealValue; }
+
         /// <summary>
         /// (Get/Set) Array of memory bytes containing <see cref="Value"/> of this channel. This 
         /// is necessary for network communication

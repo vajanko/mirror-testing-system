@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Mirror.cs" />
     <Compile Include="Converters\ResultCodeConverter.cs" />
     <Compile Include="DbParamResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
@@ -69,8 +70,14 @@
     <Compile Include="Mirror.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MirrorResult.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MTSDataHelper.cs" />
     <Compile Include="Operator.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OperatorResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Param.cs">

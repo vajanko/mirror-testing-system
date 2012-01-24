@@ -57,10 +57,10 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="startColumn" Header="Start" Binding="{Binding Start, StringFormat=hh:mm:ss}"/>
-                <DataGridTextColumn x:Name="finishColumn" Header="Finish" Binding="{Binding Finish, StringFormat=hh:mm:ss}"/>
-                <DataGridTextColumn x:Name="operatorColumn" Binding="{Binding Path=Operator}" Header="Operator"  />
-                <DataGridTextColumn x:Name="mirrorColumn" Binding="{Binding Path=Mirror}" Header="Mirror Name" />
+                <DataGridTextColumn x:Name="startColumn" Header="Start" Binding="{Binding Start, StringFormat=HH:mm:ss}"/>
+                <DataGridTextColumn x:Name="finishColumn" Header="Finish" Binding="{Binding Finish, StringFormat=HH:mm:ss}"/>
+                <DataGridTextColumn x:Name="operatorColumn" Binding="{Binding Path=OperatorName}" Header="Operator"  />
+                <DataGridTextColumn x:Name="mirrorColumn" Binding="{Binding Path=MirrorName}" Header="Mirror Name" />
                 <DataGridTextColumn x:Name="completedColumn" Binding="{Binding Path=Completed}" Header="Completed" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="failedColumn" Binding="{Binding Path=Failed}" Header="Failed" Width="SizeToHeader" />
                 <DataGridTextColumn x:Name="abortedColumn" Binding="{Binding Path=Aborted}" Header="Aborted" Width="SizeToHeader" />

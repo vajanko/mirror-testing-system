@@ -163,7 +163,7 @@ namespace MTS.Properties {
             catch (Exception ex)
             {   // other error raised when configuration file was read
                 ExceptionManager.ShowError(ex);
-                channels = null;    // return null indicating that channels was not created
+                channels = null;    // return null indicating that channels were not created
             }
 
             return channels;

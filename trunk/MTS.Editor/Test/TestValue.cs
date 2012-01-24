@@ -17,7 +17,7 @@ namespace MTS.Editor
         public const string MaxCurrent = "MaxCurrent";
         public const string MaxOverloadTime = "MaxOverloadTime";
         public const string MaxTestingTime = "MaxTestingTime";
-        public const string TestPresence = "TestPresence";
+        public const string TestPresence = "Presence";
 
         public const string SupplierName = "SupplierName";
         public const string SupplierCode = "SupplierCode";

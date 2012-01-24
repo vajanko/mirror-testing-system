@@ -30,7 +30,7 @@ namespace MTS.IO.Channel
         /// <summary>
         /// (Get/Set) Long description of this channel
         /// </summary>
-        public string Decsription { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// (Get/Set) Array of memory bytes containing <see cref="Value"/> of this channel. This 

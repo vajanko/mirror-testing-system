@@ -65,6 +65,9 @@
                                 <Style TargetType="{x:Type ColumnDefinition}">
                                     <Setter Property="MinWidth" Value="80"/>
                                 </Style>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <EventSetter Event="Checked" Handler="checkBox_Changed"/>
+                                </Style>
                             </StackPanel.Resources>
                         
                             <Label Style="{StaticResource sectionHeaderStyle}">Hardware module</Label>
@@ -110,7 +113,7 @@
                                 <base:UpDownButton x:Name="paperHeight" Grid.Row="2" Grid.Column="1" MinValue="30"/>
                                 
                                 <Label Grid.Row="3" Content="Print labels:"/>
-                                <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" x:Name="printLabels"/>
+                                <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" x:Name="printLabels" Checked="checkBox_Changed" Unchecked="checkBox_Changed"/>
                             </Grid>
                         </StackPanel>
                     </Border>

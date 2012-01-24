@@ -43,6 +43,8 @@ namespace MTS.IO
         /// <param name="value">Value to set</param>
         void SetValue(uint value);
 
+        double GetRealValue();
+
         /// <summary>
         /// (Get/Set) Delegate that converts raw value to real value (<see cref="Value"/> to 
         /// <paramref name="RealValue"/> in this case) according to values <see cref="RawLow"/>,

@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
-using System.Timers;
+using System.Windows.Forms;
 using System.Windows;
+using System.Windows.Controls;
+
 using AvalonDock;
 using MTS.Base;
 using MTS.Editor;
 using MTS.IO;
 using MTS.Properties;
-using System.Windows.Controls;
+using MTS.Data;
 
 namespace MTS.Tester
 {
@@ -124,16 +127,7 @@ namespace MTS.Tester
             protected set;
         }
 
-        public IEnumerable<IAnalogInput> AnalogChannels
-        {
-            get { return channels.GetChannels<IAnalogInput>(); }
-        }
-
         private List<Controls.FlowControl> analogControls = new List<Controls.FlowControl>();
-        public IEnumerable<Controls.FlowControl> AnalogControls
-        {
-            get { return analogControls; }
-        }
 
         #endregion
 
@@ -195,34 +189,50 @@ namespace MTS.Tester
         {
             if (shift != null && shift.IsRunning)    // prevent from starting shift multiple times
                 return;
-
+            IsRunning = true;       // disable other controls
+            
             try
             {
+                Mirror mirror = mirrorTypeBox.SelectedItem as Mirror;
+                if (mirror == null)
+                    throw new ApplicationException("No mirror is selected. Please select one mirror to be tested.");
+
                 // load channels configuration from application settings
                 Output.Write(Resource.CreatingChannelsMsg);                
                 //channels = Settings.Default.GetChannelsInstance();
                 channels.Connect();     // create connection to hardware
                 channels.Initialize();  // initialize each channel and channels properties
                 bindChannels(channels); // bind events to channel (when some value of channel change)
+                // for each analog channel create a control that will display its value on the GUI
+                analogControls.Clear();
+                foreach (IAnalogInput input in channels.GetChannels<IAnalogInput>())
+                    analogControls.Add(new Controls.FlowControl()
+                    {
+                        Title = input.Name,
+                        ToolTip = input.Description,
+                        GetNewValue = new Func<double>(input.GetRealValue)  // this method will be called when control is updated
+                    });
+                analogChannelsControls.DataContext = analogControls;
+                analogChannelsControls.InvalidateProperty(System.Windows.Controls.ListBox.DataContextProperty);
                 Output.WriteLine(Resource.OKMsg);
 
                 // create shift and register its handlers
                 Output.Write(Resource.StartingShiftMsg);
-                shift = new Shift(channels, Tests) { Total = this.Total };
+                shift = new Shift(mirror.Id, channels, Tests) { Total = this.Total };
                 shift.SequenceExecuted += new ShiftExecutedHandler(sequenceExecuted);
                 shift.ShiftExecuted += new ShiftExecutedHandler(shiftExecuted);
                 shift.Initialize();     // prepare channels for execution - power supply must be on
 
-                timer = new Timer(400);     // this timer will update user interface
-                timer.Elapsed += new ElapsedEventHandler(timerElapsed);
-                
-                IsRunning = true;   // disable other buttons                
+                timer = new Timer() { Interval = 400 };    // this timer will update user interface
+                timer.Tick += new EventHandler(timer_Tick);
+                             
                 shift.Start();      // start execution loop (new thread - return immediately)
                 timer.Start();      // start to update user interface
                 Output.WriteLine(Resource.OKMsg);
             }
             catch (Exception ex)
             {
+                IsRunning = false;
                 Output.WriteLine(Resource.StartingShiftFailedMsg);
                 ExceptionManager.ShowError(ex);
             }
@@ -264,10 +274,21 @@ namespace MTS.Tester
         /// This method is called cyclically to update user interface
         /// </summary>
         /// <param name="sender">Instance of timer which invoked this method</param>
-        /// <param name="e"></param>
-        void timerElapsed(object sender, ElapsedEventArgs e)
-        {   // run on GUI thread
-            spiralCurrent.Dispatcher.BeginInvoke(new Action(updateGui));
+        /// <param name="e">Timer elapsed event argument</param>
+        void timer_Tick(object sender, EventArgs e)
+        {
+            if (channels.IsDistanceSensorUp.Value)  // measuring is activated
+            {
+                mirrorView.RotationAxis = channels.GetRotationAxis();
+                mirrorView.RotationAngle = channels.GetRotationAngle();
+
+                mirrorView.HorizontalAngle = channels.GetHorizontalAngle();
+                mirrorView.VerticalAngle = channels.GetVerticalAngle();
+            }
+
+            // update all analog channels controls
+            foreach (var ctrl in analogControls)
+                ctrl.Update();
         }
         /// <summary>
         /// Close connection with tester hardware if it exists. This method must be called only on same thread
@@ -285,6 +306,32 @@ namespace MTS.Tester
                 timer.Stop();
             IsRunning = false;
         }
+
+        /// <summary>
+        /// This method is called once when mirror type combo box is loaded. In this moment different types of mirror saved in
+        /// database are loaded and displayed in combo box so operator may select one of them to test it
+        /// </summary>
+        /// <param name="sender">Instance of combo box that is loaded</param>
+        /// <param name="e">Loaded event arguments</param>
+        private void mirrorTypeBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var box = sender as System.Windows.Controls.ComboBox;
+            if (box == null)
+                return;
+
+            try
+            {   // load mirror types
+                using (MTSContext context = new MTSContext())
+                {
+                    box.ItemsSource = context.Mirrors.ToList();
+                    box.SelectedIndex = 0;    // select first mirror
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
+        }
         
         #endregion
 
@@ -301,37 +348,6 @@ namespace MTS.Tester
 
         #endregion
 
-        #region Debug
-
-        private void updateGui()
-        {
-            if (channels.IsDistanceSensorUp.Value)  // measuring is activated
-                setRotation();
-
-
-            foreach (Controls.FlowControl ctrl in analogControls)
-            {
-                ctrl.Update();
-            }
-            //spiralCurrent.AddValue(channels.HeatingFoilCurrent.RealValue);
-            //blinkerCurrent.AddValue(channels.DirectionLightCurrent.RealValue);
-            //actuatorACurrent.AddValue(channels.VerticalActuatorCurrent.RealValue);
-            //actuatorBCurrent.AddValue(channels.HorizontalActuatorCurrent.RealValue);
-            //powerfoldCurrent.AddValue(channels.PowerfoldCurrent.RealValue);
-            //powerSupplyVoltage1.AddValue(channels.PowerSupplyVoltage1.RealValue);
-            //powerSupplyVoltage2.AddValue(channels.PowerSupplyVoltage2.RealValue);
-        }
-        private void setRotation()
-        {
-            mirrorView.RotationAxis = channels.GetRotationAxis();
-            mirrorView.RotationAngle = channels.GetRotationAngle();
-
-            mirrorView.HorizontalAngle = channels.GetHorizontalAngle();
-            mirrorView.VerticalAngle = channels.GetVerticalAngle();
-        }
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -340,13 +356,11 @@ namespace MTS.Tester
         public TestWindow()
         {
             channels = Settings.Default.GetChannelsInstance();
-            analogControls.Clear();
-            foreach (IAnalogInput input in AnalogChannels)
-                analogControls.Add(new Controls.FlowControl() { Channel = input, Title = input.Name });
-
-            InitializeComponent();            
+            foreach (IAnalogInput input in channels.GetChannels<IAnalogInput>())
+                analogControls.Add(new Controls.FlowControl()); // add flow controls but without anything
+            InitializeComponent();
         }
 
-        #endregion        
+        #endregion
     }
 }

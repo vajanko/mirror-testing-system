@@ -120,10 +120,12 @@
                             </Grid>
                             <Canvas ClipToBounds="True">
                                 <Line X1="0" Y1="{TemplateBinding Zero}" X2="{TemplateBinding ActualWidth}" Y2="{TemplateBinding Zero}" 
-                                      Stroke="Green"/>
+                                      Stroke="{TemplateBinding BorderBrush}"/>
                                 <Polyline Points="{Binding Values, RelativeSource={RelativeSource TemplatedParent}, 
                                           Converter={StaticResource converter}}"
                                           Stroke="{TemplateBinding GraphBrush}"/>
+                                <Label Foreground="{TemplateBinding BorderBrush}" Canvas.Left="0" Canvas.Top="0" 
+                                       Content="{TemplateBinding MaxValue}" ContentStringFormat="F2"/>
                             </Canvas>
                         </DockPanel>
                     </Border>

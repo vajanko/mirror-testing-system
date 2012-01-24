@@ -6,8 +6,8 @@ using System.Text;
 namespace MTS.Data.Types
 {
     /// <summary>
-    /// Possbile values of operator types. Notice this definition of operator types is strongly
-    /// connected with this application and is independen of the database.
+    /// Possible values of operator types. Notice this definition of operator types is strongly
+    /// connected with this application and is independent of the database.
     /// </summary>
     public enum OperatorType : byte
     {
@@ -26,11 +26,11 @@ namespace MTS.Data.Types
         #region Properties
 
         /// <summary>
-        /// (Get/Set) Unic id of operator type. This value is usually saved to database
+        /// (Get/Set) Unique id of operator type. This value is usually saved to database
         /// </summary>
         public OperatorType Id { get; set; }
         /// <summary>
-        /// (Get/Set) Name of operator type (short description). May be used in combobox etc.
+        /// (Get/Set) Name of operator type (short description). May be used in combo box etc.
         /// </summary>
         public string Name { get; set; }
         /// <summary>
@@ -44,7 +44,7 @@ namespace MTS.Data.Types
         /// <summary>
         /// Name of operator type
         /// </summary>
-        /// <returns>Operator type string (could be used in combobox)</returns>
+        /// <returns>Operator type string (could be used in combo box)</returns>
         public override string ToString()
         {
             return Name;

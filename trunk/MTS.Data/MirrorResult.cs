@@ -12,18 +12,15 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class ShiftResult
+    public partial class MirrorResult
     {
         public int Id { get; set; }
-        public System.DateTime Start { get; set; }
-        public System.DateTime Finish { get; set; }
-        public int MirrorId { get; set; }
-        public string MirrorName { get; set; }
-        public int OperatorId { get; set; }
-        public string OperatorName { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> Sequences { get; set; }
         public Nullable<int> Completed { get; set; }
         public Nullable<int> Failed { get; set; }
         public Nullable<int> Aborted { get; set; }
+        public Nullable<System.TimeSpan> AverageDuration { get; set; }
     }
     
 }
