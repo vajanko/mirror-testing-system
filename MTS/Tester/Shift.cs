@@ -270,17 +270,17 @@ namespace MTS.Tester
                         scheduler.Update(time + watch.Elapsed);         // execute tasks
                         Thread.Sleep(200);              // for presentation purpose only                    
                     }
-                }
-
-                // raise sequence executed event
-                OnSequenceExecuted();
+                }                
                 Output.WriteLine(Resource.SequenceFinishedMsg, Finished + 1);
 
                 // write outputs to safe state
                 setSafeStateOutputs();
 
-                // handle results
+                // handle results - count number of failed and completed test
                 handleResults(scheduler);
+
+                // raise sequence executed event
+                OnSequenceExecuted();
 
                 if (IsAborting)
                     break;
@@ -405,8 +405,6 @@ namespace MTS.Tester
         private void createShift(TestCollection usedTests)
         {
             // 1) create a new instance of shift and save it to database
-            mirrorId = context.Mirrors.Select(m => m.Id).First();   // depends on parameter settings
-            operatorId = Admin.Operator.Instance.Id;                // logged in operator id
             dbShift = context.Shifts.Add(new Data.Shift
             {
                 Start = DateTime.Now,       // date and time when shift has been started
@@ -566,13 +564,15 @@ namespace MTS.Tester
         /// Create a new instance of shift. When shift is created connection already must be established
         /// and channels created and initialized
         /// </summary>
+        /// <param name="mirrorId">Database id of mirror to be tested</param>
         /// <param name="channels">Communication layer for hardware</param>
         /// <param name="tests">Collection of testing parameters</param>
-        public Shift(Channels channels, TestCollection tests)
+        public Shift(int mirrorId, Channels channels, TestCollection tests)
         {
+            this.mirrorId = mirrorId;
             this.channels = channels;
             this.shiftTests = tests;
-            
+            this.operatorId = Admin.Operator.Instance.Id;
         }
 
         #endregion

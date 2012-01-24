@@ -106,16 +106,22 @@ namespace MTS.Admin
         }
         /// <summary>
         /// This method is called when any of <see cref="ComboBox"/> in this window change its selected value.
-        /// State of settings window will be changed to usaved.
+        /// State of settings window will be changed to unsaved.
         /// </summary>
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   // this will change DisplayTitle property - a star is added at the end
             if (e.Source is ComboBox)
                 IsSaved = false;
         }
+        private void checkBox_Changed(object sender, RoutedEventArgs e)
+        {   // this will change DisplayTitle property - a star is added at the end
+            if (sender is CheckBox)
+                IsSaved = false;
+        }
+
         /// <summary>
-        /// This method is called when some property of any item in <see cref="ChannelSettings"/> collecion change.
-        /// State of settings window will be changed to usaved.
+        /// This method is called when some property of any item in <see cref="ChannelSettings"/> collection change.
+        /// State of settings window will be changed to unsaved.
         /// </summary>
         private void ChannelSettings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -123,7 +129,7 @@ namespace MTS.Admin
         }
 
         /// <summary>
-        /// This method is called when once settings window is initilized
+        /// This method is called when once settings window is initialized
         /// </summary>
         private void settingsWindow_Initialized(object sender, EventArgs e)
         {
@@ -132,7 +138,7 @@ namespace MTS.Admin
 
             // load application settings
             // initialize PRINTER section
-            // get names of all installed printers on this conputer
+            // get names of all installed printers on this computer
             foreach (var printer in PrinterSettings.InstalledPrinters)
                 this.printers.Items.Add(printer.ToString());
             
@@ -165,8 +171,8 @@ namespace MTS.Admin
         }
 
         /// <summary>
-        /// This method is called when close button in settings window is clicked. Window will be close imediatelly
-        /// if all settings are saved. Otherwise user will be asked about discarding or saveing settings
+        /// This method is called when close button in settings window is clicked. Window will be close immediately
+        /// if all settings are saved. Otherwise user will be asked about discarding or saving settings
         /// </summary>
         private void close_Click(object sender, RoutedEventArgs e)
         {   // fire on close event
@@ -176,6 +182,18 @@ namespace MTS.Admin
         /// This method is called when apply button in settings window is clicked. All changed settings will be save
         /// </summary>
         private void apply_Click(object sender, RoutedEventArgs e)
+        {
+            applySettings();
+            IsSaved = true;
+        }
+
+        public override void Save()
+        {
+            applySettings();        // save settings and remove the star from title
+            base.Save();
+        }
+
+        private void applySettings()
         {
             // PRINTER
             // save selected printer name
@@ -201,10 +219,8 @@ namespace MTS.Admin
             HWSettings.Default.XZDistance = (double)xzDistance.Value;
             caltulateCalibratorsPositions((double)xyDistance.Value, (double)yzDistance.Value, (double)xzDistance.Value);
 
-            HWSettings.Default.Save();            
+            HWSettings.Default.Save();
             Settings.Default.Save();
-
-            IsSaved = true;
         }
 
         #endregion

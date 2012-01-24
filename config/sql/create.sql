@@ -8,7 +8,9 @@
 
 USE mts;
 
--- CREATE TALBES
+---------------------
+--- CREATE TALBES ---
+---------------------
 
 --#region CREATE SUPPLIER TABLE
 CREATE TABLE Supplier (
@@ -25,7 +27,8 @@ CREATE TABLE Supplier (
 	-- smart application should be
 	State NVARCHAR(30),
 	
-	CONSTRAINT pk_supplier_id PRIMARY KEY (Id)
+	CONSTRAINT pk_supplier_id PRIMARY KEY (Id),
+	CONSTRAINT uk_supplier_companyName UNIQUE(CompanyName)
 );
 --#endregion
 
@@ -52,6 +55,8 @@ CREATE TABLE Mirror (
 	-- foreign key referencing supplier who is procuding this mirror
 	CONSTRAINT fk_mirror_supplier_id FOREIGN KEY (SupplierId) REFERENCES Supplier(Id)
 );
+-- Create index for foreign key referencing supplier of the mirror
+CREATE INDEX fk_mirror_supplier_id ON Mirror(SupplierId);
 --#endregion
 
 --#region CREATE OPERATOR TABLE
@@ -135,6 +140,11 @@ CREATE TABLE TestParam (
 	CONSTRAINT uq_testParam_testId_paramId
 		UNIQUE(TestId, ParamId)
 );
+
+-- Create index for foreign key referencing test
+CREATE INDEX fk_testParam_testId ON TestParam(TestId);
+-- Create index for foreign key referencing param
+CREATE INDEX fk_testParam_paramId ON TestParam(ParamId);
 --#endregion
 
 --#region CREATE SHIFT TABLE
@@ -152,13 +162,17 @@ CREATE TABLE Shift (
 	-- primary key Id
 	CONSTRAINT pk_shift_id PRIMARY KEY(Id),
 	-- start time must be lower than end time
-	CONSTRAINT chk_shift_start_finish CHECK(START <= Finish),
+	CONSTRAINT chk_shift_start_finish CHECK(Start <= Finish),
 	-- foreign key referencing Id of mirror being tested in this shift
 	CONSTRAINT fk_shift_mirrorId FOREIGN KEY(MirrorId) REFERENCES Mirror(Id),
 	-- foreign key referencing Id of operator who has executed this shift
 	CONSTRAINT fk_shift_operatorId FOREIGN KEY(OperatorId) 
 		REFERENCES Operator(Id)
 );
+-- Create index for foreign key referencing mirror
+CREATE INDEX fk_shift_mirrorId ON Shift(MirrorId);
+-- Create index for foreign key referencing operator
+CREATE INDEX fk_shift_operatorId ON Shift(OperatorId);
 --#endregion
 
 --#region CREATE TESTSHIFT TABLE
@@ -178,6 +192,11 @@ CREATE TABLE TestShift (
 	-- unique test, param and shift id
 	CONSTRAINT uq_testShift_testId_shiftId UNIQUE(TestId, ShiftId)
 );
+
+-- Create index for foreign key referencing test
+CREATE INDEX fk_testShift_testId ON TestShift(TestId);
+-- Create index for foreign key referencing shift
+CREATE INDEX fk_testShift_shiftId ON TestShift(ShiftId);
 --#endregion
 
 --#region CREATE TESTOUTPUT TABLE
@@ -207,6 +226,11 @@ CREATE TABLE TestOutput (
 	CONSTRAINT fk_testOutput_shiftId FOREIGN KEY (ShiftId) 
 		REFERENCES Shift(Id)
 );
+
+-- Create index for foreign key referencing test
+CREATE INDEX fk_testOutput_testId ON TestOutput(TestId);
+-- Create index for foreign key referencing shift
+CREATE INDEX fk_testOutput_shiftId ON TestOutput(ShiftId);
 --#endregion
 
 --#region CREATE PARAMOUTPUT TABLE
@@ -230,9 +254,71 @@ CREATE TABLE ParamOutput (
 	CONSTRAINT fk_paramOutput_testOutputId FOREIGN KEY (TestOutputId) 
 		REFERENCES TestOutput(Id)
 );
+
+-- Create index for foreign key referencing parameter
+CREATE INDEX fk_paramOutput_paramId ON ParamOutput(ParamId);
+-- Create index for foreign key referencing test output
+CREATE INDEX fk_paramOutput_testOutputId ON ParamOutput(TestOutputId);
 --#endregion
 
--- CREATE PROCEDURES AND FUCNTIONS
+---------------------------------------
+--- CREATE PROCEDURES AND FUCNTIONS ---
+---------------------------------------
+
+--#region CREATE PROCEDURE udpDeleteParamOutput
+IF OBJECT_ID('udpDeleteParamOutput') IS NOT NULL
+	DROP PROCEDURE udpDeleteParamOutput;
+GO
+-- @paramOutputId: Id of parameter output that should be deleted
+CREATE PROCEDURE udpDeleteParamOutput(@paramOutputId INT)
+AS
+BEGIN
+	DELETE FROM ParamOutput WHERE Id = @paramOutputId;
+END
+GO
+--#endregion
+
+--#region CREATE PROCEDURE udpDeleteTestOutput
+IF OBJECT_ID('udpDeleteTestOutput') IS NOT NULL
+	DROP PROCEDURE udpDeleteTestOutput;
+GO
+-- @testOutputId: Id of test output that should be deleted
+CREATE PROCEDURE udpDeleteTestOutput(@testOutputId INT)
+AS
+BEGIN
+	-- first delete all parameters of this test output
+	DELETE FROM ParamOutput WHERE TestOutputId = @testOutputId;
+	-- now it is save to delete this test output because nothing is referencing it
+	DELETE FROM TestOutput WHERE Id = @testOutputId;
+END
+GO
+--#endregion
+
+--#region CREATE PROCEDURE udpDeleteShift
+IF OBJECT_ID('udpDeleteShift') IS NOT NULL
+	DROP PROCEDURE udpDeleteShift;
+GO
+-- @shiftId: Id of shift that should be deleted
+CREATE PROCEDURE udpDeleteShift(@shiftId INT)
+AS
+BEGIN
+	-- 1) delete all parameters that are in some test that was executed in shift
+	-- that should be deleted
+	DELETE PO FROM ParamOutput PO
+		INNER JOIN TestOutput ON (PO.TestOutputId = TestOutput.Id)
+		WHERE TestOutput.ShiftId = @shiftId;
+	-- 2) delete all tests executed in this shift
+	DELETE FROM TestOutput WHERE ShiftId = @shiftId;
+	-- 3) delete all references to test (parameters) that have been used in this shift
+	DELETE FROM TestShift WHERE ShiftId = @shiftId;	
+	-- now it is save to delete this shift because nothing is referencing it
+	DELETE FROM Shift WHERE Id = @shiftId;
+	
+	--SELECT * FROM ParamOutput PO INNER JOIN TestOutput ON (PO.TestOutputId = TestOutput.Id)
+	--	WHERE TestOutput.ShiftId = 3;
+END
+GO
+--#endregion
 
 --#region CREATE PROCEDURE udpParamResults
 IF OBJECT_ID('udpParamResults') IS NOT NULL
@@ -252,10 +338,6 @@ BEGIN
 		WHERE TestOutput.Id = @testId;
 END
 GO
-EXEC udpParamResults 2;
-select * from param;
-select * from paramOutput;
-select * from testoutput;
 --#endregion
 
 --#region CREATE PROCEDURE udpTestResults
@@ -277,20 +359,6 @@ END
 GO
 --#endregion
 
---#region CREATE PROCEDURE udpDeleteShift
---IF OBJECT_ID('udpDeleteShift') IS NOT NULL
---	DROP PROCEDURE udpDeleteShift;
---GO
---CREATE PROCEDURE udpDeleteShift(@shiftId INT)
---AS
---BEGIN
---	DELETE FROM ParamOutput
---	WHERE ParamOutput.Id 
---	DELETE FROM Operator WHERE Id = @operatorId;
---END
---GO
---#endregion
-
 --#region CREATE PROCEDURE udpDeleteOperator
 --IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
 --	DROP PROCEDURE udpDeleteOperator;
@@ -305,23 +373,26 @@ GO
 --GO
 --#endregion
 
--- CREATE VIEWS
+--------------------
+--- CREATE VIEWS ---
+--------------------
 
---#region CREATE VIEW ShiftResults
+--#region CREATE VIEW ShiftResult
 -- For each shift get these information: Date and time when shift was started
 -- and finished, name of tested mirror, full name of operator who has executed
 -- that shift, number of sequences where all tests have been completed (correctly),
 -- number of tests where at least one failed, and where at least one was aborted
-IF OBJECT_ID('ShiftResults') IS NOT NULL
-	DROP VIEW ShiftResults;
+IF OBJECT_ID('ShiftResult') IS NOT NULL
+	DROP VIEW ShiftResult;
 GO
-CREATE VIEW ShiftResults(Id, Start, Finish, Mirror, Operator, Completed, Failed, Aborted)
+CREATE VIEW ShiftResult(Id, Start, Finish, MirrorId, MirrorName, OperatorId, OperatorName, 
+	Completed, Failed, Aborted)
 	AS 
 -- this table will contain ShiftId and number of sequences in this shift
 -- where all tests in sequence are completed, number of sequences where
 -- at least one test is failed or aborted and number of sequences where
 -- at least one test is aborted	
-SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Name, 
+SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Id, Mirror.Name, Operator.Id,
 	Operator.Name + ' ' + Operator.Surname,
 	-- from the parent select command we have obtained ShiftId. we are going to
 	-- get only outputs with this shift id, grouping it by sequence. then we
@@ -348,11 +419,11 @@ SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Name,
 GO		
 --#endregion
 
---#region CREATE VIEW TestResults
-IF OBJECT_ID('TestResults') IS NOT NULL
-	DROP VIEW TestResults;
+--#region CREATE VIEW TestResult
+IF OBJECT_ID('TestResult') IS NOT NULL
+	DROP VIEW TestResult;
 GO
-CREATE VIEW TestResults(Id, Name, Result, Duration, Sequence) AS
+CREATE VIEW TestResult(Id, Name, Result, Duration, Sequence) AS
 	SELECT TestOutput.Id, Test.Name, TestOutput.Result, 
 	CAST (TestOutput.Finish - TestOutput.Start AS TIME),
 	TestOutput.Sequence
@@ -360,5 +431,41 @@ CREATE VIEW TestResults(Id, Name, Result, Duration, Sequence) AS
 		JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
 		JOIN Test ON (TestOutput.TestId = Test.Id) 
 GO
-SELECT * FROM TestResults;
+--#endregion
+
+--#region CREATE VIEW MirrorResult
+IF OBJECT_ID('MirrorResult') IS NOT NULL
+	DROP VIEW MirrorResult;
+GO
+CREATE VIEW MirrorResult(Id, Name, Sequences, Completed, Failed, Aborted, AverageDuration) AS
+	SELECT Mirror.Id, Mirror.Name, t.Sequences, t.Completed, t.Failed, t.Aborted, t.AverageDuration FROM
+	(SELECT MirrorId, COUNT(*) AS Sequences, SUM(Completed) AS Completed, SUM(Failed) AS Failed,
+		SUM(Aborted) AS Aborted, 
+		CAST(CAST(AVG(CAST(Finish - Start AS FLOAT)) AS DATETIME) AS TIME) AS AverageDuration
+		FROM ShiftResult
+		GROUP BY MirrorId) t
+	JOIN Mirror ON (t.MirrorId = Mirror.Id)
+GO
+--#endregion
+
+--#region CREATE VIEW OperatorResult
+IF OBJECT_ID('OperatorResult') IS NOT NULL
+	DROP VIEW OperatorResult;
+GO
+CREATE VIEW OperatorResult(Id, Name, Surname, TotalSequences, TotalMirrors, TotalTime) AS
+	SELECT Operator.Id, Operator.Name, Operator.Surname, TotalSequences, TotalMirrors, TotalTime
+	FROM
+	(SELECT Operator.Id AS OperatorId, COUNT(*) AS TotalMirrors,
+		CAST(CAST(SUM(CAST(TestOutput.Finish - TestOutput.Start AS FLOAT)) AS DATETIME) AS TIME) AS TotalTime
+		FROM Operator 
+		JOIN Shift ON (Operator.Id = Shift.OperatorId)
+		JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
+		GROUP BY Operator.Id) t1
+	JOIN 
+	(SELECT OperatorId, COUNT(*) AS TotalSequences
+		FROM Shift
+		GROUP BY OperatorId) t2
+	ON(t1.OperatorId = t2.OperatorId)
+	JOIN Operator ON (t2.OperatorId = Operator.Id)
+GO
 --#endregion

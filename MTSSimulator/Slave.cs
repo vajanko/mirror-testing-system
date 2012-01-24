@@ -126,19 +126,11 @@ namespace MTS.Simulator
                         lock (module)
                         {
                             foreach (IChannel channel in module)
-                            {       
-                                //List<char> val = new List<char>();
-                                //foreach (byte b in channel.ValueBytes)
-                                //    val.Add((char)b);
-
+                            {
                                 if (channel is IAnalogInput)
-                                    writer.Write("{0}:{1}\n", channel.Name, (channel as IAnalogInput).Value);
+                                    writer.Write("{0}:{1}\n", channel.Id, (channel as IAnalogInput).Value);
                                 else if (channel is IDigitalInput)
-                                    writer.Write("{0}:{1}\n", channel.Name, (channel as IDigitalInput).Value);
-
-                                //string value = enc.GetString(channel.ValueBytes);
-                                    //ASCIIEncoding.ASCII.GetString(channel.ValueBytes);
-                                //writer.Write("{0}:{1}\n", channel.Name, value);
+                                    writer.Write("{0}:{1}\n", channel.Id, (channel as IDigitalInput).Value);
                             }
                         }
                         writer.WriteLine("end");
@@ -154,14 +146,11 @@ namespace MTS.Simulator
                             string[] tmp = line.Split(':');
                             if (tmp.Length > 1)
                             {
-                                string name = tmp[0];
+                                string id = tmp[0];
                                 string value = tmp[1];
-                                //List<byte> val = new List<byte>();
-                                //foreach (char c in tmp[1])
-                                //    val.Add((byte)c);
                                 lock (module)
                                 {
-                                    IChannel channel = module.GetChannel(name);
+                                    IChannel channel = module.GetChannel(id);
                                     if (channel != null)
                                     {
                                         if (channel is IAnalogInput)

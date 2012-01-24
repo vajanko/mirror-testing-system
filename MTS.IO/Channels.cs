@@ -64,13 +64,10 @@ namespace MTS.IO
                 PropertyInfo prop = thisType.GetProperty(channel.Id);
                 prop.SetValue(this, channel, null);
             }
-            foreach (var channel in module.Inputs)
+            foreach (var channel in module.GetChannels<IAnalogInput>())
             {
-                if (channel is IAnalogInput)
-                {
-                    PropertyInfo prop = thisType.GetProperty(channel.Id);
-                    initializeChannel((IAnalogInput)prop.GetValue(this, null), settings.GetSetting(channel.Id));
-                }
+                PropertyInfo prop = thisType.GetProperty(channel.Id);
+                initializeChannel((IAnalogInput)prop.GetValue(this, null), settings.GetSetting(channel.Id));
             }
 
             //// analog inputs - also initialize its settings raw/real low/high values
@@ -795,6 +792,8 @@ namespace MTS.IO
             channel.RawHigh = setting.RawHigh;
             channel.RealLow = setting.RealLow;
             channel.RealHigh = setting.RealHigh;
+            channel.Name = setting.Name;
+            channel.Description = setting.Description;
         }
 
         #endregion

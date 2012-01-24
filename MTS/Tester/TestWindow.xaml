@@ -42,12 +42,15 @@
             <Label Content="Mirrors:" Grid.Row="1" Grid.Column="0" IsEnabled="{Binding IsNotRunning, ElementName=root}"/>
             <base:UpDownButton Grid.Column="1" Grid.Row="1" ToolTip="Number of mirrors to be tested"
                                Value="{Binding Total, ElementName=root, Mode=TwoWay}"
-                               IsEnabled="{Binding IsNotRunning, ElementName=root}"
+                               IsEnabled="{Binding IsRunning, ElementName=root, Converter={StaticResource boolNegation}}"
                                Decimals="0" MinWidth="60" MinValue="1" HorizontalAlignment="Left"/>
+            <Label Grid.Row="2" Content="Mirror type:"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" x:Name="mirrorTypeBox" ItemsSource="{Binding}" Width="200"
+                      IsEnabled="{Binding IsRunning, ElementName=root, Converter={StaticResource boolNegation}}" Loaded="mirrorTypeBox_Loaded"/>
 
-            <Button Content="Start Shift" Grid.Column="0" Grid.Row="2" Click="startClick"
+            <Button Content="Start" Grid.Column="0" Grid.Row="3" Click="startClick"
                     IsEnabled="{Binding IsParamLoaded, ElementName=root}"/>
-            <Button Content="Stop Shift" Grid.Column="0" Grid.Row="3" Click="stopClick"
+            <Button Content="Stop" Grid.Column="1" Grid.Row="3" Click="stopClick"
                     IsEnabled="{Binding IsRunning, ElementName=root}"/>
 
             <!-- Shift properties -->
@@ -86,7 +89,7 @@
         <ctrl:MirrorView DockPanel.Dock="Left" VerticalAlignment="Top"
                          Width="350" Height="350" BorderBrush="Black" BorderThickness="1"
                          x:Name="mirrorView"/>
-        <ListBox ItemsSource="{Binding AnalogControls, ElementName=root}" DockPanel.Dock="Right" x:Name="analogChannelsControls">
+        <ListBox DockPanel.Dock="Left" x:Name="analogChannelsControls" ItemsSource="{Binding}">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ctrl:FlowControl}">
                     <Setter Property="Background" Value="Black"/>
@@ -97,39 +100,21 @@
                     <Setter Property="BorderBrush" Value="Green"/>
                     <Setter Property="BorderThickness" Value="2"/>
                 </Style>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="MinWidth" Value="200"/>
+                    <Setter Property="MinHeight" Value="120"/>
+                </Style>
             </ListBox.Resources>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <ListBoxItem Content="{Binding}"/>
-                    <!--<ctrl:FlowControl Title="{Binding Name}" Unit="{Binding Unit}" Channel="{Binding}"/>-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel/>
+                    <UniformGrid Columns="3"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        
-        <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" Visibility="Collapsed">
-            <WrapPanel.Resources>
-                <Style TargetType="{x:Type ctrl:FlowControl}">
-                    <Setter Property="Background" Value="Black"/>
-                    <Setter Property="MinWidth" Value="200"/>
-                    <Setter Property="MinHeight" Value="120"/>
-                    <Setter Property="TextBrush" Value="White"/>
-                    <Setter Property="Margin" Value="4"/>
-                    <Setter Property="BorderBrush" Value="Green"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </Style>
-            </WrapPanel.Resources>
-            <ctrl:FlowControl Title="Spiral current" x:Name="spiralCurrent" Unit="mA"/>
-            <ctrl:FlowControl Title="Blinker current" x:Name="blinkerCurrent" Unit="mA"/>
-            <ctrl:FlowControl Title="ActuatorA current" Unit="mA" x:Name="actuatorACurrent"/>
-            <ctrl:FlowControl Title="ActuatorB current" Unit="mA" x:Name="actuatorBCurrent"/>
-            <ctrl:FlowControl Title="Powerfold current" Unit="mA" x:Name="powerfoldCurrent"/>
-            <ctrl:FlowControl Title="Power supply 1" Unit="V" x:Name="powerSupplyVoltage1"/>
-            <ctrl:FlowControl Title="Power supply 1" Unit="V" x:Name="powerSupplyVoltage2"/>
-        </WrapPanel>
     </DockPanel>
 </ad:DocumentContent>

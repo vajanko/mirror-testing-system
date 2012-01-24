@@ -48,14 +48,10 @@ namespace MTS.Tester.Controls
             }
         }
 
-        public double MaxValue { get; set;  }
-
-        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-        public void Update()
-        {
-            if (Channel != null && Channel != DependencyProperty.UnsetValue)
-                AddValue(Channel.RealValue);
-        }
+        /// <summary>
+        /// Method that will return new value that should be added to this controls
+        /// </summary>
+        public Func<double> GetNewValue;
 
         #endregion
 
@@ -164,18 +160,18 @@ namespace MTS.Tester.Controls
 
         #endregion
 
-        #region Channel Property
+        #region MaxValue Property
 
-        static public readonly DependencyProperty ChannelProperty =
-            DependencyProperty.Register("Channel", typeof(IAnalogInput), typeof(FlowControl));
+        static public readonly DependencyProperty MaxValueProperty =
+            DependencyProperty.Register("MaxValue", typeof(double), typeof(FlowControl));
 
         /// <summary>
-        /// (Get/Set) Short description that is displayed inside this control
+        /// (Get/Set) Max allowed value of added value
         /// </summary>
-        public IAnalogInput Channel
+        public double MaxValue
         {
-            get { return (IAnalogInput)GetValue(ChannelProperty); }
-            set { SetValue(ChannelProperty, value); }
+            get { return (double)GetValue(MaxValueProperty); }
+            set { SetValue(MaxValueProperty, value); }
         }
 
         #endregion
@@ -197,10 +193,10 @@ namespace MTS.Tester.Controls
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            // when ActualWidth changes - step will be changed apropriatelly
+            // when ActualWidth changes - step will be changed appropriately
             if (e.Property == ActualWidthProperty && ActualWidth != 0)
                 Values.Step = ActualWidth / ValuesCapacity; // entire line (all values) are always displayed
-            // when ActualWidth changes - zero will be changed apropriatelly
+            // when ActualWidth changes - zero will be changed appropriately
             else if (e.Property == ActualHeightProperty)
                 Zero = ActualHeight / 2;    // zero line is always in the middle
         }
@@ -211,7 +207,16 @@ namespace MTS.Tester.Controls
             Values.AddValue(value);
             // last value added
             CurrentValue = value;
+            if (Values.MaxValue > 0)
+                MaxValue = Values.MaxValue;
+                 
             RaisePropertyChanged("Values");     // this is for binding
+        }
+
+        public void Update()
+        {
+            if (GetNewValue != null)
+                AddValue(GetNewValue());
         }
 
         #region Constructors
@@ -226,15 +231,6 @@ namespace MTS.Tester.Controls
             // bind ValuesCapacity dependency property on this FlowControl with Capacity property on Values
             bind = new Binding("Capacity") { Source = Values, Mode = BindingMode.OneWay };
             SetBinding(ValuesCapacityProperty, bind);
-
-            timer.Interval = 200;
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Start();
-        }
-
-        void timer_Tick(object sender, EventArgs e)
-        {
-            Update();
         }
 
         static FlowControl()
@@ -253,7 +249,7 @@ namespace MTS.Tester.Controls
         /// </summary>
         public double Step { get; set; }
         /// <summary>
-        /// (Get/Set) Value of X-axis. As this double collection is converted to points collection and dispalyed
+        /// (Get/Set) Value of X-axis. As this double collection is converted to points collection and displayed
         /// as a line
         /// </summary>
         public double Zero { get; set; }
@@ -266,7 +262,7 @@ namespace MTS.Tester.Controls
         /// </summary>
         public double MinValue { get; private set; }
         /// <summary>
-        /// (Get) Maximal value presnet in the queue
+        /// (Get) Maximal value present in the queue
         /// </summary>
         public double MaxValue { get; private set; }
 

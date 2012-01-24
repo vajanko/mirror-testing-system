@@ -16,17 +16,40 @@
           <EntitySet Name="TestOutput" EntityType="MTS.Data.Store.TestOutput" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TestParam" EntityType="MTS.Data.Store.TestParam" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="TestShift" EntityType="MTS.Data.Store.TestShift" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ShiftResults" EntityType="MTS.Data.Store.ShiftResults" store:Type="Views" store:Schema="dbo" store:Name="ShiftResults">
+          <EntitySet Name="MirrorResult" EntityType="MTS.Data.Store.MirrorResult" store:Type="Views" store:Schema="dbo" store:Name="MirrorResult">
             <DefiningQuery>SELECT 
-      [ShiftResults].[Id] AS [Id], 
-      [ShiftResults].[Start] AS [Start], 
-      [ShiftResults].[Finish] AS [Finish], 
-      [ShiftResults].[Mirror] AS [Mirror], 
-      [ShiftResults].[Operator] AS [Operator], 
-      [ShiftResults].[Completed] AS [Completed], 
-      [ShiftResults].[Failed] AS [Failed], 
-      [ShiftResults].[Aborted] AS [Aborted]
-      FROM [dbo].[ShiftResults] AS [ShiftResults]</DefiningQuery>
+      [MirrorResult].[Id] AS [Id], 
+      [MirrorResult].[Name] AS [Name], 
+      [MirrorResult].[Sequences] AS [Sequences], 
+      [MirrorResult].[Completed] AS [Completed], 
+      [MirrorResult].[Failed] AS [Failed], 
+      [MirrorResult].[Aborted] AS [Aborted], 
+      [MirrorResult].[AverageDuration] AS [AverageDuration]
+      FROM [dbo].[MirrorResult] AS [MirrorResult]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="OperatorResult" EntityType="MTS.Data.Store.OperatorResult" store:Type="Views" store:Schema="dbo" store:Name="OperatorResult">
+            <DefiningQuery>SELECT 
+      [OperatorResult].[Id] AS [Id], 
+      [OperatorResult].[Name] AS [Name], 
+      [OperatorResult].[Surname] AS [Surname], 
+      [OperatorResult].[TotalSequences] AS [TotalSequences], 
+      [OperatorResult].[TotalMirrors] AS [TotalMirrors], 
+      [OperatorResult].[TotalTime] AS [TotalTime]
+      FROM [dbo].[OperatorResult] AS [OperatorResult]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ShiftResult" EntityType="MTS.Data.Store.ShiftResult" store:Type="Views" store:Schema="dbo" store:Name="ShiftResult">
+            <DefiningQuery>SELECT 
+      [ShiftResult].[Id] AS [Id], 
+      [ShiftResult].[Start] AS [Start], 
+      [ShiftResult].[Finish] AS [Finish], 
+      [ShiftResult].[MirrorId] AS [MirrorId], 
+      [ShiftResult].[MirrorName] AS [MirrorName], 
+      [ShiftResult].[OperatorId] AS [OperatorId], 
+      [ShiftResult].[OperatorName] AS [OperatorName], 
+      [ShiftResult].[Completed] AS [Completed], 
+      [ShiftResult].[Failed] AS [Failed], 
+      [ShiftResult].[Aborted] AS [Aborted]
+      FROM [dbo].[ShiftResult] AS [ShiftResult]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="fk_mirror_supplier_id" Association="MTS.Data.Store.fk_mirror_supplier_id">
             <End Role="Supplier" EntitySet="Supplier" />
@@ -172,27 +195,60 @@
           <Property Name="ShiftId" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'mts.dbo.ShiftResults' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'mts.dbo.MirrorResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="ShiftResults">
+        <EntityType Name="MirrorResult">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Sequences" Type="int" />
+          <Property Name="Completed" Type="int" />
+          <Property Name="Failed" Type="int" />
+          <Property Name="Aborted" Type="int" />
+          <Property Name="AverageDuration" Type="time" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'mts.dbo.OperatorResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="OperatorResult">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Surname" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="TotalSequences" Type="int" />
+          <Property Name="TotalMirrors" Type="int" />
+          <Property Name="TotalTime" Type="time" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'mts.dbo.ShiftResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="ShiftResult">
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Start" />
             <PropertyRef Name="Finish" />
-            <PropertyRef Name="Mirror" />
-            <PropertyRef Name="Operator" />
-            <PropertyRef Name="Completed" />
-            <PropertyRef Name="Failed" />
-            <PropertyRef Name="Aborted" />
+            <PropertyRef Name="MirrorId" />
+            <PropertyRef Name="MirrorName" />
+            <PropertyRef Name="OperatorId" />
+            <PropertyRef Name="OperatorName" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="Finish" Type="datetime" Nullable="false" />
-          <Property Name="Mirror" Type="nvarchar" Nullable="false" MaxLength="20" />
-          <Property Name="Operator" Type="nvarchar" Nullable="false" MaxLength="41" />
-          <Property Name="Completed" Type="int" Nullable="false" />
-          <Property Name="Failed" Type="int" Nullable="false" />
-          <Property Name="Aborted" Type="int" Nullable="false" />
+          <Property Name="MirrorId" Type="int" Nullable="false" />
+          <Property Name="MirrorName" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="OperatorId" Type="int" Nullable="false" />
+          <Property Name="OperatorName" Type="nvarchar" Nullable="false" MaxLength="41" />
+          <Property Name="Completed" Type="int" />
+          <Property Name="Failed" Type="int" />
+          <Property Name="Aborted" Type="int" />
         </EntityType>
         <Association Name="fk_mirror_supplier_id">
           <End Role="Supplier" Type="MTS.Data.Store.Supplier" Multiplicity="1" />
@@ -326,6 +382,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="udpDeleteParamOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="paramOutputId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpDeleteShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shiftId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpDeleteTestOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="testOutputId" Type="int" Mode="In" />
+        </Function>
         <Function Name="udpParamResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="testId" Type="int" Mode="In" />
         </Function>
@@ -391,13 +456,15 @@
             <End Role="TestOutput" EntitySet="TestOutputs" />
             <End Role="ParamOutput" EntitySet="ParamOutputs" />
           </AssociationSet>
-          <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
           <FunctionImport Name="GetTestResult" ReturnType="Collection(MTS.Data.DbTestResult)">
           <Parameter Name="shiftId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetParamResult" ReturnType="Collection(MTS.Data.DbParamResult)">
           <Parameter Name="testId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="MirrorResults" EntityType="MTS.Data.MirrorResult" />
+          <EntitySet Name="OperatorResults" EntityType="MTS.Data.OperatorResult" />
+          <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
         </EntityContainer>
         <EntityType Name="Mirror">
           <Key>
@@ -651,26 +718,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ShiftResult">
-          <Key>
-            <PropertyRef Name="Start" />
-            <PropertyRef Name="Finish" />
-            <PropertyRef Name="Mirror" />
-            <PropertyRef Name="Operator" />
-            <PropertyRef Name="Completed" />
-            <PropertyRef Name="Failed" />
-            <PropertyRef Name="Aborted" />
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="DateTime" Name="Start" Nullable="false" />
-          <Property Type="DateTime" Name="Finish" Nullable="false" />
-          <Property Type="String" Name="Mirror" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Operator" Nullable="false" MaxLength="41" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="Completed" Nullable="false" />
-          <Property Type="Int32" Name="Failed" Nullable="false" />
-          <Property Type="Int32" Name="Aborted" Nullable="false" />
-          <Property Type="Int32" Name="Id" Nullable="false" />
-        </EntityType>
         <ComplexType Name="DbParamResult">
           <Property Type="String" Name="Name" Nullable="false" MaxLength="25" />
           <Property Type="String" Name="Value" Nullable="false" MaxLength="50" />
@@ -687,6 +734,53 @@
           <Property Type="Time" Name="Duration" Nullable="true" />
           <Property Type="Int16" Name="Sequence" Nullable="false" />
         </ComplexType>
+        <EntityType Name="MirrorResult">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sequences" />
+          <Property Type="Int32" Name="Completed" />
+          <Property Type="Int32" Name="Failed" />
+          <Property Type="Int32" Name="Aborted" />
+          <Property Type="Time" Name="AverageDuration" />
+        </EntityType>
+        <EntityType Name="OperatorResult">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Surname" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="TotalSequences" />
+          <Property Type="Int32" Name="TotalMirrors" />
+          <Property Type="Time" Name="TotalTime" />
+        </EntityType>
+        <EntityType Name="ShiftResult">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Start" />
+            <PropertyRef Name="Finish" />
+            <PropertyRef Name="MirrorId" />
+            <PropertyRef Name="MirrorName" />
+            <PropertyRef Name="OperatorId" />
+            <PropertyRef Name="OperatorName" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="Start" Nullable="false" />
+          <Property Type="DateTime" Name="Finish" Nullable="false" />
+          <Property Type="Int32" Name="MirrorId" Nullable="false" />
+          <Property Type="String" Name="MirrorName" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="OperatorId" Nullable="false" />
+          <Property Type="String" Name="OperatorName" Nullable="false" MaxLength="41" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Completed" />
+          <Property Type="Int32" Name="Failed" />
+          <Property Type="Int32" Name="Aborted" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -793,20 +887,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ShiftResults">
-            <EntityTypeMapping TypeName="MTS.Data.ShiftResult">
-              <MappingFragment StoreEntitySet="ShiftResults">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Aborted" ColumnName="Aborted" />
-                <ScalarProperty Name="Failed" ColumnName="Failed" />
-                <ScalarProperty Name="Completed" ColumnName="Completed" />
-                <ScalarProperty Name="Operator" ColumnName="Operator" />
-                <ScalarProperty Name="Mirror" ColumnName="Mirror" />
-                <ScalarProperty Name="Finish" ColumnName="Finish" />
-                <ScalarProperty Name="Start" ColumnName="Start" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetTestResult" FunctionName="MTS.Data.Store.udpTestResults">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MTS.Data.DbTestResult">
@@ -831,6 +911,47 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="MirrorResults">
+            <EntityTypeMapping TypeName="MTS.Data.MirrorResult">
+              <MappingFragment StoreEntitySet="MirrorResult">
+                <ScalarProperty Name="AverageDuration" ColumnName="AverageDuration" />
+                <ScalarProperty Name="Aborted" ColumnName="Aborted" />
+                <ScalarProperty Name="Failed" ColumnName="Failed" />
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="Sequences" ColumnName="Sequences" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OperatorResults">
+            <EntityTypeMapping TypeName="MTS.Data.OperatorResult">
+              <MappingFragment StoreEntitySet="OperatorResult">
+                <ScalarProperty Name="TotalTime" ColumnName="TotalTime" />
+                <ScalarProperty Name="TotalMirrors" ColumnName="TotalMirrors" />
+                <ScalarProperty Name="TotalSequences" ColumnName="TotalSequences" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShiftResults">
+            <EntityTypeMapping TypeName="MTS.Data.ShiftResult">
+              <MappingFragment StoreEntitySet="ShiftResult">
+                <ScalarProperty Name="Aborted" ColumnName="Aborted" />
+                <ScalarProperty Name="Failed" ColumnName="Failed" />
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="OperatorName" ColumnName="OperatorName" />
+                <ScalarProperty Name="OperatorId" ColumnName="OperatorId" />
+                <ScalarProperty Name="MirrorName" ColumnName="MirrorName" />
+                <ScalarProperty Name="MirrorId" ColumnName="MirrorId" />
+                <ScalarProperty Name="Finish" ColumnName="Finish" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -878,10 +999,10 @@
           <ConnectorPoint PointX="7.375" PointY="4.33550048828125" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_testId" >
-          <ConnectorPoint PointX="2.25" PointY="10.077972819010416" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="10.077972819010416" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="10.077972819010416" />
-          <ConnectorPoint PointX="6.25" PointY="10.077972819010416" />
+          <ConnectorPoint PointX="2.25" PointY="9.34375" />
+          <ConnectorPoint PointX="5.291666666666667" PointY="9.34375" />
+          <ConnectorPoint PointX="5.458333333333333" PointY="9.34375" />
+          <ConnectorPoint PointX="6.25" PointY="9.34375" />
         </AssociationConnector>
         <EntityTypeShape EntityType="MTS.Data.TestParam" Width="1.5" PointX="4.625" PointY="6.625" Height="1.7566536458333353" />
         <EntityTypeShape EntityType="MTS.Data.TestShift" Width="1.5" PointX="0.625" PointY="5.875" Height="1.7566536458333317" />
@@ -891,8 +1012,10 @@
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testOutput_shiftId" >
           <ConnectorPoint PointX="3.75" PointY="5.53904296875" />
-          <ConnectorPoint PointX="3.75" PointY="10.796934059244792" />
-          <ConnectorPoint PointX="6.25" PointY="10.796934059244792" />
+          <ConnectorPoint PointX="3.75" PointY="9.0781225" />
+          <ConnectorPoint PointX="5.291666666666667" PointY="9.0781225" />
+          <ConnectorPoint PointX="5.458333333333333" PointY="9.0781225" />
+          <ConnectorPoint PointX="6.25" PointY="9.0781225" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testShift_shiftId" >
           <ConnectorPoint PointX="3" PointY="5.4059456380208335" />
@@ -900,10 +1023,8 @@
           <ConnectorPoint PointX="2.09375" PointY="5.875" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testParam_testId" >
-          <ConnectorPoint PointX="2.25" PointY="9.4744595768229161" />
-          <ConnectorPoint PointX="3.6666666666666665" PointY="9.4744595768229161" />
-          <ConnectorPoint PointX="3.8333333333333335" PointY="9.4744595768229161" />
-          <ConnectorPoint PointX="5.375" PointY="9.4744595768229161" />
+          <ConnectorPoint PointX="2.25" PointY="10.081454322916667" />
+          <ConnectorPoint PointX="5.375" PointY="10.081454322916667" />
           <ConnectorPoint PointX="5.375" PointY="8.3816536458333353" />
         </AssociationConnector>
         <AssociationConnector Association="MTS.Data.fk_testShift_testId" >
@@ -914,7 +1035,9 @@
           <ConnectorPoint PointX="7.5625" PointY="8.875" />
           <ConnectorPoint PointX="7.5625" PointY="5.2960009765625" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="MTS.Data.ShiftResult" Width="1.5" PointX="7.25" PointY="0.5" Height="2.2496956380208331" />
+        <EntityTypeShape EntityType="MTS.Data.MirrorResult" Width="1.5" PointX="9.125" PointY="0.5" Height="2.0853483072916674" />
+        <EntityTypeShape EntityType="MTS.Data.OperatorResult" Width="1.5" PointX="11" PointY="0.625" Height="1.9210009765625031" />
+        <EntityTypeShape EntityType="MTS.Data.ShiftResult" Width="1.5" PointX="6.875" PointY="0.5" Height="2.5783902994791674" />
       </Diagram>
     </Diagrams>
   </Designer>

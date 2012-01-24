@@ -27,7 +27,7 @@ namespace MTS.IO
         /// <summary>
         /// (Get/Set) Long description of this channel
         /// </summary>
-        string Decsription { get; set; }
+        string Description { get; set; }
 
         /// <summary>
         /// (Get/Set) Array of memory bytes containing <paramref name="Value"/> of this channel. This 

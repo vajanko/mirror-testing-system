@@ -73,23 +73,21 @@ namespace MTS.IO.Module
                 string[] tmp = line.Split(':');
                 if (tmp.Length > 1)
                 {
-                    string name = tmp[0];
+                    string id = tmp[0];
                     string value = tmp[1];
                     //List<byte> val = new List<byte>();
                     //foreach (char c in value)
                     //    val.Add((byte)c);
 
-                    IChannel channel = GetChannel(name);
+                    IChannel channel = GetChannel(id);
                     if (channel != null)
                     {
                         if (channel is IAnalogInput)
                             (channel as IAnalogInput).SetValue(uint.Parse(value));
                         else if (channel is IDigitalInput)
                             (channel as IDigitalInput).SetValue(bool.Parse(value));
-                            //channel.ValueBytes = enc.GetBytes(tmp[1]);
+                        //channel.ValueBytes = enc.GetBytes(tmp[1]);
                     }
-                            //val.ToArray();
-                            //System.Text.ASCIIEncoding.ASCII.GetBytes(value);
                 }
             }
         }
@@ -109,9 +107,9 @@ namespace MTS.IO.Module
             foreach (IChannel channel in outputs)
             {
                 if (channel is IAnalogInput)
-                    writer.Write("{0}:{1}\n", channel.Name, (channel as IAnalogInput).Value);
+                    writer.Write("{0}:{1}\n", channel.Id, (channel as IAnalogInput).Value);
                 else if (channel is IDigitalInput)
-                    writer.Write("{0}:{1}\n", channel.Name, (channel as IDigitalInput).Value);
+                    writer.Write("{0}:{1}\n", channel.Id, (channel as IDigitalInput).Value);
             }
             // closing command
             writer.WriteLine("end");
