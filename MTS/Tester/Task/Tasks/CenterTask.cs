@@ -15,6 +15,8 @@ namespace MTS.Tester
         /// Direction in which we need to move the mirror to center it
         /// </summary>
         private MoveDirection centerDir;
+
+        private Channels channels;
         
         #endregion
 
@@ -92,7 +94,9 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="channels"></param>
         public CenterTask(Channels channels)
-            : base(channels) { }
+        {
+            this.channels = channels;
+        }
 
         #endregion     
     }

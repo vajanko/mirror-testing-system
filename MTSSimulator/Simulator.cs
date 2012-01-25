@@ -140,10 +140,10 @@ namespace MTS.Simulator
                 simulateHeatingFoilCurrent();
 
                 simulateDirectionLightCurrent();
-
                 
-
                 simulateMirrorMovement();
+
+                simulatePowerSupplyVoltage();
 
                 // update user interface
                 updateTester();
@@ -251,6 +251,19 @@ namespace MTS.Simulator
                 channels.VerticalActuatorCurrent.SetValue((uint)gen.Next(0, 500));
             else
                 channels.VerticalActuatorCurrent.SetValue(0);
+        }
+        private void simulatePowerSupplyVoltage()
+        {
+            if (!channels.IsPowerSupplyOff.Value)
+            {
+                channels.PowerSupplyVoltage1.SetValue((uint)gen.Next(0, 4095));
+                channels.PowerSupplyVoltage2.SetValue((uint)gen.Next(0, 4095));
+            }
+            else
+            {
+                channels.PowerSupplyVoltage1.SetValue(0);
+                channels.PowerSupplyVoltage2.SetValue(0);
+            }
         }
 
         private void unlock()

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!ELEMENT timeline (set|wait|waitfor|setmulti|if|check|test)*>
+
+<!-- set channel value -->
+<!ELEMENT set EMPTY>
+<!ATTLIST set id ID #IMPLIED
+              type (allow|disallow) "allow"
+              tasks IDREFS #IMPLIED
+              channel NMTOKEN #REQUIRED
+              value (true|false) #REQUIRED>
+<!-- wait for a specified period of time -->
+<!ELEMENT wait EMPTY>
+<!ATTLIST wait id ID #IMPLIED
+               type (allow|disallow) "allow"
+               tasks IDREFS #IMPLIED
+               time CDATA #REQUIRED>
+<!-- wait for specified value on a specified channel -->
+<!ELEMENT waitfor EMPTY>
+<!ATTLIST waitfor id ID #IMPLIED
+                  type (allow|disallow) "allow"
+                  tasks IDREFS #IMPLIED
+                  channel NMTOKEN #REQUIRED
+                  value (true|false) #REQUIRED>
+<!-- set multiple channels values -->
+<!ELEMENT setmulti (channel)+>
+<!ATTLIST setmulti id ID #IMPLIED
+                   type (allow|disallow) "allow"
+                   tasks IDREFS #IMPLIED>
+<!ELEMENT channel EMPTY>
+<!ATTLIST channel name NMTOKEN #REQUIRED
+                  value (true|false) #REQUIRED>
+<!-- condition task -->
+<!ELEMENT if (then,else?)>
+<!ATTLIST if id ID #IMPLIED
+             type (allow|disallow) "allow"
+             tasks IDREFS #IMPLIED
+             channel NMTOKEN #REQUIRED
+             value (true|false) #REQUIRED>
+<!ELEMENT then (set|wait|waitfor|setmulti|if|check|test)>
+<!ELEMENT else (set|wait|waitfor|setmulti|if|check|test)?>
+
+<!-- check (usually presence) test -->
+<!ELEMENT check EMPTY>
+<!ATTLIST check id ID #REQUIRED
+                testparam NMTOKEN #REQUIRED
+                channel NMTOKEN #REQUIRED
+                value (true|false) #REQUIRED>
+
+<!-- test -->
+<!ELEMENT test EMPTY>
+<!ATTLIST test id ID #REQUIRED
+               type (allow|disallow) "allow"
+               tasks IDREFS #IMPLIED
+               testtype NMTOKEN #REQUIRED
+               testparam NMTOKEN #REQUIRED>
+
+
+<!-- center mirror glass -->
+<!ELEMENT center EMPTY>
+<!ATTLIST center id NMTOKEN #REQUIRED>
+

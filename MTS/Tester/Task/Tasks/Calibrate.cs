@@ -14,6 +14,8 @@ namespace MTS.Tester
     {
         private Vector3D mirrorNormal;
 
+        private Channels channels;
+
         /// <summary>
         /// Read distances, calculate zero plane normal and save this setting
         /// </summary>
@@ -65,12 +67,14 @@ namespace MTS.Tester
         #region Constructors
 
         /// <summary>
-        /// Create a new instace of task that will read distance values of mirror distance sensors
+        /// Create a new instance of task that will read distance values of mirror distance sensors
         /// and save it to application settings
         /// </summary>
         /// <param name="channels"></param>
         public Calibrate(Channels channels)
-            : base(channels) { }
+        {
+            this.channels = channels;
+        }
 
         #endregion
     }

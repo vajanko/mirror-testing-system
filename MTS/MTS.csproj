@@ -224,6 +224,11 @@
     <Compile Include="Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Tester\Result\TaskResult.cs" />
     <Compile Include="Tester\ShiftExecutedEventArgs.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelEastTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelNorthTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelSouthTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelWestTest.cs" />
+    <Compile Include="Tester\Task\TaskBehaviour.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -313,6 +318,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="config\tests.dtd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\saveFile.png" />
@@ -334,9 +342,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\newFile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="config\test.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\template.xml">
@@ -448,6 +453,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\profile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\tests.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

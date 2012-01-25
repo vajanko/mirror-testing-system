@@ -44,8 +44,7 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="channel">Channel to wait for specific value on</param>
         /// <param name="value">Value we are waiting for</param>
-        public SetValue(Channels channels, IDigitalOutput channel, bool value)
-            : base(channels) 
+        public SetValue(IDigitalOutput channel, bool value)
         {
             this.channel = channel;
             this.value = value;

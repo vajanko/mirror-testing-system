@@ -195,6 +195,10 @@ namespace MTS.Tester
         private TaskScheduler createScheduler(TestCollection tests)
         {
             TaskScheduler scheduler = new TaskScheduler(channels);
+            scheduler.Load("C:\\tests.xml", tests);
+            scheduler.Initialize();
+
+            return scheduler;
 
             // add for providing basic steps to start executing test
             // this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
@@ -225,20 +229,18 @@ namespace MTS.Tester
             // test blinker
             TestValue blinker = tests.GetTest(TestCollection.DirectionLight);
             if (blinker != null)
-                scheduler.AddTask(new BlinkerTest(channels, blinker));
+                scheduler.AddTask(new DirectionLightTest(channels, blinker));
 
             // test spiral
             TestValue spiral = tests.GetTest(TestCollection.Heating);
             if (spiral != null)
-                scheduler.AddTask(new SpiralTest(channels, spiral));
+                scheduler.AddTask(new HeatingFoilTest(channels, spiral));
 
             // open device
             scheduler.AddOpenDevice();
 
             // add first task to be executed
             scheduler.Initialize();
-            //// register handler to execute when scheduler finishes its work
-            ////scheduler.Executed += new SchedulerExecutedHandler(schedulerExecuted);
 
             return scheduler;
         }
@@ -352,8 +354,8 @@ namespace MTS.Tester
             foreach (TestValue test in shiftTests)
                 if (!test.Enabled)
                     toRemove.Add(test);
-            foreach (TestValue test in toRemove)
-                shiftTests.RemoveTest(test);
+            //foreach (TestValue test in toRemove)
+            //    shiftTests.RemoveTest(test);
 
             // 2) save tests that will be used to database
             foreach (TestValue test in shiftTests)
@@ -557,6 +559,12 @@ namespace MTS.Tester
         }
 
         #endregion
+
+        public void Load(string filename)
+        {
+            scheduler = new TaskScheduler(channels);
+            scheduler.Load(filename, shiftTests);
+        }
 
         #region Constructors
 

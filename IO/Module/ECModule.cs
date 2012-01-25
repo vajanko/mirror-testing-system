@@ -8,7 +8,7 @@ using MTS.IO.Address;
 
 namespace MTS.IO.Module
 {
-    public class ECModule : IModule
+    public sealed class ECModule : IModule
     {
         #region Constants
 
@@ -128,12 +128,16 @@ namespace MTS.IO.Module
             reader.Close();
         }
 
+        private void beforeConnect()
+        {
+        }
         /// <summary>
         /// Establish a connection to ADS device
         /// </summary>
         /// <exception cref="MTS.IO.Module.ConnectionException">Connection could not be established</exception>
         public void Connect()
         {
+            beforeConnect();
             // notice that we are connecting to local server which by the way handle any communication 
             // with remote side
             if (client.IsConnected)
@@ -146,21 +150,14 @@ namespace MTS.IO.Module
             {   // establishing connection failed
                 throw new ConnectionException(Resource.ConnectionFailedMsg, ex) { ProtocolName = this.ProtocolName };
             }
+            afterConnect();
         }
-
-        /// <summary>
-        /// Prepare (initialize) channels for reading and writing. When this method is called, connection
-        /// must be established already.
-        /// </summary>
-        /// <exception cref="AddressException">Address of some channel does not exists or it variable
-        /// handle could not be created</exception>
-        public void Initialize()
-        {
-            // see that we are calling a method of the client - connection must be established already
+        private void afterConnect()
+        {   // see that we are calling a method of the client - connection must be established already
             foreach (ChannelBase<ECAddress> channel in this.Inputs)
             {
                 try
-                {
+                {   // try to initialize each channel address
                     channel.Address.IndexOffset = client.CreateVariableHandle(channel.Address.FullName);
                 }
                 catch (Exception ex)
@@ -172,7 +169,17 @@ namespace MTS.IO.Module
                     };
                 }
             }
+            // at this time all addresses must be already initialized
             alocateChannels();  // allocate memory for reading a writing channels
+        }
+
+        /// <summary>
+        /// Prepare (initialize) channels for reading and writing. This method is called after new instance of module is
+        /// created and before module is connected
+        /// </summary>
+        public void Initialize()
+        {
+            
         }
 
         /// <summary>
@@ -400,59 +407,6 @@ namespace MTS.IO.Module
 
             // to this stream error codes will be written
             oReadStream = new AdsStream(readLength);
-
-
-            //// 1. allocate memory for input channels
-            //int count = inputs.Count;  // number of items to read
-            //// for each variable read from hardware 4 more bytes for error status are necessary
-            //int readLength = count * 4;     // we are going to skip these bytes when reading inputs
-            //// position in the stream where value for reading begins, before are only error codes
-            //iReadStreamOffset = readLength;
-            //// Information about reading variables are stored in a stream. We put this values to stream
-            //// throught BinaryWriter. This is space necessary for additional info about reading variable:
-            //// IndexGroup, IndexOffset, Size - 4B for each item
-            //int writeLength = count * 12;
-
-            //iWriter = new BinaryWriter(new AdsStream(writeLength));
-            //for (int i = 0; i < count; i++)
-            //{
-            //    ECAddress addr = inputs[i].Address as ECAddress;
-            //    if (addr == null) continue;     // skip this channel if no (or not correct) address is present
-            //    iWriter.Write(addr.IndexGroup);
-            //    iWriter.Write(addr.IndexOffset);
-            //    iWriter.Write(inputs[i].Size);
-            //    readLength += inputs[i].Size;       // count size of readed memory (+error codes)
-            //}
-            //// to this stream data are going to be read - size is sum of all variable sizes + error codes
-            //iReadStream = new AdsStream(readLength);
-
-
-            //// 2. allocate memory for writing channels
-            //count = outputs.Count;  // number of items to write
-            //// For each variable writed an error code (4B size) is returned. This is size of memory for all error codes
-            //readLength = count * 4;
-            //// Information about writing variables are stored in a stream. We put this values to stream
-            //// throught BinaryWriter. This is space necessary for additional info about writing variable:
-            //// IndexGroup, IndexOffset, Size - 4B for each item
-            //writeLength = count * 12;       // but that is not all - add space for values of writing channels
-            //oWriterOffset = writeLength;    // position in the stream where values for writing begins, before are only info data
-            //for (int i = 0; i < count; i++) // add memory for each variable that is going to be written
-            //    writeLength += outputs[i].Size;            
-
-            //// create BinaryWriter and write info data about every variable (channel)
-            //oWriter = new BinaryWriter(new AdsStream(writeLength));
-            //for (int i = 0; i < count; i++)
-            //{
-            //    ECAddress addr = outputs[i].Address as ECAddress;
-            //    if (addr == null) continue;     // skip this channel if no (or not correct) address is present
-            //    oWriter.Write(addr.IndexGroup);    // notice that data are writed at the end
-            //    oWriter.Write(addr.IndexOffset);
-            //    oWriter.Write(outputs[i].Size);
-            //}
-            //// when writing add data at the end of this writer - oWriterOffset points here
-
-            //// to this stream error codes will be written
-            //oReadStream = new AdsStream(readLength);
         }
 
         #endregion

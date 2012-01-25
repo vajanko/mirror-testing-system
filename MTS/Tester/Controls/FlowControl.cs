@@ -207,8 +207,7 @@ namespace MTS.Tester.Controls
             Values.AddValue(value);
             // last value added
             CurrentValue = value;
-            if (Values.MaxValue > 0)
-                MaxValue = Values.MaxValue;
+            MaxValue = Values.MaxValue;
                  
             RaisePropertyChanged("Values");     // this is for binding
         }

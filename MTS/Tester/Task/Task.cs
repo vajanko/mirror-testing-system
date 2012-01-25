@@ -24,13 +24,6 @@ namespace MTS.Tester
         #region Fields
 
         /// <summary>
-        /// Collection of channels from communication with remote hardware. This colleciton is regulary
-        /// updated in a loop. New values are writed to remote hardware memory and values from hardware
-        /// are writed to this collection
-        /// </summary>
-        protected Channels channels;
-
-        /// <summary>
         /// Value describing result state of this task
         /// </summary>
         protected TaskResultType resultCode;
@@ -68,6 +61,46 @@ namespace MTS.Tester
         /// (Get) Time of task duration
         /// </summary>
         public TimeSpan Duration { get { return End.Subtract(Begin); } }
+
+        #endregion
+
+        #region Scheduling
+
+        public int ScheduleId { get; set; }
+
+        /// <summary>
+        /// Collection of tasks that should be allowed or disallowed depending on <see cref="BehaviourType"/> value
+        /// </summary>
+        private List<int> tasks = new List<int>();
+
+        public AllowType AllowType { get; set; }
+
+        public void AddTask(int scheduleId)
+        {
+            tasks.Add(scheduleId);
+        }
+        /// <summary>
+        /// Get value indicating whether task identified by given id can be executed together with this task
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
+        public bool IsAllowed(Task task)
+        {
+            bool allowed;
+            // check if this task allows to execute given task
+            if (AllowType == Tester.AllowType.Allow)
+                allowed = tasks.Contains(task.ScheduleId);
+            else
+                allowed = !tasks.Contains(task.ScheduleId);
+
+            // check if given task allows to execute this task
+            if (task.AllowType == Tester.AllowType.Allow)
+                allowed &= task.tasks.Contains(ScheduleId);
+            else
+                allowed &= !task.tasks.Contains(ScheduleId);
+
+            return allowed;
+        }
 
         #endregion
 
@@ -116,11 +149,11 @@ namespace MTS.Tester
         {
             End = time;
             RaiseTaskExecuted(getResult()); // notify that task has been executed
-            exState = ExState.None;         // prevent to do anythig else
+            exState = ExState.None;         // prevent to do anything else
         }
 
         /// <summary>
-        /// Abort this task. It will not be aborted imediatelly. But the aborting state will be saved and
+        /// Abort this task. It will not be aborted immediately. But the aborting state will be saved and
         /// task will be finished at the next update (call of <see cref="Update"/> method)
         /// </summary>
         public void Abort()
@@ -135,7 +168,7 @@ namespace MTS.Tester
         protected virtual TaskResult getResult()
         {
             // these value are common for all tasks
-            // overrirde this method is TestTask and add properties to TaskResult
+            // override this method is TestTask and add properties to TaskResult
             return new TaskResult()
             {
                 ResultCode = getResultCode(),
@@ -150,8 +183,8 @@ namespace MTS.Tester
         #region Execution State
 
         /// <summary>
-        /// Current state of the task execution. During execution task is passing throught various
-        /// states. In update method is desided what to do according the current state.
+        /// Current state of the task execution. During execution task is passing through various
+        /// states. In update method is decided what to do according the current state.
         /// </summary>
         protected ExState exState;
         /// <summary>
@@ -164,6 +197,11 @@ namespace MTS.Tester
             /// Test is being initialized
             /// </summary>
             Initializing,
+
+            /// <summary>
+            /// Test has been initialized and prerequisites has been finished. Testing may be started
+            /// </summary>
+            Starting,
 
             /// <summary>
             /// Test is measuring some kind of value (current, time, temperature, ...)
@@ -180,7 +218,7 @@ namespace MTS.Tester
             BlinkerOff,
 
             /// <summary>
-            /// Whole mirror is being unfoled
+            /// Whole mirror is being unfolded
             /// </summary>
             Unfolding,
             /// <summary>
@@ -197,16 +235,16 @@ namespace MTS.Tester
             /// </summary>
             SuckerIsUp,
             /// <summary>
-            /// Air from the sudker disk is being sucked in. Vacuum is going to be created
+            /// Air from the sucker disk is being sucked in. Vacuum is going to be created
             /// </summary>
             Sucking,
             /// <summary>
-            /// Air is being blowed in the sucker disk. This removes vacuum, so sucker disk may be moved
-            /// down. This is usually done when finilizing pull-off test.
+            /// Air is being blew in the sucker disk. This removes vacuum, so sucker disk may be moved
+            /// down. This is usually done when finalizing pull-off test.
             /// </summary>
             Blowing,
             /// <summary>
-            /// Some hardware component is being moved up (sucker disk, distance sensors, galss ...)
+            /// Some hardware component is being moved up (sucker disk, distance sensors, glass ...)
             /// </summary>
             MoveingUp,
             /// <summary>
@@ -234,7 +272,7 @@ namespace MTS.Tester
             /// </summary>
             Aborting,
             /// <summary>
-            /// Unspecified state of test, nothig is executed
+            /// Unspecified state of test, nothing is executed
             /// </summary>
             None
         }
@@ -260,7 +298,7 @@ namespace MTS.Tester
         /// <param name="time">Current time - time of system clock when this method is called</param>
         protected void StartWatch(DateTime time) { start = time; }
         /// <summary>
-        /// Calculate time (in miliseconds) elapsed since time measurement has been started
+        /// Calculate time (in milliseconds) elapsed since time measurement has been started
         /// </summary>
         /// <param name="time">Current time - time of system clock when this method is called</param>
         /// <returns>Time elapsed since StartWatch has been called</returns>
@@ -271,13 +309,12 @@ namespace MTS.Tester
         #region Constructors
 
         /// <summary>
-        /// Create a new instance of task that will be executed in cyclic loop
+        /// Create a new instance of task that will be executed in cyclic loop. By default all tasks may be execute only
+        /// sequentially - <see cref="BehaviourType"/> is set to AllDisallowed
         /// </summary>
-        /// <param name="channels">Instance of channels collection for communication with hardware</param>
-        public Task(Channels channels)
+        public Task()
         {
-            this.channels = channels;       // channels are used for communication with HW
-            Name = this.GetType().Name;
+            Name = GetType().Name;
         }
 
         #endregion

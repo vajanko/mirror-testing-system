@@ -9,7 +9,7 @@ using MTS.Data.Types;
 
 namespace MTS.Tester
 {
-    sealed class TravelTest : PeakTest
+    class TravelTest : PeakTest
     {
         #region Fields
 
@@ -58,7 +58,6 @@ namespace MTS.Tester
                     angleMeasured = 0;                              // initialize variables
                     testingTimeMeasured = 0;
                     StartWatch(time);                               // start to measure time
-
                     channels.MoveMirror(travelDirection);           // start to move mirror glass
                     actuatorChannel = travelDirection.IsHorizontal() ?
                         channels.HorizontalActuatorCurrent :        // decide on which channel to measure current

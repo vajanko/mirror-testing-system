@@ -8,7 +8,7 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    sealed class BlinkerTest : RangeCurrentTest
+    sealed class DirectionLightTest : RangeCurrentTest
     {
         #region Private fields
 
@@ -124,7 +124,7 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="channels"></param>
         /// <param name="testParam"></param>
-        public BlinkerTest(Channels channels, TestValue testParam)
+        public DirectionLightTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
             // from test parameters get LighteningTime item
@@ -134,7 +134,7 @@ namespace MTS.Tester
             // from test parameters get BlinksTime item
             blinksCountParam = testParam.GetParam<IntParam>(TestValue.BlinkCount);
 
-            // for measuring time we only use miliseconds
+            // for measuring time we only use milliseconds
             lightingTime = convert(lighteningTimeParam, Units.Miliseconds);
             breakTime = convert(breakTimeParam, Units.Miliseconds);
             // this value does not need to be converted
