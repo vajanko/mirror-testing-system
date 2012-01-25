@@ -73,16 +73,14 @@ namespace MTS.Tester
         /// <summary>
         /// Create an instance of task that will execute another task depending on value of particular channel
         /// </summary>
-        /// <param name="channels"></param>
         /// <param name="scheduler">Task scheduler that is executing this task. This is necessary for re-planning
         /// task at runtime</param>
         /// <param name="condition">Channel on which we are observing the value</param>
         /// <param name="value">Value that we are comparing to value on "condition" channel</param>
         /// <param name="thenTask">Task that will be executed if "condition" channel has value "value"</param>
         /// <param name="elseTask">Task that will be executed if "condition" channel has not value "value"</param>
-        public ExecuteIf(Channels channels, TaskScheduler scheduler, IDigitalInput condition, bool value,
+        public ExecuteIf(TaskScheduler scheduler, IDigitalInput condition, bool value,
             Task thenTask, Task elseTask)
-            : base(channels)
         {
             this.conditionChannel = condition;
             this.conditionValue = value;
@@ -93,14 +91,13 @@ namespace MTS.Tester
         /// <summary>
         /// Create an instance of task that will execute another task depending on value of particular channel
         /// </summary>
-        /// <param name="channels"></param>
         /// <param name="scheduler">Task scheduler that is executing this task. This is necessary for re-planning
         /// task at runtime</param>
         /// <param name="condition">Channel on which we are observing the value</param>
         /// <param name="value">Value that we are comparing to value on "condition" channel</param>
         /// <param name="thenTask">Task that will be executed if "condition" channel has value "value"</param>
-        public ExecuteIf(Channels channels, TaskScheduler scheduler, IDigitalInput condition, bool value, Task thenTask)
-            : this(channels, scheduler, condition, value, thenTask, null) { }
+        public ExecuteIf(TaskScheduler scheduler, IDigitalInput condition, bool value, Task thenTask)
+            : this(scheduler, condition, value, thenTask, null) { }
 
         #endregion
     }

@@ -53,8 +53,7 @@ namespace MTS.Tester
         /// <summary>
         /// Create a new instance of task that will write multiple values to channels
         /// </summary>
-        public SetMultipleValues(Channels channels)
-            : base(channels) { }
+        public SetMultipleValues() { }
 
         #endregion
     }

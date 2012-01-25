@@ -8,7 +8,7 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:io="clr-namespace:MTS.IO;assembly=IO"
     Title="Tester" x:Name="root" Width="800">
-    <DockPanel>
+    <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Top" Margin="3">
             <Grid.Resources>
                 <base:BoolNegationConverter x:Key="boolNegation"/>
@@ -89,20 +89,20 @@
         <ctrl:MirrorView DockPanel.Dock="Left" VerticalAlignment="Top"
                          Width="350" Height="350" BorderBrush="Black" BorderThickness="1"
                          x:Name="mirrorView"/>
-        <ListBox DockPanel.Dock="Left" x:Name="analogChannelsControls" ItemsSource="{Binding}">
+        <ListBox  x:Name="analogChannelsControls" ItemsSource="{Binding}">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ctrl:FlowControl}">
                     <Setter Property="Background" Value="Black"/>
-                    <Setter Property="MinWidth" Value="200"/>
-                    <Setter Property="MinHeight" Value="120"/>
+                    <Setter Property="MinWidth" Value="180"/>
+                    <Setter Property="MinHeight" Value="100"/>
                     <Setter Property="TextBrush" Value="White"/>
                     <Setter Property="Margin" Value="4"/>
                     <Setter Property="BorderBrush" Value="Green"/>
                     <Setter Property="BorderThickness" Value="2"/>
                 </Style>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="MinWidth" Value="200"/>
-                    <Setter Property="MinHeight" Value="120"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.Resources>
             <ListBox.ItemTemplate>

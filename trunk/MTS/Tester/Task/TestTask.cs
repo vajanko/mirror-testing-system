@@ -14,6 +14,12 @@ namespace MTS.Tester
     public abstract class TestTask : Task
     {
         /// <summary>
+        /// Collection of channels from communication with remote hardware. This collection is regularly
+        /// updated in a loop. New values are wrote to remote hardware memory and values from hardware
+        /// are wrote to this collection
+        /// </summary>
+        protected Channels channels;
+        /// <summary>
         /// Parameter necessary for execution of this task. Include information such as
         /// maximum duration of task or allowed range of current etc.
         /// </summary>
@@ -79,7 +85,7 @@ namespace MTS.Tester
 
         #region Constructors
 
-        public TestTask(Channels channels, TestValue testParam) : base(channels) 
+        public TestTask(Channels channels, TestValue testParam)
         {
             this.testParam = testParam;
             Name = testParam.Name;

@@ -183,16 +183,29 @@ namespace MTS.Tester
         }
 
         /// <summary>
+        /// This method is called when before new testing is started. Here variables (like number of tested mirrors)
+        /// should be initialized
+        /// </summary>
+        private void initializeTesting()
+        {
+            Passed = 0;
+            Failed = 0;
+
+            IsRunning = true;       // disable other controls
+        }
+
+        /// <summary>
         /// Start shift. At this time connection to device must be established
         /// </summary>
         private void startClick(object sender, RoutedEventArgs e)
         {
             if (shift != null && shift.IsRunning)    // prevent from starting shift multiple times
                 return;
-            IsRunning = true;       // disable other controls
             
             try
             {
+                initializeTesting();    // initialize variables
+
                 Mirror mirror = mirrorTypeBox.SelectedItem as Mirror;
                 if (mirror == null)
                     throw new ApplicationException("No mirror is selected. Please select one mirror to be tested.");
@@ -200,20 +213,8 @@ namespace MTS.Tester
                 // load channels configuration from application settings
                 Output.Write(Resource.CreatingChannelsMsg);                
                 //channels = Settings.Default.GetChannelsInstance();
-                channels.Connect();     // create connection to hardware
-                channels.Initialize();  // initialize each channel and channels properties
+                channels.Connect();     // create connection to hardware                
                 bindChannels(channels); // bind events to channel (when some value of channel change)
-                // for each analog channel create a control that will display its value on the GUI
-                analogControls.Clear();
-                foreach (IAnalogInput input in channels.GetChannels<IAnalogInput>())
-                    analogControls.Add(new Controls.FlowControl()
-                    {
-                        Title = input.Name,
-                        ToolTip = input.Description,
-                        GetNewValue = new Func<double>(input.GetRealValue)  // this method will be called when control is updated
-                    });
-                analogChannelsControls.DataContext = analogControls;
-                analogChannelsControls.InvalidateProperty(System.Windows.Controls.ListBox.DataContextProperty);
                 Output.WriteLine(Resource.OKMsg);
 
                 // create shift and register its handlers
@@ -356,9 +357,16 @@ namespace MTS.Tester
         public TestWindow()
         {
             channels = Settings.Default.GetChannelsInstance();
+            channels.Initialize();  // initialize each channel and channels properties
             foreach (IAnalogInput input in channels.GetChannels<IAnalogInput>())
-                analogControls.Add(new Controls.FlowControl()); // add flow controls but without anything
+                analogControls.Add(new Controls.FlowControl()
+                {
+                    Title = input.Name,
+                    GetNewValue = new Func<double>(input.GetRealValue)  // this method will be called when control is updated
+                });
+
             InitializeComponent();
+            analogChannelsControls.DataContext = analogControls;
         }
 
         #endregion

@@ -8,7 +8,7 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    sealed class SpiralTest : RangeCurrentTest
+    sealed class HeatingFoilTest : RangeCurrentTest
     {
         #region Private fields
 
@@ -88,7 +88,7 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="channels"></param>
         /// <param name="testParam"></param>
-        public SpiralTest(Channels channels, TestValue testParam)
+        public HeatingFoilTest(Channels channels, TestValue testParam)
             : base(channels, testParam) 
         {
             // from test parameters get TestingTime item

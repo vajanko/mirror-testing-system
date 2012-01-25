@@ -23,7 +23,7 @@ namespace MTS.Tester
     class PulloffTest : TestTask
     {
         /// <summary>
-        /// Required duration in miliseconds of pulling off the mirror glass. 
+        /// Required duration in milliseconds of pulling off the mirror glass. 
         /// </summary>
         private int testingTime = 0;
 

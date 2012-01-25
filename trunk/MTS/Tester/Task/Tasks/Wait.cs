@@ -12,7 +12,7 @@ namespace MTS.Tester
         /// <summary>
         /// Time that we are going to wait
         /// </summary>
-        private int miliseconds;
+        private int milliseconds;
         /// <summary>
         /// Check if enough time has elapsed and finish this task if so
         /// </summary>
@@ -24,11 +24,11 @@ namespace MTS.Tester
                 case ExState.Initializing:  // start to measure time
                     StartWatch(time);
                     goTo(ExState.Measuring);
-                    Output.Write("Waiting for {0} ms ... ", miliseconds);
+                    Output.Write("Waiting for {0} ms ... ", milliseconds);
                     break;
                 case ExState.Measuring:     // just wait for required time and finish
                     double elapsed = TimeElapsed(time);
-                    if (elapsed > miliseconds)
+                    if (elapsed > milliseconds)
                         goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
@@ -44,14 +44,12 @@ namespace MTS.Tester
         #region Constructors
 
         /// <summary>
-        /// Create a new instnce of task that will wait for a particular period of time
+        /// Create a new instance of task that will wait for a particular period of time
         /// </summary>
-        /// <param name="channels"></param>
-        /// <param name="miliseconds">Time in miliseconds to wait</param>
-        public Wait(Channels channels, int miliseconds)
-            : base(channels) 
+        /// <param name="milliseconds">Time in milliseconds to wait</param>
+        public Wait(int milliseconds)
         {
-            this.miliseconds = miliseconds;
+            this.milliseconds = milliseconds;
         }
 
         #endregion
