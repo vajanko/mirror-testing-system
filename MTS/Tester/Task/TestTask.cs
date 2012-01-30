@@ -24,11 +24,6 @@ namespace MTS.Tester
         /// maximum duration of task or allowed range of current etc.
         /// </summary>
         protected TestValue testParam;
-        /// <summary>
-        /// (Get) Value indicating if this test task is enabled. If true, task is executed,
-        /// otherwise not.
-        /// </summary>
-        protected bool Enabled { get; private set; }
 
         /// <summary>
         /// Generate object holding result data for this task such as time of execution and results of 
@@ -87,6 +82,7 @@ namespace MTS.Tester
 
         public TestTask(Channels channels, TestValue testParam)
         {
+            this.channels = channels;
             this.testParam = testParam;
             Name = testParam.Name;
             Id = testParam.ValueId;

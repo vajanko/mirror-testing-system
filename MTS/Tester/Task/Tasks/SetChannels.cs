@@ -7,27 +7,20 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    class SetValue : Task
+    class SetChannels : ChannelsTask<IDigitalOutput>
     {
-        /// <summary>
-        /// Channel whose value we want to set
-        /// </summary>
-        private IDigitalOutput channel;
-        /// <summary>
-        /// Value that we want to write to channel
-        /// </summary>
-        private bool value;
-
         public override void Update(DateTime time)
         {
             switch (exState)
             {
                 case ExState.Initializing:
-                    exState = ExState.Finalizing;
-                    Output.WriteLine("Setting {0} to {1}", Name, value);
+                    foreach (var ch in channels)
+                        Output.WriteLine("Setting {0} to\t{1}", ch.Channel.Name, ch.Value);
+                    goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
-                    channel.Value = value;
+                    foreach (var ch in channels)
+                        ch.Channel.Value = ch.Value;
                     Finish(time);
                     break;
                 case ExState.Aborting:
@@ -42,13 +35,8 @@ namespace MTS.Tester
         /// Create a new instance of a task that will wait for a specific value on a particular
         /// channel for ever
         /// </summary>
-        /// <param name="channel">Channel to wait for specific value on</param>
-        /// <param name="value">Value we are waiting for</param>
-        public SetValue(IDigitalOutput channel, bool value)
+        public SetChannels()
         {
-            this.channel = channel;
-            this.value = value;
-            Name = channel.Name;
         }
 
         #endregion

@@ -195,7 +195,7 @@ namespace MTS.Tester
         private TaskScheduler createScheduler(TestCollection tests)
         {
             TaskScheduler scheduler = new TaskScheduler(channels);
-            scheduler.Load("C:\\tests.xml", tests);
+            scheduler.Load("C:\\tasks.xml", tests);
             scheduler.Initialize();
 
             return scheduler;
@@ -581,6 +581,17 @@ namespace MTS.Tester
             this.channels = channels;
             this.shiftTests = tests;
             this.operatorId = Admin.Operator.Instance.Id;
+
+            // add special channels for test enabled value
+            foreach (var test in tests)
+                channels.AddChannel(new TestChannel(test));
+            MTS.IO.Channel.DigitalInput<MTS.IO.Address.DummyAddress> ch = new IO.Channel.DigitalInput<IO.Address.DummyAddress>();
+            ch.Id = "IsTravelEnabled";
+            ch.SetValue(channels.GetChannel<IDigitalInput>(TestCollection.TravelEast).Value &&
+                channels.GetChannel<IDigitalInput>(TestCollection.TravelNorth).Value &&
+                channels.GetChannel<IDigitalInput>(TestCollection.TravelSouth).Value &&
+                channels.GetChannel<IDigitalInput>(TestCollection.TravelWest).Value);
+            channels.AddChannel(ch);
         }
 
         #endregion

@@ -61,48 +61,21 @@ namespace MTS.Tester
         /// (Get) Time of task duration
         /// </summary>
         public TimeSpan Duration { get { return End.Subtract(Begin); } }
+        /// <summary>
+        /// (Get) Value indicating if this test task is enabled. If true, task is executed,
+        /// otherwise not.
+        /// </summary>
+        public bool Enabled { get; protected set; }
 
         #endregion
 
-        #region Scheduling
+        //#region Scheduling
 
         public int ScheduleId { get; set; }
 
-        /// <summary>
-        /// Collection of tasks that should be allowed or disallowed depending on <see cref="BehaviourType"/> value
-        /// </summary>
-        private List<int> tasks = new List<int>();
+        public int DisallowId { get; set; }
 
-        public AllowType AllowType { get; set; }
-
-        public void AddTask(int scheduleId)
-        {
-            tasks.Add(scheduleId);
-        }
-        /// <summary>
-        /// Get value indicating whether task identified by given id can be executed together with this task
-        /// </summary>
-        /// <param name="task"></param>
-        /// <returns></returns>
-        public bool IsAllowed(Task task)
-        {
-            bool allowed;
-            // check if this task allows to execute given task
-            if (AllowType == Tester.AllowType.Allow)
-                allowed = tasks.Contains(task.ScheduleId);
-            else
-                allowed = !tasks.Contains(task.ScheduleId);
-
-            // check if given task allows to execute this task
-            if (task.AllowType == Tester.AllowType.Allow)
-                allowed &= task.tasks.Contains(ScheduleId);
-            else
-                allowed &= !task.tasks.Contains(ScheduleId);
-
-            return allowed;
-        }
-
-        #endregion
+        //#endregion
 
         /// <summary>
         /// Event that is raised when task get executed
@@ -116,6 +89,11 @@ namespace MTS.Tester
         {
             if (TaskExecuted != null)
                 TaskExecuted(this, new TaskExecutedEventArgs(result));
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} ({1}) - is {2}", Name, GetType().Name, Enabled ? "enabled" : "disabled");
         }
 
         #region Task Execution
@@ -315,6 +293,7 @@ namespace MTS.Tester
         public Task()
         {
             Name = GetType().Name;
+            Enabled = true;
         }
 
         #endregion
