@@ -32,7 +32,7 @@ namespace MTS.Tester
         private readonly DoubleParam maxTestingTimeParam;
 
         /// <summary>
-        /// Maximal duration allowed for this test in miliseconds
+        /// Maximal duration allowed for this test in milliseconds
         /// </summary>
         private readonly double maxTestingTime;
         /// <summary>
@@ -44,6 +44,9 @@ namespace MTS.Tester
         private IAnalogInput actuatorChannel;
 
         #endregion
+
+        private CenterTask center;
+        private bool centering;
 
         public override void Update(DateTime time)
         {
@@ -57,13 +60,33 @@ namespace MTS.Tester
                 case ExState.Initializing:
                     angleMeasured = 0;                              // initialize variables
                     testingTimeMeasured = 0;
-                    StartWatch(time);                               // start to measure time
-                    channels.MoveMirror(travelDirection);           // start to move mirror glass
-                    actuatorChannel = travelDirection.IsHorizontal() ?
-                        channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
-                        channels.VerticalActuatorCurrent;           // depends on which direction we are moving in
-                    goTo(ExState.Measuring);                        // switch to next state
-                    Output.WriteLine("Moving in direction: {0}", travelDirection);
+                    centering = true;
+                    center = new CenterTask(channels);
+                    center.TaskExecuted += new TaskExecutedHandler(center_TaskExecuted);
+
+                    goTo(ExState.Starting);
+
+                    //StartWatch(time);                               // start to measure time
+                    //channels.MoveMirror(travelDirection);           // start to move mirror glass
+                    //actuatorChannel = travelDirection.IsHorizontal() ?
+                    //    channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
+                    //    channels.VerticalActuatorCurrent;           // depends on which direction we are moving in
+                    //goTo(ExState.Measuring);                        // switch to next state
+                    //Output.WriteLine("Moving in direction: {0}", travelDirection);
+                    break;
+                case ExState.Starting:
+                    if (!centering)
+                    {
+                        StartWatch(time);                               // start to measure time
+                        channels.MoveMirror(travelDirection);           // start to move mirror glass
+                        actuatorChannel = travelDirection.IsHorizontal() ?
+                            channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
+                            channels.VerticalActuatorCurrent;           // depends on which direction we are moving in
+                        goTo(ExState.Measuring);
+                        Output.WriteLine("Moving in direction: {0}", travelDirection);
+                    }
+                    center.Update(time);
+
                     break;
                 case ExState.Measuring:
                     testingTimeMeasured = TimeElapsed(time);        // measure time
@@ -83,6 +106,11 @@ namespace MTS.Tester
                     Finish(time);                                   //
                     break;
             }
+        }
+
+        void center_TaskExecuted(Task sender, TaskExecutedEventArgs args)
+        {
+            centering = false;
         }
 
         protected override TaskResult getResult()

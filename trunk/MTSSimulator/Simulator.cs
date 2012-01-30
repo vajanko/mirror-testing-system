@@ -125,6 +125,11 @@ namespace MTS.Simulator
         private Timer unfoldTimer = new Timer();
         private Timer lockTimer = new Timer();
         private Timer unlockTimer = new Timer();
+        private Timer suckerUpTimer = new Timer(1000);
+        private Timer suckerDownTimer = new Timer(1000);
+        private Timer suckingTimer = new Timer(1000);
+        private Timer blowingTimer = new Timer(1000);
+
         void slave_Update()
         {
             lock (channels)
@@ -144,6 +149,8 @@ namespace MTS.Simulator
                 simulateMirrorMovement();
 
                 simulatePowerSupplyVoltage();
+
+                simulatePulloff();
 
                 // update user interface
                 updateTester();
@@ -265,6 +272,45 @@ namespace MTS.Simulator
                 channels.PowerSupplyVoltage2.SetValue(0);
             }
         }
+        private void simulatePulloff()
+        {
+            if (channels.MoveSuckerUp.Value)
+            {
+                suckerDownTimer.Initialize();
+                if (suckerUpTimer.Finished(DateTime.Now))
+                {
+                    channels.IsSuckerUp.SetValue(true);
+                    channels.IsSuckerDown.SetValue(false);
+                }
+            }
+            else if (channels.MoveSuckerDown.Value)
+            {
+                suckerUpTimer.Initialize();
+                if (suckerDownTimer.Finished(DateTime.Now))
+                {
+                    channels.IsSuckerUp.SetValue(false);
+                    channels.IsSuckerDown.SetValue(true);
+                }
+            }
+
+            if (channels.IsSuckerUp.Value)
+                simulateAir();
+        }
+        private void simulateAir()
+        {
+            if (channels.SuckOn.Value)
+            {
+                blowingTimer.Initialize();
+                if (suckingTimer.Finished(DateTime.Now))
+                    channels.IsVacuum.SetValue(true);
+            }
+            else if (channels.BlowOn.Value)
+            {
+                suckingTimer.Initialize();
+                if (blowingTimer.Finished(DateTime.Now))
+                    channels.IsVacuum.SetValue(false);
+            }
+        }
 
         private void unlock()
         {
@@ -348,12 +394,28 @@ namespace MTS.Simulator
         private void insertMirrorButton_Click(object sender, EventArgs e)
         {
             if (tester1.IsDeviceOpened)
+            {
                 tester1.IsMirrorInserted = true;
+                if (channels == null)
+                    return;
+                lock (channels)
+                {
+                    channels.IsPowerfoldUp.SetValue(true);
+                }
+            }
         }
         private void removeMirrorButton_Click(object sender, EventArgs e)
         {
             if (tester1.IsDeviceOpened)
+            {
                 tester1.IsMirrorInserted = false;
+                if (channels == null)
+                    return;
+                lock (channels)
+                {
+                    channels.IsPowerfoldUp.SetValue(false);
+                }
+            }
         }
 
         private void lockButton_Click(object sender, EventArgs e)

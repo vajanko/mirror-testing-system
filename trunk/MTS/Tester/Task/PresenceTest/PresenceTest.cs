@@ -6,16 +6,17 @@ using MTS.Data.Types;
 
 namespace MTS.Tester
 {
-    public class PresenceTest : TestTask
+    sealed class PresenceTest : TestTask
     {
         /// <summary>
         /// Channel on which presence of particular mirror component is signalized
         /// </summary>
-        protected IDigitalInput PresenceChannel;
+        private readonly IDigitalInput presenceChannel;
+
         /// <summary>
         /// Value indicating if mirror component should be present
         /// </summary>
-        private bool shouldBePresent;
+        private readonly BoolParam presenceParam;
 
         /// <summary>
         /// Check for presence of particular mirror component
@@ -23,7 +24,7 @@ namespace MTS.Tester
         /// <param name="time">Time of calling this method</param>
         public override void Update(DateTime time)
         {
-            if (PresenceChannel.Value == shouldBePresent)
+            if (presenceChannel.Value == presenceParam.BoolValue)
                 resultCode = TaskResultType.Completed;
             else
                 resultCode = TaskResultType.Failed;
@@ -42,12 +43,10 @@ namespace MTS.Tester
         public PresenceTest(Channels channels, TestValue testParam, IDigitalInput channel)
             : base(channels, testParam)
         {
-            PresenceChannel = channel;
+            presenceChannel = channel;
 
             // from test parameters get TestPresence parameter
-            BoolParam bValue = testParam.GetParam<BoolParam>(TestValue.TestPresence);
-            if (bValue != null)     // it must be of type Boolean
-                shouldBePresent = bValue.BoolValue;
+            presenceParam = testParam.GetParam<BoolParam>(TestValue.TestPresence);
         }
 
         #endregion

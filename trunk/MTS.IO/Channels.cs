@@ -18,6 +18,8 @@ namespace MTS.IO
         /// </summary>
         private IModule module;
 
+        private Dictionary<string, IChannel> specialChannels = new Dictionary<string, IChannel>();
+
         /// <summary>
         /// Collection of setting for all analog channels. This includes raw/real low/high values
         /// </summary>
@@ -257,10 +259,12 @@ namespace MTS.IO
         /// <summary>
         /// Get an instance of particular channel identified by its name. Return null if there is no such a channel
         /// </summary>
-        /// <param name="name">Unique name (identifier) of required channel</param>
-        public IChannel GetChannel(string name)
+        /// <param name="id">Unique name (identifier) of required channel</param>
+        public IChannel GetChannel(string id)
         {
-            return module.GetChannel(name);
+            if (specialChannels.ContainsKey(id))
+                return specialChannels[id];
+            return module.GetChannel(id);
         }
         /// <summary>
         /// Get all channels contained in this current module of <typeparamref name="TChannel"/> type
@@ -275,6 +279,12 @@ namespace MTS.IO
         }
         public TChannel GetChannel<TChannel>(string id) where TChannel : IChannel
         {
+            if (specialChannels.ContainsKey(id))
+            {
+                TChannel ch = (TChannel)specialChannels[id];
+                if (ch != null)
+                    return ch;
+            }
             return module.GetChannel<TChannel>(id);
         }
 
@@ -677,6 +687,11 @@ namespace MTS.IO
         #endregion
 
         #endregion
+
+        public void AddChannel(IChannel channel)
+        {
+            specialChannels.Add(channel.Id, channel);
+        }
 
         // TODO: add description of channels
         #region Channels

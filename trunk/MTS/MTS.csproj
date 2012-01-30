@@ -62,6 +62,9 @@
       <HintPath>..\lib\AvalonDock.Themes.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="OK.Collections.Generic">
+      <HintPath>..\lib\OK.Collections.Generic.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -228,7 +231,11 @@
     <Compile Include="Tester\Task\PeakTest\TravelNorthTest.cs" />
     <Compile Include="Tester\Task\PeakTest\TravelSouthTest.cs" />
     <Compile Include="Tester\Task\PeakTest\TravelWestTest.cs" />
-    <Compile Include="Tester\Task\TaskBehaviour.cs" />
+    <Compile Include="Tester\Task\PresenceTest\ChannelTest.cs" />
+    <Compile Include="Tester\Task\TaskEdge.cs" />
+    <Compile Include="Tester\Task\TaskParser.cs" />
+    <Compile Include="Tester\Task\Tasks\ChannelTask.cs" />
+    <Compile Include="Tester\TestChannel.cs" />
     <Compile Include="WindowMain.xaml.cs">
       <DependentUpon>WindowMain.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -266,11 +273,10 @@
     <Compile Include="Tester\Task\Task.cs" />
     <Compile Include="Tester\Task\Tasks\Calibrate.cs" />
     <Compile Include="Tester\Task\Tasks\CenterTask.cs" />
-    <Compile Include="Tester\Task\Tasks\SetMultipleValues.cs" />
-    <Compile Include="Tester\Task\Tasks\SetValue.cs" />
+    <Compile Include="Tester\Task\Tasks\SetChannels.cs" />
     <Compile Include="Tester\Task\Tasks\Wait.cs" />
-    <Compile Include="Tester\Task\Tasks\WaitForValue.cs" />
-    <Compile Include="Tester\Task\Tasks\ExecuteIf.cs" />
+    <Compile Include="Tester\Task\Tasks\WaitForChannels.cs" />
+    <Compile Include="Tester\Task\Tasks\IfChannels.cs" />
     <Compile Include="Tester\Task\TestTask.cs" />
     <Compile Include="Tester\Task\PeakTest\TravelTest.cs" />
     <Compile Include="Tester\TestWindow.xaml.cs">
@@ -312,14 +318,15 @@
     <None Include="config\template.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="config\test.dtd" />
+    <None Include="config\testfile.dtd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="config\tests.dtd">
+    <None Include="config\tasks.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -455,8 +462,9 @@
     <Resource Include="Resources\icons\profile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config\tests.xml">
+    <None Include="config\tasks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

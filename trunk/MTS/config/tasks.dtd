@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!ELEMENT timeline (set|wait|waitfor|if|check|test)*>
+
+<!-- set channel value -->
+<!ELEMENT set (behavior?, channel+)>
+<!ATTLIST set id ID #IMPLIED>
+
+<!-- wait for a specified period of time -->
+<!ELEMENT wait (behavior?)>
+<!ATTLIST wait id ID #IMPLIED
+               time CDATA #REQUIRED>
+<!-- wait for specified value on a specified channel -->
+<!ELEMENT waitfor (behavior?, channel+)>
+<!ATTLIST waitfor id ID #IMPLIED>
+
+<!-- condition task -->
+<!ELEMENT if (behavior?, channel+, then, else?)>
+<!ATTLIST if id ID #IMPLIED>
+<!ELEMENT then (set|wait|waitfor|if|check|test)>
+<!ELEMENT else (set|wait|waitfor|if|check|test)?>
+
+<!-- check (usually presence) test -->
+<!ELEMENT check (behavior?)>
+<!ATTLIST check id ID #IMPLIED
+                testparam NMTOKEN #REQUIRED
+                channel NMTOKEN #REQUIRED>
+
+<!-- test -->
+<!ELEMENT test (behavior?)>
+<!ATTLIST test id ID #IMPLIED
+               testtype NMTOKEN #REQUIRED
+               testparam NMTOKEN #REQUIRED>
+
+<!-- pair digital channel and its value -->
+<!ELEMENT channel EMPTY>
+<!-- name: Name of channel - using name from channels configuration file -->
+<!-- value: Value of digital channel - only possible values are true or false -->
+<!ATTLIST channel name NMTOKEN #REQUIRED
+                  value (true|false) #REQUIRED>
+
+<!-- Defines task behavior: which tasks are required to be completed when starting current one and
+     which are disallowed to be executed at the same time -->
+<!ELEMENT behavior EMPTY>
+<!ATTLIST behavior require IDREFS #IMPLIED
+                   disallow IDREFS #IMPLIED>
+
+<!ELEMENT task (set|wait|waitfor|if|check|test)>
+

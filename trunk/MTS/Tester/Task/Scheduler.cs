@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
+using OK.Collections.Generic;
+
 using MTS.IO;
 using MTS.Base;
 using MTS.Editor;
@@ -26,10 +28,14 @@ namespace MTS.Tester
 
         private IModule module;
 
+        private IOrientedGraph requiredGraph;
+        private IGraph disallowedGraph;
+        private List<Task> tasks;
+
         /// <summary>
         /// These tasks should be executed
         /// </summary>
-        private LinkedList<Task> toExecute = new LinkedList<Task>();
+        private Queue<Task> toExecute = new Queue<Task>();
         /// <summary>
         /// Tasks that can be executed right now, but its method Initialize has not called yet
         /// </summary>
@@ -75,219 +81,219 @@ namespace MTS.Tester
 
         public void AddInitSequence()
         {
-            // allow power supply
-            this.AddTask(new SetValue(channels.AllowPowerSupply, true));
+            //// allow power supply
+            //this.AddTask(new SetChannels(channels.AllowPowerSupply, true));
 
-            // check if power supply is on - we are waiting for false value
-            this.AddTask(new WaitForValue(channels.IsPowerSupplyOff, false));
+            //// check if power supply is on - we are waiting for false value
+            //this.AddTask(new WaitForChannels(channels.IsPowerSupplyOff, false));
 
-            // open device if not opened
-            this.AddOpenDevice();
+            //// open device if not opened
+            //this.AddOpenDevice();
 
-            // missing checking of mirror presence
-            // ...
+            //// missing checking of mirror presence
+            //// ...
 
-            // wait for start button to be pressed and released
-            this.AddWaitForStart();
+            //// wait for start button to be pressed and released
+            //this.AddWaitForStart();
 
-            // switch off lights from previous sequence
-            SetMultipleValues multi = new SetMultipleValues();
-            multi.AddChannel(channels.GreenLightOn, false);
-            multi.AddChannel(channels.RedLightOn, false);
-            this.AddTask(multi);
+            //// switch off lights from previous sequence
+            //SetMultipleValues multi = new SetMultipleValues();
+            //multi.AddChannel(channels.GreenLightOn, false);
+            //multi.AddChannel(channels.RedLightOn, false);
+            //this.AddTask(multi);
 
-            // close device
-            this.AddCloseDevice();
+            //// close device
+            //this.AddCloseDevice();
 
-            // after this initialization task, tester is prepared to run testing sequence
+            //// after this initialization task, tester is prepared to run testing sequence
         }
 
         public void AddWaitForStart()
         {
-            // wait for start button to be pressed
-            this.AddTask(new WaitForValue(channels.IsStartPressed, true));
-            // and released
-            this.AddTask(new WaitForValue(channels.IsStartPressed, false));
+            //// wait for start button to be pressed
+            //this.AddTask(new WaitForChannels(channels.IsStartPressed, true));
+            //// and released
+            //this.AddTask(new WaitForChannels(channels.IsStartPressed, false));
         }
 
         public void AddOpenDevice()
         {
-            // open device: multiple values must be set
-            // for sure set all channels
-            // device must be closed strongly so that it may be opened slowly after
+            //// open device: multiple values must be set
+            //// for sure set all channels
+            //// device must be closed strongly so that it may be opened slowly after
 
-            // this (multi) task will open device
-            SetMultipleValues multi = new SetMultipleValues();
-            multi.AddChannel(channels.LockStrong, false);   // release strong lock
-            multi.AddChannel(channels.LockWeak, false);     // release weak lock
-            multi.AddChannel(channels.UnlockWeak, true);    // unlock weak
-            multi.AddChannel(channels.UnlockStrong, true);  // unlock strong
+            //// this (multi) task will open device
+            //SetMultipleValues multi = new SetMultipleValues();
+            //multi.AddChannel(channels.LockStrong, false);   // release strong lock
+            //multi.AddChannel(channels.LockWeak, false);     // release weak lock
+            //multi.AddChannel(channels.UnlockWeak, true);    // unlock weak
+            //multi.AddChannel(channels.UnlockStrong, true);  // unlock strong
 
-            // only open device if it is closed
-            // if is old mirror
-            //   open if old is closed
-            // else
-            //   open if new is closed
-            this.AddTask(new ExecuteIf(this, channels.IsOldMirror, true,
-                new ExecuteIf(this, channels.IsOldLocked, true, multi),
-                new ExecuteIf(this, channels.IsLocked, true, multi)));
+            //// only open device if it is closed
+            //// if is old mirror
+            ////   open if old is closed
+            //// else
+            ////   open if new is closed
+            //this.AddTask(new IfChannels(this, channels.IsOldMirror, true,
+            //    new IfChannels(this, channels.IsOldLocked, true, multi),
+            //    new IfChannels(this, channels.IsLocked, true, multi)));
 
-            // wait for (depending if it is new or old mirror) device to be opened
-            this.AddTask(new ExecuteIf(this, channels.IsOldMirror, true,
-                new WaitForValue(channels.IsOldLocked, false),
-                new WaitForValue(channels.IsLocked, false)));
+            //// wait for (depending if it is new or old mirror) device to be opened
+            //this.AddTask(new IfChannels(this, channels.IsOldMirror, true,
+            //    new WaitForChannels(channels.IsOldLocked, false),
+            //    new WaitForChannels(channels.IsLocked, false)));
 
-            // after this tasks has been executed - device is opened
+            //// after this tasks has been executed - device is opened
         }
 
         public void AddCloseDevice()
         {
-            // close device weakly (slowly)
-            SetMultipleValues multiTask = new SetMultipleValues();
-            // for sure set all channels
-            multiTask.AddChannel(channels.LockStrong, false);   // release strong lock
-            multiTask.AddChannel(channels.UnlockWeak, false);   // release weak unlock
-            multiTask.AddChannel(channels.UnlockStrong, false); // release strong unlock
-            multiTask.AddChannel(channels.LockWeak, true);      // lock weak
-            this.AddTask(multiTask);
+            //// close device weakly (slowly)
+            //SetMultipleValues multiTask = new SetMultipleValues();
+            //// for sure set all channels
+            //multiTask.AddChannel(channels.LockStrong, false);   // release strong lock
+            //multiTask.AddChannel(channels.UnlockWeak, false);   // release weak unlock
+            //multiTask.AddChannel(channels.UnlockStrong, false); // release strong unlock
+            //multiTask.AddChannel(channels.LockWeak, true);      // lock weak
+            //this.AddTask(multiTask);
 
-            // wait for (depending if it is new or old mirror) device to be closed
-            this.AddTask(new ExecuteIf(this, channels.IsOldMirror, true,
-                new WaitForValue(channels.IsOldLocked, true),
-                new WaitForValue(channels.IsLocked, true)));
+            //// wait for (depending if it is new or old mirror) device to be closed
+            //this.AddTask(new IfChannels(this, channels.IsOldMirror, true,
+            //    new WaitForChannels(channels.IsOldLocked, true),
+            //    new WaitForChannels(channels.IsLocked, true)));
 
-            // lock strongly
-            this.AddTask(new SetValue(channels.LockStrong, true));
+            //// lock strongly
+            //this.AddTask(new SetChannels(channels.LockStrong, true));
         }
 
         public void AddDistanceSensorsUp()
         {
-            // move sensors up
-            SetMultipleValues multi = new SetMultipleValues();
-            multi.AddChannel(channels.MoveDistanceSensorDown, false);
-            multi.AddChannel(channels.MoveDistanceSensorUp, true);
-            this.AddTask(multi);
+            //// move sensors up
+            //SetMultipleValues multi = new SetMultipleValues();
+            //multi.AddChannel(channels.MoveDistanceSensorDown, false);
+            //multi.AddChannel(channels.MoveDistanceSensorUp, true);
+            //this.AddTask(multi);
 
-            // wait for sensors to be up
-            this.AddTask(new WaitForValue(channels.IsDistanceSensorUp, true));
+            //// wait for sensors to be up
+            //this.AddTask(new WaitForChannels(channels.IsDistanceSensorUp, true));
 
-            // wait for sensors to be really up
-            this.AddTask(new Wait(1000));
+            //// wait for sensors to be really up
+            //this.AddTask(new Wait(1000));
         }
 
         public void AddDistanceSensorsDown()
         {
-            // move sensors down
-            SetMultipleValues multi = new SetMultipleValues();
-            multi.AddChannel(channels.MoveDistanceSensorDown, true);
-            multi.AddChannel(channels.MoveDistanceSensorUp, false);
-            this.AddTask(multi);
+            //// move sensors down
+            //SetMultipleValues multi = new SetMultipleValues();
+            //multi.AddChannel(channels.MoveDistanceSensorDown, true);
+            //multi.AddChannel(channels.MoveDistanceSensorUp, false);
+            //this.AddTask(multi);
 
-            // wait for sensors to be down
-            this.AddTask(new WaitForValue(channels.IsDistanceSensorDown, true));
+            //// wait for sensors to be down
+            //this.AddTask(new WaitForChannels(channels.IsDistanceSensorDown, true));
         }
 
         public void AddTravelTests(TestCollection tests)
         {
-            TestValue north = tests.GetTest(TestCollection.TravelNorth);
-            TestValue south = tests.GetTest(TestCollection.TravelSouth);
-            TestValue west = tests.GetTest(TestCollection.TravelWest);
-            TestValue east = tests.GetTest(TestCollection.TravelEast);
+            //TestValue north = tests.GetTest(TestCollection.TravelNorth);
+            //TestValue south = tests.GetTest(TestCollection.TravelSouth);
+            //TestValue west = tests.GetTest(TestCollection.TravelWest);
+            //TestValue east = tests.GetTest(TestCollection.TravelEast);
 
-            // if all travel tests are disabled, no prerequisites are necessary to be done
-            if (north == null && south == null && west == null && east == null)
-                return;
+            //// if all travel tests are disabled, no prerequisites are necessary to be done
+            //if (north == null && south == null && west == null && east == null)
+            //    return;
 
-            // prerequisites:
-            // move distance sensors up for measuring
-            this.AddDistanceSensorsUp();
-            // allow mirror movement
-            this.AddTask(new SetValue(channels.AllowMirrorMovement, true));
+            //// prerequisites:
+            //// move distance sensors up for measuring
+            //this.AddDistanceSensorsUp();
+            //// allow mirror movement
+            //this.AddTask(new SetChannels(channels.AllowMirrorMovement, true));
 
-            if (north != null)
-            {
-                // center mirror glass to zero plane saved in HWSettings
-                this.AddTask(new CenterTask(channels));
-                // move north
-                this.AddTask(new TravelTest(channels, north, MoveDirection.Up));
-            }
+            //if (north != null)
+            //{
+            //    // center mirror glass to zero plane saved in HWSettings
+            //    this.AddTask(new CenterTask(channels));
+            //    // move north
+            //    this.AddTask(new TravelTest(channels, north, MoveDirection.Up));
+            //}
 
-            if (south != null)
-            {
-                // center mirror glass to zero plane saved in HWSettings
-                this.AddTask(new CenterTask(channels));
-                // move north
-                this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelSouth), MoveDirection.Down));
-            }
+            //if (south != null)
+            //{
+            //    // center mirror glass to zero plane saved in HWSettings
+            //    this.AddTask(new CenterTask(channels));
+            //    // move north
+            //    this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelSouth), MoveDirection.Down));
+            //}
 
-            if (west != null)
-            {
-                // center mirror glass to zero plane saved in HWSettings
-                this.AddTask(new CenterTask(channels));
-                // move north
-                this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelWest), MoveDirection.Left));
-            }
+            //if (west != null)
+            //{
+            //    // center mirror glass to zero plane saved in HWSettings
+            //    this.AddTask(new CenterTask(channels));
+            //    // move north
+            //    this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelWest), MoveDirection.Left));
+            //}
 
-            if (east != null)
-            {
-                // center mirror glass to zero plane saved in HWSettings
-                this.AddTask(new CenterTask(channels));
-                // move north
-                this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelEast), MoveDirection.Right));
-            }
+            //if (east != null)
+            //{
+            //    // center mirror glass to zero plane saved in HWSettings
+            //    this.AddTask(new CenterTask(channels));
+            //    // move north
+            //    this.AddTask(new TravelTest(channels, tests.GetTest(TestCollection.TravelEast), MoveDirection.Right));
+            //}
 
-            // mirror must not be centered at the end - operator will do this manually
+            //// mirror must not be centered at the end - operator will do this manually
 
-            // disable mirror movement
-            this.AddTask(new SetValue(channels.AllowMirrorMovement, false));
+            //// disable mirror movement
+            //this.AddTask(new SetChannels(channels.AllowMirrorMovement, false));
 
-            // move distance sensors down - not necessary at all
-            this.AddDistanceSensorsDown();
+            //// move distance sensors down - not necessary at all
+            //this.AddDistanceSensorsDown();
         }
 
         public void AddRubberTest(TestValue test)
         {
-            Task task =new ExecuteIf(this, channels.IsLeftMirror, true,
-                new PresenceTest(channels, test, channels.IsLeftRubberPresent),
-                new PresenceTest(channels, test, channels.IsRightRubberPresent));
-            AddTask(task);
+            //Task task =new IfChannels(this, channels.IsLeftMirror, true,
+            //    new PresenceTest(channels, test, channels.IsLeftRubberPresent),
+            //    new PresenceTest(channels, test, channels.IsRightRubberPresent));
+            //AddTask(task);
         }
 
         public void AddPulloffTest(TestValue test)
         {
-            // move sucker up
-            SetMultipleValues multi = new SetMultipleValues();
-            multi.AddChannel(channels.MoveSuckerUp, true);
-            multi.AddChannel(channels.MoveSuckerDown, false);
-            this.AddTask(multi);
+            //// move sucker up
+            //SetMultipleValues multi = new SetMultipleValues();
+            //multi.AddChannel(channels.MoveSuckerUp, true);
+            //multi.AddChannel(channels.MoveSuckerDown, false);
+            //this.AddTask(multi);
 
-            // wait for sucker to be up
-            this.AddTask(new WaitForValue(channels.IsSuckerUp, true));
+            //// wait for sucker to be up
+            //this.AddTask(new WaitForChannels(channels.IsSuckerUp, true));
 
-            // start suction
-            this.AddTask(new SetValue(channels.SuckOn, true));
+            //// start suction
+            //this.AddTask(new SetChannels(channels.SuckOn, true));
 
-            // wait for vacuum
-            this.AddTask(new WaitForValue(channels.IsVacuum, true));
+            //// wait for vacuum
+            //this.AddTask(new WaitForChannels(channels.IsVacuum, true));
 
-            // provide test
-            this.AddTask(new PulloffTest(channels, test));
+            //// provide test
+            //this.AddTask(new PulloffTest(channels, test));
 
-            // stop suction
-            this.AddTask(new SetValue(channels.SuckOn, false));
-            // start blowing
-            this.AddTask(new SetValue(channels.BlowOn, true));
+            //// stop suction
+            //this.AddTask(new SetChannels(channels.SuckOn, false));
+            //// start blowing
+            //this.AddTask(new SetChannels(channels.BlowOn, true));
 
-            // move sucker down
-            multi = new SetMultipleValues();
-            multi.AddChannel(channels.MoveSuckerUp, false);
-            multi.AddChannel(channels.MoveSuckerDown, true);
-            this.AddTask(multi);
+            //// move sucker down
+            //multi = new SetMultipleValues();
+            //multi.AddChannel(channels.MoveSuckerUp, false);
+            //multi.AddChannel(channels.MoveSuckerDown, true);
+            //this.AddTask(multi);
 
-            // wait for sucker to be down
-            this.AddTask(new WaitForValue(channels.IsSuckerDown, true));
-            // stop blowing
-            this.AddTask(new SetValue(channels.BlowOn, false));
+            //// wait for sucker to be down
+            //this.AddTask(new WaitForChannels(channels.IsSuckerDown, true));
+            //// stop blowing
+            //this.AddTask(new SetChannels(channels.BlowOn, false));
         }
 
         #endregion
@@ -334,17 +340,21 @@ namespace MTS.Tester
             //if (executing.Count > 0 || prepared.Count > 0)    // for now only allow sequential task scheduling
             //    return null;                                  // if there is some task being executed - no other could be added
 
-            if (toExecute.Count > 0)    // otherwise there are no more tasks
-            {   // this is very simple and could be change in future
-                task = toExecute.First.Value;
-                foreach (Task t in executing)
-                    if (!t.IsAllowed(task))
-                        return null;
-                foreach (Task t in prepared)
-                    if (!t.IsAllowed(task))
-                        return null;
-                toExecute.RemoveFirst();
+            //if (toExecute.Count > 0)    // otherwise there are no more tasks
+            //{   // this is very simple and could be change in future
+            //    task = toExecute.First.Value;
+            //    toExecute.RemoveFirst();
+            //}
+
+            if (toExecute.Count > 0)
+            {
+                Task t = toExecute.Peek();
+
+                if (executing.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId) &&
+                    !disallowedGraph.Contains(e.DisallowId, t.DisallowId)))
+                    task = toExecute.Dequeue();
             }
+
             return task;
         }
 
@@ -357,10 +367,10 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="task">An instance of tasks that is going to be executed</param>
         public void AddTask(Task task)
-        {
+        {            
+            toExecute.Enqueue(task);    // only task that will be executed are added
             // register handler for each task that will be called when task is executed
             task.TaskExecuted += new TaskExecutedHandler(taskExecuted);
-            toExecute.AddLast(task);    // only task that will be executed are added
         }
         /// <summary>
         /// Change currently executing tasks for another one
@@ -369,6 +379,10 @@ namespace MTS.Tester
         /// <param name="newTask">Task that shall be executed instead of this one</param>
         public void ChangeTask(Task executingTask, Task newTask)
         {
+            // overlay executing task with new task
+            newTask.ScheduleId = executingTask.ScheduleId;
+            newTask.DisallowId = executingTask.DisallowId;
+
             executingTask.TaskExecuted -= new TaskExecutedHandler(taskExecuted);
             // remove executing task from executing collection
             executing.Remove(executingTask);
@@ -386,117 +400,31 @@ namespace MTS.Tester
         {
             try
             {
-                lastTaskId = 1;
+                // load configuration file
                 XDocument doc = XDocument.Load(filename);
-                Dictionary<string, int> taskIds = new Dictionary<string, int>();
+                TaskParser parser = new TaskParser(doc.Element("timeline"), tests, channels, this);
 
-                foreach (XElement elem in doc.Element("timeline").Elements())
-                    addTaskIds(elem, taskIds);
+                parser.ParseTasks(out requiredGraph, out disallowedGraph, out tasks);
 
-
-                foreach (XElement elem in doc.Element("timeline").Elements())
+                // all tasks in topological order that are enabled
+                List<int> order = requiredGraph.TopologicalSort().ToList();
+                foreach (var taskId in order.Where(i => i < tasks.Count && tasks[i].Enabled))
                 {
-                    Task task = parseTask(elem, tests, taskIds);
-                    if (task != null)
-                        AddTask(task);
+                    Task task = tasks[taskId];
+                    task.ScheduleId = taskId;
+                    AddTask(tasks[taskId]);
+                }
+                foreach (var taskId in disallowedGraph.GetVertices())
+                {
+                    Task task = tasks[taskId];
+                    task.DisallowId = taskId;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }
-        private void addTaskIds(XElement elem, Dictionary<string, int> taskIds)
-        {
-            if (elem == null)
-                return;
-
-            XAttribute id = elem.Attribute("id");   // for each id generate a unique integer value
-            if (id != null)
-                taskIds.Add(id.Value, getNewId());
-
-            if (elem.Name.LocalName == "if")
-            {
-                addTaskIds(elem.Element("then").Elements().First(), taskIds);
-                XElement elseElem = elem.Element("else");
-                if (elseElem != null)
-                    addTaskIds(elseElem.Elements().First(), taskIds);
-            }
-        }
-        private Task parseTask(XElement elem, TestCollection tests, Dictionary<string, int> taskIds)
-        {
-            if (elem == null)
-                return null;
-            Task task = null;
-
-            switch (elem.Name.LocalName)
-            {
-                case "set":
-                    task = new SetValue(
-                        module.GetChannel<IDigitalOutput>(elem.Attribute("channel").Value),
-                        bool.Parse(elem.Attribute("value").Value));
-                    break;
-                case "waitfor":
-                    task = new WaitForValue(
-                        module.GetChannel<IDigitalInput>(elem.Attribute("channel").Value),
-                        bool.Parse(elem.Attribute("value").Value));
-                    break;
-                case "wait":
-                    task = new Wait(
-                        (int)TimeSpan.Parse(elem.Attribute("time").Value).TotalMilliseconds);
-                    break;
-                case "if":
-                    XElement elseElem = elem.Element("else");
-                    if (elseElem != null)
-                        elseElem = elseElem.Elements().First();
-
-                    task = new ExecuteIf(
-                        this,
-                        module.GetChannel<IDigitalInput>(elem.Attribute("channel").Value),
-                        bool.Parse(elem.Attribute("value").Value),
-                        parseTask(elem.Element("then").Elements().First(), tests, taskIds),
-                        parseTask(elseElem, tests, taskIds));
-                    break;
-                case "setmulti":
-                    SetMultipleValues multi = new SetMultipleValues();
-                    foreach (XElement ch in elem.Elements("channel"))
-                        multi.AddChannel(
-                            module.GetChannel<IDigitalOutput>(ch.Attribute("name").Value),
-                            bool.Parse(ch.Attribute("value").Value));
-                    task = multi;
-                    break;
-                case "test":
-                    string typeName = "MTS.Tester." + elem.Attribute("testtype").Value;
-                    Assembly assembly = typeof(TestTask).Assembly;
-                    Type type = assembly.GetType(typeName);
-                    ConstructorInfo con = type.GetConstructor(new Type[] { typeof(Channels), typeof(TestValue) });
-                    TestValue testValue = tests.GetTest(elem.Attribute("testparam").Value);
-                    task = (TestTask)con.Invoke(new object[] { channels, testValue });
-                    break;            
-            }
-            if (task == null)
-                return null;
-
-            XAttribute t = elem.Attribute("type");
-            if (t != null && t.Value == "disallow") task.AllowType = AllowType.Disallow;
-            else task.AllowType = AllowType.Allow;
-
-            t = elem.Attribute("tasks");
-            if (t != null)
-            {
-                string[] ids = t.Value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (string i in ids)
-                    task.AddTask(taskIds[i.Trim()]);
-            }
-
-            XAttribute id = elem.Attribute("id");
-            if (id != null)
-                task.ScheduleId = taskIds[id.Value];
-
-            return task;
-        }
-        private int lastTaskId;
-        private int getNewId() { return lastTaskId++; }
+        }    
 
         /// <summary>
         /// Prepare scheduler for tasks executing. This method must be called before first Update()
@@ -511,8 +439,7 @@ namespace MTS.Tester
                 return;
             // initialize tasks if necessary
             // add first task to prepared collection
-            prepared.AddFirst(toExecute.First.Value);
-            toExecute.RemoveFirst();
+            prepared.AddFirst(toExecute.Dequeue());
             // initialize channels
         }
         /// <summary>

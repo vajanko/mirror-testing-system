@@ -12,7 +12,7 @@ namespace MTS.Tester
         /// <summary>
         /// Time that we are going to wait
         /// </summary>
-        private int milliseconds;
+        private double milliseconds;
         /// <summary>
         /// Check if enough time has elapsed and finish this task if so
         /// </summary>
@@ -47,7 +47,7 @@ namespace MTS.Tester
         /// Create a new instance of task that will wait for a particular period of time
         /// </summary>
         /// <param name="milliseconds">Time in milliseconds to wait</param>
-        public Wait(int milliseconds)
+        public Wait(double milliseconds)
         {
             this.milliseconds = milliseconds;
         }

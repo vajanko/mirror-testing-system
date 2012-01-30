@@ -7,16 +7,8 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    class ExecuteIf : Task
+    class IfChannels : ChannelsTask<IDigitalInput>
     {
-        /// <summary>
-        /// Channel on which we are observing the value
-        /// </summary>
-        private IDigitalInput conditionChannel;
-        /// <summary>
-        /// Value that we are comparing to value on observed channel
-        /// </summary>
-        private bool conditionValue;
         /// <summary>
         /// Task that will be executed if observed channel has required value
         /// </summary>
@@ -42,9 +34,14 @@ namespace MTS.Tester
             switch (exState)
             {
                 case ExState.Initializing:
-                    Output.WriteLine("Condition: if ({0} == {1})", conditionChannel.Name,
-                        conditionValue);
-                    goTo(conditionChannel.Value == conditionValue ? ExState.StateA : ExState.StateB);
+                    Output.Write("Condition: if ");
+                    foreach (var ch in channels)
+                        Output.Write("{0}=={1} AND ", ch.Channel.Name, ch.Value);
+
+                    if (channels.TrueForAll(ch => ch.Channel.Value == ch.Value))
+                        goTo(ExState.StateA);
+                    else
+                        goTo(ExState.StateB);
                     break;
                 case ExState.StateA:
                     Output.WriteLine("Changing to task {0}", thenTask.Name);
@@ -57,7 +54,9 @@ namespace MTS.Tester
                         scheduler.ChangeTask(this, elseTask);
                     }
                     else
+                    {
                         goTo(ExState.Finalizing);
+                    }
                     break;
                 case ExState.Finalizing:
                     Finish(time);
@@ -75,15 +74,10 @@ namespace MTS.Tester
         /// </summary>
         /// <param name="scheduler">Task scheduler that is executing this task. This is necessary for re-planning
         /// task at runtime</param>
-        /// <param name="condition">Channel on which we are observing the value</param>
-        /// <param name="value">Value that we are comparing to value on "condition" channel</param>
         /// <param name="thenTask">Task that will be executed if "condition" channel has value "value"</param>
         /// <param name="elseTask">Task that will be executed if "condition" channel has not value "value"</param>
-        public ExecuteIf(TaskScheduler scheduler, IDigitalInput condition, bool value,
-            Task thenTask, Task elseTask)
+        public IfChannels(TaskScheduler scheduler, Task thenTask, Task elseTask)
         {
-            this.conditionChannel = condition;
-            this.conditionValue = value;
             this.thenTask = thenTask;
             this.elseTask = elseTask;
             this.scheduler = scheduler;
@@ -96,8 +90,8 @@ namespace MTS.Tester
         /// <param name="condition">Channel on which we are observing the value</param>
         /// <param name="value">Value that we are comparing to value on "condition" channel</param>
         /// <param name="thenTask">Task that will be executed if "condition" channel has value "value"</param>
-        public ExecuteIf(TaskScheduler scheduler, IDigitalInput condition, bool value, Task thenTask)
-            : this(scheduler, condition, value, thenTask, null) { }
+        public IfChannels(TaskScheduler scheduler, Task thenTask)
+            : this(scheduler, thenTask, null) { }
 
         #endregion
     }

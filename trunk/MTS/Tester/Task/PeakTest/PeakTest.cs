@@ -30,11 +30,11 @@ namespace MTS.Tester
         private DateTime overloaded;
 
         /// <summary>
-        /// Maximal allowed time of current overloaded in miliampheres
+        /// Maximal allowed time of current overloaded in milliamperes
         /// </summary>
         private readonly double maxOverloadTime;
         /// <summary>
-        /// Maximal allowed current in miliampheres
+        /// Maximal allowed current in milliamperes
         /// </summary>
         private readonly double maxCurrent;
 
