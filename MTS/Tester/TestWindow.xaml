@@ -7,7 +7,7 @@
     xmlns:tester="clr-namespace:MTS.Tester"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:io="clr-namespace:MTS.IO;assembly=IO"
-    Title="Tester" x:Name="root" Width="800">
+    Title="Tester" x:Name="root" Width="800" IsFloatingAllowed="False">
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Top" Margin="3">
             <Grid.Resources>

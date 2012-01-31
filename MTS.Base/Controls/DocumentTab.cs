@@ -125,7 +125,7 @@ namespace MTS.Base
         }
 
         /// <summary>
-        /// This mehtod is called when user is trying to close current item. If it is not saved yet
+        /// This method is called when user is trying to close current item. If it is not saved yet
         /// a confirmation dialog is displayed to user asking for discarding changes.
         /// </summary>
         /// <returns>Value indicating if item could be closed</returns>
@@ -166,7 +166,7 @@ namespace MTS.Base
 
         public DocumentItem()
         {
-            
+            IsFloatingAllowed = false;
         }
 
         #endregion

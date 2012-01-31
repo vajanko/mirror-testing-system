@@ -21,6 +21,9 @@
         <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewTester}" CanExecute="viewTesterCanExecute" Executed="viewTesterExecuted"/>
         <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewSettings}" CanExecute="viewSettingsCanExecute" Executed="viewSettingsExecuted"/>
         <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewData}" CanExecute="viewDataCanExecute" Executed="viewDataExecuted"/>
+        <CommandBinding Command="{x:Static ctrl:MTSCommands.LogIn}" CanExecute="logInCanExecute"  Executed="logInExecuted"/>
+        <CommandBinding Command="{x:Static ctrl:MTSCommands.LogOut}" CanExecute="logOutCanExecute"  Executed="logOutExecuted"/>
+        <CommandBinding Command="{x:Static ctrl:MTSCommands.ViewProfile}" CanExecute="viewProfileCanExecute"  Executed="viewProfileExecuted"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="Close" Key="F4" Modifiers="Ctrl"/>
@@ -122,17 +125,20 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Option">
-                <MenuItem Header="Log _in" Click="login_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow, Converter={StaticResource boolNegationConverter}}">
+                <MenuItem Header="Log _in" Command="{x:Static ctrl:MTSCommands.LogIn}">
+                          <!--Click="login_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow, Converter={StaticResource boolNegationConverter}}">-->
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/login.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Log _out" Click="logout_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
+                <MenuItem Header="Log _out" Command="{x:Static ctrl:MTSCommands.LogOut}">
+                          <!--Click="logout_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">-->
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/logout.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Profile ..." Click="profile_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">
+                <MenuItem Header="_Profile ..." Command="{x:Static ctrl:MTSCommands.ViewProfile}">
+                          <!--Click="profile_Click" IsEnabled="{Binding IsLoggedIn, ElementName=MainWindow}">-->
                     <MenuItem.Icon>
                         <Image Source="/MTS;component/Resources/icons/profile.png" />
                     </MenuItem.Icon>
@@ -164,6 +170,15 @@
                 <Button Command="Cut">
                     <Image Source="/MTS;component/Resources/icons/cut.png"/>
                 </Button>
+                <Button Command="Delete">
+                    <Image Source="/MTS;component/Resources/icons/delete.png" />
+                </Button>
+                <Button Command="Undo">
+                    <Image Source="/MTS;component/Resources/icons/undo.png" />
+                </Button>
+                <Button Command="Redo">
+                    <Image Source="/MTS;component/Resources/icons/redo.png" />
+                </Button>
             </ToolBar>            
             <!-- File ToolBar -->
             <ToolBar>
@@ -190,6 +205,18 @@
                 </Button>
                 <Button Command="{x:Static ctrl:MTSCommands.ViewSettings}">
                     <Image Source="/MTS;component/Resources/icons/viewSettings.png"/>
+                </Button>
+            </ToolBar>
+            <!-- Options -->
+            <ToolBar>
+                <Button Command="{x:Static ctrl:MTSCommands.LogIn}">
+                    <Image Source="/MTS;component/Resources/icons/login.png" />
+                </Button>
+                <Button Command="{x:Static ctrl:MTSCommands.LogOut}">
+                    <Image Source="/MTS;component/Resources/icons/logout.png" />
+                </Button>
+                <Button Command="{x:Static ctrl:MTSCommands.ViewProfile}">
+                    <Image Source="/MTS;component/Resources/icons/profile.png" />
                 </Button>
             </ToolBar>
         </ToolBarTray>
