@@ -246,6 +246,54 @@ namespace MTS
             e.Handled = true;
         }
 
+        private void logInCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !Admin.Operator.IsLoggedIn();
+            e.Handled = true;
+        }
+        private void logInExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            login();
+        }
+
+        private void logOutCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = Admin.Operator.IsLoggedIn();
+            e.Handled = true;
+        }
+        private void logOutExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // before logout close all tab items (some of them may require logged in user instance)
+            List<DocumentItem> toClose = new List<DocumentItem>();
+            foreach (DocumentContent item in filePane.Items)
+            {   // get all document items - should be closed
+                if (item is DocumentItem)
+                    toClose.Add(item as DocumentItem);
+            }
+            while (toClose.Count > 0)
+            {
+                DocumentItem item = toClose[0];
+                toClose.RemoveAt(0);
+                if (!item.Close())
+                    return; // this DocumentItem could not be closed - logout is not successful
+            }
+            // now all document items are closed - operator will be logged out
+            Output.WriteLine("Logout {0}", Admin.Operator.Instance.Login);
+            Admin.Operator.LogOut();
+            IsLoggedIn = false;
+        }
+
+        private void viewProfileCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = Admin.Operator.IsLoggedIn();
+            e.Handled = true;
+        }
+        private void viewProfileExecuted(object sender, ExecutedRoutedEventArgs e)
+        {   // show window with operator profiles
+            Admin.Controls.ProfileWindow wnd = new Admin.Controls.ProfileWindow();
+            wnd.ShowDialog();
+        }
+
         /// <summary>
         /// Get an instance of document content of type  <see cref="DocumentItem"/> that is currently active inside the main area -
         /// <paramref name="filePane"/>.
@@ -310,7 +358,7 @@ namespace MTS
         private void viewSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var tab = new SettingsItem(); // create new settings window
-            filePane.Items.Add(tab);        // add it to tab colleciton
+            filePane.Items.Add(tab);        // add it to tab collection
             filePane.SelectedItem = tab;    // select just created tab
         }
 
@@ -349,7 +397,7 @@ namespace MTS
             new PropertyMetadata(false));
 
         /// <summary>
-        /// (Get/Set) Value indicating whether an operator is logged in. This is a depedenty property.
+        /// (Get/Set) Value indicating whether an operator is logged in. This is a dependency property.
         /// </summary>
         public bool IsLoggedIn
         {
