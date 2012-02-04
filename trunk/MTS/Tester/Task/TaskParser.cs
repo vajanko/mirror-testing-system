@@ -110,6 +110,8 @@ namespace MTS.Tester
                         .GetType("MTS.Tester." + elem.Attribute("testtype").Value)
                         .GetConstructor(new Type[] { typeof(Channels), typeof(TestValue) })
                         .Invoke(new object[] { channels, tests.GetTest(elem.Attribute("testparam").Value) });
+                case "calib":
+                    return new Calibrate(channels);
                 case "check":
                     // this must be test task
                     return new PresenceTest(channels,
@@ -171,6 +173,8 @@ namespace MTS.Tester
                 taskIds.Add(id.Value, key);
         }
 
+        #region Constructors
+
         public TaskParser(XElement timeline, TestCollection tests, Channels channels, TaskScheduler scheduler)
         {
             this.timeline = timeline;
@@ -179,6 +183,12 @@ namespace MTS.Tester
             this.module = channels;
             this.scheduler = scheduler;
         }
+        public TaskParser(XElement timeline, Channels channels, TaskScheduler scheduler)
+            : this(timeline, null, channels, scheduler) { }
+
+        #endregion
+
+        #region Nested Types
 
         class TaskData
         {
@@ -191,5 +201,7 @@ namespace MTS.Tester
                 Task = task;
             }
         }
+
+        #endregion
     }
 }

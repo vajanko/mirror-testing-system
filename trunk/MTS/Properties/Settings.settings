@@ -17,7 +17,7 @@
     <Setting Name="EthercatConfigFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">task1.csv</Value>
     </Setting>
-    <Setting Name="ConfigDir" Type="System.String" Scope="User">
+    <Setting Name="ConfigDir" Type="System.String" Scope="Application">
       <Value Profile="(Default)">config</Value>
     </Setting>
     <Setting Name="ModbusConfigFile" Description="Absolute path to configuration file of channels for modbus protocol are stored" Type="System.String" Scope="User">
@@ -32,7 +32,7 @@
     <Setting Name="PrinterName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ChannelsConfigFile" Type="System.String" Scope="User">
+    <Setting Name="ChannelsConfigFile" Type="System.String" Scope="Application">
       <Value Profile="(Default)">analog_channels.xml</Value>
     </Setting>
     <Setting Name="PrintLabels" Type="System.Boolean" Scope="User">
@@ -40,6 +40,21 @@
     </Setting>
     <Setting Name="DummyPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">1234</Value>
+    </Setting>
+    <Setting Name="AppDir" Description="Absolute application root path " Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CalibConfigFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.\config\calibration.xml</Value>
+    </Setting>
+    <Setting Name="TasksConfigFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.\config\tasks.xml</Value>
+    </Setting>
+    <Setting Name="DummyConfigFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dummyConfig.csv</Value>
+    </Setting>
+    <Setting Name="DummyIpAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">127.0.0.1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

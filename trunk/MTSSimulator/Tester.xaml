@@ -64,26 +64,9 @@
                     </Style.Triggers>
                 </Style>
             </Rectangle.Style>
-            <Rectangle.Triggers>
-                <!--<DataTrigger  Binding="{Binding IsEnabled, RelativeSource={RelativeSource self}}" Value="true">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation From="120" To="150" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                </DataTrigger>-->
-                <!--<EventTrigger RoutedEvent="Rectangle.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation From="150" To="120" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>-->
-            </Rectangle.Triggers>
         </Rectangle>
-
+        
+        <Ellipse Width="15" Height="15" Canvas.Left="130" Canvas.Top="180" Fill="LightYellow" x:Name="directionLight" Visibility="Hidden"/>
         <Path Fill="Black" Canvas.Left="118" Canvas.Top="185" x:Name="mirror" Visibility="Hidden">
             <Path.RenderTransform>
                 <RotateTransform Angle="180" CenterX="25" CenterY="10" />
@@ -97,6 +80,65 @@
             </Path.Data>
         </Path>
 
+        <Rectangle Width="50" Height="30" Canvas.Left="125" Canvas.Top="270" Fill="Gray"/>
+                   
+        <StackPanel Canvas.Left="135" Canvas.Top="225" x:Name="sucker">
+            <StackPanel.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSuckerUp, ElementName=root}" Value="true">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="200" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="225" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <Rectangle Width="30" Height="5" Fill="Black" />
+            <Rectangle Width="5" Height="70" Fill="Gray"/>
+        </StackPanel>
+        
+        <Canvas Canvas.Left="131" Canvas.Top="220" x:Name="calibrators">
+            <Canvas.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCalibratorUp, ElementName=root}" Value="true">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="200" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation To="220" Storyboard.TargetProperty="(Canvas.Top)" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Canvas.Style>
+            <Rectangle Width="2" Height="50" Fill="Blue" Canvas.Left="1"/>
+            <Rectangle Width="2" Height="50" Fill="Blue" Canvas.Left="10"/>
+            <Rectangle Width="2" Height="50" Fill="Blue" Canvas.Left="29"/>
+            <Rectangle Width="32" Height="10" Fill="LightBlue" Canvas.Top="30"/>
+        </Canvas>
+        
+        
 
         <Border Canvas.Top="200" Canvas.Left="50" BorderThickness="2" 
                 BorderBrush="Gray" Width="200" Height="100">

@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE timeline SYSTEM "tasks.dtd">
+
+<timeline>
+  <!-- allow to switch power supply on -->
+  <set id="allowPower">
+    <channel name="AllowPowerSupply" value="true"/>
+  </set>
+  <!-- wait for power supply to switched on -->
+  <waitfor id="waitForPower">
+    <behavior require ="allowPower"/>
+    <channel name="IsPowerSupplyOff" value="false"/>
+  </waitfor>
+  <!-- open device, if it is closed nothing will happen -->
+  <set id="unlock1">
+    <channel name="LockStrong" value="false"/>
+    <channel name="LockWeak" value="false"/>
+    <channel name="UnlockWeak" value="true"/>
+    <channel name="UnlockStrong" value="true"/>
+  </set>
+  
+  <!-- wait for mirror to be inserted -->
+  <if id="waitForMirror">
+    <behavior require="unlock1"/>
+    <channel name="IsOldMirror" value="true"/>
+    <then>
+      <waitfor>
+        <channel name="IsOldPowerfoldUp" value="true"/>
+      </waitfor>
+    </then>
+    <else>
+      <waitfor>
+        <channel name="IsPowerfoldUp" value="true"/>
+      </waitfor>
+    </else>
+  </if>
+  
+  <!-- wait for start button to be pressed and released -->
+  <waitfor id="startDown">
+    <behavior require="waitForMirror"/>
+    <channel name="IsStartPressed" value="true"/>
+  </waitfor>
+  <waitfor id="startUp">
+    <behavior require="startDown"/>
+    <channel name="IsStartPressed" value="false"/>
+  </waitfor>
+  <!-- close device -->
+  <set id="lockWeak">
+    <behavior require="startUp"/>
+    <channel name="LockStrong" value="false"/>
+    <channel name="LockWeak" value="true"/>
+    <channel name="UnlockWeak" value="false"/>
+    <channel name="UnlockStrong" value="false"/>
+  </set>
+  <!-- wait for device to be closed -->
+  <if id="isLocked">
+    <behavior require="lockWeak"/>
+    <channel name="IsOldMirror" value="true"/>
+    <then>
+      <waitfor>
+        <channel name="IsOldLocked" value="true"/>
+      </waitfor>
+    </then>
+    <else>
+      <waitfor>
+        <channel name="IsLocked" value="true"/>
+      </waitfor>
+    </else>
+  </if>
+  <!-- lock device strongly -->
+  <set id="lockStrong">
+    <behavior require="isLocked"/>
+    <channel name="LockStrong" value="true"/>
+  </set>
+  
+  <!-- Now tester is prepared, mirror is fixed -->
+  
+  <!-- move calibrators up so calibration may start -->  
+  <set id="moveCalibUp">
+    <behavior require="lockStrong"/>
+    <channel name="MoveDistanceSensorDown" value="false"/>
+    <channel name="MoveDistanceSensorUp" value="true"/>
+  </set>
+  <!-- wait for calibrators to be up -->
+  <waitfor id="isCalibUp">
+    <behavior require="moveCalibUp"/>
+    <channel name="IsDistanceSensorUp" value="true"/>
+  </waitfor>
+  <!-- wait one second -->
+  <wait id="waitSecond" time="00:00:01">
+    <behavior require="isCalibUp"/>
+  </wait>
+  <!-- allow mirror to move -->
+  <set id="allowMovement">
+    <behavior require="waitSecond"/>
+    <channel name="AllowMirrorMovement" value="true"/>
+  </set>
+  
+  <!-- Now calibration may start -->
+  <calib id="calibration">
+    <!-- movement of mirror glass must be allowed -->
+    <behavior require="allowMovement"/>
+  </calib>
+
+  <!-- disallow mirror to move -->
+  <set>
+    <behavior require="calibration"/>
+    <channel name="AllowMirrorMovement" value="false"/>
+  </set>
+  <!-- move calibrators down -->
+  <set id="moveCalibDown">
+    <behavior require="calibration"/>
+    <channel name="MoveDistanceSensorDown" value="true"/>
+    <channel name="MoveDistanceSensorUp" value="false"/>
+  </set>
+  <!-- wait for calibrators to be down -->
+  <waitfor id="isCalibDown">
+    <behavior require="moveCalibDown"/>
+    <channel name="IsDistanceSensorDown" value="true"/>
+  </waitfor>
+
+  <!-- open device -->
+  <set id="unlock2">
+    <behavior require="isCalibDown"/>
+    <channel name="LockStrong" value="false"/>
+    <channel name="LockWeak" value="false"/>
+    <channel name="UnlockWeak" value="true"/>
+    <channel name="UnlockStrong" value="true"/>
+  </set>
+  
+  <!-- wait for device to be opened -->
+  <if>
+    <behavior require="unlock2"/>
+    <channel name="IsOldMirror" value="true"/>
+    <then>
+      <waitfor>
+        <channel name="IsOldLocked" value="true"/>
+      </waitfor>
+    </then>
+    <else>
+      <waitfor>
+        <channel name="IsLocked" value="true"/>
+      </waitfor>
+    </else>
+  </if>
+</timeline>

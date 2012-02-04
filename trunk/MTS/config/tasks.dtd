@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<!ELEMENT timeline (set|wait|waitfor|if|check|test)*>
+<!ELEMENT timeline (set|wait|waitfor|if|check|test|calib)*>
 
 <!-- set channel value -->
 <!ELEMENT set (behavior?, channel+)>
@@ -17,8 +17,8 @@
 <!-- condition task -->
 <!ELEMENT if (behavior?, channel+, then, else?)>
 <!ATTLIST if id ID #IMPLIED>
-<!ELEMENT then (set|wait|waitfor|if|check|test)>
-<!ELEMENT else (set|wait|waitfor|if|check|test)?>
+<!ELEMENT then (set|wait|waitfor|if|check|test|calib)>
+<!ELEMENT else (set|wait|waitfor|if|check|test|calib)?>
 
 <!-- check (usually presence) test -->
 <!ELEMENT check (behavior?)>
@@ -31,6 +31,9 @@
 <!ATTLIST test id ID #IMPLIED
                testtype NMTOKEN #REQUIRED
                testparam NMTOKEN #REQUIRED>
+<!-- calibration -->
+<!ELEMENT calib (behavior?)>
+<!ATTLIST calib id ID #IMPLIED>
 
 <!-- pair digital channel and its value -->
 <!ELEMENT channel EMPTY>
@@ -45,5 +48,5 @@
 <!ATTLIST behavior require IDREFS #IMPLIED
                    disallow IDREFS #IMPLIED>
 
-<!ELEMENT task (set|wait|waitfor|if|check|test)>
+<!ELEMENT task (set|wait|waitfor|if|check|test|calib)>
 

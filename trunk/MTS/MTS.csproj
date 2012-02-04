@@ -309,12 +309,15 @@
     <None Include="app.config">
       <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
     </None>
-    <None Include="config\moxaConfig.csv">
+    <Content Include="config\dummyConfig.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="config\task1.csv">
+    </Content>
+    <Content Include="config\moxaConfig.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
+    <Content Include="config\task1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="config\template.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -466,6 +469,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\calibration.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

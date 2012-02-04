@@ -688,6 +688,10 @@ namespace MTS.IO
 
         #endregion
 
+        public void ClearSpecialChannels()
+        {
+            specialChannels.Clear();
+        }
         public void AddChannel(IChannel channel)
         {
             specialChannels.Add(channel.Id, channel);

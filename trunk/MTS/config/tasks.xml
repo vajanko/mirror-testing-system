@@ -93,7 +93,7 @@
     <behavior require="lockStrong"/>
     <channel name="IsOldMirror" value="true"/>
     <then>
-      <check channel="IsPowerfoldUp" testparam="MirrorGlass"/>
+      <check channel="IsOldPowerfoldUp" testparam="MirrorGlass"/>
     </then>
     <else>
       <check channel="IsPowerfoldUp" testparam="MirrorGlass"/>

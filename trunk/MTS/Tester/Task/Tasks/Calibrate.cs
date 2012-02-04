@@ -31,13 +31,10 @@ namespace MTS.Tester
                     break;
                 case ExState.Measuring:
                     mirrorNormal = channels.GetMirrorNormal();
-                    //HWSettings.Default.ZeroPlaneNormal = channels.GetMirrorNormal();
                     if (TimeElapsed(time) > 1000)
                         goTo(ExState.Finalizing);
                     break;
                 case ExState.Finalizing:
-                    //HWSettings.Default.Save();
-                    //HWSettings.Default.Reload();
                     Output.WriteLine("Finished");
                     Finish(time);
                     break;
