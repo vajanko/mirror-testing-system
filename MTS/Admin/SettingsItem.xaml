@@ -90,6 +90,7 @@
                             </Grid>
                             <ctrl:EthercatSettings x:Name="ethercatSettings" Visibility="Collapsed" BrowseClick="ethercatSettings_BrowseClick"/>
                             <ctrl:ModbusSettings x:Name="modbusSettings" Visibility="Collapsed" BrowseClick="modbusSettings_BrowseClick"/>
+                            <ctrl:ModbusSettings x:Name="dummySettings" Visibility="Collapsed" BrowseClick="dummySettings_BrowseClick"/>
 
                             <Label Style="{StaticResource sectionHeaderStyle}">Printer settings</Label>
                             <Grid>

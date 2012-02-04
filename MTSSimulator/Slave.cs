@@ -139,7 +139,7 @@ namespace MTS.Simulator
                     // write command from master
                     else if (command == "write")
                     {   // lock channels because multiple thread may access it
-                        // read channels that should be writed
+                        // read channels that should be wrote
                         string line;
                         while ((line = reader.ReadLine()) != "end")
                         {

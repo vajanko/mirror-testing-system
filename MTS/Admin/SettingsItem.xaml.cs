@@ -247,16 +247,19 @@ namespace MTS.Admin
             modbusSettings.IPAddress = Settings.Default.ModbusIpAddress;
             modbusSettings.Port = Settings.Default.ModbusPort;
             // DUMMY
+            dummySettings.ConfigFilePath = Settings.Default.DummyConfigFile;
+            dummySettings.IPAddress = Settings.Default.DummyIpAddress;
+            dummySettings.Port = Settings.Default.DummyPort;
 
             // make visible settings part for currently selected protocol
             showProtocolSettings(protocols.SelectedItem.ToString());
         }
         /// <summary>
         /// This method is called when another protocol from protocol type selection is selected.
-        /// Afteer that settings panel for required protocol is shown.
+        /// After that settings panel for required protocol is shown.
         /// When applying settings - only selected setting of protocol are saved
         /// </summary>
-        /// <param name="sender">Item in combobox which was selected</param>
+        /// <param name="sender">Item in combo box which was selected</param>
         private void protocols_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is ComboBox)
@@ -290,7 +293,7 @@ namespace MTS.Admin
                     break;
                 case "modbus": modbusSettings.Visibility = Visibility.Visible;
                     break;
-                case "dummy":
+                case "dummy": dummySettings.Visibility = Visibility.Visible;
                     break;
             }
         }
@@ -307,7 +310,7 @@ namespace MTS.Admin
                     break;
                 case "modbus": modbusSettings.Visibility = Visibility.Collapsed;
                     break;
-                case "dummy":
+                case "dummy": dummySettings.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -330,6 +333,9 @@ namespace MTS.Admin
                     Settings.Default.ModbusConfigFile = modbusSettings.ConfigFilePath;
                     break;
                 case "dummy":
+                    Settings.Default.DummyConfigFile = dummySettings.ConfigFilePath;
+                    Settings.Default.DummyIpAddress = dummySettings.IPAddress;
+                    Settings.Default.DummyPort = dummySettings.Port;
                     break;
             }
         }
@@ -339,7 +345,7 @@ namespace MTS.Admin
         /// </summary>
         private void ethercatSettings_BrowseClick(object sender, RoutedEventArgs e)
         {
-            // open file dialog is created acording application settings in Settings.Default
+            // open file dialog is created according application settings in Settings.Default
             var dialog = Settings.Default.CreateOpenFileDialog();
             if (dialog.ShowDialog() == true)
             {   // user has enter valid configuration file
@@ -351,11 +357,23 @@ namespace MTS.Admin
         /// </summary>
         private void modbusSettings_BrowseClick(object sender, RoutedEventArgs e)
         {
-            // open file dialog is created acording application settings in Settings.Default
+            // open file dialog is created according application settings in Settings.Default
             var dialog = Settings.Default.CreateOpenFileDialog();
             if (dialog.ShowDialog() == true)
             {   // user has enter valid configuration file
                 modbusSettings.ConfigFilePath = dialog.FileName;
+            }
+        }
+        /// <summary>
+        /// This method is called when browse button on Dummy settings panel is clicked
+        /// </summary>
+        private void dummySettings_BrowseClick(object sender, RoutedEventArgs e)
+        {
+            // open file dialog is created according application settings in Settings.Default
+            var dialog = Settings.Default.CreateOpenFileDialog();
+            if (dialog.ShowDialog() == true)
+            {   // user has enter valid configuration file
+                dummySettings.ConfigFilePath = dialog.FileName;
             }
         }
 
@@ -445,8 +463,8 @@ namespace MTS.Admin
         }
 
         /// <summary>
-        /// This method is called when any distace between two calibretors change. We will recalculate the
-        /// calibretors positions in 2D space and display it to user. After calling this mehtod sate of settings
+        /// This method is called when any distance between two calibrators change. We will recalculate the
+        /// calibrators positions in 2D space and display it to user. After calling this method sate of settings
         /// window will change to unsaved.
         /// </summary>
         private void distance_ValueChanged(object sender, RoutedEventArgs e)
@@ -550,11 +568,25 @@ namespace MTS.Admin
             {   // no operator is selected
                 ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, "No operator is selected. Select an operator and then click \"Delete\"");
             }
+            else if (op.Id == Operator.Instance.Id)
+            {   // current (logged in) operator could not be deleted
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ExclamationIcon, @"Operator you want to delete is 
+currently logged in. To delete this operator log in as a different user.");
+            }
             else
             {
                 try
                 {
-                    // delete operator (and its data)
+                    // delete operator (and its data) but ask before - this action must be confirmed
+                    if (MessageBox.Show(@"Do you really want to delete selected operator and his data? All 
+shifts executed by this operator will be deleted!", "Delete operator", MessageBoxButton.YesNo,
+                                                  MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
+                    {
+                        // delete selected operator and all his data from database
+                        context.DeleteOperator(op.Id);
+                        // reload operators in the grid
+                        updateOperatorsGrid();
+                    }
                 }
                 catch (Exception ex)
                 {

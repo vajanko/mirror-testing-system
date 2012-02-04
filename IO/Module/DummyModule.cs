@@ -18,6 +18,7 @@ namespace MTS.IO.Module
         /// </summary>
         public bool IsConnected { get; set; }
         private readonly System.Timers.Timer timer = new System.Timers.Timer();
+        private IPAddress ipAddress = IPAddress.Loopback;
         private int port = 1234;
         private ASCIIEncoding enc = new ASCIIEncoding();
 
@@ -35,7 +36,7 @@ namespace MTS.IO.Module
             {
                 master = new TcpClient();
                 //new Socket(IPAddress.Loopback.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                master.Connect(new IPEndPoint(IPAddress.Loopback, port));
+                master.Connect(new IPEndPoint(ipAddress, port));
                 IsConnected = true;
             }
             catch
@@ -388,8 +389,9 @@ namespace MTS.IO.Module
 
         #endregion
 
-        public DummyModule(int port = 1234)
+        public DummyModule(string ipAddress = "127.0.0.1", int port = 1234)
         {
+            this.ipAddress = IPAddress.Parse(ipAddress);
             this.port = port;
         }
     }

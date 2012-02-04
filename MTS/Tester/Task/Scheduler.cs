@@ -424,7 +424,11 @@ namespace MTS.Tester
             {
                 throw ex;
             }
-        }    
+        }
+        public void Load(string filename)
+        {   // sometimes tests are unnecessary
+            Load(filename, null);
+        }
 
         /// <summary>
         /// Prepare scheduler for tasks executing. This method must be called before first Update()

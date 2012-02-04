@@ -130,6 +130,7 @@ namespace MTS.IO.Module
 
         private void beforeConnect()
         {
+            
         }
         /// <summary>
         /// Establish a connection to ADS device

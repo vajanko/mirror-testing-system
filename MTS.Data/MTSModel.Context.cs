@@ -61,5 +61,32 @@ namespace MTS.Data
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DbParamResult>("GetParamResult", testIdParameter);
         }
+    
+        public virtual int DeleteShift(Nullable<int> shiftId)
+        {
+            var shiftIdParameter = shiftId.HasValue ?
+                new ObjectParameter("shiftId", shiftId) :
+                new ObjectParameter("shiftId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteShift", shiftIdParameter);
+        }
+    
+        public virtual int DeleteOperator(Nullable<int> operatorId)
+        {
+            var operatorIdParameter = operatorId.HasValue ?
+                new ObjectParameter("operatorId", operatorId) :
+                new ObjectParameter("operatorId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteOperator", operatorIdParameter);
+        }
+    
+        public virtual int DeleteParamOutput(Nullable<int> paramOutputId)
+        {
+            var paramOutputIdParameter = paramOutputId.HasValue ?
+                new ObjectParameter("paramOutputId", paramOutputId) :
+                new ObjectParameter("paramOutputId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteParamOutput", paramOutputIdParameter);
+        }
     }
 }

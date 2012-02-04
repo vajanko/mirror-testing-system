@@ -72,10 +72,11 @@ namespace MTS.Properties {
             {
                 case "ethercat": protocolConfig = this.EthercatConfigFile; break;
                 case "modbus": protocolConfig = this.ModbusConfigFile; break;
-                case "dummy": protocolConfig = this.ModbusConfigFile; break;
+                case "dummy": protocolConfig = this.DummyConfigFile; break;
                 default: protocolConfig = this.EthercatConfigFile; break;
             }
-            return Path.Combine(GetConfigDirectory(), protocolConfig);
+            return protocolConfig;
+            //return Path.Combine(GetConfigDirectory(), protocolConfig);
         }
 
         /// <summary>
@@ -115,17 +116,14 @@ namespace MTS.Properties {
             {
                 case "ethercat": 
                     module = new MTS.IO.Module.ECModule(this.EthercatTaskName);
-                    module.LoadConfiguration(this.EthercatConfigFile);
                     break;
                 case "modbus":
                     module = new MTS.IO.Module.ModbusModule(this.ModbusIpAddress, this.ModbusPort);
-                    module.LoadConfiguration(this.ModbusConfigFile);
                     break;
                 default:
-                    module = new MTS.IO.Module.DummyModule();
+                    module = new MTS.IO.Module.DummyModule(this.DummyIpAddress, this.DummyPort);
                     break;
             }
-            module.Initialize();
 
             return module;
         }

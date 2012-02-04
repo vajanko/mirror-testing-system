@@ -45,14 +45,14 @@ namespace MTS.Data
         /// </summary>
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            // check whether
+            // check whether password provided by user are equal
             if (passwordBox.SecurePassword.Length > 0 && passwordBox.Password == confirmPasswordBox.Password)
+            {
                 this.DialogResult = true;
+            }
             else
             {
-                ErrorWindow wnd = new ErrorWindow("Error", "Passwords are different");
-                wnd.ErrorIcon = Errors.ErrorIcon;
-                wnd.ShowDialog();
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, "Passwords you have entered are different");
             }
         }
 

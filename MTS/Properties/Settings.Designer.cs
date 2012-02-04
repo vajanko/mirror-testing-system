@@ -88,15 +88,12 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("config")]
         public string ConfigDir {
             get {
                 return ((string)(this["ConfigDir"]));
-            }
-            set {
-                this["ConfigDir"] = value;
             }
         }
         
@@ -152,15 +149,12 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("analog_channels.xml")]
         public string ChannelsConfigFile {
             get {
                 return ((string)(this["ChannelsConfigFile"]));
-            }
-            set {
-                this["ChannelsConfigFile"] = value;
             }
         }
         
@@ -185,6 +179,61 @@ namespace MTS.Properties {
             }
             set {
                 this["DummyPort"] = value;
+            }
+        }
+        
+        /// <summary>
+        /// Absolute application root path 
+        /// </summary>
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("Absolute application root path ")]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AppDir {
+            get {
+                return ((string)(this["AppDir"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\config\\calibration.xml")]
+        public string CalibConfigFile {
+            get {
+                return ((string)(this["CalibConfigFile"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\config\\tasks.xml")]
+        public string TasksConfigFile {
+            get {
+                return ((string)(this["TasksConfigFile"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("dummyConfig.csv")]
+        public string DummyConfigFile {
+            get {
+                return ((string)(this["DummyConfigFile"]));
+            }
+            set {
+                this["DummyConfigFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
+        public string DummyIpAddress {
+            get {
+                return ((string)(this["DummyIpAddress"]));
+            }
+            set {
+                this["DummyIpAddress"] = value;
             }
         }
     }

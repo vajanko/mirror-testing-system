@@ -31,6 +31,9 @@ namespace MTS.Simulator
             unfoldTimer.Interval = (double)unfoldingTime.Value;
             lockTimer.Interval = (double)lockTime.Value;
             unlockTimer.Interval = (double)unlockTime.Value;
+            // let the mirror be inserted
+            insertMirrorButton_Click(insertMirrorButton, EventArgs.Empty);
+            tester1.IsDirectionLightOn = true;
         }
 
         #endregion
@@ -92,6 +95,11 @@ namespace MTS.Simulator
                     channels.DistanceX.SetValue(2200);
                     channels.DistanceY.SetValue(2000);
                     channels.DistanceZ.SetValue(2000);
+                    channels.IsSuckerUp.SetValue(false);
+                    channels.IsSuckerDown.SetValue(true);
+                    channels.IsDistanceSensorDown.SetValue(true);
+                    channels.IsDistanceSensorUp.SetValue(false);
+                    channels.DirectionLightOn.SetValue(false);
                 }
             }
         }
@@ -110,6 +118,7 @@ namespace MTS.Simulator
                     tester1.IsRedLightOn = channels.RedLightOn.Value;
                     tester1.IsPowerSupplyOn = !channels.IsPowerSupplyOff.Value;
                     tester1.IsStartPressed = channels.IsStartPressed.Value;
+                    tester1.IsSuckerUp = channels.IsSuckerUp.Value;
                     if (lockTimer.Running)
                         tester1.IsDeviceOpened = false;
                     else if (unlockTimer.Running)
@@ -117,6 +126,8 @@ namespace MTS.Simulator
                     calibratorX.Text = channels.DistanceX.RealValue.ToString();
                     calibratorY.Text = channels.DistanceY.RealValue.ToString();
                     calibratorZ.Text = channels.DistanceZ.RealValue.ToString();
+                    tester1.IsCalibratorUp = channels.IsDistanceSensorUp.Value;
+                    tester1.IsDirectionLightOn = channels.DirectionLightOn.Value;
                 }
             }
         }
@@ -400,7 +411,14 @@ namespace MTS.Simulator
                     return;
                 lock (channels)
                 {
-                    channels.IsPowerfoldUp.SetValue(true);
+                    if (channels.IsOldMirror.Value)
+                    {
+                        channels.IsOldPowerfoldUp.SetValue(true);
+                    }
+                    else
+                    {
+                        channels.IsPowerfoldUp.SetValue(true);
+                    }
                 }
             }
         }

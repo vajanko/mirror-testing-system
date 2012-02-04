@@ -582,15 +582,18 @@ namespace MTS.Tester
             this.shiftTests = tests;
             this.operatorId = Admin.Operator.Instance.Id;
 
+            // remove special channels if they are already added
+            channels.ClearSpecialChannels();
             // add special channels for test enabled value
             foreach (var test in tests)
                 channels.AddChannel(new TestChannel(test));
             MTS.IO.Channel.DigitalInput<MTS.IO.Address.DummyAddress> ch = new IO.Channel.DigitalInput<IO.Address.DummyAddress>();
             ch.Id = "IsTravelEnabled";
-            ch.SetValue(channels.GetChannel<IDigitalInput>(TestCollection.TravelEast).Value &&
-                channels.GetChannel<IDigitalInput>(TestCollection.TravelNorth).Value &&
-                channels.GetChannel<IDigitalInput>(TestCollection.TravelSouth).Value &&
-                channels.GetChannel<IDigitalInput>(TestCollection.TravelWest).Value);
+            ch.SetValue(
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelEast)).Value &&
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelNorth)).Value &&
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelSouth)).Value &&
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelWest)).Value);
             channels.AddChannel(ch);
         }
 

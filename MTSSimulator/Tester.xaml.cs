@@ -143,6 +143,40 @@ namespace MTS.Simulator
 
         #endregion
 
+        #region IsSuckerUp Property
+
+        static public readonly DependencyProperty IsSuckerUpProperty =
+            DependencyProperty.Register("IsSuckerUp", typeof(bool), typeof(Tester),
+            new PropertyMetadata(false));
+
+        /// <summary>
+        /// (Get/Set DP)
+        /// </summary>
+        public bool IsSuckerUp
+        {
+            get { return (bool)GetValue(IsSuckerUpProperty); }
+            set { SetValue(IsSuckerUpProperty, value); }
+        }
+
+        #endregion
+
+        #region IsCalibratorUp Property
+
+        static public readonly DependencyProperty IsCalibratorUpProperty =
+            DependencyProperty.Register("IsCalibratorUp", typeof(bool), typeof(Tester),
+            new PropertyMetadata(false));
+
+        /// <summary>
+        /// (Get/Set DP)
+        /// </summary>
+        public bool IsCalibratorUp
+        {
+            get { return (bool)GetValue(IsCalibratorUpProperty); }
+            set { SetValue(IsCalibratorUpProperty, value); }
+        }
+
+        #endregion
+
         #endregion
 
         private bool isMirrorInserted = false;
@@ -152,11 +186,29 @@ namespace MTS.Simulator
             set {
                 isMirrorInserted = value;
                 if (value)
+                {
                     mirror.Visibility = System.Windows.Visibility.Visible;
+                    directionLight.Visibility = System.Windows.Visibility.Visible;
+                }
                 else
+                {
                     mirror.Visibility = System.Windows.Visibility.Hidden;
+                    directionLight.Visibility = System.Windows.Visibility.Hidden;
+                }
             }
-
+        }
+        private bool isDirectionLightOn = false;
+        public bool IsDirectionLightOn
+        {
+            get { return isDirectionLightOn; }
+            set
+            {
+                isDirectionLightOn = value;
+                if (value)
+                    directionLight.Fill = Brushes.Orange;
+                else
+                    directionLight.Fill = Brushes.LightYellow;
+            }
         }
 
 

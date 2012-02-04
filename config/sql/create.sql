@@ -313,9 +313,6 @@ BEGIN
 	DELETE FROM TestShift WHERE ShiftId = @shiftId;	
 	-- now it is save to delete this shift because nothing is referencing it
 	DELETE FROM Shift WHERE Id = @shiftId;
-	
-	--SELECT * FROM ParamOutput PO INNER JOIN TestOutput ON (PO.TestOutputId = TestOutput.Id)
-	--	WHERE TestOutput.ShiftId = 3;
 END
 GO
 --#endregion
@@ -360,17 +357,38 @@ GO
 --#endregion
 
 --#region CREATE PROCEDURE udpDeleteOperator
---IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
---	DROP PROCEDURE udpDeleteOperator;
---GO
---CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
---AS
---BEGIN
---	DELETE FROM ParamOutput
---	WHERE ParamOutput.Id 
---	DELETE FROM Operator WHERE Id = @operatorId;
---END
---GO
+IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
+	DROP PROCEDURE udpDeleteOperator;
+GO
+CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
+AS
+BEGIN
+	-- 1) delete all parameters which have been executed in some test which has been
+	-- executed in a shift which has executed operator that should be deleted
+	DELETE P FROM ParamOutput P
+		INNER JOIN TestOutput ON (P.TestOutputId = TestOutput.Id)
+		INNER JOIN Shift ON (TestOutput.ShiftId = Shift.Id)
+		WHERE Shift.OperatorId = @operatorId;
+
+	-- 2) delete all tests that have been executed in some shift which has beed executed
+	-- by operator that should be deleted
+	DELETE T FROM TestOutput T
+		INNER JOIN Shift ON (T.ShiftId = Shift.Id)
+		WHERE Shift.OperatorId = @operatorId;
+	
+	-- 3) delete all references to test which has been used in a shift which has been executed
+	-- by operator that should be deleted
+	DELETE TS FROM TestShift TS
+		INNER JOIN Shift ON (TS.ShiftId = Shift.Id)
+		WHERE Shift.OperatorId = @operatorId;
+	
+	-- 4) delete all shifts which have been executed by operator that should be deleted
+	DELETE FROM Shift WHERE Shift.OperatorId = @operatorId;
+	
+	-- 5) delete operator
+	DELETE FROM Operator WHERE Operator.Id = @operatorId;
+END
+GO		
 --#endregion
 
 --------------------

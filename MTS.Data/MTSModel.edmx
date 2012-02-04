@@ -382,6 +382,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="udpDeleteOperator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="operatorId" Type="int" Mode="In" />
+        </Function>
         <Function Name="udpDeleteParamOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="paramOutputId" Type="int" Mode="In" />
         </Function>
@@ -465,6 +468,15 @@
           <EntitySet Name="MirrorResults" EntityType="MTS.Data.MirrorResult" />
           <EntitySet Name="OperatorResults" EntityType="MTS.Data.OperatorResult" />
           <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
+          <FunctionImport Name="DeleteShift">
+            <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteOperator">
+            <Parameter Name="operatorId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteParamOutput">
+            <Parameter Name="paramOutputId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Mirror">
           <Key>
@@ -952,6 +964,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DeleteShift" FunctionName="MTS.Data.Store.udpDeleteShift" />
+          <FunctionImportMapping FunctionImportName="DeleteOperator" FunctionName="MTS.Data.Store.udpDeleteOperator" />
+          <FunctionImportMapping FunctionImportName="DeleteParamOutput" FunctionName="MTS.Data.Store.udpDeleteParamOutput" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

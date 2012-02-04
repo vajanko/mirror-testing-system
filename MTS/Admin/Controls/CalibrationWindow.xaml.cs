@@ -144,18 +144,18 @@ namespace MTS.Admin.Controls
         /// </summary>
         private void calibrate()
         {
-            // create a module based on current application settings (could be of different procotol type
+            // create a module based on current application settings (could be of different protocol type
             // and loaded from different configuration files
             IModule module = null;
 
-            // when executed is true - means: calibration was successfull and can by saved
+            // when executed is true - means: calibration was successful and can by saved
             IsExecuted = false;
 
             // catch connection exceptions
             try
             {   // connect to hw
                 Status = "Initializing ... ";
-                module = Settings.Default.GetModuleInstance();
+                //module = Settings.Default.GetModuleInstance();
                 Channels channels = Settings.Default.GetChannelsInstance();
                 channels.Connect();
                 channels.Initialize();
@@ -179,11 +179,14 @@ namespace MTS.Admin.Controls
 
                 // create scheduler and add tasks needed for calibration process
                 scheduler = new TaskScheduler(channels);
-                scheduler.AddInitSequence();        // open device and wait for mirror to be inserted, then close it
-                scheduler.AddDistanceSensorsUp();   // move up distance sensors for measuring
-                scheduler.AddTask(new Calibrate(channels));     // read distance sensor values
-                scheduler.AddDistanceSensorsDown(); // move down distance sensors - so device could be opened
-                scheduler.AddOpenDevice();          // open device - after that calibration has finished
+                scheduler.Load(Settings.Default.CalibConfigFile);
+                
+                //scheduler.AddInitSequence();        // open device and wait for mirror to be inserted, then close it
+                //scheduler.AddDistanceSensorsUp();   // move up distance sensors for measuring
+                //scheduler.AddTask(new Calibrate(channels));     // read distance sensor values
+                //scheduler.AddDistanceSensorsDown(); // move down distance sensors - so device could be opened
+                //scheduler.AddOpenDevice();          // open device - after that calibration has finished
+
                 CalibrationState++;
                 Stopwatch watch = new Stopwatch();  // time elapsed since last loop
                 DateTime time = DateTime.Now;       // current time of updating scheduler

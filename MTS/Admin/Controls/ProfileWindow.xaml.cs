@@ -10,6 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MTS.Base;
+using MTS.Base.Properties;
 
 namespace MTS.Admin.Controls
 {
@@ -22,15 +24,14 @@ namespace MTS.Admin.Controls
 
         private void changePassword_PasswordFailed(object sender, EventArgs e)
         {
-            msgBlock.Foreground = Brushes.Red;
-            msgBlock.Text = "Your current password is either incorrect or new and confirmation password do not match";
+            ExceptionManager.ShowError(Errors.ErrorTitle, 
+                "Your current password is either incorrect or new and confirmation password do not match");
         }
 
         private void changePassword_PasswordChanged(object sender, ChangedPasswordEventArgs e)
         {
             Operator.ChangePassword(e.Login, e.OldPassword, e.NewPassword);
-            msgBlock.Foreground = Brushes.Green;
-            msgBlock.Text = "Password changed successfully";
+            MessageBox.Show("Password changed successfully", "Password", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private bool validatePassword(string login, string password)
