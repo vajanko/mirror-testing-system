@@ -186,13 +186,17 @@ namespace MTS.Admin
             applySettings();
             IsSaved = true;
         }
-
+        /// <summary>
+        /// Save these document item. In this case apply changed settings
+        /// </summary>
         public override void Save()
         {
             applySettings();        // save settings and remove the star from title
             base.Save();
         }
-
+        /// <summary>
+        /// Save settings that has been changed to application configuration file.
+        /// </summary>
         private void applySettings()
         {
             // PRINTER
@@ -594,12 +598,19 @@ shifts executed by this operator will be deleted!", "Delete operator", MessageBo
                 }
             }
         }
-
+        /// <summary>
+        /// This method is called when edit button in operator settings section is clicked. Selected operator
+        /// will be opened for editing in a new window
+        /// </summary>
+        /// <param name="sender">Instance of button that has been clicked</param>
+        /// <param name="e">Click event argument</param>
         private void editOperator_Click(object sender, RoutedEventArgs e)
         {
             Data.Operator op = operatorsGrid.SelectedValue as Data.Operator;
             if (op == null)
+            {
                 ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, "No operator is selected. Select an operator and then click \"Edit\"");
+            }
             else
             {
                 EditOperatorWindow dialog = new EditOperatorWindow(op.Name, op.Surname, op.Login, (Data.Types.OperatorType)op.Type);
