@@ -597,7 +597,6 @@ namespace MTS.IO
         public double GetRotationAngle()
         {
             Vector3D normal = GetMirrorNormal();
-            normal.Normalize();
             double angle = Vector3D.AngleBetween(normal, ZeroPlaneNormal);
             return angle;
         }
@@ -645,7 +644,8 @@ namespace MTS.IO
             PointX.Z = DistanceX.RealValue;
             PointY.Z = DistanceY.RealValue;
             PointZ.Z = DistanceZ.RealValue;
-            Vector3D normal = getPlaneNormal(PointX, PointY, PointZ);            
+            Vector3D normal = getPlaneNormal(PointX, PointY, PointZ);
+            normal.Normalize();
             return normal;
         }
 
