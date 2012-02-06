@@ -88,15 +88,6 @@ namespace MTS.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("config")]
-        public string ConfigDir {
-            get {
-                return ((string)(this["ConfigDir"]));
-            }
-        }
-        
         /// <summary>
         /// Absolute path to configuration file of channels for modbus protocol are stored
         /// </summary>
@@ -215,7 +206,7 @@ namespace MTS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("dummyConfig.csv")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\config\\dummyConfig.csv")]
         public string DummyConfigFile {
             get {
                 return ((string)(this["DummyConfigFile"]));
@@ -234,6 +225,15 @@ namespace MTS.Properties {
             }
             set {
                 this["DummyIpAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\config")]
+        public string ConfigDir {
+            get {
+                return ((string)(this["ConfigDir"]));
             }
         }
     }

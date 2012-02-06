@@ -212,6 +212,9 @@ namespace MTS.Tester.Controls
             RaisePropertyChanged("Values");     // this is for binding
         }
 
+        /// <summary>
+        /// Get a new value and add it to the control. For this <see cref="GetNewValue"/> delegate is used
+        /// </summary>
         public void Update()
         {
             if (GetNewValue != null)

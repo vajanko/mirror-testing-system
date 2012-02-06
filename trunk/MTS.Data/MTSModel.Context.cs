@@ -88,5 +88,81 @@ namespace MTS.Data
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteParamOutput", paramOutputIdParameter);
         }
+    
+        public virtual ObjectResult<Param> AddParam(Nullable<int> testId, string name, string value, Nullable<byte> type, string unit)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Param).Assembly);
+    
+            var testIdParameter = testId.HasValue ?
+                new ObjectParameter("testId", testId) :
+                new ObjectParameter("testId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var valueParameter = value != null ?
+                new ObjectParameter("value", value) :
+                new ObjectParameter("value", typeof(string));
+    
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(byte));
+    
+            var unitParameter = unit != null ?
+                new ObjectParameter("unit", unit) :
+                new ObjectParameter("unit", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Param>("AddParam", testIdParameter, nameParameter, valueParameter, typeParameter, unitParameter);
+        }
+    
+        public virtual ObjectResult<Param> AddParam(Nullable<int> testId, string name, string value, Nullable<byte> type, string unit, MergeOption mergeOption)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Param).Assembly);
+    
+            var testIdParameter = testId.HasValue ?
+                new ObjectParameter("testId", testId) :
+                new ObjectParameter("testId", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            var valueParameter = value != null ?
+                new ObjectParameter("value", value) :
+                new ObjectParameter("value", typeof(string));
+    
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("type", type) :
+                new ObjectParameter("type", typeof(byte));
+    
+            var unitParameter = unit != null ?
+                new ObjectParameter("unit", unit) :
+                new ObjectParameter("unit", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Param>("AddParam", mergeOption, testIdParameter, nameParameter, valueParameter, typeParameter, unitParameter);
+        }
+    
+        public virtual ObjectResult<Test> AddTest(string name)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Test).Assembly);
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test>("AddTest", nameParameter);
+        }
+    
+        public virtual ObjectResult<Test> AddTest(string name, MergeOption mergeOption)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Test).Assembly);
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("name", name) :
+                new ObjectParameter("name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test>("AddTest", mergeOption, nameParameter);
+        }
     }
 }

@@ -11,7 +11,6 @@ namespace MTS.IO
     /// Output channel may be wrote by user (programmer). Program reads this value and writes it to hardware
     /// terminal.
     /// </summary>
-    /// <typeparam name="TAddress"></typeparam>
     public interface IChannel
     {
         /// <summary>

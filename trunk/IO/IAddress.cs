@@ -6,6 +6,9 @@ using System.Xml.Linq;
 
 namespace MTS.IO
 {
+    /// <summary>
+    /// Provide access to communication channel address
+    /// </summary>
     public interface IAddress
     {
         /// <summary>

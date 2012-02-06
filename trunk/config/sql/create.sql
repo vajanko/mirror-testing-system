@@ -116,7 +116,7 @@ CREATE TABLE Param (
 	-- primary key Id
 	CONSTRAINT pk_param_id PRIMARY KEY (Id),
 	-- unique Name and Value of parmater 
-	CONSTRAINT uq_param_name_value_type UNIQUE (Name, Value, Type),
+	CONSTRAINT uq_param_name_value_type_unit UNIQUE (Name, Value, Type, Unit),
 	-- min value of parameter value type
 	CONSTRAINT chk_param_type CHECK (Type >= 0)
 );
@@ -265,6 +265,8 @@ CREATE INDEX fk_paramOutput_testOutputId ON ParamOutput(TestOutputId);
 --- CREATE PROCEDURES AND FUCNTIONS ---
 ---------------------------------------
 
+  -- DELETE --
+
 --#region CREATE PROCEDURE udpDeleteParamOutput
 IF OBJECT_ID('udpDeleteParamOutput') IS NOT NULL
 	DROP PROCEDURE udpDeleteParamOutput;
@@ -273,9 +275,18 @@ GO
 CREATE PROCEDURE udpDeleteParamOutput(@paramOutputId INT)
 AS
 BEGIN
+	-- delete parameter output with given id
 	DELETE FROM ParamOutput WHERE Id = @paramOutputId;
+	-- delete all parameters which are not referenced by any parameter output
+	-- ...
+	--DELETE P FROM Param P
+	--	LEFT JOIN ParamOutput ON (ParamOutput.ParamId = P.Id)
+	--	WHERE P.Name = 'test';
 END
 GO
+--SELECT * FROM Param P
+--		LEFT JOIN ParamOutput ON (ParamOutput.ParamId = P.Id)
+--		WHERE P.Name = 'test';
 --#endregion
 
 --#region CREATE PROCEDURE udpDeleteTestOutput
@@ -389,6 +400,80 @@ BEGIN
 	DELETE FROM Operator WHERE Operator.Id = @operatorId;
 END
 GO		
+--#endregion
+
+  -- ADD OR MODIFY --
+--#region CREATE PROCEDURE udpAddTest
+
+IF OBJECT_ID('udpAddTest') IS NOT NULL
+	DROP PROCEDURE udpAddTest;
+-- Add a new test to Test table (if it does not exists) and return inserted or already
+-- existing value
+GO
+CREATE PROCEDURE udpAddTest(@name VARCHAR(25))
+AS
+BEGIN TRAN
+	-- check if such a test already exists
+	DECLARE @count INT;
+	SET @count = (SELECT COUNT(*) FROM Test 
+		WHERE Name = @name);
+		
+	-- if test does not exists yet - add a new one. Even if parallel transaction are running
+	-- unique constraint will rollback one of them if both try to insert new parameter
+	IF @count = 0
+		-- insert new test
+		INSERT INTO Test (Name)
+			VALUES(@name)
+	
+	-- now select added or already existing test. This strange behaviour is required by
+	-- entity framework - this value will be returned as output
+	SELECT TOP 1 * FROM Test
+		WHERE (Name = @name);
+COMMIT TRAN
+GO
+--#endregion  
+  
+--#region CREATE PROCEDURE udpAddParam
+IF OBJECT_ID('udpAddParam') IS NOT NULL
+	DROP PROCEDURE udpAddParam;
+-- Add a new parameter to Param table (if it does not exists) and return inserted or already
+-- existing values
+GO
+CREATE PROCEDURE udpAddParam(@testId INT, @name VARCHAR(25), @value VARCHAR(50), @type TINYINT,
+	@unit VARCHAR(2))
+AS
+BEGIN TRAN
+	-- check if such a parameter already exists
+	DECLARE @count INT;
+	SET @count = (SELECT COUNT(*) FROM Param 
+		WHERE Name = @name AND Value = @value AND Type = @type AND (Unit IS NULL OR Unit = @unit));
+	PRINT @count;
+		
+	-- if parameter does not exists yet - add a new one. Even if parallel transaction are running
+	-- unique constraint will rollback one of them if both try to insert new parameter
+	IF @count = 0
+	BEGIN
+		-- insert new parameter
+		INSERT INTO Param (Name, Value, Type, Unit)
+			VALUES(@name, @value, @type, @unit)
+		-- insert relationship between test and this parameter
+		INSERT INTO TestParam (TestId, ParamId)
+			VALUES(@testId, @@IDENTITY);
+			
+	END;
+		
+	-- now select added or already existing parameter. This strange behaviour is required by
+	-- entity framework - this value will be returned as output
+	SELECT TOP 1 * FROM Param
+		WHERE (Name = @name AND Value = @value AND Type = @type AND (Unit IS NULL OR Unit = @unit));
+COMMIT TRAN
+GO
+EXEC udpAddParam 1, 'test2', 'val', 0, NULL;
+SELECT * FROM PARAM;
+SELECT * FROM TESTPARAM;
+
+(SELECT Id FROM Param
+				WHERE Name = 'test' AND Value = 'val' AND Type = 0 AND (Unit IS NULL OR Unit = ''))
 --#endregion
 
 --------------------

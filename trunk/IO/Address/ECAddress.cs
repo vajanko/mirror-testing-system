@@ -6,6 +6,9 @@ using TwinCAT.Ads;
 
 namespace MTS.IO.Address
 {
+    /// <summary>
+    /// Address of a channel in EtherCAT communication module
+    /// </summary>
     public class ECAddress : IAddress
     {
         /// <summary>
@@ -53,9 +56,16 @@ namespace MTS.IO.Address
             return string.Format(Resource.EtherCATAddrStr, IndexGroup, IndexOffset);
         }
 
+        #region Constructors
+
+        /// <summary>
+        /// Create a new instance of <see cref="ECAddress"/> referencing value of EtherCAT communication module
+        /// </summary>
         public ECAddress()
         {
             IndexGroup = (int)AdsReservedIndexGroups.SymbolValueByHandle;
         }
+
+        #endregion
     }
 }

@@ -36,7 +36,7 @@ INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
 	VALUES('963-686-798', 'Ford Mirror', 0, 
 		(SELECT Id FROM Supplier WHERE CompanyName = 'Super Company'));
 INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
-	VALUES('963-686-798', 'Ford Mirror', 1, 
+	VALUES('963-456-798', 'Ford Mirror', 1, 
 		(SELECT Id FROM Supplier WHERE CompanyName = 'Super Company'));
 INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
 	VALUES('897-456-321', 'Ford Mirror', 0, 
@@ -49,12 +49,7 @@ INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
 		(SELECT Id FROM Supplier WHERE CompanyName = 'AutoMirror'));
 INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
 	VALUES('489-897-359', 'Ford Mirror', 3, 
-		(SELECT Id FROM Supplier WHERE CompanyName = 'AutoMirror'));
-		
-		
-INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
-	VALUES('123-456-798', 'Ford Power Mirror', 0, 
-		(SELECT Id FROM Supplier WHERE CompanyName = 'Super Company'));
+		(SELECT Id FROM Supplier WHERE CompanyName = 'AutoMirror'));		
 		
 
 SELECT * from Supplier;		

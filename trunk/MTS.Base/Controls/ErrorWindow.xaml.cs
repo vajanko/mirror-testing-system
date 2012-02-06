@@ -95,7 +95,8 @@ namespace MTS.Base
         {
             exception = ex;
             sendErrorButton.IsEnabled = true;   // only exception could be send
-            viewDetailsButton.IsEnabled = true;
+            // details can be viewed only if inner exception is present
+            viewDetailsButton.IsEnabled = ex.InnerException != null;
         }
         
 
@@ -174,7 +175,8 @@ namespace MTS.Base
         /// <param name="e">Click event arguments</param>
         private void viewDetails_Click(object sender, RoutedEventArgs e)
         {
-
+            if (exception != null && exception.InnerException != null)
+                ExceptionManager.ShowError(exception.InnerException);
         }
 
         /// <summary>

@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace MTS.IO.Address
 {
+    /// <summary>
+    /// Exception that is thrown when an error occurs on channel address.
+    /// </summary>
     public class AddressException : IOException
     {
         /// <summary>

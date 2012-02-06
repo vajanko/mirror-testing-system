@@ -5,6 +5,7 @@ using System.Windows;
 using System.Threading;
 using System.Diagnostics;
 
+using MTS.Properties;
 using MTS.IO;
 using MTS.Base;
 using MTS.Editor;
@@ -57,8 +58,7 @@ namespace MTS.Tester
         protected void OnShiftExecuted()
         {
             if (shiftExecuted != null)
-                shiftExecuted(this, new ShiftExecutedEventArgs() { Total = this.Total, Failed = this.Failed, 
-                    Passed = this.Passed, Duration = End - Begin });
+                shiftExecuted(this, new ShiftExecutedEventArgs(Total, Failed, Passed, End - Begin));
         }
 
         private event ShiftExecutedHandler sequenceExecuted;
@@ -76,8 +76,7 @@ namespace MTS.Tester
         protected void OnSequenceExecuted()
         {
             if (sequenceExecuted != null)
-                sequenceExecuted(this, new ShiftExecutedEventArgs() { Total = this.Total, Failed = this.Failed, 
-                    Passed = this.Passed });
+                sequenceExecuted(this, new ShiftExecutedEventArgs(Total, Failed, Passed));
         }
 
         #endregion
@@ -195,7 +194,7 @@ namespace MTS.Tester
         private TaskScheduler createScheduler(TestCollection tests)
         {
             TaskScheduler scheduler = new TaskScheduler(channels);
-            scheduler.Load("C:\\tasks.xml", tests);
+            scheduler.Load(Settings.Default.TasksConfigFile, tests);
             scheduler.Initialize();
 
             return scheduler;
@@ -245,6 +244,11 @@ namespace MTS.Tester
             return scheduler;
         }
 
+        /// <summary>
+        /// This method is executed on a different thread with real-time priority. In loop are cyclically updated
+        /// communication channels and executed tasks form scheduler. At the end of each sequence results are
+        /// save to database and if enabled label is printed.
+        /// </summary>
         private void executeLoop()
         {
             Stopwatch watch = new Stopwatch();  // time elapsed since last loop
@@ -350,23 +354,24 @@ namespace MTS.Tester
         private void initTests()
         {
             // 1) remove all disabled test - will not be executed
-            List<TestValue> toRemove = new List<TestValue>();
-            foreach (TestValue test in shiftTests)
-                if (!test.Enabled)
-                    toRemove.Add(test);
+            //List<TestValue> toRemove = new List<TestValue>();
+            //foreach (TestValue test in shiftTests)
+            //    if (!test.Enabled)
+            //        toRemove.Add(test);
             //foreach (TestValue test in toRemove)
             //    shiftTests.RemoveTest(test);
 
             // 2) save tests that will be used to database
-            foreach (TestValue test in shiftTests)
+            foreach (TestValue test in shiftTests.Where(t => t.Enabled))
             {
                 // 2.1) save used test to database
-                Test dbTest = context.Tests.FirstOrDefault(t => t.Name == test.ValueId);
-                if (dbTest == null)
-                {   // check if such a test already exists
-                    dbTest = context.Tests.Add(new Test { Name = test.ValueId });
-                    context.SaveChanges();  // this will generate a new id for this test
-                }
+                Test dbTest = context.AddTest(test.ValueId).First();
+                    //context.Tests.FirstOrDefault(t => t.Name == test.ValueId);
+                //if (dbTest == null)
+                //{   // check if such a test already exists
+                //    dbTest = context.Tests.Add(new Test { Name = test.ValueId });
+                //    context.SaveChanges();  // this will generate a new id for this test
+                //}
                 test.DatabaseId = dbTest.Id;
 
                 // 2.2) save used test parameters to database
@@ -378,21 +383,22 @@ namespace MTS.Tester
                     if (param is DoubleParam) unit = (param as DoubleParam).Unit.Name;
                     else if (param is IntParam) unit = (param as IntParam).Unit.Name;
 
-                    Param dbParam = context.Params.FirstOrDefault(p => p.Name == param.ValueId && p.Value == strValue);
-                    if (dbParam == null)
-                    {   // if it does not exists create a new one
-                        byte valueType = (byte)param.ValueType();
-                        dbParam = context.Params.Add(new Param { Name = param.ValueId, Type = valueType, Value = strValue, Unit = unit });
-                        context.SaveChanges();
-                    }
+                    Param dbParam = context.AddParam(dbTest.Id, param.ValueId, strValue, (byte)param.ValueType(), unit).First();
+                    //Param dbParam = context.Params.FirstOrDefault(p => p.Name == param.ValueId && p.Value == strValue);
+                    //if (dbParam == null)
+                    //{   // if it does not exists create a new one
+                    //    byte valueType = (byte)param.ValueType();
+                    //    dbParam = context.Params.Add(new Param { Name = param.ValueId, Type = valueType, Value = strValue, Unit = unit });
+                    //    context.SaveChanges();
+                    //}
 
                     // 2.2.2) save relationship between test and param if it does not exists yet
-                    TestParam dbTestParam = context.TestParams
-                        .FirstOrDefault(tp => tp.TestId == dbTest.Id && tp.ParamId == dbParam.Id);
-                    if (dbTestParam == null)
-                    {
-                        dbTestParam = context.TestParams.Add(new TestParam { TestId = dbTest.Id, ParamId = dbParam.Id });
-                    }
+                    //TestParam dbTestParam = context.TestParams
+                    //    .FirstOrDefault(tp => tp.TestId == dbTest.Id && tp.ParamId == dbParam.Id);
+                    //if (dbTestParam == null)
+                    //{
+                    //    dbTestParam = context.TestParams.Add(new TestParam { TestId = dbTest.Id, ParamId = dbParam.Id });
+                    //}
 
                     param.DatabaseId = dbParam.Id;
                 }
@@ -492,6 +498,19 @@ namespace MTS.Tester
 
         #region Public Methods
 
+        /// <summary>
+        /// Load tasks configuration from file.
+        /// </summary>
+        /// <param name="filename">Configuration file containing tasks properties</param>
+        public void Load(string filename)
+        {
+            scheduler = new TaskScheduler(channels);
+            scheduler.Load(filename, shiftTests);
+        }
+        /// <summary>
+        /// This method should be called once before shift is started. Variables are initialized and user is asked
+        /// to switch power supply on. If this is not fulfilled shift is aborted immediately
+        /// </summary>
         public void Initialize()
         {
             Passed = 0;         // nothing is finished yet
@@ -523,10 +542,15 @@ namespace MTS.Tester
                 channels.UpdateInputs();
             }
             // create a new thread for execution loop
-            loop = new Thread(new ThreadStart(executeLoop));
+            loop = new Thread(new ThreadStart(executeLoop)) { Priority = ThreadPriority.Highest };
         }
+        /// <summary>
+        /// This method is called when user asks for shift to be started. At the time of calling this method
+        /// shift must be correctly initialized. New thread with real-time priority is started
+        /// </summary>
         public void Start()
         {   // save date and time when shift has been started - necessary for database
+            Begin = DateTime.Now;
            
             // create database layer
             context = new MTSContext();
@@ -540,7 +564,11 @@ namespace MTS.Tester
             if (loop != null && !loop.IsAlive)
                 loop.Start();
         }
-        public void Finish()    // must be private method
+        /// <summary>
+        /// This method is called automatically when shift is finished. Shift dependent data are save to database
+        /// and allocated resources are released. <see cref="ShiftExecuted"/> event is raised.
+        /// </summary>
+        private void Finish()
         {
             // save date and time when shift has been finished - necessary for database
             saveShift();
@@ -553,18 +581,15 @@ namespace MTS.Tester
             // raise notify event that shift has been finished
             OnShiftExecuted();
         }
+        /// <summary>
+        /// Abort executing shift. Only a attribute is set and in the next loop of executing thread shift is aborted
+        /// </summary>
         public void Abort()
         {   // this property is thread safe - executing loop will abort scheduler in the next update
             IsAborting = true;
         }
 
         #endregion
-
-        public void Load(string filename)
-        {
-            scheduler = new TaskScheduler(channels);
-            scheduler.Load(filename, shiftTests);
-        }
 
         #region Constructors
 
