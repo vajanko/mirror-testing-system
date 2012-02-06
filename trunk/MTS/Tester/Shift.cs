@@ -194,7 +194,7 @@ namespace MTS.Tester
         private TaskScheduler createScheduler(TestCollection tests)
         {
             TaskScheduler scheduler = new TaskScheduler(channels);
-            scheduler.Load(Settings.Default.TasksConfigFile, tests);
+            scheduler.Load(Settings.Default.GetTasksConfigPath(), tests);
             scheduler.Initialize();
 
             return scheduler;

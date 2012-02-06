@@ -29,7 +29,7 @@ using MTS.Admin.Controls;
 namespace MTS.Admin
 {
     /// <summary>
-    /// Interaction logic for AdminWindow.xaml
+    /// Interaction logic for SettingsItem.xaml - window that provide advanced application settings
     /// </summary>
     public partial class SettingsItem : DocumentItem
     {
