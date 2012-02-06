@@ -37,7 +37,22 @@ namespace MTS
         /// This method is called when MainMenu->File->Exit item is clicked
         /// </summary>
         private void menuClick_Exit(object sender, RoutedEventArgs e)
-        {
+        {   // get references to all items that should be closed
+            List<DocumentItem> toClose = new List<DocumentItem>();
+            foreach (DocumentContent item in filePane.Items)
+            {   // we car only about our document items
+                if (item is DocumentItem)
+                    toClose.Add(item as DocumentItem);
+            }
+            // try to close all selected document items
+            while (toClose.Count > 0)
+            {
+                DocumentItem item = toClose[0];
+                toClose.RemoveAt(0);
+                if (!item.Close())  // if user do not want to close this item - application won't be closed
+                    return;
+            }
+            // close main application window
             this.Close();
         }
         /// <summary>
@@ -51,7 +66,7 @@ namespace MTS
         /// This method is called when MainMenu->Options->Log out item is clicked
         /// </summary>
         private void logout_Click(object sender, RoutedEventArgs e)
-        {   // before logout close all tab items (some of them may require loged in user instance)
+        {   // before logout close all tab items (some of them may require logged in user instance)
             List<DocumentItem> toClose = new List<DocumentItem>();
             foreach (DocumentContent item in filePane.Items)
             {   // get all document items - should be closed
@@ -70,12 +85,13 @@ namespace MTS
             Admin.Operator.LogOut();
             IsLoggedIn = false;
         }
-
+        /// <summary>
+        /// This method is called when 
+        /// </summary>
         private void profile_Click(object sender, RoutedEventArgs e)
         {
             Admin.Controls.ProfileWindow wnd = new Admin.Controls.ProfileWindow();
             wnd.ShowDialog();
-            //Admin.Printing.PrintingManager.Print("Mirror", "Passed");
         }
 
         #endregion
@@ -83,10 +99,10 @@ namespace MTS
         #region Window Events
 
         /// <summary>
-        /// This method is called once when window is loaded. Login dialog is displayed to used imediatelly.
+        /// This method is called once when window is loaded. Login dialog is displayed to used immediately.
         /// </summary>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {   // open login windows for user, so he or she should not manualy click this menu item at startup
+        {   // open login windows for user, so he or she should not manually click this menu item at startup
             login();
         }
 
@@ -96,7 +112,8 @@ namespace MTS
 
         #region Commands
 
-        // new
+        #region New Command
+
         private void newCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // check if testing is running otherwise ..
@@ -118,7 +135,11 @@ namespace MTS
             }
             e.Handled = true;
         }
-        // open
+
+        #endregion
+
+        #region Open Command
+
         private void openCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // check if testing is running otherwise ..
@@ -159,7 +180,11 @@ namespace MTS
                 e.Handled = true;   // opening file has been finished
             }
         }
-        // close
+
+        #endregion
+
+        #region Close Command
+
         private void closeCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // could be for different document contents (not just TestFile)
@@ -177,7 +202,11 @@ namespace MTS
                                     // not be closed it file.Close() will return false
             e.Handled = true;
         }
-        // save
+
+        #endregion
+
+        #region Save Command
+
         private void saveCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // filePane exists so get its active document (tab), it must be a DocumentItem (Savable)
@@ -195,13 +224,17 @@ namespace MTS
             item.Save();
             e.Handled = true;
         }
-        // save as
+
+        #endregion
+
+        #region Save As Command
+
         private void saveAsCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // check if testing is running otherwise ..
 
             // true when selected tab is a TestFile
-            e.CanExecute = (getActiveItem() != null);  // it must not be saved to execute save as
+            e.CanExecute = (getActiveTestFile() != null);  // it must not be saved to execute save as
             e.Handled = true;
         }
         private void saveAsExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -225,6 +258,8 @@ namespace MTS
             }
             e.Handled = true;
         }
+
+        #endregion
         // help
         private void helpCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -332,10 +367,17 @@ namespace MTS
         }
         private void viewTesterExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // open new tester window
-            var tab = new TestWindow();     // create new test window
-            filePane.Items.Add(tab);        // add it to tab collection
-            filePane.SelectedItem = tab;    // select just created tab
+            try
+            {
+                // open new tester window
+                var tab = new TestWindow();     // create new test window
+                filePane.Items.Add(tab);        // add it to tab collection
+                filePane.SelectedItem = tab;    // select just created tab
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
         }
 
         // viewSettings
@@ -434,10 +476,14 @@ namespace MTS
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of main application window
+        /// </summary>
         public WindowMain()
         {
             InitializeComponent();
-            Output.TextBox = outputConsole;    // initialize output console
+            // initialize output console - to this text box output logs will be written
+            Output.TextBox = outputConsole;
         }
 
         #endregion

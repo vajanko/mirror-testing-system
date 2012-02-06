@@ -5,13 +5,32 @@
     /// </summary>
     public enum MoveDirection
     {
+        /// <summary>
+        /// Move mirror up (north)
+        /// </summary>
         Up,
+        /// <summary>
+        /// Move mirror down (south)
+        /// </summary>
         Down,
+        /// <summary>
+        /// Move mirror left (west)
+        /// </summary>
         Left,
+        /// <summary>
+        /// Move mirror right (east)
+        /// </summary>
         Right,
+        /// <summary>
+        /// Do not move mirror
+        /// </summary>
         None
     }
 
+    /// <summary>
+    /// Extension for <see cref="MoveDirection"/> enumerator. Allows distinguish between horizontal and
+    /// vertical direction.
+    /// </summary>
     public static class MoveDirectionExtension
     {
         /// <summary>

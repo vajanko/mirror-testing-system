@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Configuration;
 using System.Windows.Media.Media3D;
 
 namespace MTS.IO {
@@ -20,22 +22,29 @@ namespace MTS.IO {
             // this.SettingsSaving += this.SettingsSavingEventHandler;
             //
 
-            this.SettingsLoaded += new System.Configuration.SettingsLoadedEventHandler(HWSettings_SettingsLoaded);
+            this.SettingsLoaded += new SettingsLoadedEventHandler(HWSettings_SettingsLoaded);
+
+            // recalculate positions of calibrators from current settings - distances between each calibrator
             calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
         }
 
-        void HWSettings_SettingsLoaded(object sender, System.Configuration.SettingsLoadedEventArgs e)
-        {
+        /// <summary>
+        /// This method is called when <see cref="HWSettings"/> is loaded. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HWSettings_SettingsLoaded(object sender, SettingsLoadedEventArgs e)
+        {   // recalculate positions of calibrators from current settings - distances between each calibrator
             calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
         }
         
-        private void HWSettingsChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
-            // Add code to handle the SettingChangingEvent event here.
-        }
+        //private void HWSettingsChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
+        //    // Add code to handle the SettingChangingEvent event here.
+        //}
         
-        private void HWSettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
-            // Add code to handle the SettingsSaving event here.
-        }
+        //private void HWSettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
+        //    // Add code to handle the SettingsSaving event here.
+        //}
 
         #region Calibretors
 
@@ -46,6 +55,13 @@ namespace MTS.IO {
         private Point3D calibretorZ;
         public Point3D CalibretorZ { get { return calibretorZ; } }
 
+        /// <summary>
+        /// Recalculate position of calibrators in 2D space from given distances between each of them.
+        /// Notice that X calibrator position is always [0,0] and x-coordinate of Y calibrator is always 0
+        /// </summary>
+        /// <param name="xy">Distance between X and Y calibrator</param>
+        /// <param name="yz">Distance between Y and Z calibrator</param>
+        /// <param name="xz">Distance between X and Z calibrator</param>
         private void calculateCalibratorsPositions(double xy, double yz, double xz)
         {
             double cosRes = ((xy * xy) + (xz * xz) - (yz * yz)) / (2 * xy * xz);
@@ -61,10 +77,16 @@ namespace MTS.IO {
             calibretorZ.X = Math.Sin(beta) * xz;
         }
 
-        void HWSettings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        /// <summary>
+        /// This method is called when any of <see cref="HWSettings"/> property change. If this property is one
+        /// of calibrators distances, positions of calibrators are recalculated
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HWSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "XYDistance" || e.PropertyName == "YZDistance"
-                || e.PropertyName == "XZDistance")
+            // property that has been changed is one of calibrators distances
+            if (e.PropertyName.EndsWith("Distance"))
                 calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
         }
 

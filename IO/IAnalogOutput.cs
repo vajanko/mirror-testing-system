@@ -2,6 +2,11 @@ using System;
 
 namespace MTS.IO
 {
+    /// <summary>
+    /// Provide read-write access to analog communication channel. Value is of this channel is raw value of a memory
+    /// unit on remote communication terminal. To get a real value relative to application a conversion
+    /// method is used
+    /// </summary>
     public interface IAnalogOutput : IAnalogInput
     {
         /// <summary>

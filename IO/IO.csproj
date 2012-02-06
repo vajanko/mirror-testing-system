@@ -57,7 +57,6 @@
     <Compile Include="ChannelSettings.cs" />
     <Compile Include="Channel\ChannelException.cs" />
     <Compile Include="IAddress.cs" />
-    <Compile Include="IXmlFormatable.cs" />
     <Compile Include="Module\DummyModule.cs">
       <SubType>Code</SubType>
     </Compile>

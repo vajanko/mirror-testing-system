@@ -9,14 +9,19 @@
 USE mts;
 
 -- DROP ALL PROCEDURES
-DROP PROCEDURE udpTestResults;
+DROP PROCEDURE udpDeleteParamOutput;
+DROP PROCEDURE udpDeleteTestOutput;
+DROP PROCEDURE udpDeleteShift;
 DROP PROCEDURE udpParamResults;
+DROP PROCEDURE udpTestResults;
+DROP PROCEDURE udpDeleteOperator;
+
 
 -- DROP ALL VIEWS
-DROP VIEW ShiftResults;
-DROP VIEW TestResults;
-DROP VIEW MirrorResults;
-DROP VIEW OperatorResults;
+DROP VIEW ShiftResult;
+DROP VIEW TestResult;
+DROP VIEW MirrorResult;
+DROP VIEW OperatorResult;
 
 -- DROP ALL TABLES
 DROP TABLE ParamOutput;		-- referenging: Param, Shift

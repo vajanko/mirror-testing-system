@@ -24,7 +24,7 @@ namespace MTS.Tester.Controls
 
             var points = new PointCollection();
 
-            // let hight to be:
+            // let height to be:
             double hight = queue.Zero;
             double range = queue.MaxValue - queue.MinValue;
             if (range == 0) range = hight;

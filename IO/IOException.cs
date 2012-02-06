@@ -5,6 +5,9 @@ using System.Runtime.Serialization;
 
 namespace MTS.IO
 {
+    /// <summary>
+    /// Base class for exception that is thrown when an error occurs during communication
+    /// </summary>
     public abstract class IOException : Exception
     {
         public const string EtherCatString = "EtherCAT";

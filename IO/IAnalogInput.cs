@@ -2,6 +2,11 @@ using System;
 
 namespace MTS.IO
 {
+    /// <summary>
+    /// Provide read only access to analog communication channel. Value is of this channel is raw value of a memory
+    /// unit on remote communication terminal. To get a real value relative to application a conversion
+    /// method is used
+    /// </summary>
     public interface IAnalogInput : IChannel
     {
         /// <summary>
@@ -43,6 +48,11 @@ namespace MTS.IO
         /// <param name="value">Value to set</param>
         void SetValue(uint value);
 
+        /// <summary>
+        /// Get real value of this channel. Same as <see cref="RealValue"/> property. Use this method if 
+        /// you want to reference it in a delegate.
+        /// </summary>
+        /// <returns>Real converted value of this channel using <see cref="RawToReal"/> delegate</returns>
         double GetRealValue();
 
         /// <summary>

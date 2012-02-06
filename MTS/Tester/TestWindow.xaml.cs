@@ -357,13 +357,20 @@ namespace MTS.Tester
         public TestWindow()
         {
             channels = Settings.Default.GetChannelsInstance();
-            channels.Initialize();  // initialize each channel and channels properties
-            foreach (IAnalogInput input in channels.GetChannels<IAnalogInput>())
-                analogControls.Add(new Controls.FlowControl()
-                {
-                    Title = input.Name,
-                    GetNewValue = new Func<double>(input.GetRealValue)  // this method will be called when control is updated
-                });
+            if (channels == null)
+            {
+                this.IsEnabled = false;
+            }
+            else
+            {
+                channels.Initialize();  // initialize each channel and channels properties
+                foreach (IAnalogInput input in channels.GetChannels<IAnalogInput>())
+                    analogControls.Add(new Controls.FlowControl()
+                    {
+                        Title = input.Name,
+                        GetNewValue = new Func<double>(input.GetRealValue)  // this method will be called when control is updated
+                    });
+            }
 
             InitializeComponent();
             analogChannelsControls.DataContext = analogControls;

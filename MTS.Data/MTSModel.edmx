@@ -382,6 +382,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="udpAddParam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="testId" Type="int" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="value" Type="varchar" Mode="In" />
+          <Parameter Name="type" Type="tinyint" Mode="In" />
+          <Parameter Name="unit" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="udpAddTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="udpDeleteOperator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="operatorId" Type="int" Mode="In" />
         </Function>
@@ -469,13 +479,23 @@
           <EntitySet Name="OperatorResults" EntityType="MTS.Data.OperatorResult" />
           <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
           <FunctionImport Name="DeleteShift">
-            <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          <Parameter Name="shiftId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteOperator">
-            <Parameter Name="operatorId" Mode="In" Type="Int32" />
+          <Parameter Name="operatorId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteParamOutput">
-            <Parameter Name="paramOutputId" Mode="In" Type="Int32" />
+          <Parameter Name="paramOutputId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddParam" EntitySet="Params" ReturnType="Collection(MTS.Data.Param)">
+            <Parameter Name="testId" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="value" Mode="In" Type="String" />
+            <Parameter Name="type" Mode="In" Type="Byte" />
+            <Parameter Name="unit" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddTest" EntitySet="Tests" ReturnType="Collection(MTS.Data.Test)">
+            <Parameter Name="name" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Mirror">
@@ -967,6 +987,8 @@
           <FunctionImportMapping FunctionImportName="DeleteShift" FunctionName="MTS.Data.Store.udpDeleteShift" />
           <FunctionImportMapping FunctionImportName="DeleteOperator" FunctionName="MTS.Data.Store.udpDeleteOperator" />
           <FunctionImportMapping FunctionImportName="DeleteParamOutput" FunctionName="MTS.Data.Store.udpDeleteParamOutput" />
+          <FunctionImportMapping FunctionImportName="AddParam" FunctionName="MTS.Data.Store.udpAddParam" />
+          <FunctionImportMapping FunctionImportName="AddTest" FunctionName="MTS.Data.Store.udpAddTest" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
