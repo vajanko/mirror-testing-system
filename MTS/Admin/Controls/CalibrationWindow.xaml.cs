@@ -179,7 +179,7 @@ namespace MTS.Admin.Controls
 
                 // create scheduler and add tasks needed for calibration process
                 scheduler = new TaskScheduler(channels);
-                scheduler.Load(Settings.Default.CalibConfigFile);
+                scheduler.Load(Settings.Default.GetCalibConfigPath());
                 
                 //scheduler.AddInitSequence();        // open device and wait for mirror to be inserted, then close it
                 //scheduler.AddDistanceSensorsUp();   // move up distance sensors for measuring

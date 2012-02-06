@@ -54,11 +54,14 @@ namespace MTS.Properties {
             else
                 return Path.Combine(GetExecutingDirectory(), Default.ConfigDir);
         }
-
-        //public string GetChannelsConfigPath()
-        //{
-        //    return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
-        //}
+        /// <summary>
+        /// Get absolute path to configuration directory of this application
+        /// </summary>
+        /// <returns></returns>
+        public string GetChannelsConfigPath()
+        {
+            return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
+        }
         /// <summary>
         /// Get path to configuration file where channels for current protocol are saved. Current protocol is a user setting
         /// describing type of module which will be used for communication with tester hardware. If protocol is not set, 
@@ -77,6 +80,22 @@ namespace MTS.Properties {
             }
             return protocolConfig;
             //return Path.Combine(GetConfigDirectory(), protocolConfig);
+        }
+        /// <summary>
+        /// Get absolute path to configuration file where configuration of all tasks is stored
+        /// </summary>
+        /// <returns>Absolute path to tasks configuration file</returns>
+        public string GetTasksConfigPath()
+        {
+            return Path.Combine(GetConfigDirectory(), TasksConfigFile);
+        }
+        /// <summary>
+        /// Get absolute path to configuration file where configuration of all tasks is stored
+        /// </summary>
+        /// <returns>Absolute path to calibration configuration file</returns>
+        public string GetCalibConfigPath()
+        {
+            return Path.Combine(GetConfigDirectory(), CalibConfigFile);
         }
 
         /// <summary>
