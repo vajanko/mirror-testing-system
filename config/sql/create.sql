@@ -468,12 +468,6 @@ BEGIN TRAN
 		WHERE (Name = @name AND Value = @value AND Type = @type AND (Unit IS NULL OR Unit = @unit));
 COMMIT TRAN
 GO
-EXEC udpAddParam 1, 'test2', 'val', 0, NULL;
-SELECT * FROM PARAM;
-SELECT * FROM TESTPARAM;
-
-(SELECT Id FROM Param
-				WHERE Name = 'test' AND Value = 'val' AND Type = 0 AND (Unit IS NULL OR Unit = ''))
 --#endregion
 
 --------------------

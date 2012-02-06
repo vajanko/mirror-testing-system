@@ -78,8 +78,8 @@ namespace MTS.Properties {
                 case "dummy": protocolConfig = this.DummyConfigFile; break;
                 default: protocolConfig = this.EthercatConfigFile; break;
             }
-            return protocolConfig;
-            //return Path.Combine(GetConfigDirectory(), protocolConfig);
+            //return protocolConfig;
+            return Path.Combine(GetExecutingDirectory(), protocolConfig);
         }
         /// <summary>
         /// Get absolute path to configuration file where configuration of all tasks is stored
@@ -87,7 +87,7 @@ namespace MTS.Properties {
         /// <returns>Absolute path to tasks configuration file</returns>
         public string GetTasksConfigPath()
         {
-            return Path.Combine(GetConfigDirectory(), TasksConfigFile);
+            return Path.Combine(GetExecutingDirectory(), TasksConfigFile);
         }
         /// <summary>
         /// Get absolute path to configuration file where configuration of all tasks is stored
@@ -95,7 +95,7 @@ namespace MTS.Properties {
         /// <returns>Absolute path to calibration configuration file</returns>
         public string GetCalibConfigPath()
         {
-            return Path.Combine(GetConfigDirectory(), CalibConfigFile);
+            return Path.Combine(GetExecutingDirectory(), CalibConfigFile);
         }
 
         /// <summary>
