@@ -345,7 +345,7 @@ namespace MTS.IO
             }
         }
         /// <summary>
-        /// (Get) Value indicating whether mirror glass is moveing down
+        /// (Get) Value indicating whether mirror glass is moving down
         /// </summary>
         public bool IsMirrorMoveingDown
         {
@@ -356,7 +356,7 @@ namespace MTS.IO
             }
         }
         /// <summary>
-        /// (Get) Value indicating whether mirror glass is moveing left
+        /// (Get) Value indicating whether mirror glass is moving left
         /// </summary>
         public bool IsMirrorMoveingLeft
         {
@@ -367,7 +367,7 @@ namespace MTS.IO
             }
         }
         /// <summary>
-        /// (Get) Value indicating whether mirror glass is moveing right
+        /// (Get) Value indicating whether mirror glass is moving right
         /// </summary>
         public bool IsMirrorMoveingRight
         {

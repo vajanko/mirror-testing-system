@@ -38,7 +38,7 @@
     <Setting Name="DummyPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">1234</Value>
     </Setting>
-    <Setting Name="AppDir" Description="Absolute application root path " Type="System.String" Scope="Application">
+    <Setting Name="AppDir" Description="Absolute application root path " Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CalibConfigFile" Type="System.String" Scope="Application">

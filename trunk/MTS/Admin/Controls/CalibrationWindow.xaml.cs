@@ -26,7 +26,7 @@ using MTS.Tester.Result;
 namespace MTS.Admin.Controls
 {
     /// <summary>
-    /// Interaction logic for CalibrationWindow.xaml
+    /// Allows user to execute mirror calibration.
     /// </summary>
     partial class CalibrationWindow : Window, INotifyPropertyChanged
     {

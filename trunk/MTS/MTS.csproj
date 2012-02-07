@@ -66,6 +66,7 @@
       <HintPath>..\lib\OK.Collections.Generic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -74,6 +75,7 @@
     </Reference>
     <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -110,10 +112,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Admin\Controls\ChangePasswordControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Admin\Controls\IPAddressControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -195,9 +193,6 @@
     <Compile Include="Controls\Converters\ParamIdToNameConverter.cs" />
     <Compile Include="Controls\Converters\TaskResultTypeConverter.cs" />
     <Compile Include="Controls\Converters\TestIdToNameConverter.cs" />
-    <Compile Include="Admin\Controls\IPAddressControl.xaml.cs">
-      <DependentUpon>IPAddressControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
@@ -217,6 +212,12 @@
     <Compile Include="Data\OperatorSource.cs" />
     <Compile Include="Controls\Converters\ParamValueConverter.cs" />
     <Compile Include="Data\ResultStyleSelector.cs" />
+    <Compile Include="Installer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Installer.Designer.cs">
+      <DependentUpon>Installer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tester\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -318,19 +319,21 @@
     <Content Include="config\task1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="config\template.dtd">
+    <Content Include="config\template.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="config\testfile.dtd" />
+    </Content>
+    <Content Include="config\testfile.dtd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="config\tasks.dtd">
+    <Content Include="config\tasks.dtd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\saveFile.png" />
@@ -354,10 +357,10 @@
     <Resource Include="Resources\icons\newFile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config\template.xml">
+    <Content Include="config\template.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\viewData.png" />
@@ -465,10 +468,10 @@
     <Resource Include="Resources\icons\profile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config\tasks.xml">
+    <Content Include="config\tasks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon.ico" />

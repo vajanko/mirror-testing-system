@@ -6,8 +6,6 @@
 
 -------------------------------------------------------------------------------
 
-USE mts;
-
 -- Add system operator with default password (admin)
 INSERT INTO Operator (Name, Surname, Login, Password, Type)
 	VALUES('System', 'Administrator', 'admin', 

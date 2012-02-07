@@ -15,7 +15,7 @@ using MTS.Data;
 namespace MTS.Admin.Controls
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Allows users to log into the application.
     /// </summary>
     public partial class LoginWindow : Window
     {
@@ -27,14 +27,14 @@ namespace MTS.Admin.Controls
         private void login_Click(object sender, RoutedEventArgs e)
         {   // try to log operator in
             this.DialogResult = Operator.TryLogin(loginBox.Text, passwordBox.Password);
-            this.Close();   // close window - after that setup result of login operation (overwriter close result)
+            this.Close();   // close window - after that setup result of login operation (override close result)
             if (DialogResult == true)
                 Result = LoginResult.Success;
             else
                 Result = LoginResult.Fail;
         }
         /// <summary>
-        /// This method is called when window is closed manualy by used by clicking close button
+        /// This method is called when window is closed manually by used by clicking close button
         /// </summary>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {   // login operation will be aborted
@@ -43,6 +43,10 @@ namespace MTS.Admin.Controls
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of login window
+        /// </summary>
+        /// <param name="owner">Owner of this window. Will be blocked while this one is displayed</param>
         private LoginWindow(Window owner)
             : base()
         {
@@ -54,7 +58,7 @@ namespace MTS.Admin.Controls
         /// Create a new instance of login window
         /// </summary>
         /// <param name="owner">Parent of this window</param>
-        /// <param name="previousFailed">Value indicating if previous login was unsuccessfull. If so a message
+        /// <param name="previousFailed">Value indicating if previous login was unsuccessful. If so a message
         /// will be displayed to user</param>
         public LoginWindow(Window owner, bool previousFailed = false)
             : this(owner)

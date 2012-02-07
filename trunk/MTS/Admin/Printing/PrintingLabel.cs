@@ -4,6 +4,9 @@ using System.Drawing.Printing;
 
 namespace MTS.Admin.Printing
 {
+    /// <summary>
+    /// Represents label that will be printed for a particular mirror test.
+    /// </summary>
     public class PrintLabel : PrintDocument
     {
         /// <summary>
@@ -77,11 +80,20 @@ namespace MTS.Admin.Printing
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of default label - without any text to print
+        /// </summary>
         public PrintLabel() :base()
         {
             DefaultPageSettings.Color = false;
             DefaultPageSettings.Margins = new Margins(10, 10, 10, 10);
         }
+        /// <summary>
+        /// Create a new instance of label with specified text to be printed
+        /// </summary>
+        /// <param name="mirrorName">Name of mirror will be printed on the label</param>
+        /// <param name="result">Result of mirror testing will be printed on the label</param>
+        /// <param name="date">Date of mirror testing will be printed on the label</param>
         public PrintLabel(string mirrorName, string result, DateTime date)
             : this()
         {
