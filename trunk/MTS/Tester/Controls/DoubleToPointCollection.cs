@@ -22,7 +22,7 @@ namespace MTS.Tester.Controls
             if (queue == null)
                 throw new InvalidOperationException("Converted value must a DoubleQueue");
 
-            var points = new PointCollection();
+            var points = new PointCollection(queue.Count);
 
             // let height to be:
             double hight = queue.Zero;

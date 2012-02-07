@@ -463,7 +463,7 @@ namespace MTS
         /// </summary>
         private void login()
         {
-            if (!Admin.Operator.TryLogin("admin", "admin"))
+            //if (!Admin.Operator.TryLogin("admin", "admin"))
             {   // for debugging: try to login as admin, if it is not possible display login window
                 LoginWindow loginWindow = new LoginWindow(this, false);
                 loginWindow.ShowDialog();   // show window for first time

@@ -93,7 +93,7 @@
             <ListBox.Resources>
                 <Style TargetType="{x:Type ctrl:FlowControl}">
                     <Setter Property="Background" Value="Black"/>
-                    <Setter Property="MinWidth" Value="180"/>
+                    <Setter Property="MinWidth" Value="200"/>
                     <Setter Property="MinHeight" Value="100"/>
                     <Setter Property="TextBrush" Value="White"/>
                     <Setter Property="Margin" Value="4"/>

@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 
-namespace Praetor.Setup
+namespace MTS.Setup
 {
     class DbCreator
     {
