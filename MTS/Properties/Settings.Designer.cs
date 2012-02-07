@@ -176,13 +176,16 @@ namespace MTS.Properties {
         /// <summary>
         /// Absolute application root path 
         /// </summary>
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.SettingsDescriptionAttribute("Absolute application root path ")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string AppDir {
             get {
                 return ((string)(this["AppDir"]));
+            }
+            set {
+                this["AppDir"] = value;
             }
         }
         

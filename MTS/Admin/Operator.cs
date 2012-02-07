@@ -131,17 +131,22 @@ namespace MTS.Admin
             }
             return false;   // this means that exception has been thrown
         }
-
+        /// <summary>
+        /// Change password of operator with specified login and password for a new password
+        /// </summary>
+        /// <param name="login">Login of operator who's password should be changed</param>
+        /// <param name="oldPassword">Current password of operator who's password should be changed</param>
+        /// <param name="newPassword">New password that should be used</param>
         public static void ChangePassword(string login, string oldPassword, string newPassword)
         {
             try
-            {
+            {   // compute hashes of both password
                 string oldHash = ComputeHash(oldPassword);
                 string newHash = ComputeHash(newPassword);
                 using (MTSContext context = new MTSContext())
-                {
+                {   // try to find operator with given login - also check if password is correct
                     Data.Operator op = context.Operators.FirstOrDefault(o => o.Login == login && o.Password == oldHash);
-                    op.Password = newHash;
+                    op.Password = newHash;  // change password - if such an operator doest not exists exception is thrown
                     context.SaveChanges();
                 }
             }

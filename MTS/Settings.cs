@@ -58,10 +58,10 @@ namespace MTS.Properties {
         /// Get absolute path to configuration directory of this application
         /// </summary>
         /// <returns></returns>
-        public string GetChannelsConfigPath()
-        {
-            return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
-        }
+        //public string GetChannelsConfigPath()
+        //{
+        //    return Path.Combine(GetConfigDirectory(), this.ChannelsConfigFile);
+        //}
         /// <summary>
         /// Get path to configuration file where channels for current protocol are saved. Current protocol is a user setting
         /// describing type of module which will be used for communication with tester hardware. If protocol is not set, 

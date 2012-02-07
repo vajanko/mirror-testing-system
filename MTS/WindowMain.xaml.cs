@@ -104,6 +104,11 @@ namespace MTS
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {   // open login windows for user, so he or she should not manually click this menu item at startup
             login();
+
+            if (Application.Current.Properties["open"] != null)
+            {
+                openTestFile(Application.Current.Properties["open"].ToString());
+            }
         }
 
         #endregion
@@ -156,28 +161,31 @@ namespace MTS
             // file entered - create new tab
             if (dialog.ShowDialog() == true)
             {
-                string filename = dialog.FileName;  // path to open
-                TestFileItem file;
-
-                // check each content in the main pane (file pane) if document is not opened yet
-                foreach (DocumentContent content in filePane.Items)
-                {
-                    file = (content as TestFileItem);   // only check TestFile
-                    if (file != null && file.ItemId == filename)
-                    {   // file is already opened - do not open it again, but show it to the user
-                        file.Activate();
-                        return;
-                    }
-                }
-
-                // file is not opened yet - new tab will be created
-                file = new TestFileItem();          // create new tab
-                if (file.Open(dialog.FileName))     // read content to it
-                {
-                    filePane.Items.Add(file);       // add to dockable pane
-                    file.Activate();                // show it to user
-                }
+                openTestFile(dialog.FileName);
                 e.Handled = true;   // opening file has been finished
+            }
+        }
+        private void openTestFile(string filename)
+        {
+            TestFileItem file;
+
+            // check each content in the main pane (file pane) if document is not opened yet
+            foreach (DocumentContent content in filePane.Items)
+            {
+                file = (content as TestFileItem);   // only check TestFile
+                if (file != null && file.ItemId == filename)
+                {   // file is already opened - do not open it again, but show it to the user
+                    file.Activate();
+                    return;
+                }
+            }
+
+            // file is not opened yet - new tab will be created
+            file = new TestFileItem();          // create new tab
+            if (file.Open(filename))     // read content to it
+            {
+                filePane.Items.Add(file);       // add to dockable pane
+                file.Activate();                // show it to user
             }
         }
 

@@ -132,7 +132,7 @@ namespace MTS.Editor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File {0} may be corrcupted and could not be readed.
+        ///   Looks up a localized string similar to File {0} may be corrupted and could not be read.
         /// </summary>
         internal static string FileFormatErrorMsg {
             get {

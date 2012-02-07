@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace MTS.Admin.Controls
 {
     /// <summary>
-    /// Interaction logic for EthercatSettings.xaml
+    /// Allows user to setup EtherCAT communication protocol
     /// </summary>
     public partial class EthercatSettings : UserControl
     {

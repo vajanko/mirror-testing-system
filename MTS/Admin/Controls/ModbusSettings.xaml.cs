@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace MTS.Admin.Controls
 {
     /// <summary>
-    /// Interaction logic for ModbusSettings.xaml
+    /// Allows user to setup Modbus communication protocol
     /// </summary>
     public partial class ModbusSettings : UserControl
     {
@@ -60,6 +60,9 @@ namespace MTS.Admin.Controls
 
         #region Constructors
 
+        /// <summary>
+        /// Create a new instance of control that allows user to setup Modbus communication protocol
+        /// </summary>
         public ModbusSettings()
         {
             InitializeComponent();

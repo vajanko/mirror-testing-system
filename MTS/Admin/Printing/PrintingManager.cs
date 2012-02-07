@@ -6,6 +6,9 @@ using MTS.Properties;
 
 namespace MTS.Admin.Printing
 {
+    /// <summary>
+    /// Static helper providing printing service of labels
+    /// </summary>
     public static class PrintingManager
     {
         /// <summary>

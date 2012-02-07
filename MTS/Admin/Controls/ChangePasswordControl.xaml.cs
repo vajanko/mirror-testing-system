@@ -15,13 +15,19 @@ using System.Windows.Shapes;
 namespace MTS.Admin.Controls
 {
     /// <summary>
-    /// Interaction logic for ChangePasswordControl.xaml
+    /// Allows user to change password
     /// </summary>
     public partial class ChangePasswordControl : UserControl
     {
         #region Fields
 
+        /// <summary>
+        /// Login of operator we want to change
+        /// </summary>
         private string login;
+        /// <summary>
+        /// Delegate gets login and password and return value indicating whether these credentials are valid
+        /// </summary>
         Func<string, string, bool> validateOldPassword;
 
         #endregion
