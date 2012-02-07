@@ -226,7 +226,8 @@ namespace MTS.Admin.Controls
             catch (Exception ex)
             {
                 Status += "Failed!";
-                ExceptionManager.ShowError(ex);
+                Output.WriteLine("An error occurred while calibrating mirror: {0}", ex.Message);
+                //ExceptionManager.ShowError(ex);
             }
             finally
             {   // release connection allocated resources
@@ -239,10 +240,10 @@ namespace MTS.Admin.Controls
         /// Get result data from scheduler used for calibration and save them to application settings
         /// </summary>
         /// <param name="scheduler">Task scheduler used for calibration process</param>
-        /// <returns>Value indicating whether saveing calibration results was successfull</returns>
+        /// <returns>Value indicating whether saving calibration results was successful</returns>
         private bool handleResult(TaskScheduler scheduler)
         {
-            // this sould contain only one result from calibration task
+            // this should contain only one result from calibration task
             var results = scheduler.GetResultData();
             bool executed = false;
 

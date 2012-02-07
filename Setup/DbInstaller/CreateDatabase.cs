@@ -11,7 +11,7 @@ using System.Reflection;
 using System.IO;
 using System.Diagnostics;
 
-namespace Praetor.Setup
+namespace MTS.Setup
 
 {
     public partial class CreateDatabase : Form

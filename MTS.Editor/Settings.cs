@@ -36,7 +36,7 @@ namespace MTS.Editor.Properties
         /// <returns>Absolute path to template file</returns>
         public string GetTemplatePath()
         {
-            return Path.Combine(GetConfigDirectory(), Settings.Default.TemplateFile);
+            return Path.Combine(GetExecutingDirectory(), Settings.Default.TemplateFile);
         }
     }
 }

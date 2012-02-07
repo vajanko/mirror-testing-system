@@ -1,4 +1,4 @@
-﻿namespace Praetor.Setup
+﻿namespace MTS.Setup
 {
     partial class CreateDatabase
     {

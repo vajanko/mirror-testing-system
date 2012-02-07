@@ -25,22 +25,19 @@ namespace MTS.Editor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("template.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\config\\template.xml")]
         public string TemplateFile {
             get {
                 return ((string)(this["TemplateFile"]));
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("config")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\config")]
         public string ConfigDir {
             get {
                 return ((string)(this["ConfigDir"]));
-            }
-            set {
-                this["ConfigDir"] = value;
             }
         }
     }

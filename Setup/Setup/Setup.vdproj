@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0C4973446D341A3FBE1466570DFFBE24"
+        "OwnerKey" = "8:_B6A70C2833DA4A8DA832A1E06813B997"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0F077D4CB8A068375288BB9D0CC8F7E1"
         "OwnerKey" = "8:_15517585ECADF477733C7F3F93716253"
         "MsmSig" = "8:_UNDEFINED"
@@ -75,12 +81,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0F27F79810A0498BB8236A84383AC221"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_15517585ECADF477733C7F3F93716253"
         "OwnerKey" = "8:_4C7122E6E72D469E87D0B48DD6B2B5FA"
         "MsmSig" = "8:_UNDEFINED"
@@ -95,6 +95,12 @@
         {
         "MsmKey" = "8:_288A8FAFB0C6CC81B46DD7D932A2B509"
         "OwnerKey" = "8:_9FF95A128F2F48248FFBA2AD2775615E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_288A8FAFB0C6CC81B46DD7D932A2B509"
+        "OwnerKey" = "8:_B6A70C2833DA4A8DA832A1E06813B997"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -161,6 +167,12 @@
         {
         "MsmKey" = "8:_50FFAC40B9D5298C35E8ABD1AF0658C5"
         "OwnerKey" = "8:_288A8FAFB0C6CC81B46DD7D932A2B509"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_50FFAC40B9D5298C35E8ABD1AF0658C5"
+        "OwnerKey" = "8:_B6A70C2833DA4A8DA832A1E06813B997"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -321,6 +333,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B6A70C2833DA4A8DA832A1E06813B997"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BC427EAD9A2DA61059E0422D0C1F449B"
         "OwnerKey" = "8:_15517585ECADF477733C7F3F93716253"
         "MsmSig" = "8:_UNDEFINED"
@@ -387,8 +405,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FF16789894CA4B8CA7A69AEE482D16B3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_50FFAC40B9D5298C35E8ABD1AF0658C5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B6A70C2833DA4A8DA832A1E06813B997"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -771,26 +801,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F27F79810A0498BB8236A84383AC221"
-            {
-            "SourcePath" = "8:uninstall.ico"
-            "TargetName" = "8:uninstall.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_A43E991DF2BA420DAE179F7960D6AD62"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_15517585ECADF477733C7F3F93716253"
@@ -1453,6 +1463,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FF16789894CA4B8CA7A69AEE482D16B3"
+            {
+            "SourcePath" = "8:TwinCAT System Manager.chm"
+            "TargetName" = "8:TwinCAT System Manager.chm"
+            "Tag" = "8:"
+            "Folder" = "8:_648963A03BD547F1AA3380E9CB65065B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -1491,6 +1521,28 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A848E93ACB1B4742A6A65FFB232C01D7"
+                    {
+                    "Name" = "8:MTS"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_DF05CC2741344B32B22767BA3ABEF18A"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_648963A03BD547F1AA3380E9CB65065B"
+                            {
+                            "Name" = "8:help"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_4272BEA58C1C439B8CED5B5C541B964D"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_E0A09D8056444CFDA018D9E4DE818DD2"
@@ -1525,6 +1577,28 @@
                         {
                         }
                     }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9A01D00437244BD6BC4A0C178480C58F"
+                    {
+                    "Name" = "8:simulator"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_2F1E4FA2631242119675CA3CB502BBB0"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F4BD1A902CA9443AAA9B13A95957F63A"
+                    {
+                    "Name" = "8:help"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_EE05DC2103B24E048CC2F9678DC46E6D"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -1544,7 +1618,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MTS"
         "ProductCode" = "8:{1E05FCAD-23DB-48C1-9765-44453C17BD60}"
-        "PackageCode" = "8:{49C3DDD7-5A91-4A4E-8E8A-A53BF3891291}"
+        "PackageCode" = "8:{CEBE8037-E1B1-4D63-9DE2-64519EF8CB7B}"
         "UpgradeCode" = "8:{58D1A402-8096-4CBB-B9C4-8EF359022A5A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2063,6 +2137,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_287E4D9728F848228460147B0976254C"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_9A01D00437244BD6BC4A0C178480C58F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
+            "OutputProjectGuid" = "8:{DE4CF0E5-D65D-492B-96E6-0649B251870F}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_3A076528230E4D2E994FC679DF0F0746"
             {
             "SourcePath" = "8:"
@@ -2149,7 +2251,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9FF95A128F2F48248FFBA2AD2775615E"
             {
-            "SourcePath" = "8:..\\..\\MTS\\obj\\x86\\Debug\\MTS.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FEE14891A32F49EEB9F5C0F6FA07EA7E"
@@ -2170,6 +2272,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{C186DE23-9AF7-4C5D-8328-7E00AE2AC4FF}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B6A70C2833DA4A8DA832A1E06813B997"
+            {
+            "SourcePath" = "8:..\\..\\MTS.Simulator\\obj\\Debug\\MTS.Simulator.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_9A01D00437244BD6BC4A0C178480C58F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{DE4CF0E5-D65D-492B-96E6-0649B251870F}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

@@ -479,7 +479,7 @@ namespace MTS.Tester
             catch (Exception ex)
             {
                 // handle error: 
-                throw ex;
+                Output.WriteLine("An error occurred while saving data: {0}", ex.Message);
             }
         }
         /// <summary>

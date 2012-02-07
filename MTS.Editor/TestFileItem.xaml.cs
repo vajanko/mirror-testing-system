@@ -257,5 +257,29 @@ namespace MTS.Editor
         }
 
         #endregion
+
+        private void checkAllBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox box = sender as CheckBox;
+            if (box == null)
+                return;
+            foreach (TestValue item in checkTestListBox.Items)
+            {
+                item.Enabled = true;
+            }
+            box.Content = "Uncheck all";
+        }
+
+        private void checkAllBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox box = sender as CheckBox;
+            if (box == null)
+                return;
+            foreach (TestValue item in checkTestListBox.Items)
+            {
+                item.Enabled = false;
+            }
+            box.Content = "Check all";
+        }
     }
 }

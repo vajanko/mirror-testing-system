@@ -677,6 +677,7 @@
             // 
             this.leftRubber.AutoSize = true;
             this.leftRubber.Checked = global::MTS.Simulator.Properties.Settings.Default.LeftRubber;
+            this.leftRubber.CheckState = System.Windows.Forms.CheckState.Checked;
             this.leftRubber.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MTS.Simulator.Properties.Settings.Default, "LeftRubber", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.leftRubber.Location = new System.Drawing.Point(9, 19);
             this.leftRubber.Name = "leftRubber";
@@ -723,11 +724,12 @@
             // 
             // portBox
             // 
+            this.portBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::MTS.Simulator.Properties.Settings.Default, "Port", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.portBox.Location = new System.Drawing.Point(41, 13);
             this.portBox.Name = "portBox";
             this.portBox.Size = new System.Drawing.Size(66, 20);
             this.portBox.TabIndex = 13;
-            this.portBox.Text = "1234";
+            this.portBox.Text = global::MTS.Simulator.Properties.Settings.Default.Port;
             // 
             // label11
             // 

@@ -30,16 +30,16 @@
                 <EventSetter Event="PreviewGotKeyboardFocus" Handler="SelectCurrentItem"/>
             </Style>
         </DockPanel.Resources>
-        <ListBox DockPanel.Dock="Left" ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" MinWidth="150">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type ListBoxItem}">
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox IsChecked="{Binding Enabled}" Margin="3,0"/>
-                        <Label Content="{Binding Name}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <StackPanel DockPanel.Dock="Left">
+            <CheckBox Content="Check all" Margin="3" x:Name="checkAllBox" Checked="checkAllBox_Checked" Unchecked="checkAllBox_Unchecked"/>
+            <ListBox ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" MinWidth="150" x:Name="checkTestListBox">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type ListBoxItem}">
+                        <CheckBox IsChecked="{Binding Enabled}" Margin="3" Content="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
         <!-- Main area where all controls for setting testing parameters are placed -->
         <ListBox ItemsSource="{Binding}" ScrollViewer.VerticalScrollBarVisibility="Auto"
                      DockPanel.Dock="Left" x:Name="testList" IsSynchronizedWithCurrentItem="True">
