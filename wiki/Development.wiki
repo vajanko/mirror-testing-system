@@ -3,6 +3,24 @@
 = Vývoj projektu MTS =
 Na tejto stránke budem zaznamenávať postupné kroky vývoja aplikácie
 
+= Správa 3 =
+
+Zmeny:
+  * Vylepšený simulátor testovacieho zariadenia - vizualizácia
+  * 
+  * Tlač obalovej etikety
+  * Kalibrácia meracích sond polohy skla zrkadla
+  * Vylepšený plánovač testov - vykonávajú sa paralelne
+  * Závislosť testov je možné definovať v konfiguračnom súbore
+  * Vylepšený editor testovacích parametrov - pohodlnejšie ovládanie
+  * Inštalátor (vytvára databázu)
+  * Loggovanie chýb a udalostí. Jednotná prezentácia výnimky - Error window
+
+  * Užívateľská dokumentácia (EN) - [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvOGU2YTRhNTUtNWUzMC00NmRlLThmYzktM2RkYmJiOGZjNDg4&hl=sk pdf] | [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvN2IwMDZhMjAtNzMzMC00NGRjLWE5MWEtNzRiNDNhNTJmN2E1&hl=sk docx]
+  * [http://mts.php5.cz/doc/index.html Doxygen] dokumentácia
+  * Nekompletná programátorská dokumentácia (EN) - [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvZWZhNzNkNzYtMjZjNS00MDRkLWE1OGMtNTkxODg0MjgxMmE0&hl=sk pdf] | [https://docs.google.com/viewer?a=v&pid=explorer&chrome=true&srcid=0B8XOIEPqV4lvYjJjZjQxYzEtOGE5Yi00YjY1LWIzMTYtNmU1ZDA5ZjllN2Q4&hl=sk docx]
+
+
 = Správa 2 =
 
 Zmeny:
