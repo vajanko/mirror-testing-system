@@ -18,7 +18,7 @@ namespace MTS.Tester
         private double testingTimeMeasured;
 
         /// <summary>
-        /// Required duration of this task in miliseconds
+        /// Required duration of this task in milliseconds
         /// </summary>
         private readonly double testingTime;
         /// <summary>
@@ -72,7 +72,7 @@ namespace MTS.Tester
         {
             TaskResult result = base.getResult();
 
-            // we have been measuring time in miliseconds, now convert it back to parameter unit
+            // we have been measuring time in milliseconds, now convert it back to parameter unit
             // in this state will be saved to database
             double time = convertBack(testingTimeParam, Units.Miliseconds, testingTimeMeasured);
             result.Params.Add(new ParamResult(testingTimeParam, time));
@@ -83,7 +83,7 @@ namespace MTS.Tester
         #region Constructors
 
         /// <summary>
-        /// Create a new instance of test task that will execute spiral heating by switchig it on
+        /// Create a new instance of test task that will execute spiral heating by switching it on
         /// and measuring the current.
         /// </summary>
         /// <param name="channels"></param>
@@ -94,7 +94,7 @@ namespace MTS.Tester
             // from test parameters get TestingTime item
             testingTimeParam = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
 
-            // for measuring time we only use miliseconds
+            // for measuring time we only use milliseconds
             testingTime = convert(testingTimeParam, Units.Miliseconds);
         }
 

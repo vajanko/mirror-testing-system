@@ -70,6 +70,9 @@
     <Compile Include="Mirror.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MirrorRate.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MirrorResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
@@ -102,6 +105,9 @@
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TestParam.cs">
+      <DependentUpon>MTSModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestRate.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TestShift.cs">

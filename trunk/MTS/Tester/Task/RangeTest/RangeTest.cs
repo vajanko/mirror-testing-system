@@ -109,7 +109,7 @@ namespace MTS.Tester
 
             // for measuring current only use miliampheres
             maxCurrent = convert(maxCurrentParam, Units.Miliampheres);
-            minCurrent = convert(maxCurrentParam, Units.Miliampheres);
+            minCurrent = convert(minCurrentParam, Units.Miliampheres);
         }
 
         #endregion

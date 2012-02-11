@@ -44,13 +44,18 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.existingDbButton = new System.Windows.Forms.RadioButton();
             this.newDbButton = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.windowsButton = new System.Windows.Forms.RadioButton();
+            this.sqlButton = new System.Windows.Forms.RadioButton();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 97);
+            this.label1.Location = new System.Drawing.Point(6, 71);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 0;
@@ -58,7 +63,7 @@
             // 
             // serverBox
             // 
-            this.serverBox.Location = new System.Drawing.Point(109, 94);
+            this.serverBox.Location = new System.Drawing.Point(97, 68);
             this.serverBox.Name = "serverBox";
             this.serverBox.Size = new System.Drawing.Size(169, 20);
             this.serverBox.TabIndex = 1;
@@ -67,33 +72,33 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 158);
+            this.label2.Location = new System.Drawing.Point(6, 132);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(36, 13);
+            this.label2.Size = new System.Drawing.Size(61, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Login:";
+            this.label2.Text = "User name:";
             // 
             // loginBox
             // 
-            this.loginBox.Location = new System.Drawing.Point(80, 155);
+            this.loginBox.Location = new System.Drawing.Point(73, 129);
             this.loginBox.Name = "loginBox";
-            this.loginBox.Size = new System.Drawing.Size(198, 20);
+            this.loginBox.Size = new System.Drawing.Size(193, 20);
             this.loginBox.TabIndex = 3;
             this.loginBox.Text = "mts_user";
             // 
             // passwordBox1
             // 
-            this.passwordBox1.Location = new System.Drawing.Point(80, 181);
+            this.passwordBox1.Location = new System.Drawing.Point(73, 155);
             this.passwordBox1.Name = "passwordBox1";
             this.passwordBox1.PasswordChar = '*';
-            this.passwordBox1.Size = new System.Drawing.Size(198, 20);
+            this.passwordBox1.Size = new System.Drawing.Size(193, 20);
             this.passwordBox1.TabIndex = 4;
             this.passwordBox1.Text = "mts_user123";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 184);
+            this.label3.Location = new System.Drawing.Point(7, 158);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 13);
             this.label3.TabIndex = 5;
@@ -102,7 +107,7 @@
             // passwordLabel2
             // 
             this.passwordLabel2.AutoSize = true;
-            this.passwordLabel2.Location = new System.Drawing.Point(19, 210);
+            this.passwordLabel2.Location = new System.Drawing.Point(7, 184);
             this.passwordLabel2.Name = "passwordLabel2";
             this.passwordLabel2.Size = new System.Drawing.Size(45, 13);
             this.passwordLabel2.TabIndex = 7;
@@ -110,10 +115,10 @@
             // 
             // passwordBox2
             // 
-            this.passwordBox2.Location = new System.Drawing.Point(80, 207);
+            this.passwordBox2.Location = new System.Drawing.Point(73, 181);
             this.passwordBox2.Name = "passwordBox2";
             this.passwordBox2.PasswordChar = '*';
-            this.passwordBox2.Size = new System.Drawing.Size(198, 20);
+            this.passwordBox2.Size = new System.Drawing.Size(193, 20);
             this.passwordBox2.TabIndex = 6;
             this.passwordBox2.Text = "mts_user123";
             // 
@@ -130,7 +135,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(122, 233);
+            this.cancelButton.Location = new System.Drawing.Point(110, 207);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 9;
@@ -140,7 +145,7 @@
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(203, 233);
+            this.okButton.Location = new System.Drawing.Point(191, 207);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 10;
@@ -151,7 +156,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(18, 120);
+            this.label6.Location = new System.Drawing.Point(6, 94);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(85, 13);
             this.label6.TabIndex = 11;
@@ -159,7 +164,7 @@
             // 
             // databaseBox
             // 
-            this.databaseBox.Location = new System.Drawing.Point(109, 117);
+            this.databaseBox.Location = new System.Drawing.Point(97, 91);
             this.databaseBox.Name = "databaseBox";
             this.databaseBox.Size = new System.Drawing.Size(169, 20);
             this.databaseBox.TabIndex = 12;
@@ -171,7 +176,7 @@
             this.panel1.Controls.Add(this.newDbButton);
             this.panel1.Location = new System.Drawing.Point(12, 36);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(266, 52);
+            this.panel1.Size = new System.Drawing.Size(276, 52);
             this.panel1.TabIndex = 13;
             // 
             // existingDbButton
@@ -197,33 +202,79 @@
             this.newDbButton.Text = "Create new database";
             this.newDbButton.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.sqlButton);
+            this.groupBox1.Controls.Add(this.windowsButton);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.serverBox);
+            this.groupBox1.Controls.Add(this.databaseBox);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.loginBox);
+            this.groupBox1.Controls.Add(this.okButton);
+            this.groupBox1.Controls.Add(this.passwordBox1);
+            this.groupBox1.Controls.Add(this.cancelButton);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.passwordBox2);
+            this.groupBox1.Controls.Add(this.passwordLabel2);
+            this.groupBox1.Location = new System.Drawing.Point(12, 94);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(276, 237);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Log on to the server";
+            // 
+            // windowsButton
+            // 
+            this.windowsButton.AutoSize = true;
+            this.windowsButton.Checked = true;
+            this.windowsButton.Location = new System.Drawing.Point(10, 19);
+            this.windowsButton.Name = "windowsButton";
+            this.windowsButton.Size = new System.Drawing.Size(162, 17);
+            this.windowsButton.TabIndex = 13;
+            this.windowsButton.TabStop = true;
+            this.windowsButton.Text = "Use Windows Authentication";
+            this.windowsButton.UseVisualStyleBackColor = true;
+            // 
+            // sqlButton
+            // 
+            this.sqlButton.AutoSize = true;
+            this.sqlButton.Location = new System.Drawing.Point(10, 42);
+            this.sqlButton.Name = "sqlButton";
+            this.sqlButton.Size = new System.Drawing.Size(173, 17);
+            this.sqlButton.TabIndex = 14;
+            this.sqlButton.Text = "Use SQL Server Authentication";
+            this.sqlButton.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(10, 207);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 23);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "Test Connection";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // CreateDatabase
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(290, 265);
+            this.ClientSize = new System.Drawing.Size(299, 340);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.databaseBox);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.infoLabel);
-            this.Controls.Add(this.passwordLabel2);
-            this.Controls.Add(this.passwordBox2);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.passwordBox1);
-            this.Controls.Add(this.loginBox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.serverBox);
-            this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "CreateDatabase";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Database";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,6 +298,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton existingDbButton;
         private System.Windows.Forms.RadioButton newDbButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton sqlButton;
+        private System.Windows.Forms.RadioButton windowsButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 
