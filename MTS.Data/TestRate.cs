@@ -12,14 +12,15 @@ using System.Collections.Generic;
 
 namespace MTS.Data
 {
-    public partial class OperatorResult
+    public partial class TestRate
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; }
-        public Nullable<int> TotalSequences { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> Total { get; set; }
+        public Nullable<int> Completed { get; set; }
+        public Nullable<int> Failed { get; set; }
+        public Nullable<int> Aborted { get; set; }
         public Nullable<System.TimeSpan> TotalTime { get; set; }
-        public Nullable<int> TotalTests { get; set; }
     }
     
 }

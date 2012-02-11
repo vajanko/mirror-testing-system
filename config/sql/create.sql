@@ -277,16 +277,8 @@ AS
 BEGIN
 	-- delete parameter output with given id
 	DELETE FROM ParamOutput WHERE Id = @paramOutputId;
-	-- delete all parameters which are not referenced by any parameter output
-	-- ...
-	--DELETE P FROM Param P
-	--	LEFT JOIN ParamOutput ON (ParamOutput.ParamId = P.Id)
-	--	WHERE P.Name = 'test';
 END
 GO
---SELECT * FROM Param P
---		LEFT JOIN ParamOutput ON (ParamOutput.ParamId = P.Id)
---		WHERE P.Name = 'test';
 --#endregion
 
 --#region CREATE PROCEDURE udpDeleteTestOutput
@@ -299,8 +291,8 @@ AS
 BEGIN
 	-- first delete all parameters of this test output
 	DELETE FROM ParamOutput WHERE TestOutputId = @testOutputId;
-	-- now it is save to delete this test output because nothing is referencing it
-	DELETE FROM TestOutput WHERE Id = @testOutputId;
+	-- now it is safe to delete this test output because nothing is referencing it
+	DELETE FROM TestOutput WHERE Id = @testOutputId;	
 END
 GO
 --#endregion
@@ -327,6 +319,43 @@ BEGIN
 END
 GO
 --#endregion
+
+--#region CREATE PROCEDURE udpDeleteOperator
+IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
+	DROP PROCEDURE udpDeleteOperator;
+GO
+CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
+AS
+BEGIN
+	-- 1) delete all parameters which have been executed in some test which has been
+	-- executed in a shift which has executed operator that should be deleted
+	DELETE P FROM ParamOutput P
+		INNER JOIN TestOutput ON (P.TestOutputId = TestOutput.Id)
+		INNER JOIN Shift ON (TestOutput.ShiftId = Shift.Id)
+		WHERE Shift.OperatorId = @operatorId;
+
+	-- 2) delete all tests that have been executed in some shift which has beed executed
+	-- by operator that should be deleted
+	DELETE T FROM TestOutput T
+		INNER JOIN Shift ON (T.ShiftId = Shift.Id)
+		WHERE Shift.OperatorId = @operatorId;
+	
+	-- 3) delete all references to test which has been used in a shift which has been executed
+	-- by operator that should be deleted
+	DELETE TS FROM TestShift TS
+		INNER JOIN Shift ON (TS.ShiftId = Shift.Id)
+		WHERE Shift.OperatorId = @operatorId;
+	
+	-- 4) delete all shifts which have been executed by operator that should be deleted
+	DELETE FROM Shift WHERE Shift.OperatorId = @operatorId;
+	
+	-- 5) delete operator
+	DELETE FROM Operator WHERE Operator.Id = @operatorId;
+END
+GO		
+--#endregion
+
+	-- SELECT (ENTITY FRAMEWORK) --
 
 --#region CREATE PROCEDURE udpParamResults
 IF OBJECT_ID('udpParamResults') IS NOT NULL
@@ -367,42 +396,8 @@ END
 GO
 --#endregion
 
---#region CREATE PROCEDURE udpDeleteOperator
-IF OBJECT_ID('udpDeleteOperator') IS NOT NULL
-	DROP PROCEDURE udpDeleteOperator;
-GO
-CREATE PROCEDURE udpDeleteOperator(@operatorId INT)
-AS
-BEGIN
-	-- 1) delete all parameters which have been executed in some test which has been
-	-- executed in a shift which has executed operator that should be deleted
-	DELETE P FROM ParamOutput P
-		INNER JOIN TestOutput ON (P.TestOutputId = TestOutput.Id)
-		INNER JOIN Shift ON (TestOutput.ShiftId = Shift.Id)
-		WHERE Shift.OperatorId = @operatorId;
-
-	-- 2) delete all tests that have been executed in some shift which has beed executed
-	-- by operator that should be deleted
-	DELETE T FROM TestOutput T
-		INNER JOIN Shift ON (T.ShiftId = Shift.Id)
-		WHERE Shift.OperatorId = @operatorId;
-	
-	-- 3) delete all references to test which has been used in a shift which has been executed
-	-- by operator that should be deleted
-	DELETE TS FROM TestShift TS
-		INNER JOIN Shift ON (TS.ShiftId = Shift.Id)
-		WHERE Shift.OperatorId = @operatorId;
-	
-	-- 4) delete all shifts which have been executed by operator that should be deleted
-	DELETE FROM Shift WHERE Shift.OperatorId = @operatorId;
-	
-	-- 5) delete operator
-	DELETE FROM Operator WHERE Operator.Id = @operatorId;
-END
-GO		
---#endregion
-
   -- ADD OR MODIFY --
+  
 --#region CREATE PROCEDURE udpAddTest
 
 IF OBJECT_ID('udpAddTest') IS NOT NULL
@@ -470,6 +465,63 @@ COMMIT TRAN
 GO
 --#endregion
 
+	-- PARAMETRIZED VIEWS --
+
+--#region CREATE FUNCTION udfGetStat
+
+IF OBJECT_ID('udfGetShiftStat') IS NOT NULL
+	DROP FUNCTION udfGetShiftStat;
+GO
+CREATE FUNCTION udfGetShiftStat(@begin DATETIME, @end DATETIME)
+RETURNS TABLE
+AS
+	RETURN (SELECT * FROM ShiftResult 
+		WHERE Start >= @begin AND Finish <= @end);
+GO
+--#endregion
+
+--#region CREATE FUNCTION udfBestOperators
+
+IF OBJECT_ID('udfBestOperators') IS NOT NULL
+	DROP FUNCTION udfBestOperators;
+GO
+-- Get @count of best operators during given period of time (@begin - @end)
+-- Operators are evaluated by sum of duration of all tests executed in a shift by this operator
+CREATE FUNCTION udfBestOperators(@count INT, @begin DATETIME, @end DATETIME)
+RETURNS TABLE
+AS
+	RETURN 
+	(SELECT TOP (@count)
+		Operator.Id, Operator.Name, Operator.Surname, TotalSequences, TotalTests, 
+		TotalTestTime, TotalShiftTime
+	FROM
+	(SELECT Operator.Id AS OperatorId, COUNT(*) AS TotalTests,
+		-- count operator testing time
+		CAST(CAST(SUM(CAST(TestOutput.Finish - TestOutput.Start AS FLOAT)) AS DATETIME) AS TIME) AS TotalTestTime
+		FROM Operator 
+		JOIN Shift ON (Operator.Id = Shift.OperatorId)
+		JOIN TestOutput ON (Shift.Id = TestOutput.ShiftId)
+		-- only count shift in given time range
+		WHERE Shift.Start >= @begin AND Shift.Finish <= @end
+		GROUP BY Operator.Id) t1
+	JOIN 
+	-- for each operator count number of his or her serquences
+	(SELECT OperatorId, COUNT(*) AS TotalSequences, 
+		CAST(CAST(SUM(CAST(Shift.Finish - Shift.Start AS FLOAT)) AS DATETIME) AS TIME) AS TotalShiftTime
+		FROM Shift
+		-- only count shift in given range
+		WHERE Shift.Start >= @begin AND Shift.Finish <= @end
+		GROUP BY OperatorId) t2
+	ON(t1.OperatorId = t2.OperatorId)
+	JOIN Operator ON (t2.OperatorId = Operator.Id)
+	ORDER BY TotalTestTime, TotalShiftTime DESC);
+GO
+--#endregion
+
+--#region CREATE FUNCTION udf
+
+--#endregion
+
 --------------------
 --- CREATE VIEWS ---
 --------------------
@@ -478,42 +530,60 @@ GO
 -- For each shift get these information: Date and time when shift was started
 -- and finished, name of tested mirror, full name of operator who has executed
 -- that shift, number of sequences where all tests have been completed (correctly),
--- number of tests where at least one failed, and where at least one was aborted
+-- number of tests where at least one failed, and where at least one was aborted,
+-- number of completed, failed and aborted tests. Notice that aborted test is failed
+-- as well
 IF OBJECT_ID('ShiftResult') IS NOT NULL
 	DROP VIEW ShiftResult;
 GO
-CREATE VIEW ShiftResult(Id, Start, Finish, MirrorId, MirrorName, OperatorId, OperatorName, 
-	Completed, Failed, Aborted)
-	AS 
--- this table will contain ShiftId and number of sequences in this shift
--- where all tests in sequence are completed, number of sequences where
--- at least one test is failed or aborted and number of sequences where
--- at least one test is aborted	
-SELECT Shift.Id, Shift.Start, Shift.Finish, Mirror.Id, Mirror.Name, Operator.Id,
-	Operator.Name + ' ' + Operator.Surname,
-	-- from the parent select command we have obtained ShiftId. we are going to
-	-- get only outputs with this shift id, grouping it by sequence. then we
-	-- will find the maximum of result in one group (sequence). if it is 0 (all
-	-- of them are 0) all test is this sequence are completed
-	(SELECT COUNT(*) FROM 
-		(SELECT Sequence FROM TestOutput AS t2
-			WHERE t2.ShiftId = Shift.Id
-			GROUP BY t2.Sequence HAVING MAX(Result) = 0) AS C) AS Completed,
-	-- this is same as finding sequences with all tests completed, just find
-	-- such a sequence where at least one test is not failed
-	(SELECT COUNT(*) FROM
-		(SELECT Sequence FROM TestOutput AS t2
-			WHERE t2.ShiftId = Shift.Id
-			GROUP BY t2.Sequence HAVING MAX(Result) = 1) AS C) AS Failed,
-	-- find such a sequence where at least one test is aborted
-	(SELECT COUNT(*) FROM
-		(SELECT Sequence FROM TestOutput AS t2
-			WHERE t2.ShiftId = Shift.Id
-			GROUP BY t2.Sequence HAVING MAX(Result) = 2) AS C) AS Aborted
-	FROM Shift
+-- ShiftId, TotalSequences, CompletedSequences, FailedSequences, AbortedSequences, TotalTests,
+-- CompletedTests, FailedTests, AbortedTests, Start, Finish, MirrorId, Mirror, OperatorId, Operator
+CREATE VIEW ShiftResult AS
+	SELECT t2.*, Shift.Start, Shift.Finish, Mirror.Id AS MirrorId, Mirror.Name AS Mirror, 
+		Operator.Id AS OperatorId, Operator.Name + ' ' + Operator.Surname AS Operator
+	FROM
+	(SELECT ShiftId,
+		-- test outputs are grouped by sequences - count number of sequences in each shift
+		COUNT(*) AS TotalSequences,
+		-- count number of sequences where all tests are completed
+		SUM(CASE WHEN Failed = 0 AND Aborted = 0 THEN 1 ELSE 0 END) AS CompletedSequences,
+		-- count number of sequences where at least one test is failed or aborted
+		SUM(CASE WHEN Failed > 0 OR Aborted > 0 THEN 1 ELSE 0 END) AS FailedSequences,
+		-- count number of sequence where at least one test is aborted
+		SUM(CASE WHEN Aborted > 0 THEN 1 ELSE 0 END) AS AbortedSequences,
+		-- sum all tests in all sequences
+		SUM(TotalTests) AS TotalTests,
+		-- sum all completed tests in all sequences
+		SUM(Completed) AS CompletedTests,
+		-- sum all failed tests in all sequences
+		SUM(Failed) AS FailedTests,
+		-- sum all aborted tests in all sequences
+		SUM(Aborted) AS AbortedTests
+	FROM
+		-- group tests in shift by sequence number and in each sequence count nubmer of completed,
+		-- failed and aborted tests (sequence where are only completed tests is completed, otherwise
+		-- it is failed and can be aborted if thare is at least one aborted test)
+		(SELECT ShiftId, Sequence,
+			-- count total number of tests
+			COUNT(*) TotalTests,
+			-- for each completed test add 1
+			SUM(CASE WHEN Result = 0 THEN 1 ELSE 0 END) AS Completed,
+			-- for each failed (or aborted) test add 1
+			SUM(CASE WHEN Result >= 1 THEN 1 ELSE 0 END) AS Failed,
+			-- for each aborted test add 1
+			SUM(CASE WHEN Result >= 2 THEN 1 ELSE 0 END) AS Aborted
+		FROM TestOutput
+		-- create groups of sequences for each shift
+		GROUP BY TestOutput.ShiftId, TestOutput.Sequence) t1
+		-- group sequences to one shift
+		GROUP BY t1.ShiftId) t2
+	-- add shift data: start, finish
+	JOIN Shift ON (Shift.Id = t2.ShiftId)
+	-- add mirror data: name of mirror
 	JOIN Mirror ON (Shift.MirrorId = Mirror.Id)
-	JOIN Operator ON (Shift.OperatorId = Operator.Id);
-GO		
+	-- add name opeartor who executed this shift
+	JOIN Operator ON (Shift.OperatorId = Operator.Id)
+GO
 --#endregion
 
 --#region CREATE VIEW TestResult
@@ -549,7 +619,7 @@ GO
 IF OBJECT_ID('OperatorResult') IS NOT NULL
 	DROP VIEW OperatorResult;
 GO
-CREATE VIEW OperatorResult(Id, Name, Surname, TotalSequences, TotalMirrors, TotalTime) AS
+CREATE VIEW OperatorResult(Id, Name, Surname, TotalSequences, TotalTests, TotalTime) AS
 	SELECT Operator.Id, Operator.Name, Operator.Surname, TotalSequences, TotalMirrors, TotalTime
 	FROM
 	(SELECT Operator.Id AS OperatorId, COUNT(*) AS TotalMirrors,
@@ -564,5 +634,109 @@ CREATE VIEW OperatorResult(Id, Name, Surname, TotalSequences, TotalMirrors, Tota
 		GROUP BY OperatorId) t2
 	ON(t1.OperatorId = t2.OperatorId)
 	JOIN Operator ON (t2.OperatorId = Operator.Id)
+GO
+SELECT * FROM OperatorResult ORDER BY TotalSequences DESC
+--#endregion
+
+--#region CREATE VIEW TestRate
+IF OBJECT_ID('TestRate') IS NOT NULL
+	DROP VIEW TestRate;
+GO
+-- List of all tests used for any testing with statistics:
+-- Id (of test), Name (of test), Total (numer of test executions), Completed (number of completed
+-- executions), Failed (number of failed executions), Aborted (number of aborted executions), 
+-- TotalTime (sum of all executions duration)
+CREATE VIEW TestRate AS
+	SELECT t1.Id, Test.Name, t1.Total, t1.Completed, t1.Failed, t1.Aborted, t1.TotalTime FROM
+	(SELECT Test.Id,
+		-- test outputs are grouped by used test id, count number of executions of this test
+		COUNT(*) AS Total,
+		-- count number of completed executions
+		SUM(CASE WHEN Result = 0 THEN 1 ELSE 0 END) AS Completed,
+		-- count number of failed (or aborted) executions
+		SUM(CASE WHEN Result >= 1 THEN 1 ELSE 0 END) AS Failed,
+		-- count number of aborted executinos
+		SUM(CASE WHEN Result >= 2 THEN 1 ELSE 0 END) AS Aborted,
+		-- sum durations of all tests
+		CAST(CAST(SUM(CAST(Finish - Start AS FLOAT)) AS DATETIME) AS TIME) AS TotalTime
+	 FROM
+		TestOutput
+		JOIN Test ON (TestOutput.TestId = Test.Id)
+		GROUP BY Test.Id) t1
+	-- add test data: name
+	JOIN Test ON (t1.Id = Test.Id)
+GO
+--#endregion
+
+--#region CREATE VIEW MirrorRate
+IF OBJECT_ID('MirrorRate') IS NOT NULL
+	DROP VIEW MirrorRate;
+GO
+-- List of all mirrors and statisticks about tests executed on this type of mirror:
+-- Id, SerialNumber, Name, Description, Type, SupplierId, Total, Completed, Failed, Aborted
+CREATE VIEW MirrorRate AS
+	SELECT Mirror.*, t.Total, t.Completed, t.Failed, t.Aborted FROM
+	(SELECT Mirror.Id,
+		COUNT(*) AS Total,
+		SUM(CASE WHEN Result = 0 THEN 1 ELSE 0 END) AS Completed,
+		SUM(CASE WHEN Result >= 1 THEN 1 ELSE 0 END) AS Failed,
+		SUM(CASE WHEN Result >= 2 THEN 1 ELSE 0 END) AS Aborted
+	FROM 
+		Shift
+		JOIN
+		TestOutput ON (TestOutput.ShiftId = Shift.Id)
+		RIGHT JOIN	-- include mirror that have not been tested yet
+		Mirror ON (Shift.MirrorId = Mirror.Id)
+		GROUP BY Mirror.Id) t
+	JOIN
+	-- to result add info about particular mirror
+	Mirror ON (Mirror.Id = t.Id)
+GO
+select * from mirrorrate;
+--#endregion
+
+-----------------------
+--- CREATE TRIGGERS ---
+-----------------------
+
+--#region CREATE TRIGGER trParamOutput_del
+IF OBJECT_ID('trParamOutput_del') IS NOT NULL
+	DROP TRIGGER trParamOutput_del;
+GO
+-- after some parameter outputs have been deleted check if there are any unused parameters
+-- which have been referenced by these delted outputs
+CREATE TRIGGER trParamOutput_del ON ParamOutput
+-- this trigger will be fired after param outputs have been deleted so we are shure that Params
+-- won't be referenced
+AFTER DELETE
+AS
+BEGIN TRAN
+	-- delete all parameters
+	DELETE FROM Param
+		-- that are not referenced by some parameter output just deleted
+		WHERE NOT EXISTS (SELECT * FROM deleted
+			WHERE Param.Id = deleted.ParamId)
+COMMIT
+GO
+--#endregion
+
+--#region CREATE TRIGGER trTestOutput_del
+IF OBJECT_ID('trTestOutput_del') IS NOT NULL
+	DROP TRIGGER trTestOutput_del;
+GO
+-- after some test outputs have been deleted check if there are any unused tests
+-- which have been referenced by these delted outputs
+CREATE TRIGGER trTestOutput_del ON TestOutput
+-- this trigger will be fired after test outputs have been deleted so we are shure that Tests
+-- won't be referenced
+AFTER DELETE
+AS
+BEGIN TRAN
+	-- delete all tests
+	DELETE FROM Test
+		-- that are not referenced by some test output just deleted
+		WHERE NOT EXISTS (SELECT * FROM deleted
+			WHERE Test.Id = deleted.TestId)
+COMMIT
 GO
 --#endregion

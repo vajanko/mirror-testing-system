@@ -21,7 +21,6 @@ namespace MTS.Simulator
         private NetworkStream stream;
         private Channels channels;
         private List<Thread> threads = new List<Thread>();
-        private System.Timers.Timer timer;
 
         private event Action update;
         public event Action Update
@@ -35,9 +34,6 @@ namespace MTS.Simulator
             if (running) return;
 
             slave = new TcpListener(ip, port);
-            timer = new System.Timers.Timer(100);
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
-            timer.Start();
             running = true;
 
             // create a new thread for listening incoming connections
@@ -45,16 +41,10 @@ namespace MTS.Simulator
             listenerThread.Start(slave);
         }
 
-        void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (update != null)
-                update();
-        }
 
         public void Disconnect()
         {
             running = false;
-            timer.Stop();
             slave.Stop();
             foreach (Thread t in threads)
             {
@@ -81,7 +71,7 @@ namespace MTS.Simulator
                 {
                     TcpClient master = slave.AcceptTcpClient();
 
-                    Responder responder = new Responder(master, channels);
+                    Responder responder = new Responder(master, channels, update);
                     Thread mt = new Thread(new ThreadStart(responder.respond));
                     threads.Add(mt);
                     mt.Start();
@@ -104,6 +94,12 @@ namespace MTS.Simulator
     {
         private TcpClient master;
         IModule module;
+        private Action update;
+        private void OnUpdate()
+        {
+            if (update != null)
+                update();
+        }
 
         public void respond()
         {
@@ -157,14 +153,13 @@ namespace MTS.Simulator
                                             (channel as IAnalogInput).SetValue(uint.Parse(value));
                                         else if (channel is IDigitalInput)
                                             (channel as IDigitalInput).SetValue(bool.Parse(value));
-                                        //channel.ValueBytes = enc.GetBytes(tmp[1]);
                                     }
-                                            //val.ToArray();
-                                            //ASCIIEncoding.ASCII.GetBytes(value);
                                 }
                             }
                         }
                     }
+
+                    OnUpdate();
                 }
                 catch (Exception ex)
                 {
@@ -173,10 +168,11 @@ namespace MTS.Simulator
             }
         }
 
-        public Responder(TcpClient master, IModule module)
+        public Responder(TcpClient master, IModule module, Action onUpdate)
         {
             this.master = master;
             this.module = module;
+            this.update = onUpdate;
         }
     }
 }

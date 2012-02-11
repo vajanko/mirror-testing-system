@@ -39,6 +39,8 @@ namespace MTS.Data
         public DbSet<MirrorResult> MirrorResults { get; set; }
         public DbSet<OperatorResult> OperatorResults { get; set; }
         public DbSet<ShiftResult> ShiftResults { get; set; }
+        public DbSet<MirrorRate> MirrorRates { get; set; }
+        public DbSet<TestRate> TestRates { get; set; }
     
         public virtual ObjectResult<DbTestResult> GetTestResult(Nullable<int> shiftId)
         {

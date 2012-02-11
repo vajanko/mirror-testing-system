@@ -18,12 +18,17 @@ namespace MTS.Data
         public System.DateTime Start { get; set; }
         public System.DateTime Finish { get; set; }
         public int MirrorId { get; set; }
-        public string MirrorName { get; set; }
         public int OperatorId { get; set; }
-        public string OperatorName { get; set; }
-        public Nullable<int> Completed { get; set; }
-        public Nullable<int> Failed { get; set; }
-        public Nullable<int> Aborted { get; set; }
+        public Nullable<int> TotalSequences { get; set; }
+        public Nullable<int> CompletedSequences { get; set; }
+        public Nullable<int> FailedSequences { get; set; }
+        public Nullable<int> AbortedSequences { get; set; }
+        public Nullable<int> TotalTests { get; set; }
+        public Nullable<int> CompletedTests { get; set; }
+        public Nullable<int> FailedTests { get; set; }
+        public Nullable<int> AbortedTests { get; set; }
+        public string Mirror { get; set; }
+        public string Operator { get; set; }
     }
     
 }

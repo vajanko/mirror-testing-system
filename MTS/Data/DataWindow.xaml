@@ -53,17 +53,23 @@
                       SelectionChanged="shiftResultDataGrid_SelectionChanged" LoadingRow="shiftResultDataGrid_LoadingRow" HeadersVisibility="All">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=Header}"/>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=Header}" TextWrapping="Wrap"/>
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
+            
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="startColumn" Header="Start" Binding="{Binding Start, StringFormat=HH:mm:ss}"/>
                 <DataGridTextColumn x:Name="finishColumn" Header="Finish" Binding="{Binding Finish, StringFormat=HH:mm:ss}"/>
-                <DataGridTextColumn x:Name="operatorColumn" Binding="{Binding Path=OperatorName}" Header="Operator"  />
-                <DataGridTextColumn x:Name="mirrorColumn" Binding="{Binding Path=MirrorName}" Header="Mirror Name" />
-                <DataGridTextColumn x:Name="completedColumn" Binding="{Binding Path=Completed}" Header="Completed" Width="SizeToHeader" />
-                <DataGridTextColumn x:Name="failedColumn" Binding="{Binding Path=Failed}" Header="Failed" Width="SizeToHeader" />
-                <DataGridTextColumn x:Name="abortedColumn" Binding="{Binding Path=Aborted}" Header="Aborted" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="operatorColumn" Binding="{Binding Path=Operator}" Header="Operator"  />
+                <DataGridTextColumn x:Name="mirrorColumn" Binding="{Binding Path=Mirror}" Header="Mirror"/>
+                <DataGridTextColumn Binding="{Binding TotalSequences}" Header="Total seq"/>
+                <DataGridTextColumn x:Name="completedColumn" Binding="{Binding Path=CompletedSequences}" Header="Completed" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="failedColumn" Binding="{Binding Path=FailedSequences}" Header="Failed" Width="SizeToHeader" />
+                <DataGridTextColumn x:Name="abortedColumn" Binding="{Binding Path=AbortedSequences}" Header="Aborted" Width="SizeToHeader" />
+                <DataGridTextColumn Binding="{Binding TotalTests}" Header="Total tests"/>
+                <DataGridTextColumn Binding="{Binding CompletedTests}" Header="Completed tests"/>
+                <DataGridTextColumn Binding="{Binding FailedTests}" Header="Failed tests"/>
+                <DataGridTextColumn Binding="{Binding AbortedTests}" Header="Aborted tests"/>
             </DataGrid.Columns>
         </DataGrid>
 
