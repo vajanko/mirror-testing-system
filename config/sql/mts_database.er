@@ -10,16 +10,16 @@
 <autor xsi:null="1"/>
 <verze xsi:null="1"/>
 <vytvoreno id="ref-6">6. 10. 2011 9:15</vytvoreno>
-<zmeneno id="ref-7">18. 12. 2011 20:44</zmeneno>
+<zmeneno id="ref-7">14. 2. 2012 21:48</zmeneno>
 <pocetEntit>10</pocetEntit>
-<pocetVztahu>19</pocetVztahu>
+<pocetVztahu>20</pocetVztahu>
 <zrozmery href="#ref-8"/>
 <krozmery href="#ref-9"/>
 </a1:ER>
 <a2:ArrayList id="ref-3" xmlns:a2="http://schemas.microsoft.com/clr/ns/System.Collections">
 <_items href="#ref-10"/>
 <_size>17</_size>
-<_version>45</_version>
+<_version>47</_version>
 </a2:ArrayList>
 <a2:ArrayList id="ref-4" xmlns:a2="http://schemas.microsoft.com/clr/ns/System.Collections">
 <_items href="#ref-11"/>
@@ -345,98 +345,98 @@
 </a1:Dvojice>
 <a1:Dvojice id="ref-30" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-13"/>
-<role href="#ref-5"/>
+<role id="ref-143"></role>
 <v href="#ref-17"/>
 <typ>1</typ>
-<kardinalita href="#ref-143"/>
+<kardinalita href="#ref-144"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-31" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-13"/>
 <role href="#ref-5"/>
 <v href="#ref-18"/>
 <typ>1</typ>
-<kardinalita href="#ref-144"/>
+<kardinalita href="#ref-145"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-32" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-16"/>
 <role href="#ref-5"/>
 <v href="#ref-19"/>
 <typ>1</typ>
-<kardinalita href="#ref-145"/>
+<kardinalita href="#ref-146"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-33" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-15"/>
 <role href="#ref-5"/>
 <v href="#ref-19"/>
 <typ>1</typ>
-<kardinalita href="#ref-146"/>
+<kardinalita href="#ref-147"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-34" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-12"/>
 <role href="#ref-5"/>
 <v href="#ref-20"/>
 <typ>1</typ>
-<kardinalita href="#ref-147"/>
+<kardinalita href="#ref-148"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-35" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-15"/>
 <role href="#ref-5"/>
 <v href="#ref-20"/>
 <typ>1</typ>
-<kardinalita href="#ref-148"/>
+<kardinalita href="#ref-149"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-36" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-21"/>
 <role href="#ref-5"/>
 <v href="#ref-22"/>
 <typ>1</typ>
-<kardinalita href="#ref-149"/>
+<kardinalita href="#ref-150"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-37" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-16"/>
 <role href="#ref-5"/>
 <v href="#ref-22"/>
 <typ>1</typ>
-<kardinalita href="#ref-150"/>
+<kardinalita href="#ref-151"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-38" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-15"/>
 <role href="#ref-5"/>
 <v href="#ref-18"/>
 <typ>1</typ>
-<kardinalita href="#ref-151"/>
+<kardinalita href="#ref-152"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-39" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-24"/>
 <role href="#ref-5"/>
 <v href="#ref-25"/>
 <typ>1</typ>
-<kardinalita href="#ref-152"/>
+<kardinalita href="#ref-153"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-40" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-21"/>
 <role href="#ref-5"/>
 <v href="#ref-25"/>
 <typ>1</typ>
-<kardinalita href="#ref-153"/>
+<kardinalita href="#ref-154"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-41" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-16"/>
 <role href="#ref-5"/>
 <v href="#ref-26"/>
 <typ>1</typ>
-<kardinalita href="#ref-154"/>
+<kardinalita href="#ref-155"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-42" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-23"/>
 <role href="#ref-5"/>
 <v href="#ref-26"/>
 <typ>1</typ>
-<kardinalita href="#ref-155"/>
+<kardinalita href="#ref-156"/>
 </a1:Dvojice>
 <a1:Dvojice id="ref-43" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <e href="#ref-15"/>
-<role id="ref-156"></role>
+<role href="#ref-5"/>
 <v href="#ref-27"/>
 <typ>1</typ>
 <kardinalita href="#ref-157"/>
@@ -981,7 +981,7 @@
 <s id="ref-186">MirrorProduction</s>
 </a1:Str>
 <a1:Str id="ref-80" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
-<s id="ref-187">Vztah 0</s>
+<s id="ref-187">MirrorProduction</s>
 </a1:Str>
 <a1:Souradnice id="ref-81" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/ERTOS/ERTOS%2C%20Version%3D1.0.2384.24692%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <x>-287</x>
@@ -1813,33 +1813,29 @@
 <item>0</item>
 <item>n</item>
 </SOAP-ENC:Array>
-<SOAP-ENC:Array id="ref-143" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
-<item>0</item>
-<item>n</item>
-</SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-144" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
-<item>0</item>
-<item>n</item>
+<item>1</item>
+<item>1</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-145" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>0</item>
 <item>n</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-146" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
-<item>1</item>
-<item>n</item>
-</SOAP-ENC:Array>
-<SOAP-ENC:Array id="ref-147" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>0</item>
 <item>n</item>
 </SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-147" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
+<item>1</item>
+<item>n</item>
+</SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-148" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
-<item>1</item>
-<item>1</item>
+<item>0</item>
+<item>n</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-149" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>1</item>
-<item>n</item>
+<item>1</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-150" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>1</item>
@@ -1847,21 +1843,25 @@
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-151" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>1</item>
-<item>1</item>
+<item>n</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-152" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>1</item>
 <item>1</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-153" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
-<item>0</item>
-<item>n</item>
+<item>1</item>
+<item>1</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-154" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>0</item>
 <item>n</item>
 </SOAP-ENC:Array>
 <SOAP-ENC:Array id="ref-155" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
+<item>0</item>
+<item>n</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-156" SOAP-ENC:arrayType="a3:Char[2]" xmlns:a3="http://schemas.microsoft.com/clr/ns/System">
 <item>1</item>
 <item>1</item>
 </SOAP-ENC:Array>
