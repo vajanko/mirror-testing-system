@@ -349,8 +349,9 @@ namespace MTS.Tester
             if (toExecute.Count > 0)
             {
                 Task t = toExecute.Peek();
-
-                if (executing.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId) &&
+                
+                if (t.Enabled &&
+                    executing.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId) &&
                     !disallowedGraph.Contains(e.DisallowId, t.DisallowId)))
                     task = toExecute.Dequeue();
             }

@@ -231,19 +231,19 @@ namespace MTS.Simulator
 
             if (channels.IsMirrorMoveingUp)
             {
-                channels.DistanceX.SetValue(channels.DistanceX.Value - 5);
+                channels.DistanceX.SetValue(channels.DistanceX.Value - (uint)movingSpeed.Value);
             }
             else if (channels.IsMirrorMoveingDown)
             {
-                channels.DistanceX.SetValue(channels.DistanceX.Value + 5);
+                channels.DistanceX.SetValue(channels.DistanceX.Value + (uint)movingSpeed.Value);
             }
             else if (channels.IsMirrorMoveingLeft)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value + 5);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value + (uint)movingSpeed.Value);
             }
             else if (channels.IsMirrorMoveingRight)
             {
-                channels.DistanceZ.SetValue(channels.DistanceZ.Value - 5);
+                channels.DistanceZ.SetValue(channels.DistanceZ.Value - (uint)movingSpeed.Value);
             }
         }
         private void simulateDistanceSensors()
@@ -561,16 +561,16 @@ namespace MTS.Simulator
                     switch (text)
                     {
                         case "UP":
-                            channels.DistanceX.SetValue(channels.DistanceX.Value + 5);
+                            channels.DistanceX.SetValue(channels.DistanceX.Value + (uint)movingSpeed.Value);
                             break;
                         case "DOWN":
-                            channels.DistanceX.SetValue(channels.DistanceX.Value - 5);
+                            channels.DistanceX.SetValue(channels.DistanceX.Value - (uint)movingSpeed.Value);
                             break;
                         case "LEFT":
-                            channels.DistanceZ.SetValue(channels.DistanceZ.Value + 5);
+                            channels.DistanceZ.SetValue(channels.DistanceZ.Value + (uint)movingSpeed.Value);
                             break;
                         case "RIGHT":
-                            channels.DistanceZ.SetValue(channels.DistanceZ.Value - 5);
+                            channels.DistanceZ.SetValue(channels.DistanceZ.Value - (uint)movingSpeed.Value);
                             break;
                     }
                 }

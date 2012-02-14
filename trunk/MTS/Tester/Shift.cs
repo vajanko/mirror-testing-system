@@ -409,8 +409,8 @@ namespace MTS.Tester
         /// Create a new instance of shift and save it to database. Current date and time is used for initializing
         /// start time of shift. Also all tests and parameters that are going to be used in this shift will be saved
         /// </summary>
-        /// <param name="usedTests">Only tests that will be executed (not disabled)</param>
-        private void createShift(TestCollection usedTests)
+        /// <param name="tests">All defined tests that could be executed (also disabled)</param>
+        private void createShift(TestCollection tests)
         {
             // 1) create a new instance of shift and save it to database
             dbShift = context.Shifts.Add(new Data.Shift
@@ -424,7 +424,7 @@ namespace MTS.Tester
             context.SaveChanges();
 
             // 2) save information about used tests in current shift
-            foreach (TestValue tv in usedTests)
+            foreach (TestValue tv in tests.Where(t => t.Enabled))
             {
                 context.TestShifts.Add(new TestShift { ShiftId = dbShift.Id, TestId = tv.DatabaseId });
             }

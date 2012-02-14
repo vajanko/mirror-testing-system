@@ -37,7 +37,7 @@ namespace MTS.Tester
                 Begin = Begin,
                 End = End,
                 ResultCode = getResultCode(),   // this method may be overridden and return result depending on test
-                HasData = true                  // value indicating that this result has data to be saved to database
+                HasData = Enabled               // value indicating that this result has data to be saved to database
             };
         }
 

@@ -56,7 +56,6 @@
                     <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=Header}" TextWrapping="Wrap"/>
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
-            
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="startColumn" Header="Start" Binding="{Binding Start, StringFormat=HH:mm:ss}"/>
                 <DataGridTextColumn x:Name="finishColumn" Header="Finish" Binding="{Binding Finish, StringFormat=HH:mm:ss}"/>

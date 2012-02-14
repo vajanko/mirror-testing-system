@@ -94,6 +94,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.movingSpeed = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unfoldingTime)).BeginInit();
@@ -120,6 +122,7 @@
             this.groupBox12.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox16.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.movingSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // startButton
@@ -354,6 +357,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label15);
+            this.groupBox3.Controls.Add(this.movingSpeed);
             this.groupBox3.Controls.Add(this.groupBox7);
             this.groupBox3.Location = new System.Drawing.Point(373, 310);
             this.groupBox3.Name = "groupBox3";
@@ -850,6 +855,27 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.moveMirror_Click);
             // 
+            // movingSpeed
+            // 
+            this.movingSpeed.Location = new System.Drawing.Point(134, 41);
+            this.movingSpeed.Name = "movingSpeed";
+            this.movingSpeed.Size = new System.Drawing.Size(64, 20);
+            this.movingSpeed.TabIndex = 6;
+            this.movingSpeed.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(131, 25);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(77, 13);
+            this.label15.TabIndex = 7;
+            this.label15.Text = "Moving speed:";
+            // 
             // Simulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -890,6 +916,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.spiralCurrentMin)).EndInit();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.directionLightCurrentMax)).EndInit();
@@ -912,6 +939,7 @@
             this.groupBox14.PerformLayout();
             this.groupBox16.ResumeLayout(false);
             this.groupBox16.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.movingSpeed)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -984,6 +1012,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.NumericUpDown movingSpeed;
     }
 }
 
