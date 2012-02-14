@@ -23,9 +23,8 @@ INSERT INTO Supplier (CompanyName, City, Street, Number, Zip, State)
 	VALUES('Cyril Trnka', 'Praha', 'Nábøežní', '1', '12003', 'Czech Republic');
 INSERT INTO Supplier (CompanyName, City, Street, Number, Zip, State) 
 	VALUES('Mein Factory', 'Dusseldorf', 'Leibnitz strasse', '56', '68952', 'Germany');
-select * from supplier;
 
-
+-- Mirror types
 INSERT INTO Mirror (SerialNumber, Name, Type, SupplierId)
 	VALUES('123-456-798', 'Ford Power Mirror', 0, 
 		(SELECT Id FROM Supplier WHERE CompanyName = 'Super Company'));

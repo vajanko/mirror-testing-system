@@ -72,8 +72,8 @@
           </EntitySet>
           <EntitySet Name="TestRate" EntityType="MTS.Data.Store.TestRate" store:Type="Views" store:Schema="dbo" store:Name="TestRate">
             <DefiningQuery>SELECT 
-      [TestRate].[Name] AS [Name], 
       [TestRate].[Id] AS [Id], 
+      [TestRate].[Name] AS [Name], 
       [TestRate].[Total] AS [Total], 
       [TestRate].[Completed] AS [Completed], 
       [TestRate].[Failed] AS [Failed], 
@@ -312,11 +312,11 @@
       -->
         <EntityType Name="TestRate">
           <Key>
-            <PropertyRef Name="Name" />
             <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
           </Key>
-          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="25" />
           <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="25" />
           <Property Name="Total" Type="int" />
           <Property Name="Completed" Type="int" />
           <Property Name="Failed" Type="int" />
@@ -462,6 +462,14 @@
           <Parameter Name="type" Type="tinyint" Mode="In" />
           <Parameter Name="unit" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="udpAddSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="companyName" Type="nvarchar" Mode="In" />
+          <Parameter Name="city" Type="nvarchar" Mode="In" />
+          <Parameter Name="street" Type="nvarchar" Mode="In" />
+          <Parameter Name="number" Type="int" Mode="In" />
+          <Parameter Name="zip" Type="int" Mode="In" />
+          <Parameter Name="state" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="udpAddTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name" Type="varchar" Mode="In" />
         </Function>
@@ -473,6 +481,9 @@
         </Function>
         <Function Name="udpDeleteShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shiftId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpDeleteSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="supplierId" Type="int" Mode="In" />
         </Function>
         <Function Name="udpDeleteTestOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="testOutputId" Type="int" Mode="In" />
