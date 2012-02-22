@@ -42,6 +42,7 @@ namespace MTS
             catch (Exception ex)
             {
                 // do not care about this - could be written to installation log
+                string msg = ex.Message;
             }
 
             base.Commit(savedState);

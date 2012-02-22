@@ -17,9 +17,9 @@ namespace MTS.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public Nullable<int> TotalSequences { get; set; }
-        public Nullable<System.TimeSpan> TotalTime { get; set; }
-        public Nullable<int> TotalTests { get; set; }
+        public int TotalSequences { get; set; }
+        public int TotalTests { get; set; }
+        public System.TimeSpan TotalTime { get; set; }
     }
     
 }
