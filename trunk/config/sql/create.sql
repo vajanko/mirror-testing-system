@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 
 -- REMOVE THIS WHEN EXECUTING SCRIPT DURING INSTALATION
---USE mts;
+USE mts;
 
 ---------------------
 --- CREATE TALBES ---
@@ -491,12 +491,12 @@ GO
 IF OBJECT_ID('udpStartShift', N'P') IS NOT NULL
 	DROP PROCEDURE udpStartShift;
 GO
-CREATE PROCEDURE udpStartShift(@start DATETIME, @mirrorId INT, @operatorId INT)
+CREATE PROCEDURE udpStartShift(@mirrorId INT, @operatorId INT)
 AS
 BEGIN
 	-- insert new shift - it has been not finished yet (start == finish)
 	INSERT INTO Shift(Start, Finish, MirrorId, OperatorId)
-		VALUES(@start, @start, @mirrorId, @operatorId);
+		VALUES(GETDATE(), GETDATE(), @mirrorId, @operatorId);
 	
 	-- now select added shift. This strange behaviour is required by entity framework 
 	--- this value will be returned as output
@@ -511,10 +511,10 @@ GO
 IF OBJECT_ID('udpFinishShift', N'P') IS NOT NULL
 	DROP PROCEDURE udpFinishShift;
 GO
-CREATE PROCEDURE udpFinishShift(@shiftId INT, @finish DATETIME)
+CREATE PROCEDURE udpFinishShift(@shiftId INT)
 AS
 BEGIN TRAN
-	UPDATE Shift SET Finish = @finish WHERE Id = @shiftId;
+	UPDATE Shift SET Finish = GETDATE() WHERE Id = @shiftId;
 COMMIT
 GO
 --#endregion
@@ -640,6 +640,8 @@ AS
 BEGIN TRAN
 	INSERT INTO TestOutput(Result, Sequence, Start, Finish, TestId, ShiftId)
 		VALUES(@result, @sequence, @start, @finish, @testId, @shiftId);
+	-- select just added row id - this will be used to add parameters
+	SELECT CAST(@@IDENTITY AS INT);
 COMMIT
 GO
 --#endregion

@@ -37,10 +37,10 @@ namespace MTS.Data
         public DbSet<TestParam> TestParams { get; set; }
         public DbSet<TestShift> TestShifts { get; set; }
         public DbSet<MirrorResult> MirrorResults { get; set; }
-        public DbSet<OperatorResult> OperatorResults { get; set; }
         public DbSet<ShiftResult> ShiftResults { get; set; }
         public DbSet<MirrorRate> MirrorRates { get; set; }
         public DbSet<TestRate> TestRates { get; set; }
+        public DbSet<OperatorResult> OperatorResults { get; set; }
     
         public virtual ObjectResult<DbTestResult> GetTestResult(Nullable<int> shiftId)
         {
@@ -145,7 +145,7 @@ namespace MTS.Data
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Param>("AddParam", mergeOption, testIdParameter, nameParameter, valueParameter, typeParameter, unitParameter);
         }
     
-        public virtual ObjectResult<Test> AddTest(string name)
+        public virtual ObjectResult<Test> AddTest(string name, Nullable<int> shiftId)
         {
             ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Test).Assembly);
     
@@ -153,10 +153,14 @@ namespace MTS.Data
                 new ObjectParameter("name", name) :
                 new ObjectParameter("name", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test>("AddTest", nameParameter);
+            var shiftIdParameter = shiftId.HasValue ?
+                new ObjectParameter("shiftId", shiftId) :
+                new ObjectParameter("shiftId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test>("AddTest", nameParameter, shiftIdParameter);
         }
     
-        public virtual ObjectResult<Test> AddTest(string name, MergeOption mergeOption)
+        public virtual ObjectResult<Test> AddTest(string name, Nullable<int> shiftId, MergeOption mergeOption)
         {
             ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Test).Assembly);
     
@@ -164,7 +168,79 @@ namespace MTS.Data
                 new ObjectParameter("name", name) :
                 new ObjectParameter("name", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test>("AddTest", mergeOption, nameParameter);
+            var shiftIdParameter = shiftId.HasValue ?
+                new ObjectParameter("shiftId", shiftId) :
+                new ObjectParameter("shiftId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Test>("AddTest", mergeOption, nameParameter, shiftIdParameter);
+        }
+    
+        public virtual ObjectResult<Shift> StartShift(Nullable<int> mirrorId, Nullable<int> operatorId)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Shift).Assembly);
+    
+            var mirrorIdParameter = mirrorId.HasValue ?
+                new ObjectParameter("mirrorId", mirrorId) :
+                new ObjectParameter("mirrorId", typeof(int));
+    
+            var operatorIdParameter = operatorId.HasValue ?
+                new ObjectParameter("operatorId", operatorId) :
+                new ObjectParameter("operatorId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Shift>("StartShift", mirrorIdParameter, operatorIdParameter);
+        }
+    
+        public virtual ObjectResult<Shift> StartShift(Nullable<int> mirrorId, Nullable<int> operatorId, MergeOption mergeOption)
+        {
+            ((IObjectContextAdapter)this).ObjectContext.MetadataWorkspace.LoadFromAssembly(typeof(Shift).Assembly);
+    
+            var mirrorIdParameter = mirrorId.HasValue ?
+                new ObjectParameter("mirrorId", mirrorId) :
+                new ObjectParameter("mirrorId", typeof(int));
+    
+            var operatorIdParameter = operatorId.HasValue ?
+                new ObjectParameter("operatorId", operatorId) :
+                new ObjectParameter("operatorId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Shift>("StartShift", mergeOption, mirrorIdParameter, operatorIdParameter);
+        }
+    
+        public virtual int FinishShift(Nullable<int> shiftId)
+        {
+            var shiftIdParameter = shiftId.HasValue ?
+                new ObjectParameter("shiftId", shiftId) :
+                new ObjectParameter("shiftId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("FinishShift", shiftIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> AddTestOutput(Nullable<byte> result, Nullable<short> sequence, Nullable<System.DateTime> start, Nullable<System.DateTime> finish, Nullable<int> testId, Nullable<int> shiftId)
+        {
+            var resultParameter = result.HasValue ?
+                new ObjectParameter("result", result) :
+                new ObjectParameter("result", typeof(byte));
+    
+            var sequenceParameter = sequence.HasValue ?
+                new ObjectParameter("sequence", sequence) :
+                new ObjectParameter("sequence", typeof(short));
+    
+            var startParameter = start.HasValue ?
+                new ObjectParameter("start", start) :
+                new ObjectParameter("start", typeof(System.DateTime));
+    
+            var finishParameter = finish.HasValue ?
+                new ObjectParameter("finish", finish) :
+                new ObjectParameter("finish", typeof(System.DateTime));
+    
+            var testIdParameter = testId.HasValue ?
+                new ObjectParameter("testId", testId) :
+                new ObjectParameter("testId", typeof(int));
+    
+            var shiftIdParameter = shiftId.HasValue ?
+                new ObjectParameter("shiftId", shiftId) :
+                new ObjectParameter("shiftId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddTestOutput", resultParameter, sequenceParameter, startParameter, finishParameter, testIdParameter, shiftIdParameter);
         }
     }
 }

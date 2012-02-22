@@ -270,13 +270,16 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="Name" />
             <PropertyRef Name="Surname" />
+            <PropertyRef Name="TotalSequences" />
+            <PropertyRef Name="TotalTests" />
+            <PropertyRef Name="TotalTime" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="Surname" Type="nvarchar" Nullable="false" MaxLength="20" />
-          <Property Name="TotalSequences" Type="int" />
-          <Property Name="TotalTests" Type="int" />
-          <Property Name="TotalTime" Type="time" />
+          <Property Name="TotalSequences" Type="int" Nullable="false" />
+          <Property Name="TotalTests" Type="int" Nullable="false" />
+          <Property Name="TotalTime" Type="time" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'mts.dbo.ShiftResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -455,12 +458,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="udpAddMirror" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="serial" Type="char" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="desc" Type="nvarchar" Mode="In" />
+          <Parameter Name="type" Type="tinyint" Mode="In" />
+          <Parameter Name="supplierId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpAddOperator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="surname" Type="nvarchar" Mode="In" />
+          <Parameter Name="login" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="type" Type="tinyint" Mode="In" />
+        </Function>
         <Function Name="udpAddParam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="testId" Type="int" Mode="In" />
           <Parameter Name="name" Type="varchar" Mode="In" />
           <Parameter Name="value" Type="varchar" Mode="In" />
           <Parameter Name="type" Type="tinyint" Mode="In" />
           <Parameter Name="unit" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="udpAddParamOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="value" Type="varchar" Mode="In" />
+          <Parameter Name="paramId" Type="int" Mode="In" />
+          <Parameter Name="testOutputId" Type="int" Mode="In" />
         </Function>
         <Function Name="udpAddSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="companyName" Type="nvarchar" Mode="In" />
@@ -472,6 +494,18 @@
         </Function>
         <Function Name="udpAddTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="shiftId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpAddTestOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="result" Type="tinyint" Mode="In" />
+          <Parameter Name="sequence" Type="smallint" Mode="In" />
+          <Parameter Name="start" Type="datetime" Mode="In" />
+          <Parameter Name="finish" Type="datetime" Mode="In" />
+          <Parameter Name="testId" Type="int" Mode="In" />
+          <Parameter Name="shiftId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpDeleteMirror" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="mirrorId" Type="int" Mode="In" />
         </Function>
         <Function Name="udpDeleteOperator" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="operatorId" Type="int" Mode="In" />
@@ -488,8 +522,15 @@
         <Function Name="udpDeleteTestOutput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="testOutputId" Type="int" Mode="In" />
         </Function>
+        <Function Name="udpFinishShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shiftId" Type="int" Mode="In" />
+        </Function>
         <Function Name="udpParamResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="testId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="udpStartShift" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="mirrorId" Type="int" Mode="In" />
+          <Parameter Name="operatorId" Type="int" Mode="In" />
         </Function>
         <Function Name="udpTestResults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shiftId" Type="int" Mode="In" />
@@ -560,7 +601,6 @@
           <Parameter Name="testId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="MirrorResults" EntityType="MTS.Data.MirrorResult" />
-          <EntitySet Name="OperatorResults" EntityType="MTS.Data.OperatorResult" />
           <EntitySet Name="ShiftResults" EntityType="MTS.Data.ShiftResult" />
           <FunctionImport Name="DeleteShift">
           <Parameter Name="shiftId" Mode="In" Type="Int32" />
@@ -579,10 +619,27 @@
             <Parameter Name="unit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddTest" EntitySet="Tests" ReturnType="Collection(MTS.Data.Test)">
-          <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="shiftId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="MirrorRates" EntityType="MTS.Data.MirrorRate" />
           <EntitySet Name="TestRates" EntityType="MTS.Data.TestRate" />
+          <EntitySet Name="OperatorResults" EntityType="MTS.Data.OperatorResult" />
+          <FunctionImport Name="StartShift" EntitySet="Shifts" ReturnType="Collection(MTS.Data.Shift)">
+            <Parameter Name="mirrorId" Mode="In" Type="Int32" />
+            <Parameter Name="operatorId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="FinishShift">
+          <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddTestOutput" ReturnType="Collection(Int32)">
+            <Parameter Name="result" Mode="In" Type="Byte" />
+            <Parameter Name="sequence" Mode="In" Type="Int16" />
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="finish" Mode="In" Type="DateTime" />
+            <Parameter Name="testId" Mode="In" Type="Int32" />
+            <Parameter Name="shiftId" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Mirror">
           <Key>
@@ -865,19 +922,6 @@
           <Property Type="Int32" Name="Aborted" />
           <Property Type="Time" Name="AverageDuration" />
         </EntityType>
-        <EntityType Name="OperatorResult">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Surname" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Surname" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="TotalSequences" />
-          <Property Type="Time" Name="TotalTime" />
-          <Property Type="Int32" Name="TotalTests" />
-        </EntityType>
         <EntityType Name="ShiftResult">
           <Key>
             <PropertyRef Name="Id" />
@@ -935,6 +979,22 @@
           <Property Type="Int32" Name="Failed" />
           <Property Type="Int32" Name="Aborted" />
           <Property Type="Time" Name="TotalTime" />
+        </EntityType>
+        <EntityType Name="OperatorResult">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+            <PropertyRef Name="TotalSequences" />
+            <PropertyRef Name="TotalTests" />
+            <PropertyRef Name="TotalTime" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Surname" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="TotalSequences" Nullable="false" />
+          <Property Type="Int32" Name="TotalTests" Nullable="false" />
+          <Property Type="Time" Name="TotalTime" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1079,18 +1139,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OperatorResults">
-            <EntityTypeMapping TypeName="MTS.Data.OperatorResult">
-              <MappingFragment StoreEntitySet="OperatorResult">
-                <ScalarProperty Name="TotalTests" ColumnName="TotalTests" />
-                <ScalarProperty Name="TotalTime" ColumnName="TotalTime" />
-                <ScalarProperty Name="TotalSequences" ColumnName="TotalSequences" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ShiftResults">
             <EntityTypeMapping TypeName="MTS.Data.ShiftResult">
               <MappingFragment StoreEntitySet="ShiftResult">
@@ -1146,6 +1194,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OperatorResults">
+            <EntityTypeMapping TypeName="MTS.Data.OperatorResult">
+              <MappingFragment StoreEntitySet="OperatorResult">
+                <ScalarProperty Name="TotalTime" ColumnName="TotalTime" />
+                <ScalarProperty Name="TotalTests" ColumnName="TotalTests" />
+                <ScalarProperty Name="TotalSequences" ColumnName="TotalSequences" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="StartShift" FunctionName="MTS.Data.Store.udpStartShift" />
+          <FunctionImportMapping FunctionImportName="FinishShift" FunctionName="MTS.Data.Store.udpFinishShift" />
+          <FunctionImportMapping FunctionImportName="AddTestOutput" FunctionName="MTS.Data.Store.udpAddTestOutput" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1230,10 +1293,10 @@
           <ConnectorPoint PointX="7.5625" PointY="5.2960009765625" />
         </AssociationConnector>
         <EntityTypeShape EntityType="MTS.Data.MirrorResult" Width="1.5" PointX="8.375" PointY="0.5" Height="2.0853483072916674" />
-        <EntityTypeShape EntityType="MTS.Data.OperatorResult" Width="1.5" PointX="6.75" PointY="0.5" Height="1.9210009765625" />
         <EntityTypeShape EntityType="MTS.Data.ShiftResult" Width="1.5" PointX="11.625" PointY="2.75" Height="3.4001269531249996" />
         <EntityTypeShape EntityType="MTS.Data.MirrorRate" Width="1.5" PointX="10" PointY="0.5" Height="2.5783902994791674" />
         <EntityTypeShape EntityType="MTS.Data.TestRate" Width="1.5" PointX="11.625" PointY="0.5" Height="2.0853483072916674" />
+        <EntityTypeShape EntityType="MTS.Data.OperatorResult" Width="1.5" PointX="8.375" PointY="6.75" Height="1.9210009765625031" />
       </Diagram>
     </Diagrams>
   </Designer>
