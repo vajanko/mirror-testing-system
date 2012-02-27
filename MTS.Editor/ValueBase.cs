@@ -18,6 +18,12 @@ namespace MTS.Editor
 
         public string Description { get; set; }
 
+        /// <summary>
+        /// Call visitor method on this instance of test or parameter value adding new functions.
+        /// </summary>
+        /// <param name="visitor">Instance of visitor adding new function to test or parameter value</param>
+        public abstract void Accept(IValueVisitor visitor);
+
         #region INotifyPropertyChanged
 
         private event PropertyChangedEventHandler propertyChanged;

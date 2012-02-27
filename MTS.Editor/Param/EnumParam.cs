@@ -18,14 +18,6 @@ namespace MTS.Editor
         /// </summary>
         public string[] Values { get; private set; }
         /// <summary>
-        /// Convert parameter value to string representation
-        /// </summary>
-        /// <returns>String representation of parameter value</returns>
-        public override string ValueToString()
-        {
-            return SelectedIndex.ToString();
-        }
-        /// <summary>
         /// (Get/Set) Index of parameter enumerator value. This is the real value of this parameter
         /// </summary>
         public int SelectedIndex
@@ -40,25 +32,14 @@ namespace MTS.Editor
         {
             get { return Values[SelectedIndex]; }
         }
+
         /// <summary>
-        /// Initialize parameter value converted from given string
+        /// Call visitor method on this instance of parameter value adding new functions
         /// </summary>
-        /// <param name="value">String to convert to enumerator value</param>
-        public override void ValueFromString(string value)
+        /// <param name="visitor">Instance of visitor adding new function to parameter value</param>
+        public override void Accept(IValueVisitor visitor)
         {
-            // let to throw an exception if value is not in correct format
-            SelectedIndex = int.Parse(value);
-            // if index is too large, throw an exception
-            if (Values.Length < SelectedIndex)
-                throw new ArgumentOutOfRangeException(SelectedIndexString, "Argument is grater than maximum possible value");
-        }
-        /// <summary>
-        /// Get enumerable type of this parameter: <see cref="ParamType.Enum"/>
-        /// </summary>
-        /// <returns><see cref="ParamType.Enum"/></returns>
-        public override ParamType ValueType()
-        {
-            return ParamType.Enum;
+            visitor.Visit(this);
         }
 
         #region Constructors

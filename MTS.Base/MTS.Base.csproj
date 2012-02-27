@@ -80,6 +80,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="Types\IDataType.cs" />
+    <Compile Include="Types\IDataTypeManager.cs" />
+    <Compile Include="Types\Operator\OperatorData.cs" />
+    <Compile Include="Types\Operator\OperatorEnum.cs" />
+    <Compile Include="Types\Operator\OperatorTypes.cs" />
+    <Compile Include="Types\UnitData.cs" />
+    <Compile Include="Types\UnitEnum.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\ErrorDetailsIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Types\Protocol\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

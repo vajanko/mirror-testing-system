@@ -19,21 +19,12 @@ namespace MTS.Editor
             set { Value = value; OnPropertyChanged(BoolValueString); }
         }
         /// <summary>
-        /// Initialize parameter value converted from given string
+        /// Call visitor method on this instance of parameter value adding new functions
         /// </summary>
-        /// <param name="value">String to convert to Boolean value</param>
-        public override void ValueFromString(string value)
+        /// <param name="visitor">Instance of visitor adding new function to parameter value</param>
+        public override void Accept(IValueVisitor visitor)
         {
-            // throw an exception if value is not in correct format
-            Value = bool.Parse(value);
-        }
-        /// <summary>
-        /// Get enumerable type of this parameter: <see cref="ParamType.Bool"/>
-        /// </summary>
-        /// <returns><see cref="ParamType.Bool"/></returns>
-        public override ParamType ValueType()
-        {
-            return ParamType.Bool;
+            visitor.Visit(this);
         }
 
         #region Constructors

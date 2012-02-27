@@ -48,99 +48,18 @@ namespace MTS.Editor
         /// </summary>
         private static readonly XName IdAttr = "id";
         /// <summary>
-        /// Attribute that holds value indicating if test is enabled or disabled
-        /// </summary>
-        private static readonly XName EnabledAttr = "enabled";
-        /// <summary>
-        /// Attribute that holds value of unit of parameter value
-        /// </summary>
-        private static readonly XName TypeAttr = "type";
-        /// <summary>
-        /// Attribute that holds number of allowed decimals of parameter value
-        /// </summary>
-        private static readonly XName DecimalasAtrr = "decimals";
-
-        /// <summary>
         /// Element that holds value of test or parameter name. This is short description of test or
         /// parameter and is used in user interface
         /// </summary>
         private static readonly XName NameElem = "name";
         /// <summary>
-        /// Element that holds value of test or parameter description. This is longer peace of test desribing
-        /// in details current test or parameter. Could be used in user interface f.e. in a tooltip
-        /// </summary>
-        private static readonly XName DescriptionElem = "description";
-
-        /// <summary>
         /// Element that holds value of test properties
         /// </summary>
-        private static readonly XName TestElem = "test";        // !! very similiar
-        /// <summary>
-        /// Element that holds collection of test elements
-        /// </summary>
-        private static readonly XName TestsElem = "tests";      // !!
-        /// <summary>
-        /// Element that holds default value of a parameter
-        /// </summary>
-        private static readonly XName ValueElem = "value";      // !!
-        /// <summary>
-        /// Element that holds possible values of enumerator parameter
-        /// </summary>
-        private static readonly XName ValuesElem = "values";    // !!
-
-        /// <summary>
-        /// Element that holds value indicating if test is enabled
-        /// </summary>
-        private static readonly XName EnabledElem = "enabled";
-        /// <summary>
-        /// Element that holds minimal possible value of parameter
-        /// </summary>
-        private static readonly XName MinElem = "min";
-        /// <summary>
-        /// Element that holds maximal possible value of parameter
-        /// </summary>
-        private static readonly XName MaxElem = "max";
+        private static readonly XName TestElem = "test";
         /// <summary>
         /// Element that holds value of parameter properties
         /// </summary>
         private static readonly XName ParamElem = "param";
-        /// <summary>
-        /// Element that holds value of parameter type
-        /// </summary>
-        private static readonly XName TypeElem = "type";
-        /// <summary>
-        /// Element that holds value of describing unit of parameter value
-        /// </summary>
-        private static readonly XName UnitElem = "unit";
-        /// <summary>
-        /// Element that holds name of group to which test wich contains this element belongs
-        /// </summary>
-        private static readonly XName GroupElem = "group";
-
-        #region Param Value Types
-
-        /// <summary>
-        /// Constant string used do define integer parameter
-        /// </summary>
-        private const string intType = "int";
-        /// <summary>
-        /// Constant string used do define double parameter
-        /// </summary>
-        private const string doubleType = "double";
-        /// <summary>
-        /// Constant string used do define boolean parameter
-        /// </summary>
-        private const string boolType = "bool";
-        /// <summary>
-        /// Constant string used do define string parameter
-        /// </summary>
-        private const string stringType = "string";
-        /// <summary>
-        /// Constant string used do define enumerator parameter with defined set of values
-        /// </summary>
-        private const string enumType = "enum";
-
-        #endregion
 
         #endregion
 
@@ -213,120 +132,6 @@ namespace MTS.Editor
             return name;
         }
 
-
-        /// <summary>
-        /// Create a new instance of <paramref name="TestValue"/> from xml description (this contains
-        /// values of <paramref name="TestValue"/> instance in string format)
-        /// <paramref name="TestValue"/> contains properties that may be set up on test by user, 
-        /// collection of parameters and values that are displayed in user interface such as description
-        /// of name of current test. In this method only empty instance of <paramref name="TestValue"/> 
-        /// is created, parameters are added later.
-        /// Throws exception if xml is in incorrect format
-        /// </summary>
-        /// <param name="tmplTest">Xml element that contains properties of <paramref name="TestValue"/>
-        /// in string format</param>
-        /// <returns>A new instance of <paramref name="TestValue"/> created from xml description</returns>
-        private static TestValue getTestInstance(XElement tmplTest)
-        {
-            // create empty test just identified by unique id
-            TestValue test = new TestValue(tmplTest.Attribute(IdAttr).Value);
-            
-            // set test properties - these values are independent on test values
-            // short description of test
-            test.Name = tmplTest.Element(NameElem).Value;
-            // longer description of test - may be added as a tooltip on some user control
-            test.Description = tmplTest.Element(DescriptionElem).Value;
-            // all test are divided to groups according their functionality
-            test.GroupName = tmplTest.Element(GroupElem).Value;
-            return test;
-        }
-        /// <summary>
-        /// Create a new instance of <paramref name="ParamValue"/> from xml description (this contains
-        /// values of <paramref name="ParamValue"/> instance in string format)
-        /// <paramref name="ParamValue"/> contains properties that may be set up on parameter in any
-        /// test by user, its default values and values that are displayed in user interface such as 
-        /// description of name of current parameter.
-        /// Throws exception if xml is in incorrect format
-        /// </summary>
-        /// <param name="tmplParam">Xml element that contains properties of <paramref name="ParamValue"/>
-        /// in string format</param>
-        /// <returns>A new instance of <paramref name="ParamValue"/> (or type derived from it) created
-        /// from xml description</returns>
-        /// <exception cref="System.FormatException">Format of input file is not recognized</exception>
-        private static ParamValue getParamInstance(XElement tmplParam)
-        {
-            // use invariant culture to parse double values
-            CultureInfo iCulture = CultureInfo.InvariantCulture;
-
-            ParamValue param;
-            XElement typeElem = tmplParam.Element(TypeElem);
-            // name of parameter type (int, string, double, enum, ...)
-            string type = typeElem.Value;
-            // unique identifier of parameter inside a test, there can be parameter with same id but in a
-            // different test
-            string id = tmplParam.Attribute(IdAttr).Value;
-
-            switch (type)
-            {
-                // when parsing numeric values throw an exception if number is not in correct format
-                case intType:
-                    param = new IntParam(id)
-                    {
-                        // minimal allowed value of this numeric parameter
-                        MinValue = int.Parse(tmplParam.Element(MinElem).Value, iCulture),
-                        // maximal allowed value of this numeric parameter
-                        MaxValue = int.Parse(tmplParam.Element(MaxElem).Value, iCulture),
-                        // description of unit of this numeric parameter
-                        Unit = Units.UnitFromString(tmplParam.Element(UnitElem).Attribute(TypeAttr).Value)
-                    };
-                    break;
-                case doubleType:
-                    // get decimals attribute from type element - if it exists save number of allowed decimals
-                    XAttribute dec = typeElem.Attribute(DecimalasAtrr);
-                    int decimals = 1;
-                    if (dec != null)
-                        decimals = int.Parse(dec.Value, iCulture);
-                    param = new DoubleParam(id)
-                    {
-                        // minimal allowed value of this numeric parameter
-                        MinValue = double.Parse(tmplParam.Element(MinElem).Value, iCulture),
-                        // maximal allowed value of this numeric parameter
-                        MaxValue = double.Parse(tmplParam.Element(MaxElem).Value, iCulture),
-                        // description of unit of this numeric parameter
-                        Unit = Units.UnitFromString(tmplParam.Element(UnitElem).Attribute(TypeAttr).Value),
-                        // number of allowed decimals of this numeric parameter
-                        Decimals = decimals
-                    };
-                    break;
-                case boolType:
-                    param = new BoolParam(id);      // no other special properties
-                    break;
-                case stringType:
-                    param = new StringParam(id);    // no other special properties
-                    break;
-                case enumType:
-                    // get array of enumerator parameters
-                    param = new EnumParam(id,
-                        tmplParam.Element(ValuesElem).Elements(ValueElem).Select(el => el.Value).ToArray());
-                    break;
-                default: 
-                    // unknown type of parameter
-                    throw new ArgumentException("Unknown parameter type - " + type);
-            }
-
-
-            // these values are common for all parameter types
-            // set test properties - these values are independent on parameter values
-            // short description of parameter
-            param.Name = tmplParam.Element(NameElem).Value;
-            // longer description of parameter - may be added as a tooltip on some user control
-            param.Description = tmplParam.Element(DescriptionElem).Value;
-            // parse default param value from string
-            param.ValueFromString(tmplParam.Element(ValueElem).Value);
-
-            return param;
-        }
-
         #endregion
 
         #region Input/Output
@@ -360,72 +165,20 @@ namespace MTS.Editor
                 throw new FileNotFoundException(
                     string.Format(Errors.FileNotFoundMsg, Path.GetFileName(path)), path);
             
-            // load template to memory
+            // load template to memory (template file path is stored in application settings)
             XElement tmplRoot = loadTemplate();
-            // throw an exception if any of these two files does not exist
+
+            TestXmlParser parser = new TestXmlParser();
 
             // crate a new empty instance of test collection and add items from file
-            TestCollection tc = new TestCollection();
+            TestCollection tc = null;
 
             try     // catch exception while reading xml file - any mistake in input file
             {       // will be represented as an error in file format and would not be loaded                
                 // load file to memory
                 XElement fileRoot = XElement.Load(path);
 
-                foreach (XElement tmplTest in tmplRoot.Elements(TestElem))
-                {
-                    // create instance of test from template test (do not consider test parameters)
-                    TestValue tv = getTestInstance(tmplTest);
-                    // get template test id attribute
-                    string testId = tmplTest.Attribute(IdAttr).Value;
-                    // in test file find test element with this id attribute (all other test elements that are
-                    // not contained in template will be ignored)
-                    XElement test = fileRoot.Elements(TestElem)
-                        .FirstOrDefault(el => el.Attribute(IdAttr).Value == testId);
-
-                    // if file doest not contain test element from template (older version) - must be added
-                    if (test == null)
-                    {
-                        // get value indicating if test should be enabled by default
-                        XAttribute enabAttr = tmplTest.Attribute(EnabledAttr);
-                        string enabled = enabAttr == null ? "false" : enabAttr.Value;
-
-                        // add test to file without any attributes
-                        test = new XElement(TestElem,
-                            new XAttribute(IdAttr, testId),
-                            new XAttribute(EnabledAttr, enabled));
-                    }
-                    tv.Enabled = bool.Parse(test.Attribute(EnabledElem).Value);
-
-                    foreach (XElement tmplParam in tmplTest.Elements(ParamElem))
-                    {
-                        // create an parameter instance according its properties in xml template
-                        ParamValue pv = getParamInstance(tmplParam);
-                        // get template param id attribute
-                        string paramId = tmplParam.Attribute(IdAttr).Value;
-                        // in test file find element with this id attribute (all other param elements that are
-                        // not contained in template will be ignored). When this test is not included in file
-                        // it is created just now and it does not have any parameters - all will be added
-                        XElement param = test.Elements(ParamElem)
-                            .FirstOrDefault(pr => pr.Attribute(IdAttr).Value == paramId);
-
-                        // string representation of parameter value
-                        string value;
-
-                        // parameter is not defined in file (test) - add its default value from template
-                        if (param == null)
-                            value = tmplParam.Element(ValueElem).Value;
-                        else
-                            value = param.Value;    // use value from file
-                        
-                        // initialize value of parameter
-                        pv.ValueFromString(value);
-                        // add created parameter to test instance
-                        tv.AddParam(pv.ValueId, pv);
-                    }
-
-                    tc.AddTest(testId, tv);
-                }
+                tc = parser.LoadCollection(tmplRoot, fileRoot);
             }
             catch (Exception ex)
             {   // file could not be read - it is an unknown format
@@ -450,29 +203,11 @@ namespace MTS.Editor
             // this is the only place (also method for reading and creating new file) where the format of test 
             // collection file is described
 
-            // create xml tree
-            XElement root = new XElement(TestsElem);
-            foreach (TestValue test in collection)
-            {
-                // create test element with attributes id and enabled
-                XElement testElem = new XElement(TestElem,
-                    new XAttribute(IdAttr, test.ValueId),
-                    new XAttribute(EnabledElem, test.Enabled));
-                // add param child's elements to test
-                foreach (ParamValue param in test)
-                {
-                    // create param element with id attribute and its string value representation
-                    XElement paramElem = new XElement(ParamElem,
-                        new XAttribute(IdAttr, param.ValueId),
-                        param.ValueToString());    // this is value of parameter in string format
-                    // add to parameter to test
-                    testElem.Add(paramElem);
-                }
-                // add test to collection
-                root.Add(testElem);
-            }
+            // create a new instance of parser used to read test xml template from disk. It also provide reverse
+            // conversion
+            TestXmlParser parser = new TestXmlParser();
 
-            // write xml to file
+            XElement root = parser.CollectionToXml(collection);
             root.Save(path);
         }
 
@@ -490,47 +225,12 @@ namespace MTS.Editor
             // this is the only place (also method for saving and reading) where the format of test 
             // collection file is described
 
-            //TODO: check for an exception (error in template file)
+            // load template file - root element is <tests>
+            XElement tmplRoot = loadTemplate();
 
-            // absolute path to directory where template file is stored
-            string templatePath = Settings.Default.GetTemplatePath();
-            // check if file exists - otherwise throw special exception so user may check configuration of
-            // his application for bad settings
-            if (!File.Exists(templatePath))
-                throw new ConfigNotFoundException(templatePath, 
-                    string.Format(Errors.ConfigNotFoundMsg, Path.GetFileName(templatePath)));
-
-            // create a new empty instance of test collection
-            TestCollection tc = new TestCollection();
-
-            try
-            {
-                // load template file - root element is <tests>
-                XDocument template = XDocument.Load(templatePath);
-                XElement tmplRoot = template.Root;
-
-                foreach (XElement tmplTest in tmplRoot.Elements(TestElem))
-                {
-                    // get empty instance of test (without properties) with default properties
-                    TestValue tv = getTestInstance(tmplTest);
-
-                    // add parameters from template to just created TestValue instance
-                    foreach (XElement tmplParam in tmplTest.Elements(ParamElem))
-                        tv.AddParam(getParamInstance(tmplParam));   // create parameter from xml description
-
-                    // add test to collection
-                    tc.AddTest(tv);
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is IOException)
-                    throw ex;
-                throw new ConfigException(templatePath, 
-                    string.Format(Errors.ConfigCorruptedMsg, Path.GetFileName(templatePath)), ex);
-            }
-
-            return tc;
+            // create a new instance of parser that will create strongly typed instances of tests and their parameters
+            TestXmlParser parser = new TestXmlParser();
+            return parser.ParseCollection(tmplRoot);
         }
 
         /// <summary>

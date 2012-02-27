@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MTS.Base;
 
 namespace MTS.Data.Types
 {
@@ -56,6 +57,38 @@ namespace MTS.Data.Types
         public MirrorTypeClass(int id = 0, string name = "", string description = "")
         {
             this.Id = id;
+            this.Name = name;
+            this.Description = description;
+        }
+
+        #endregion
+    }
+
+    public class MirrorDataType : IDataType<MirrorType>
+    {
+        #region IDataType<MirrorType> Members
+
+        public int Id { get { return (int)Value; } }
+
+        public string Name { get; private set; }
+
+        public string Description { get; private set; }
+
+        public MirrorType Value { get; private set; }
+
+        #endregion
+
+        /// <summary>
+        /// Mirror data type name
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() { return Name; }
+
+        #region Constructors
+
+        private MirrorDataType(MirrorType value, string name, string description = "")
+        {
+            this.Value = value;
             this.Name = name;
             this.Description = description;
         }

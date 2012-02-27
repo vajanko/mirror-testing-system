@@ -65,7 +65,7 @@ namespace MTS.Admin
                             Surname = op.Surname,
                             Login = op.Login,
                             Id = op.Id,             // necessary when referencing operator (database id)
-                            Type = (OperatorType)op.Type    // for permission only
+                            Type = (OperatorEnum)op.Type    // for permission only
                         };
                         result = true;              // operator was logged in successfully
                     }
@@ -100,7 +100,7 @@ namespace MTS.Admin
         /// </summary>
         /// <param name="role">Operator role to test if operator is in</param>
         /// <returns>True if some operator is logged in and is in given role</returns>
-        public static bool IsInRole(OperatorType role)
+        public static bool IsInRole(OperatorEnum role)
         {
             if (IsLoggedIn())
                 return instance.Type == role;
@@ -164,7 +164,7 @@ namespace MTS.Admin
                 Surname ="Administrator",
                 Login = "admin",
                 Id = 1,
-                Type = OperatorType.Admin
+                Type = OperatorEnum.Admin
             };
         }
 
@@ -193,7 +193,7 @@ namespace MTS.Admin
         /// <summary>
         /// (Get) Operator type or role. This type defines operator privileges
         /// </summary>
-        public OperatorType Type { get; private set; }
+        public OperatorEnum Type { get; private set; }
 
         #endregion
 

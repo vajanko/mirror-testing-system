@@ -353,13 +353,8 @@ namespace MTS.Tester
         /// </summary>
         private void initTests()
         {
-            // 1) remove all disabled test - will not be executed
-            //List<TestValue> toRemove = new List<TestValue>();
-            //foreach (TestValue test in shiftTests)
-            //    if (!test.Enabled)
-            //        toRemove.Add(test);
-            //foreach (TestValue test in toRemove)
-            //    shiftTests.RemoveTest(test);
+            ToStringVisitor toString = new ToStringVisitor();
+            ParamTypeVisotor paramType = new ParamTypeVisotor();
 
             // 2) save tests that will be used to database
             foreach (TestValue test in shiftTests.Where(t => t.Enabled))
@@ -378,12 +373,12 @@ namespace MTS.Tester
                 foreach (ParamValue param in test)
                 {
                     // 2.2.1) save used parameter to database
-                    string strValue = param.ValueToString();
+                    string strValue = toString.ConvertToString(param);
                     string unit = null;
                     if (param is DoubleParam) unit = (param as DoubleParam).Unit.Name;
                     else if (param is IntParam) unit = (param as IntParam).Unit.Name;
 
-                    Param dbParam = context.AddParam(dbTest.Id, param.ValueId, strValue, (byte)param.ValueType(), unit).First();
+                    Param dbParam = context.AddParam(dbTest.Id, param.ValueId, strValue, paramType.GetDbParamType(param), unit).First();
                     //Param dbParam = context.Params.FirstOrDefault(p => p.Name == param.ValueId && p.Value == strValue);
                     //if (dbParam == null)
                     //{   // if it does not exists create a new one
@@ -412,6 +407,9 @@ namespace MTS.Tester
         /// <param name="tests">All defined tests that could be executed (also disabled)</param>
         private void createShift(TestCollection tests)
         {
+            ToStringVisitor toString = new ToStringVisitor();
+            ParamTypeVisotor paramType = new ParamTypeVisotor();
+
             // 1) create a new instance of shift and save it to database
             dbShift = context.StartShift(mirrorId, operatorId).Single();
 
@@ -428,7 +426,7 @@ namespace MTS.Tester
                     else if (pv is IntParam)
                         unit = (pv as IntParam).Unit.Name;
 
-                    context.AddParam(dbTest.Id, pv.ValueId, pv.ValueToString(), (byte)pv.ValueType(), unit);
+                    context.AddParam(dbTest.Id, pv.ValueId, toString.ConvertToString(pv), paramType.GetDbParamType(pv), unit);
                 }
             }
         }
@@ -451,17 +449,17 @@ namespace MTS.Tester
                 {
                     int testOutputId = (int)context.AddTestOutput((byte)tRes.ResultCode, sequence, tRes.Begin, tRes.End, tRes.DatabaseId, dbShift.Id).Single();
                     // only save test outputs which have data to be saved
-                    //TestOutput dbTestOutput = context.TestOutputs.Add(new TestOutput
-                    //{
-                    //    Result = (byte)tRes.ResultCode,     // result of test: Completed/Failed/Aborted
-                    //    Start = tRes.Begin,                 // date and time then test has been started
-                    //    Finish = tRes.End,                  // date and time when test has been finished
-                    //    ShiftId = dbShift.Id,               // shift where this output was generated
-                    //    TestId = tRes.DatabaseId,           // test used for this output
-                    //    Sequence = sequence                 // number of test sequence within this shift
-                    //});
-                    //// generate new id of TestOutput, this is necessary for saving parameters output
-                    //context.SaveChanges();
+                    TestOutput dbTestOutput = context.TestOutputs.Add(new TestOutput
+                    {
+                        Result = (byte)tRes.ResultCode,     // result of test: Completed/Failed/Aborted
+                        Start = tRes.Begin,                 // date and time then test has been started
+                        Finish = tRes.End,                  // date and time when test has been finished
+                        ShiftId = dbShift.Id,               // shift where this output was generated
+                        TestId = tRes.DatabaseId,           // test used for this output
+                        Sequence = sequence                 // number of test sequence within this shift
+                    });
+                    // generate new id of TestOutput, this is necessary for saving parameters output
+                    context.SaveChanges();
 
                     // only save parameter outputs which have data to be saved
                     foreach (ParamResult pRes in tRes.Params.Where(p => p.HasData))

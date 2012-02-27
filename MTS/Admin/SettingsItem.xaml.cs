@@ -505,7 +505,7 @@ namespace MTS.Admin
         private void initializeOperators()
         {
             // hide operators if logged user is not admin
-            if (Operator.IsInRole(Data.Types.OperatorType.Admin))
+            if (Operator.IsInRole(OperatorEnum.Admin))
             {
                 operatorsExpander.Visibility = System.Windows.Visibility.Visible;
                 // this method will load operators from database
@@ -613,7 +613,7 @@ shifts executed by this operator will be deleted!", "Delete operator", MessageBo
             }
             else
             {
-                EditOperatorWindow dialog = new EditOperatorWindow(op.Name, op.Surname, op.Login, (Data.Types.OperatorType)op.Type);
+                EditOperatorWindow dialog = new EditOperatorWindow(op.Name, op.Surname, op.Login, (OperatorEnum)op.Type);
                 if (dialog.ShowDialog() == true)
                 {
                     try

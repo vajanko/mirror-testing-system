@@ -131,7 +131,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MTSModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Types\OperatorType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\TaskResultCode.cs" />
   </ItemGroup>
@@ -197,6 +196,12 @@
     <Content Include="scripts\create.sql" />
     <Content Include="scripts\drop.sql" />
     <Content Include="scripts\init.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MTS.Base\MTS.Base.csproj">
+      <Project>{0AE7820B-31EC-4D62-B36B-E8CD63369ABC}</Project>
+      <Name>MTS.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
