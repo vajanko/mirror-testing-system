@@ -36,23 +36,45 @@ namespace MTS.Editor
         #endregion
 
         /// <summary>
-        /// Constant string "Enabled"
+        /// Constant string "Enabled". Use this when checking <see cref="PropertyChanged"/> event
         /// </summary>
         public const string EnabledString = "Enabled";
+        /// <summary>
+        /// Constant string "AbortOnFail". Use this when checking <see cref="PropertyChanged"/> event
+        /// </summary>
+        public const string AbortOnFailString = "AbortOnFail";
 
         /// <summary>
-        /// (Get/Set) Name of group this test belongs to
+        /// (Get/Set) Name of group this test belongs to.
         /// </summary>
         public string GroupName { get; set; }
 
         private bool _enabled;
         /// <summary>
-        /// (Get/Set) True if test is enabled
+        /// (Get/Set) Value indicating whether test is enabled and will be executed during testing
         /// </summary>
         public bool Enabled 
         {
             get { return _enabled; }
             set { _enabled = value; OnPropertyChanged(EnabledString); }
+        }
+        private bool _abortOnFail;
+        /// <summary>
+        /// (Get/Set) Value indicating whether testing should be aborted if this test does not finish correctly.
+        /// </summary>
+        public bool AbortOnFail
+        {
+            get { return _abortOnFail; }
+            set { _abortOnFail = value; OnPropertyChanged(AbortOnFailString); }
+        }
+
+        /// <summary>
+        /// Call visitor method on this instance of test value adding new functions
+        /// </summary>
+        /// <param name="visitor">Instance of visitor adding new function to test value</param>
+        public override void Accept(IValueVisitor visitor)
+        {
+            visitor.Visit(this);
         }
 
         #region Parameters
@@ -70,10 +92,6 @@ namespace MTS.Editor
         {
             parameters.Add(key, param);
         }
-        //public ParamValue GetParam(string key)
-        //{
-        //    return parameters[key];
-        //}
         /// <summary>
         /// Finds parameter value in collection of parameters in this test identified by its key.
         /// Return null if it doesn't exists

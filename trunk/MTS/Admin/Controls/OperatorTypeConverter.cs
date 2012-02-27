@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using MTS.Data.Types;
+using MTS.Base;
+
 
 namespace MTS.Admin.Controls
 {
@@ -29,12 +31,7 @@ namespace MTS.Admin.Controls
             if (targetType != typeof(string))
                 throw new InvalidOperationException("Target type must be of type string");
 
-            switch ((OperatorType)(byte)value)
-            {
-                case OperatorType.Admin: return "Admin";
-                case OperatorType.User: return "User";
-                default: return null;
-            }
+            return OperatorTypes.Instance[(OperatorEnum)value].Name;
         }
         /// <summary>
         /// Convert string representation of operator to <see cref="OperatorType"/> enumerator
@@ -50,19 +47,15 @@ namespace MTS.Admin.Controls
             if (value == null) return null;
 
             // only to OperatorType conversion is allowed
-            if (targetType != typeof(OperatorType))
+            if (targetType != typeof(OperatorEnum))
                 throw new InvalidOperationException(
-                    string.Format("Target type must be of type {0}", typeof(OperatorType).Name));
+                    string.Format("Target type must be of type {0}", typeof(OperatorEnum).Name));
 
             // case is not important
-            string res = value.ToString().ToLower();
+            string res = value.ToString();
 
-            switch (res)
-            {
-                case "admin": return OperatorType.Admin;
-                case "user": return OperatorType.User;
-                default: return null;
-            }
+            // get operator type enum value with given name
+            return OperatorTypes.Instance[res].Value;
         }
 
         #endregion

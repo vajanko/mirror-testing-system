@@ -13,24 +13,6 @@ namespace MTS.Editor
         /// (Get/Set) Number of allowed decimals for this parameter value
         /// </summary>
         public int Decimals { get; set; }
-        /// <summary>
-        /// Initialize parameter value converted from given string
-        /// </summary>
-        /// <param name="value">String to convert to double value</param>
-        public override void ValueFromString(string value)
-        {
-            // throw an exception if value is not in correct format
-            Value = double.Parse(value, System.Globalization.NumberStyles.Float,
-                System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-        }
-        /// <summary>
-        /// Get enumerable type of this parameter: <see cref="ParamType.Double"/>
-        /// </summary>
-        /// <returns><see cref="ParamType.Double"/></returns>
-        public override ParamType ValueType()
-        {
-            return ParamType.Double;
-        }
 
         /// <summary>
         /// Convert double parameter value to specified unit value. Returns unchanged parameter value if conversion
@@ -41,6 +23,15 @@ namespace MTS.Editor
         public override double ConvertTo(Unit unit)
         {   // convert to double value
             return this.Unit.ConvertTo(unit, NumericValue);
+        }
+
+        /// <summary>
+        /// Call visitor method on this instance of parameter value adding new functions
+        /// </summary>
+        /// <param name="visitor">Instance of visitor adding new function to parameter value</param>
+        public override void Accept(IValueVisitor visitor)
+        {
+            visitor.Visit(this);
         }
 
         #region Constructors

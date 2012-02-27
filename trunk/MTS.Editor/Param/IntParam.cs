@@ -10,24 +10,6 @@ namespace MTS.Editor
     public sealed class IntParam : NumericParam<int>
     {
         /// <summary>
-        /// Initialize parameter value converted from given string
-        /// </summary>
-        /// <param name="value">String to convert to integer value</param>
-        public override void ValueFromString(string value)
-        {
-            // throw an exception if value is not in correct format
-            Value = int.Parse(value, CultureInfo.InvariantCulture);
-        }
-        /// <summary>
-        /// Get enumerable type of this parameter: <see cref="ParamType.Int"/>
-        /// </summary>
-        /// <returns><see cref="ParamType.Int"/></returns>
-        public override ParamType ValueType()
-        {
-            return ParamType.Int;
-        }
-
-        /// <summary>
         /// Convert integer parameter value to specified unit value. Returns unchanged parameter value if conversion
         /// is not possible (Incompatible unit etc.)
         /// </summary>
@@ -36,6 +18,15 @@ namespace MTS.Editor
         public override int ConvertTo(Unit unit)
         {   // convert to integer value
             return this.Unit.ConvertTo(unit, NumericValue);
+        }
+
+        /// <summary>
+        /// Call visitor method on this instance of parameter value adding new functions
+        /// </summary>
+        /// <param name="visitor">Instance of visitor adding new function to parameter value</param>
+        public override void Accept(IValueVisitor visitor)
+        {
+            visitor.Visit(this);
         }
 
         #region Constructors

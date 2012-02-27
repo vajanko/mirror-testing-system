@@ -8,7 +8,7 @@ namespace MTS.Editor
     /// Test parameter holding numeric value. Base class for numeric parameters
     /// </summary>
     /// <typeparam name="T">Numeric value type</typeparam>
-    public abstract class NumericParam<T> : ParamValue where T : struct, IComparable
+    public abstract class NumericParam<T> : UnitParam where T : struct, IComparable
     {
         /// <summary>
         /// Constant string "NumericValue"
@@ -32,10 +32,6 @@ namespace MTS.Editor
         /// (Get) Maximal allowed value of this parameter
         /// </summar
         public T MaxValue { get; set; }
-        /// <summary>
-        /// (Get/Set) Unit of this parameter value
-        /// </summary>
-        public Unit Unit { get; set; }
 
         /// <summary>
         /// Convert numeric parameter value to specified unit value. Returns unchanged parameter value if conversion

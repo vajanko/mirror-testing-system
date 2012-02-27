@@ -22,21 +22,12 @@ namespace MTS.Editor
             set { Value = value; OnPropertyChanged(StringValueString); }
         }
         /// <summary>
-        /// Initialize parameter value converted from given string
+        /// Call visitor method on this instance of parameter value adding new functions
         /// </summary>
-        /// <param name="value">String to convert to string value</param>
-        public override void ValueFromString(string value)
+        /// <param name="visitor">Instance of visitor adding new function to parameter value</param>
+        public override void Accept(IValueVisitor visitor)
         {
-            // nothing to parse
-            Value = value;
-        }
-        /// <summary>
-        /// Get enumerable type of this parameter: <see cref="ParamType.String"/>
-        /// </summary>
-        /// <returns><see cref="ParamType.String"/></returns>
-        public override ParamType ValueType()
-        {
-            return ParamType.String;
+            visitor.Visit(this);
         }
 
         #region Constructors

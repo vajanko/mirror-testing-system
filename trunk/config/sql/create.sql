@@ -104,6 +104,8 @@ COMMIT
 GO
 --#endregion
 
+
+
 --#endregion
 
 --#region CREATE TABLE MIRROR
@@ -135,6 +137,8 @@ CREATE TABLE Mirror (
 );
 -- Create index for foreign key referencing supplier of the mirror
 CREATE INDEX fk_mirror_supplier_id ON Mirror(SupplierId);
+-- Create index for mirror name (notice that it is not unique)
+CREATE INDEX mirror_name ON Mirror(Name);
 
 --#region CREATE PROCEDURE udpAddMirror
 IF OBJECT_ID('udpAddMirror') IS NOT NULL
@@ -260,6 +264,9 @@ COMMIT
 GO		
 --#endregion
 
+-- Create index for operator surname and name (notice that they are not unique)
+CREATE INDEX operator_surname_name ON Operator(Surname, Name);
+
 --#endregion
 
 --#region CREATE TABLE TEST
@@ -290,7 +297,7 @@ CREATE TRIGGER trTest_del_after ON Test
 AFTER DELETE
 AS
 BEGIN
-	-- delete all unsused parameters (without references)
+	-- delete all unused parameters (without references)
 	DELETE P FROM Param P
 		WHERE NOT EXISTS (SELECT * FROM TestParam WHERE TestParam.ParamId = P.Id)
 		AND NOT EXISTS (SELECT * FROM ParamOutput WHERE ParamOutput.ParamId = P.Id);	

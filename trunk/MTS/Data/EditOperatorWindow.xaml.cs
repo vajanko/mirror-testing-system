@@ -28,7 +28,7 @@ namespace MTS.Data
         public string OperatorSurname { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public OperatorType Type { get; set; }
+        public OperatorEnum Type { get; set; }
 
         public string ErorrMessage
         {
@@ -93,8 +93,9 @@ namespace MTS.Data
         {
             InitializeComponent();
             Password = string.Empty;
+            typeBox.DataContext = OperatorTypes.Instance;
         }
-        public EditOperatorWindow(string name, string surname, string login, OperatorType type)
+        public EditOperatorWindow(string name, string surname, string login, OperatorEnum type)
             : this()
         {
             nameBox.Text = name;

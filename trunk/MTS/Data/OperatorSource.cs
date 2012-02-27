@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Security;
-using MTS.Data.Types;
+using MTS.Base;
 
 namespace MTS.Data
 {
@@ -14,7 +14,7 @@ namespace MTS.Data
         public string OperatorSurname { get; set; }
         public string Login { get; set; }
         public SecureString Password { get; set; }
-        public OperatorType Type { get; set; }
+        public OperatorEnum Type { get; set; }
 
 
         #region IDataErrorInfo Members

@@ -9,12 +9,13 @@ namespace MTS.Tester.Result
         /// (Get) Value of parameter result
         /// </summary>
         public object ResultValue { get; private set; }
-        public string ResultStringValue { get { return Param.ValueToString(ResultValue); } }
+        public string ResultStringValue { get { return ResultValue.ToString(); } }
+            //return Param.ValueToString(ResultValue); } }
         /// <summary>
         /// (Get) Parameter used to produce this output
         /// </summary>
         public ParamValue Param { get { return Value as ParamValue; } }
-        public ParamType ValueType { get { return Param.ValueType(); } }
+        //public ParamType ValueType { get { return Param.ValueType(); } }
 
         #region Constructors
 
