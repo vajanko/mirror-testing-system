@@ -87,6 +87,11 @@
     <Compile Include="Types\Operator\OperatorTypes.cs" />
     <Compile Include="Types\UnitData.cs" />
     <Compile Include="Types\UnitEnum.cs" />
+    <Compile Include="UI\CommandViewModel.cs" />
+    <Compile Include="UI\DelegateCommand.cs" />
+    <Compile Include="UI\ErrorWindowViewModel.cs" />
+    <Compile Include="UI\GenericDelegateCommand.cs" />
+    <Compile Include="UI\ViewModelBase.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>

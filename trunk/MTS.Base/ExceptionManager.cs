@@ -13,34 +13,43 @@ namespace MTS.Base
     {
         public static void ShowError(string caption, string format, params object[] args)
         {
-            ErrorWindow wnd = new ErrorWindow(caption, string.Format(format, args));
+            ErrorWindow wnd = new ErrorWindow(new ErrorWindowViewModel(caption)
+            {
+                Message = string.Format(format, args)
+            });
             wnd.ShowDialog();
         }
-        public static void ShowError(string caption, Image icon, string format, params object[] args)
+        public static void ShowError(string caption, Bitmap icon, string format, params object[] args)
         {
-            ErrorWindow wnd = new ErrorWindow(caption, string.Format(format, args));
-            wnd.ErrorIcon = icon;
+            ErrorWindow wnd = new ErrorWindow(new ErrorWindowViewModel(caption, null, icon)
+            {
+                Message = string.Format(format, args)
+            });
             wnd.ShowDialog();
         }
 
         public static void ShowError(Exception ex, string caption, string format, params object[] args)
         {
             LogException(ex);
-            ErrorWindow wnd = new ErrorWindow(caption, string.Format(format, args), ex);
+            ErrorWindow wnd = new ErrorWindow(new ErrorWindowViewModel(caption, ex)
+            {
+                Message = string.Format(format, args)
+            });
             wnd.ShowDialog();
         }
-        public static void ShowError(Exception ex, string caption, Image icon, string format, params object[] args)
+        public static void ShowError(Exception ex, string caption, Bitmap icon, string format, params object[] args)
         {
             LogException(ex);
-            ErrorWindow wnd = new ErrorWindow(caption, string.Format(format, args), ex);
-            wnd.ErrorIcon = icon;
+            ErrorWindow wnd = new ErrorWindow(new ErrorWindowViewModel(caption, ex, icon)
+            {
+                Message = string.Format(format, args)
+            });
             wnd.ShowDialog();
         }
         public static void ShowError(Exception ex)
         {
             LogException(ex);
-            ErrorWindow wnd = new ErrorWindow(Errors.ErrorTitle, ex.Message, ex);
-            wnd.ErrorIcon = Errors.ErrorIcon;
+            ErrorWindow wnd = new ErrorWindow(new ErrorWindowViewModel(Errors.ErrorTitle, ex, Errors.ErrorIcon));
             wnd.ShowDialog();
         }
 
