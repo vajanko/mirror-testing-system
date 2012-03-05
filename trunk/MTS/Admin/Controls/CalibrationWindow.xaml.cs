@@ -259,7 +259,7 @@ namespace MTS.Admin.Controls
                 executed = true;
             }
             catch
-            {   // result of the calibration taks is corrupted
+            {   // result of the calibration tasks is corrupted
                 Status = "Missing calibration data!";
             }
 

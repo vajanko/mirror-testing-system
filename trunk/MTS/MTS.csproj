@@ -227,6 +227,7 @@
     <Compile Include="Tester\Result\ResultBase.cs" />
     <Compile Include="Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Tester\Result\TaskResult.cs" />
+    <Compile Include="Tester\Result\TestResult.cs" />
     <Compile Include="Tester\ShiftExecutedEventArgs.cs" />
     <Compile Include="Tester\Task\PeakTest\TravelEastTest.cs" />
     <Compile Include="Tester\Task\PeakTest\TravelNorthTest.cs" />

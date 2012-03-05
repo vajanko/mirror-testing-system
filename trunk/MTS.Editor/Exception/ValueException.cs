@@ -10,7 +10,6 @@ namespace MTS.Editor
     /// </summary>
     public class ValueException : Exception
     {
-
         #region Constructors
 
         public ValueException() : base() { }
