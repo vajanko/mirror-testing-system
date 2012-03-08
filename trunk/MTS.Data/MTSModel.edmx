@@ -630,7 +630,7 @@
             <Parameter Name="operatorId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="FinishShift">
-          <Parameter Name="shiftId" Mode="In" Type="Int32" />
+            <Parameter Name="shiftId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddTestOutput" ReturnType="Collection(Int32)">
             <Parameter Name="result" Mode="In" Type="Byte" />

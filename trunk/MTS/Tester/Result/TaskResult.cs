@@ -40,8 +40,13 @@ namespace MTS.Tester.Result
 
         #region Constructors
 
-        public TaskResult(TestValue value = null)
-            : base(value)
+        public TaskResult()
+            : base(0)
+        {
+            HasData = false;
+        }
+        public TaskResult(int databaseId)
+            : base(databaseId)
         {
             Params = new List<ParamResult>();
         }

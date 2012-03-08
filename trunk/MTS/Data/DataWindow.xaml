@@ -11,7 +11,7 @@
     Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}" ItemId="Data" x:Name="root" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Loaded="root_Loaded" IsActiveDocumentChanged="root_IsActiveDocumentChanged">
     <base:DocumentItem.Resources>
-        <CollectionViewSource x:Key="shiftResultViewSource" d:DesignSource="{d:DesignInstance data:ShiftResult, CreateList=True}" />
+        <CollectionViewSource x:Key="shiftResultViewSource" d:DesignSource="{d:DesignValue data:ShiftResult, CreateList=True}" />
     </base:DocumentItem.Resources>
     <Grid DataContext="{StaticResource shiftResultViewSource}" SizeChanged="mainGrid_SizeChanged" >
         <Grid.Resources>

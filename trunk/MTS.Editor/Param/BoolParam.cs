@@ -26,6 +26,20 @@ namespace MTS.Editor
         {
             visitor.Visit(this);
         }
+        /// <summary>
+        /// Creates a deep copy of <see cref="BoolParam"/> instance
+        /// </summary>
+        /// <returns>New instance of <see cref="BoolParam"/> class</returns>
+        public override object Clone()
+        {
+            return new BoolParam(ValueId)
+            {
+                DatabaseId = this.DatabaseId,
+                Name = this.Name,
+                Description = this.Description,
+                BoolValue = this.BoolValue
+            };
+        }
 
         #region Constructors
 

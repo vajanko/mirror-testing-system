@@ -225,6 +225,7 @@
     </Compile>
     <Compile Include="Tester\Result\ParamResult.cs" />
     <Compile Include="Tester\Result\ResultBase.cs" />
+    <Compile Include="Tester\Result\ResultVisitor.cs" />
     <Compile Include="Tester\Result\TaskExecutedEventArgs.cs" />
     <Compile Include="Tester\Result\TaskResult.cs" />
     <Compile Include="Tester\Result\TestResult.cs" />

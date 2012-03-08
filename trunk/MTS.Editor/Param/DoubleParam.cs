@@ -34,6 +34,21 @@ namespace MTS.Editor
             visitor.Visit(this);
         }
 
+        /// <summary>
+        /// Creates a deep copy of <see cref="DoubleParam"/> instance
+        /// </summary>
+        /// <returns>New instance of <see cref="DoubleParam"/> class</returns>
+        public override object Clone()
+        {
+            return new DoubleParam(ValueId)
+            {
+                DatabaseId = this.DatabaseId,
+                Name = this.Name,
+                Description = this.Description,
+                NumericValue = this.NumericValue
+            };
+        }
+
         #region Constructors
 
         /// <summary>

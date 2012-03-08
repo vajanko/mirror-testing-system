@@ -249,13 +249,13 @@ namespace MTS.Admin.Controls
 
             try
             {   // if any of this data is missing as exception will be thrown
-                TaskResult res = results.Where(r => r.Value != null && r.ValueId == "Calibration").First();
-                ParamResult disX = res.Params.Where(p => p.ValueId == "DistanceX").First();
-                ParamResult disY = res.Params.Where(p => p.ValueId == "DistanceY").First();
-                ParamResult disZ = res.Params.Where(p => p.ValueId == "DistanceZ").First();
+                TaskResult res = results.Where(r => r.HasData).First();
+                ParamResult disX = res.Params.Where(p => p.ResultParam.ValueId == "DistanceX").First();
+                ParamResult disY = res.Params.Where(p => p.ResultParam.ValueId == "DistanceY").First();
+                ParamResult disZ = res.Params.Where(p => p.ResultParam.ValueId == "DistanceZ").First();
 
                 // save mirror normal - when ok button is clicked, also will be save to hardware settings file
-                mirrorNormal = new Vector3D((double)disX.ResultValue, (double)disY.ResultValue, (double)disZ.ResultValue);
+                mirrorNormal = new Vector3D((double)disX.ResultParam.Value, (double)disY.ResultParam.Value, (double)disZ.ResultParam.Value);
                 executed = true;
             }
             catch

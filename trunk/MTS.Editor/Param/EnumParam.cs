@@ -42,6 +42,21 @@ namespace MTS.Editor
             visitor.Visit(this);
         }
 
+        /// <summary>
+        /// Creates a deep copy of <see cref="EnumParam"/> instance
+        /// </summary>
+        /// <returns>New instance of <see cref="EnumParam"/> class</returns>
+        public override object Clone()
+        {
+            return new EnumParam(ValueId, Values)
+            {
+                DatabaseId = this.DatabaseId,
+                Name = this.Name,
+                Description = this.Description,
+                SelectedIndex = this.SelectedIndex
+            };
+        }
+
         #region Constructors
 
         /// <summary>

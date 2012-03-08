@@ -444,6 +444,7 @@ namespace MTS.Tester
                 // this converter is used to convert object value to its string representation when
                 // saving to and retrieving from database
                 ParamTypeConverter converter = new ParamTypeConverter();
+                ToStringVisitor toString = new ToStringVisitor();
 
                 foreach (TaskResult tRes in results.Where(t => t.HasData))
                 {
@@ -469,7 +470,7 @@ namespace MTS.Tester
                         {
                             ParamId = pRes.DatabaseId,      // parameter used for this output
                             TestOutpuId = dbTestOutput.Id,  // test output to which this parameter output belongs
-                            Value = pRes.ResultStringValue  // value of parameter output (could be null)
+                            Value = toString.ConvertToString(pRes.ResultParam)  // value of parameter output (could be null)
                         });
                         // context should not be saved - will be saved with next test output or at the end of loop
                     }

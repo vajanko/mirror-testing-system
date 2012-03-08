@@ -12,7 +12,7 @@ namespace MTS.Tester
         #region Private fields
 
         /// <summary>
-        /// Max duration allowed for this test in miliseconds
+        /// Max duration allowed for this test in milliseconds
         /// </summary>
         private readonly double maxTestingTime;
         /// <summary>
@@ -72,7 +72,7 @@ namespace MTS.Tester
         {
             // from test parameters get MAX_TESTING_TIME item
             maxTestingTimeParam = testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
-            // for measuring time only use miliseconds
+            // for measuring time only use milliseconds
             maxTestingTime = convert(maxTestingTimeParam, Units.Miliseconds);
         }
 

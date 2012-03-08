@@ -69,7 +69,7 @@ namespace MTS.Tester
                 overloaded = time;      // start to measure overload time
             }
             else if (isOverloaded && measuredCurrent < maxCurrent)
-            {   // current was overloaded and stopted to be right now
+            {   // current was overloaded and stopped to be right now
                 isOverloaded = false;
             }
 
@@ -93,22 +93,23 @@ namespace MTS.Tester
         {   // these are common value such as duration and result code
             TaskResult result = base.getResult();
 
-            // prepare value for saveing to database
+            // prepare value for saving to database
             validate(ref maxMeasuredOverloadTime);
 
             // maxCurrent is used value but has no result
             result.Params.Add(new ParamResult(maxCurrentParam));
 
-            // we have been measuring time in miliseconds, now convert it back to parameter unit
+            // we have been measuring time in milliseconds, now convert it back to parameter unit
             // in this state will be saved to database
             double overload = convertBack(maxOverloadTimeParam, Units.Miliseconds, maxMeasuredOverloadTime);
-            result.Params.Add(new ParamResult(maxOverloadTimeParam, overload));
+            result.Params.Add(new ParamResult(maxOverloadTimeParam, 
+                new DoubleParam(maxOverloadTimeParam.ValueId) { NumericValue = overload }));
 
             return result;
         }
         /// <summary>
         /// Generate the result of this test after it has been finished. Will be <see cref="TaskResultType.Aborted"/>
-        /// if excuting state (<see cref="exState"/>) was <see cref="ExState.Aborting"/>, if 
+        /// if executing state (<see cref="exState"/>) was <see cref="ExState.Aborting"/>, if 
         /// <see cref="maxMeasuredOverloadTime"/> was greater than max allowed current (<see cref="maxOverloadTime"/>)
         /// will be failed. This method is called always only from <see cref="getResult"/>.
         /// </summary>

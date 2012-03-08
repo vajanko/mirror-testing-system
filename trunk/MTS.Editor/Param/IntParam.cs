@@ -29,6 +29,21 @@ namespace MTS.Editor
             visitor.Visit(this);
         }
 
+        /// <summary>
+        /// Creates a deep copy of <see cref="IntParam"/> instance
+        /// </summary>
+        /// <returns>New instance of <see cref="IntParam"/> class</returns>
+        public override object Clone()
+        {
+            return new IntParam(ValueId)
+            {
+                DatabaseId = this.DatabaseId,
+                Name = this.Name,
+                Description = this.Description,
+                NumericValue = this.NumericValue
+            };
+        }
+
         #region Constructors
 
         /// <summary>

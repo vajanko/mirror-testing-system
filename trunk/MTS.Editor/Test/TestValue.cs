@@ -77,6 +77,28 @@ namespace MTS.Editor
             visitor.Visit(this);
         }
 
+        /// <summary>
+        /// Creates a deep copy of <see cref="IntParam"/> instance
+        /// </summary>
+        /// <returns>New instance of <see cref="IntParam"/> class</returns>
+        public override object Clone()
+        {
+            // clone test instance
+            TestValue test = new TestValue(ValueId)
+            {
+                DatabaseId = this.DatabaseId,
+                Name = this.Name,
+                Description = this.Description,
+                Enabled = this.Enabled,
+                AbortOnFail = this.AbortOnFail
+            };
+            // clone all parameters and add them to just created test instance
+            foreach (var param in parameters.Values)
+                test.AddParam(param.Clone() as ParamValue);
+
+            return test;
+        }
+
         #region Parameters
 
         public ParamValue this[string key]
