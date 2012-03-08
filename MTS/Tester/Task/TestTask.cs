@@ -32,7 +32,7 @@ namespace MTS.Tester
         /// <returns>Object describing all results of this task</returns>
         protected override TaskResult getResult()
         {
-            return new TaskResult(testParam)
+            return new TestResult(testParam)
             {
                 Begin = Begin,
                 End = End,

@@ -3,19 +3,9 @@ using MTS.Editor;
 
 namespace MTS.Tester.Result
 {
-    public class ParamResult : ResultBase
+    public class ParamResult : ResultBase 
     {
-        /// <summary>
-        /// (Get) Value of parameter result
-        /// </summary>
-        public object ResultValue { get; private set; }
-        public string ResultStringValue { get { return ResultValue.ToString(); } }
-            //return Param.ValueToString(ResultValue); } }
-        /// <summary>
-        /// (Get) Parameter used to produce this output
-        /// </summary>
-        public ParamValue Param { get { return Value as ParamValue; } }
-        //public ParamType ValueType { get { return Param.ValueType(); } }
+        public ParamValue ResultParam { get; private set; }
 
         #region Constructors
 
@@ -25,12 +15,13 @@ namespace MTS.Tester.Result
         /// </summary>
         /// <param name="valueId">String id of used parameter</param>
         /// <param name="databaseId">Database id of used parameter</param>
-        /// <param name="value">Value of parameter. If this is null value will not be save to database
+        /// <param name="paramValue">Value of parameter. If this is null value will not be save to database
         /// but will be referenced by test output as used parameter</param>
-        public ParamResult(ParamValue value, object resultValue = null)
-            : base(value)
+        public ParamResult(ParamValue usedParam, object resultValue = null)
+            : base(usedParam.DatabaseId)
         {
-            ResultValue = resultValue;
+            ResultParam = usedParam.Clone() as ParamValue;
+            ResultParam.Value = resultValue;
             // if parameter should not be saved to database, must be explicitly set
             // by default all parameters are saved to database (even if result value is null)
             HasData = true;

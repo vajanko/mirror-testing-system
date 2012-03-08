@@ -45,12 +45,12 @@ namespace MTS.Tester
         }
         protected override TaskResult getResult()
         {
-            TaskResult res = new TaskResult(new TestValue("Calibration") { Name = "Calibration" })
+            TaskResult res = new TaskResult()
             {
                 ResultCode = getResultCode(),
                 Begin = this.Begin,
                 End = this.End,
-                HasData = false
+                HasData = true
             };
             
             // as result return measured calibration values - distances of measuring calibrators

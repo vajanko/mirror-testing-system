@@ -121,7 +121,7 @@ namespace MTS.Tester
             // in this state will be saved to database
             double angle = convertBack(minAngleParam, Units.Degrees, angleMeasured);
             result.Params.Add(new ParamResult(minAngleParam, angle));
-            // we have been measuring time in miliseconds, now convert it back to parameter unit
+            // we have been measuring time in milliseconds, now convert it back to parameter unit
             // in this state will be saved to database
             double time = convertBack(maxTestingTimeParam, Units.Miliseconds, testingTimeMeasured);
             result.Params.Add(new ParamResult(maxTestingTimeParam, time));
