@@ -30,5 +30,5 @@ Dočasná stránka na tvorbu a zaznamenávanie zmien bakalárskej práce. Dokume
 *4. kapitola* - zatiaľ úplne vynechaná
 
 *Dokumenty:*
-  * [https://docs.google.com/file/d/0B8XOIEPqV4lvZmEwYzg0MDAtYTM2Mi00MmEyLWJhNjctZjFkNjg0YWEyNDFm/edit Bakalárka práca] (.docx)
+  * [https://docs.google.com/file/d/0B8XOIEPqV4lvZmEwYzg0MDAtYTM2Mi00MmEyLWJhNjctZjFkNjg0YWEyNDFm/edit Bakalárka práca (EN)] (.docx)
   * [https://docs.google.com/file/d/0B8XOIEPqV4lvRi1PLTFEVDdUUEd2Vy1aVFpwcVdTdw/edit Úprava bakalárskej práce (EN)] (.rtf)
