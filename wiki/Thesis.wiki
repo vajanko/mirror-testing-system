@@ -4,13 +4,31 @@
 
 Dočasná stránka na tvorbu a zaznamenávanie zmien bakalárskej práce. Dokumenty sú uložené na *Google Docs* vo formáte .docx
 
+----
 
 = Správa 1 =
 
-*Dátum:* 18.3.2012
+*Dátum:* 19.3.2012
 
 *Poznámky:*
-  * 
+  * Na niektorých miestach sú použité WORD komentáre popisujúce časti, ktoré je potreba doplniť
+  * Úvod - potreba testovania, definované ciele ktoré chceme dosiahnúť
+*1. kapitola* - komunikácia a ovládanie HW, použitie rôznych komunikačných protokolov
+  * Real-time - zatiaľ neobsahuje
+  * Popísaná implementácia obecného komunikačného rozhrania (chýba popis kanálov a adresovania v rôznych protokoloch)
+  * Použitie vzoru _decorator_ - adaptácia komunikačného rozhrania výlučne pre potreby našej aplikácie
+  * Popis (vlastnosti) bežne používaných protokolov - zatiaľ neobsahuje
+*2. kapitola* - vytvorenie dátových typov _test_ a _parameter_
+  * Použitie vzoru _visitor_ zatiaľ neobsahuje
+  * Vzťah: použitý test a parameter - výsledok testu a parametrov
+  * Dôraz sa kladie na nezávislosť na dátových typoch parametrov
+*3. kapitola* - spúšťanie samotných testov
+  * Definícia tzv. _task-u_ = základný stavebný kameň celého ovládania HW a testovania
+  * Základné typy task-ov
+  * Task lifecycle
+  * Plánovanie task-ov a možnosť paralelného vykonávania - zatiaľ neobsahuje
+*4. kapitola* - zatiaľ úplne vynechaná
 
 *Dokumenty:*
- * 
+  * [https://docs.google.com/file/d/0B8XOIEPqV4lvZmEwYzg0MDAtYTM2Mi00MmEyLWJhNjctZjFkNjg0YWEyNDFm/edit Bakalárka práca] (.docx)
+  * [https://docs.google.com/file/d/0B8XOIEPqV4lvRi1PLTFEVDdUUEd2Vy1aVFpwcVdTdw/edit Úprava bakalárskej práce (EN)] (.rtf)
