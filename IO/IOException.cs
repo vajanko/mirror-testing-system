@@ -10,10 +10,6 @@ namespace MTS.IO
     /// </summary>
     public abstract class IOException : Exception
     {
-        public const string EtherCatString = "EtherCAT";
-        public const string ModbusString = "Modbus";
-        public const string DummyString = "Dummy";
-
         /// <summary>
         /// (Get) Name of protocol which was in use when this exception was thrown
         /// </summary>

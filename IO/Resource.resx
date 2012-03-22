@@ -135,6 +135,7 @@
   </data>
   <data name="ConnectionFailedMsg" xml:space="preserve">
     <value>Connection to the module could not be established</value>
+    <comment>No parameters</comment>
   </data>
   <data name="EtherCATAddrStr" xml:space="preserve">
     <value>Index group: {0}, Index offset: {1}</value>

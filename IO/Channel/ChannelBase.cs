@@ -5,6 +5,12 @@ using System.ComponentModel;
 
 namespace MTS.IO.Channel
 {
+    /// <summary>
+    /// Base class for all channel implementations. There are two possible ways of looking at a channel:
+    /// IChannel interface which provide access to channel value and IChannelAddress<<typeparamref name="TAddress"/>>
+    /// which define protocol dependant channel addressing inside a module
+    /// </summary>
+    /// <typeparam name="TAddress">Type of channel address. This type depends on used protocol</typeparam>
     public abstract class ChannelBase<TAddress> : IChannel, IChannelAddress<TAddress> where TAddress:IAddress
     {
         #region Constants
@@ -47,11 +53,11 @@ namespace MTS.IO.Channel
         /// </summary>
         public int Size { get; set; }
 
-        private event ValueChangedEventHandler valueChanged;
+        private event ChannelChangedEventHandler valueChanged;
         /// <summary>
         /// Occurs when channel value changed
         /// </summary>
-        public event ValueChangedEventHandler ValueChanged
+        public event ChannelChangedEventHandler ValueChanged
         {
             add { valueChanged += value; }
             remove { valueChanged -= value; }
@@ -63,7 +69,7 @@ namespace MTS.IO.Channel
         protected void OnValueChanged()
         {
             if (valueChanged != null)
-                valueChanged(this, new ValueChangedEventArgs(this));
+                valueChanged(this, new ChannelChangedEventArgs(this));
         }
 
         #endregion

@@ -81,7 +81,7 @@ namespace MTS.IO
 
         private event PropertyChangedEventHandler propertyChanged;
         /// <summary>
-        /// Event which occurs when property of channel settings chaned
+        /// Event which occurs when property of channel settings change
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged
         {
