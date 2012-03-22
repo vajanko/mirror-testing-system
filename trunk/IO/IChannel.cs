@@ -42,16 +42,6 @@ namespace MTS.IO
         /// <summary>
         /// Event that occurs when value of channel is changed
         /// </summary>
-        event ValueChangedEventHandler ValueChanged;
+        event ChannelChangedEventHandler ValueChanged;
     }
-    public interface IChannelAddress<TAddress> where TAddress : IAddress
-    {
-        /// <summary>
-        /// (Get/Set) Address of channel inside the hardware. This allows us to access (read/write)
-        /// data (from/to) this channel
-        /// </summary>
-        TAddress Address { get; set; }
-    }
-
-    public delegate void ValueChangedEventHandler(object sender, ValueChangedEventArgs args);
 }

@@ -53,10 +53,12 @@
     <Compile Include="Address\DummyAddress.cs" />
     <Compile Include="Address\ECAddress.cs" />
     <Compile Include="Address\ModbusAddress.cs" />
+    <Compile Include="ChannelChangedEventHandler.cs" />
     <Compile Include="ChannelSetting.cs" />
     <Compile Include="ChannelSettings.cs" />
     <Compile Include="Channel\ChannelException.cs" />
     <Compile Include="IAddress.cs" />
+    <Compile Include="IChannelAddress.cs" />
     <Compile Include="Module\DummyModule.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -79,6 +81,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ProtocolType.cs" />
+    <Compile Include="Protocol\ProtocolInfo.cs" />
+    <Compile Include="Protocol\ProtocolManager.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

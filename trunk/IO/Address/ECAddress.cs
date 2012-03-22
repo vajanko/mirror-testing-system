@@ -13,7 +13,7 @@ namespace MTS.IO.Address
     {
         /// <summary>
         /// (Get/Set) Identifier of group of channels this one belongs to. Group is a view on some collection of
-        /// channels. For example one group may be Inputs or Output. This value will be usually 
+        /// channels. For example one group may be Inputs or Output. Default value is 
         /// <see cref="AdsReservedIndexGroups.SymbolValueByHandle"/>
         /// </summary>
         public int IndexGroup { get; set; }

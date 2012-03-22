@@ -2,6 +2,9 @@
 
 namespace MTS.IO.Channel
 {
+    /// <summary>
+    /// Exception that is thrown when an error occurs on the channel
+    /// </summary>
     public class ChannelException : IOException
     {
         /// <summary>

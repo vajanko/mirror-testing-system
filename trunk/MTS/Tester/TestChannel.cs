@@ -58,7 +58,7 @@ namespace MTS.Tester
             set;
         }
 
-        public event ValueChangedEventHandler ValueChanged;
+        public event ChannelChangedEventHandler ValueChanged;
 
         #endregion
 

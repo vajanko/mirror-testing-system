@@ -2,6 +2,9 @@
 
 namespace MTS.IO.Module
 {
+    /// <summary>
+    /// Exception that is thrown when an error in communication module occurs
+    /// </summary>
     public class ModuleException : IOException
     {
         #region Constructors

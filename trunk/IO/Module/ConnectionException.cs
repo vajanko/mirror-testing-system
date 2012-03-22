@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace MTS.IO.Module
 {
+    /// <summary>
+    /// Exception that is thrown when an error during communication occurs
+    /// </summary>
     public class ConnectionException : ModuleException
     {
         #region Constructors
