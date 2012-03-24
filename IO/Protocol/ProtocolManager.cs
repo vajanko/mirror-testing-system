@@ -38,15 +38,15 @@ namespace MTS.IO.Protocol
         /// <param name="name">Name of protocol to register. Must be unique</param>
         /// <param name="description">Description of protocol to register</param>
         /// <param name="protocolFactory">Factory method that will create an instance of <see cref="IModule"/>
-        /// communication layer</param>
+        /// communication layer with given name as a first parameter</param>
         /// <exception cref="System.ArgumentException">Protocol definition with the same name
         /// already exists in the collection of known <see cref="Protocols"/></exception>
-        public void RegisterProtocol(string name, string description, Func<IModule> protocolFactory)
+        public void RegisterProtocol(string name, string description, Func<string, IModule> protocolFactory)
         {
             ProtocolInfo protocol = new ProtocolInfo(name, description, protocolFactory);
             protocols.Add(name, protocol);
         }
-
+        
         #region Constructors
 
         /// <summary>

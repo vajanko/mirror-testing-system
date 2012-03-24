@@ -8,7 +8,8 @@ using System.Collections.Generic;
 namespace MTS.IO.Properties
 {
     /// <summary>
-    /// This class is used by Visual Studio when editing application settings of analog channels through user interface
+    /// This class is used by Visual Studio Designer when editing application settings of analog channels through 
+    /// user interface
     /// </summary>
     public class ChannelCollectionEditor : CollectionEditor
     {

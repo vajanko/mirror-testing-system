@@ -10,15 +10,6 @@ namespace MTS.IO.Module
 {
     public sealed class ECModule : IModule
     {
-        #region Constants
-
-        /// <summary>
-        /// Name of using protocol
-        /// </summary>
-        private const string protocol = "EtherCAT";
-
-        #endregion
-
         #region Channels alocated memory
 
         // connection object
@@ -256,7 +247,7 @@ namespace MTS.IO.Module
         /// <summary>
         /// (Get) Name of this module communication protocol
         /// </summary>
-        public string ProtocolName { get { return protocol; } }
+        public string ProtocolName { get; private set; }
 
         /// <summary>
         /// Get an instance of particular channel identified by its name. Return null if there is no such a channel.
@@ -417,11 +408,13 @@ namespace MTS.IO.Module
         /// <summary>
         /// Create a new instance of EtherCAT module
         /// </summary>
+        /// <param name="protocolName">Name of ethercat protocol</param>
         /// <param name="taskName">Name of task in TwinCAT IO Server. This is necessary for variables
         /// handles</param>
-        public ECModule(string taskName)
+        public ECModule(string protocolName, string taskName)
         {
-            TaskName = taskName;    // this is necessary for variable handles
+            ProtocolName = protocolName;
+            TaskName = taskName;            // this is necessary for variable handles
         }
 
         #endregion
