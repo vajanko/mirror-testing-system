@@ -134,7 +134,7 @@ namespace MTS.Properties {
             switch (protocol)
             {
                 case "ethercat": 
-                    module = new MTS.IO.Module.ECModule(this.EthercatTaskName);
+                    module = new MTS.IO.Module.ECModule("EtherCAT", this.EthercatTaskName);
                     break;
                 case "modbus":
                     module = new MTS.IO.Module.ModbusModule(this.ModbusIpAddress, this.ModbusPort);

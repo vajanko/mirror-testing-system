@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Configuration;
 using System.Windows.Media.Media3D;
+using MTS.IO.Protocol;
 
 namespace MTS.IO {
     
@@ -11,23 +12,8 @@ namespace MTS.IO {
     //  The PropertyChanged event is raised after a setting's value is changed.
     //  The SettingsLoaded event is raised after the setting values are loaded.
     //  The SettingsSaving event is raised before the setting values are saved.
-    public sealed partial class HWSettings {
-
-        public HWSettings()
-        {
-            // // To add event handlers for saving and changing settings, uncomment the lines below:
-            //
-            // this.SettingChanging += this.SettingChangingEventHandler;
-            //
-            // this.SettingsSaving += this.SettingsSavingEventHandler;
-            //
-
-            this.SettingsLoaded += new SettingsLoadedEventHandler(HWSettings_SettingsLoaded);
-
-            // recalculate positions of calibrators from current settings - distances between each calibrator
-            calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
-        }
-
+    public sealed partial class HWSettings 
+    {
         /// <summary>
         /// This method is called when <see cref="HWSettings"/> is loaded. 
         /// </summary>
@@ -88,6 +74,28 @@ namespace MTS.IO {
             // property that has been changed is one of calibrators distances
             if (e.PropertyName.EndsWith("Distance"))
                 calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Create a new instance of setting class dedicated for handling hardware settings
+        /// </summary>
+        public HWSettings()
+        {
+            // // To add event handlers for saving and changing settings, uncomment the lines below:
+            //
+            // this.SettingChanging += this.SettingChangingEventHandler;
+            //
+            // this.SettingsSaving += this.SettingsSavingEventHandler;
+            //
+
+            this.SettingsLoaded += new SettingsLoadedEventHandler(HWSettings_SettingsLoaded);
+
+            // recalculate positions of calibrators from current settings - distances between each calibrator
+            calculateCalibratorsPositions(XYDistance, YZDistance, XZDistance);
         }
 
         #endregion

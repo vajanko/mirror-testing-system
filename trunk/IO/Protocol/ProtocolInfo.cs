@@ -19,14 +19,19 @@ namespace MTS.IO.Protocol
         /// </summary>
         public string Description { get; private set; }
 
-        private Func<IModule> protocolFactory;
+        private Func<string, IModule> protocolFactory;
         /// <summary>
         /// Create a new instance of protocol dependant communication layer accessed by common interface
         /// </summary>
         /// <returns>Instance of protocol <see cref="IModule"/> implementation</returns>
-        public IModule CreateModule()
+        public IModule CreateModule(string configPath)
         {
-            return protocolFactory();
+            // create new instance of module with given name
+            IModule module = protocolFactory(Name);
+            // load channel configuration
+            module.LoadConfiguration(configPath);
+
+            return module;
         }
 
         #region Constructors
@@ -39,7 +44,7 @@ namespace MTS.IO.Protocol
         /// <param name="description">Short description of the protocol</param>
         /// <param name="protocolFactory">Factory method creating a new instance of <see cref="IModule"/> implementation
         /// for a specific protocol</param>
-        public ProtocolInfo(string name, string description, Func<IModule> protocolFactory)
+        public ProtocolInfo(string name, string description, Func<string, IModule> protocolFactory)
         {
             Name = name;
             Description = description;
@@ -49,3 +54,4 @@ namespace MTS.IO.Protocol
         #endregion
     }
 }
+
