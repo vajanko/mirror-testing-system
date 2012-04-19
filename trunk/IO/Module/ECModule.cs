@@ -154,10 +154,10 @@ namespace MTS.IO.Module
                 }
                 catch (Exception ex)
                 {   // variable handle of some address could not be created
-                    throw new AddressException(string.Format(Resource.VarNotFoundMsg, protocol, channel.Address), ex)
+                    throw new AddressException(string.Format(Resource.VarNotFoundMsg, ProtocolName, channel.Address), ex)
                     {
                         ChannelName = channel.Name,
-                        ProtocolName = protocol
+                        ProtocolName = this.ProtocolName
                     };
                 }
             }

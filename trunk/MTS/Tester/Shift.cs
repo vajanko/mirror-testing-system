@@ -13,6 +13,8 @@ using MTS.Data;
 using MTS.Data.Converters;
 using MTS.Data.Types;
 using MTS.Tester.Result;
+using System.Runtime.CompilerServices;
+using System.Runtime;
 
 
 namespace MTS.Tester
@@ -263,20 +265,32 @@ namespace MTS.Tester
                 // create scheduler with tasks to be executed
                 scheduler = createScheduler(shiftTests);
 
-                // this loop tests one mirror
-                while (!scheduler.IsFinished)
+                GCLatencyMode oldMode = GCSettings.LatencyMode;
+                RuntimeHelpers.PrepareConstrainedRegions();
+                try
                 {
-                    if (IsAborting)
+                    GCSettings.LatencyMode = GCLatencyMode.LowLatency;
+
+                    // this loop tests one mirror
+                    while (!scheduler.IsFinished)
                     {
-                        scheduler.Abort(time + watch.Elapsed);
-                        break;
-                    }
-                    else
-                    {
-                        scheduler.Update(time + watch.Elapsed);         // execute tasks
-                        Thread.Sleep(200);              // for presentation purpose only                    
-                    }
-                }                
+                        if (IsAborting)
+                        {
+                            scheduler.Abort(time + watch.Elapsed);
+                            break;
+                        }
+                        else
+                        {
+                            scheduler.Update(time + watch.Elapsed);         // execute tasks
+                            Thread.Sleep(200);              // for presentation purpose only                    
+                        }
+                    } 
+                }
+                finally
+                {
+                    GCSettings.LatencyMode = oldMode;
+                }
+         
                 Output.WriteLine(Resource.SequenceFinishedMsg, Finished + 1);
 
                 // write outputs to safe state

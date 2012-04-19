@@ -316,24 +316,52 @@ namespace MTS.Editor
         /// </summary>
         /// <param name="test">Instance of test created from template with default values</param>
         /// <param name="xmlTest">Value of test (and its parameters) save in xml format</param>
-        public void LoadTest(TestValue test, XElement xmlTest)
+        /// <returns>Value indicating whether test in xml file is in format supported by current application</returns>
+        public bool LoadTest(TestValue test, XElement xmlTest)
         {
             // initialize test properties
+
+            // load enabled attribute - default is false
             XAttribute enAttr = xmlTest.Attribute(EnabledAttr);
             test.Enabled = enAttr == null ? false : bool.Parse(enAttr.Value);
+
+            // load abort on fail attribute - default is false
             XAttribute abAttr = xmlTest.Attribute(AbortOnFailAttr);
             test.AbortOnFail = abAttr == null ? false : bool.Parse(abAttr.Value);
+
+            // value indicating whether test is in format supported by current application version
+            bool isCurrentVersion = true;
+
+            var paramElements = xmlTest.Elements(ParamElem);
 
             // load value of all parameters
             foreach (ParamValue param in test)
             {   // get saved value of parameter from xml with current value id
-                XElement xmlParam = xmlTest.Elements(ParamElem).FirstOrDefault(pe => pe.Attribute(IdAttr).Value == param.ValueId);
+                XElement xmlParam = paramElements.FirstOrDefault(pe => pe.Attribute(IdAttr).Value == param.ValueId);
                 // Notice that is may happen that there is no such a parameter in given file. Important is what is in the 
                 // template. If there is no parameter in template - will be ignored. And if there is a parameter in template
                 // on not in file, will be added with default value
                 if (xmlParam != null)
+                {
                     LoadParam(param, xmlParam);
+                }
+                else
+                {
+                    isCurrentVersion = false;
+                }
             }
+
+            // check if test in xml file contains elements that are not contained in the template
+            if (!isCurrentVersion)  // do not check if we already know that it is not in current version
+                return false;
+
+            foreach (XElement xmlParam in paramElements)
+            {
+                if (!test.ContainsParam(xmlParam.Attribute(IdAttr).Value))
+                    return false;
+            }
+
+            return isCurrentVersion;
         }
         /// <summary>
         /// Loads collection of tests from given xml tree using template xml tree. Tests and parameters that are not
@@ -346,16 +374,42 @@ namespace MTS.Editor
         public TestCollection LoadCollection(XElement templateRoot, XElement fileRoot)
         {   // create a default collection of tests and then initialize their values
             TestCollection tc = ParseCollection(templateRoot);
+            var testElements = fileRoot.Elements(TestElem);
 
             // load value of all tests
             foreach (TestValue test in tc)
             {   // get saved value of test from xml with current value id
-                XElement xmlTest = fileRoot.Elements(TestElem).FirstOrDefault(te => te.Attribute(IdAttr).Value == test.ValueId);
+                XElement xmlTest = testElements.FirstOrDefault(te => te.Attribute(IdAttr).Value == test.ValueId);
+
                 // notice that it may happen that there is no such a test in given file. Important is what is in the template
                 // If there is no test in template - will be ignored. And if there is a test in template and not in file,
                 // will be added, with default values and parameters
                 if (xmlTest != null)
-                    LoadTest(test, xmlTest);
+                {
+                    // modify content of "test" with data in "xmlTest"
+                    // return value indicating whether test contained in xml file is in format supported by current
+                    // application version
+                    bool isCurrentVersion = LoadTest(test, xmlTest);    
+                    if (!isCurrentVersion)
+                        tc.InvalidateCurrentVersion();
+                }
+                else
+                {   // else there is test in template file that is not present in given file so it is left without any changes
+                    tc.InvalidateCurrentVersion();
+                }
+            }
+
+            // check if loaded file contains elements that are not contained in the template
+            if (!tc.IsCurrentVersion)    // do not check it if we already know that it is not in current format
+            {
+                foreach (XElement xmlTest in testElements)
+                {
+                    if (!tc.ContainsKey(xmlTest.Attribute(IdAttr).Value))
+                    {   // we have discovered that test file contains element that is not contained in the template
+                        tc.InvalidateCurrentVersion();
+                        break;
+                    }
+                }
             }
 
             return tc;
