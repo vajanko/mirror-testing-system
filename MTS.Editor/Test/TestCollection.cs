@@ -71,6 +71,19 @@ namespace MTS.Editor
                 test.SetPropertyChangedHandler(handler);    // also will add handler on parameters
         }
 
+        /// <summary>
+        /// (Get) Value indicating whether collection of tests contained in this instance is of the same
+        /// format as the application supports. If not should be converted when saving.
+        /// </summary>
+        public bool IsCurrentVersion { get; private set; }
+        /// <summary>
+        /// Setup this instance of tests collection to indicate that it is not in format that current application supports
+        /// </summary>
+        public void InvalidateCurrentVersion()
+        {
+            IsCurrentVersion = false;
+        }
+
         #region IEnumerable<TestValue> Members
 
         /// <summary>
@@ -93,6 +106,15 @@ namespace MTS.Editor
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)tests.Values).GetEnumerator();
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public TestCollection()
+        {
+            IsCurrentVersion = true;
         }
 
         #endregion

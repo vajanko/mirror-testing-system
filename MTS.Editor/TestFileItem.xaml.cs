@@ -167,6 +167,7 @@ namespace MTS.Editor
             FileManager.SaveFile(path, Tests);
             Exists = true;
 
+            // add this string to resources
             Output.WriteLine("File \"" + path + "\" saved as " + path);
 
             ItemId = path;
@@ -183,7 +184,20 @@ namespace MTS.Editor
         public override void Save()
         {
             // do not access HDD if not necessary
-            if (IsSaved) return;
+            if (IsSaved) 
+                return;
+
+            if (!Tests.IsCurrentVersion)
+            {   // opened file is not in current application format - needs to be converted - ask user
+                // add this string to resources
+                var result = MessageBox.Show(
+                    string.Format("\"{0}\" is is different format than supported by current version of the application. Would you like to convert the file to current format?", Title),
+                    "Different file format!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes);
+
+                if (result == MessageBoxResult.No)
+                    return; // user does not want to convert the file - cancel save event
+            }
 
             if (Exists) // file already exists - only will be overwritten
             {

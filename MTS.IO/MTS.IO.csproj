@@ -47,6 +47,7 @@
       <DependentUpon>HWSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="MoveDirection.cs" />
+    <Compile Include="MoveDirectionExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingEditor.cs" />
     <Compile Include="HWSettings.cs" />

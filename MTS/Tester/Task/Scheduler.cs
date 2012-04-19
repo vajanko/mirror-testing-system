@@ -12,6 +12,7 @@ using MTS.Base;
 using MTS.Editor;
 using MTS.Tester.Result;
 using MTS.Data.Types;
+using System.Runtime;
 
 namespace MTS.Tester
 {
@@ -461,8 +462,12 @@ namespace MTS.Tester
             }
             prepared.Clear();           // prepared tasks became executing
 
+            // "disable" garbage collection for a moment
+            var lastMode = GCSettings.LatencyMode;
+            GCSettings.LatencyMode = GCLatencyMode.LowLatency;
             // write all outputs and read inputs (in this order)
             channels.Update();
+            GCSettings.LatencyMode = lastMode;
 
             // update all executing tasks
             LinkedListNode<Task> node1 = executing.First, node2;
