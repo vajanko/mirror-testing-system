@@ -55,7 +55,7 @@
     <Compile Include="Visitors\FromStringVisitor.cs" />
     <Compile Include="Visitors\ParamTypeVisotor.cs" />
     <Compile Include="Visitors\ToStringVisitor.cs" />
-    <Compile Include="Visitors\IParamVisitor.cs" />
+    <Compile Include="Visitors\IValueVisitor.cs" />
     <Compile Include="Param\UnitParam.cs" />
     <Compile Include="Properties\Errors.Designer.cs">
       <AutoGen>True</AutoGen>

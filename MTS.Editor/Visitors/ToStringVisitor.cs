@@ -21,29 +21,42 @@ namespace MTS.Editor
 
         #region IParamVisitor Members
 
+        private void defaultConvert(object value)
+        {
+            if (value == null)
+            {
+                result = null;
+            }
+            else
+            {
+                result = string.Format(CultureInfo.InvariantCulture, "{0}", value);
+            }
+        }
+
         public void Visit(BoolParam param)
         {
-            result = string.Format(CultureInfo.InvariantCulture, "{0}", param.Value);
+            defaultConvert(param.Value);
         }
 
         public void Visit(EnumParam param)
         {
-            result = string.Format(CultureInfo.InvariantCulture, "{0}", param.SelectedIndex);
+            defaultConvert(param.Value);
+            //result = string.Format(CultureInfo.InvariantCulture, "{0}", param.SelectedIndex);
         }
 
         public void Visit(StringParam param)
         {
-            result = string.Format(CultureInfo.InvariantCulture, "{0}", param.Value);
+            defaultConvert(param.Value);
         }
 
         public void Visit(IntParam param)
         {
-            result = string.Format(CultureInfo.InvariantCulture, "{0}", param.Value);
+            defaultConvert(param.Value);
         }
 
         public void Visit(DoubleParam param)
         {
-            result = string.Format(CultureInfo.InvariantCulture, "{0}", param.Value);
+            defaultConvert(param.Value);
         }
 
         public void Visit(TestValue test)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using MTS.IO;
@@ -26,6 +27,19 @@ namespace MTS.Tester
         private TaskScheduler scheduler;
 
         /// <summary>
+        /// Initialize <see cref="thenTask"/> and <see cref="elseTask"/>
+        /// </summary>
+        private void initTasks()
+        {
+            // one of these tasks will overlay this task
+            thenTask.ScheduleId = this.ScheduleId;
+            if (elseTask != null)
+            {
+                elseTask.ScheduleId = this.ScheduleId;
+            }
+        }
+
+        /// <summary>
         /// Check for value on condition channel and executed appropriate task
         /// </summary>
         /// <param name="time">Time of calling this method</param>
@@ -34,9 +48,10 @@ namespace MTS.Tester
             switch (exState)
             {
                 case ExState.Initializing:
-                    Output.Write("Condition: if ");
-                    foreach (var ch in channels)
-                        Output.Write("{0}=={1} AND ", ch.Channel.Name, ch.Value);
+                    string msg = string.Join("", channels.Select(ch => string.Format("{0}=={1}", ch.Channel.Name, ch.Value)));
+                    Output.WriteLine("Condition: if " + msg);
+
+                    initTasks();
 
                     if (channels.TrueForAll(ch => ch.Channel.Value == ch.Value))
                         goTo(ExState.StateA);

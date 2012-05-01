@@ -30,7 +30,6 @@ namespace MTS.Tester
         private IModule module;
 
         private IOrientedGraph requiredGraph;
-        private IGraph disallowedGraph;
         private List<Task> tasks;
 
         /// <summary>
@@ -334,27 +333,20 @@ namespace MTS.Tester
         /// <summary>
         /// Find next task that can be executed now. If there is no such a task returns null
         /// </summary>
+        /// <returns>Next task to be executed or null if no adequate tasks exist or all tasks already has been
+        /// executed</returns>
         private Task getNextTask()
-        {   // task selector
+        {
+
+            if (toExecute.Count == 0)
+                return null;
 
             Task task = null;
-            //if (executing.Count > 0 || prepared.Count > 0)    // for now only allow sequential task scheduling
-            //    return null;                                  // if there is some task being executed - no other could be added
 
-            //if (toExecute.Count > 0)    // otherwise there are no more tasks
-            //{   // this is very simple and could be change in future
-            //    task = toExecute.First.Value;
-            //    toExecute.RemoveFirst();
-            //}
-
-            if (toExecute.Count > 0)
+            Task t = toExecute.Peek();
+            if (executing.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId)))
             {
-                Task t = toExecute.Peek();
-                
-                if (t.Enabled &&
-                    executing.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId) &&
-                    !disallowedGraph.Contains(e.DisallowId, t.DisallowId)))
-                    task = toExecute.Dequeue();
+                task = toExecute.Dequeue();
             }
 
             return task;
@@ -381,10 +373,6 @@ namespace MTS.Tester
         /// <param name="newTask">Task that shall be executed instead of this one</param>
         public void ChangeTask(Task executingTask, Task newTask)
         {
-            // overlay executing task with new task
-            newTask.ScheduleId = executingTask.ScheduleId;
-            newTask.DisallowId = executingTask.DisallowId;
-
             executingTask.TaskExecuted -= new TaskExecutedHandler(taskExecuted);
             // remove executing task from executing collection
             executing.Remove(executingTask);
@@ -406,20 +394,15 @@ namespace MTS.Tester
                 XDocument doc = XDocument.Load(filename);
                 TaskParser parser = new TaskParser(doc.Element("timeline"), tests, channels, this);
 
-                parser.ParseTasks(out requiredGraph, out disallowedGraph, out tasks);
+                parser.ParseTasks(out requiredGraph, out tasks);
 
-                // all tasks in topological order that are enabled
+                // all enabled tasks in topological order
                 List<int> order = requiredGraph.TopologicalSort().ToList();
                 foreach (var taskId in order.Where(i => i < tasks.Count && tasks[i].Enabled))
                 {
                     Task task = tasks[taskId];
                     task.ScheduleId = taskId;
                     AddTask(tasks[taskId]);
-                }
-                foreach (var taskId in disallowedGraph.GetVertices())
-                {
-                    Task task = tasks[taskId];
-                    task.DisallowId = taskId;
                 }
             }
             catch (Exception ex)
@@ -462,12 +445,8 @@ namespace MTS.Tester
             }
             prepared.Clear();           // prepared tasks became executing
 
-            // "disable" garbage collection for a moment
-            var lastMode = GCSettings.LatencyMode;
-            GCSettings.LatencyMode = GCLatencyMode.LowLatency;
             // write all outputs and read inputs (in this order)
             channels.Update();
-            GCSettings.LatencyMode = lastMode;
 
             // update all executing tasks
             LinkedListNode<Task> node1 = executing.First, node2;
