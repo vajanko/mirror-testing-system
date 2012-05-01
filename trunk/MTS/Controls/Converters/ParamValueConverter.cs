@@ -35,7 +35,7 @@ namespace MTS.Controls
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException("This type of conversion is unnecesary. Do not use it!");
+            throw new NotImplementedException("This type of conversion is unnecessary. Do not use it!");
         }
 
         #endregion

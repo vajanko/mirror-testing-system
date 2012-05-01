@@ -235,7 +235,6 @@
     <Compile Include="Tester\Task\PeakTest\TravelSouthTest.cs" />
     <Compile Include="Tester\Task\PeakTest\TravelWestTest.cs" />
     <Compile Include="Tester\Task\PresenceTest\ChannelTest.cs" />
-    <Compile Include="Tester\Task\TaskEdge.cs" />
     <Compile Include="Tester\Task\TaskParser.cs" />
     <Compile Include="Tester\Task\Tasks\ChannelTask.cs" />
     <Compile Include="Tester\TestChannel.cs" />

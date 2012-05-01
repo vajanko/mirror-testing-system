@@ -128,16 +128,17 @@
   
   <!-- move calibrators up -->
   <!-- Only start moving mirror if pull of test has been passed -->
-  <if id="moveCalibUp">
+  <!--<if id="moveCalibUp">
     <behavior require="pulloff lockStrong"/>
     <channel name="IsTravelEnabled" value="true"/>
-    <then>
-      <set>
+    <then>-->
+      <set id="moveCalibUp">
+        <behavior require="pulloff lockStrong"/>
         <channel name="MoveDistanceSensorDown" value="false"/>
         <channel name="MoveDistanceSensorUp" value="true"/>
       </set>
-    </then>
-  </if>
+    <!--</then>
+  </if>-->
   <!-- wait for calibrators to be up -->
   <waitfor id="isCalibUp">
     <behavior require="moveCalibUp"/>
@@ -148,33 +149,34 @@
     <behavior require="isCalibUp"/>
   </wait>
   <!-- allow mirror to move -->
-  <set>
+  <set id="allowMovement">
     <behavior require="waitSecond"/>
     <channel name="AllowMirrorMovement" value="true"/>
   </set>
 
   <!-- move mirror galls to all sides -->
   <test id="travelNorth" testparam="TravelNorth" testtype="TravelNorthTest">
-    <behavior require="waitSecond" disallow="travelSouth travelEast travelWest"/>
+    <behavior require="allowMovement"/>
   </test>
+  <!-- if travelNorth is disable travelSouth still requires waitSecond to be finished and does not start before -->
   <test id ="travelSouth" testparam="TravelSouth" testtype="TravelSouthTest">
-    <behavior require="waitSecond" disallow="travelNorth travelEast travelWest"/>
+    <behavior require="allowMovement travelNorth"/>
   </test>
   <test id ="travelEast" testparam="TravelEast" testtype="TravelEastTest">
-    <behavior require="waitSecond" disallow="travelNorth travelSouth travelWest"/>
+    <behavior require="allowMovement travelSouth"/>
   </test>
   <test id ="travelWest" testparam="TravelWest" testtype="TravelWestTest">
-    <behavior require="waitSecond" disallow="travelNorth travelSouth travelEast"/>
+    <behavior require="allowMovement travelEast"/>
   </test>
 
   <!-- disallow mirror to move -->
-  <set>
-    <behavior require="travelNorth travelSouth travelEast travelWest"/>
+  <set id="disallowMovement">
+    <behavior require="allowMovement travelNorth travelSouth travelEast travelWest"/>
     <channel name="AllowMirrorMovement" value="false"/>
   </set>
   <!-- move calibrators down -->
   <set id="moveCalibDown">
-    <behavior require="travelNorth travelSouth travelEast travelWest"/>
+    <behavior require="disallowMovement"/>
     <channel name="MoveDistanceSensorDown" value="true"/>
     <channel name="MoveDistanceSensorUp" value="false"/>
   </set>

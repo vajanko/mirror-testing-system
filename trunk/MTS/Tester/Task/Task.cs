@@ -67,15 +67,11 @@ namespace MTS.Tester
         /// </summary>
         public bool Enabled { get; protected set; }
 
-        #endregion
-
-        //#region Scheduling
-
         public int ScheduleId { get; set; }
 
-        public int DisallowId { get; set; }
+        #endregion
 
-        //#endregion
+        
 
         /// <summary>
         /// Event that is raised when task get executed

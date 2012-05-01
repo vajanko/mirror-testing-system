@@ -102,8 +102,7 @@ namespace MTS.Tester
             // we have been measuring time in milliseconds, now convert it back to parameter unit
             // in this state will be saved to database
             double overload = convertBack(maxOverloadTimeParam, Units.Miliseconds, maxMeasuredOverloadTime);
-            result.Params.Add(new ParamResult(maxOverloadTimeParam, 
-                new DoubleParam(maxOverloadTimeParam.ValueId) { NumericValue = overload }));
+            result.Params.Add(new ParamResult(maxOverloadTimeParam, overload));
 
             return result;
         }

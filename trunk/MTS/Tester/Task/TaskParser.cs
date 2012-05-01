@@ -40,7 +40,7 @@ namespace MTS.Tester
         List<GraphEdge> disallowed = new List<GraphEdge>();
         List<Task> allTasks;
 
-        public void ParseTasks(out IOrientedGraph reqGraph, out IGraph disGraph, out List<Task> tasks)
+        public void ParseTasks(out IOrientedGraph reqGraph, out List<Task> tasks)
         {
             List<XElement> elements = new List<XElement>(timeline.Elements());
             allTasks = new List<Task>(elements.Count);
@@ -66,9 +66,6 @@ namespace MTS.Tester
 
             reqGraph = new OrientedGraph(allTasks.Count, required.Count);
             reqGraph.Build(required);
-
-            disGraph = new UnorientedGraph();
-            disGraph.Build(disallowed);
 
             tasks = allTasks;
         }
