@@ -6,6 +6,21 @@ Dočasná stránka na tvorbu a zaznamenávanie zmien bakalárskej práce. Dokume
 
 ----
 
+= Správa 2 =
+*Dátum:* 2.5.2012
+
+*Poznámky:*
+  * Práca je rozdelená na dve hlavné časti: _Analysis_ a _Implementation_
+  * Úvod je zatiaľ z text vynechaný
+  * Prvá kapitola vysvetľuje spôsob komunikácie s použitým hardwarom
+  * Je navrhnutá štruktúra implementačnej časti - text ešte nie je všade doplnený
+
+*Dokumenty:*
+  * [https://docs.google.com/file/d/0B8XOIEPqV4lvZmEwYzg0MDAtYTM2Mi00MmEyLWJhNjctZjFkNjg0YWEyNDFm/edit Bakalárska práca (EN)]
+  * [https://docs.google.com/file/d/0B8XOIEPqV4lvN2IwMDZhMjAtNzMzMC00NGRjLWE5MWEtNzRiNDNhNTJmN2E1/edit Dokumentácia (EN)]
+
+----
+
 = Správa 1 =
 
 *Dátum:* 19.3.2012
