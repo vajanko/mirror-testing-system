@@ -130,9 +130,9 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MaxCurrent item and throw exception if it is not found
-            maxCurrentParam = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
+            maxCurrentParam = testParam.GetParam<DoubleParam>(ParamIds.MaxCurrent);
             // from test parameters get MaxOverloadTime item and throw exception if it is not found
-            maxOverloadTimeParam = testParam.GetParam<DoubleParam>(TestValue.MaxOverloadTime);
+            maxOverloadTimeParam = testParam.GetParam<DoubleParam>(ParamIds.MaxOverloadTime);
 
             // for measuring current only use miliampheres
             maxCurrent = convert(maxCurrentParam, Units.Miliampheres);

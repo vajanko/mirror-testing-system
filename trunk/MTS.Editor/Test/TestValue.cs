@@ -6,34 +6,16 @@ using System.ComponentModel;
 
 namespace MTS.Editor
 {
+    /// <summary>
+    /// Class that encapsulate configuration of a single test. Contains collection of
+    /// parameters.
+    /// </summary>
     public class TestValue : ValueBase, IEnumerable<ParamValue>
     {
+        /// <summary>
+        /// Collection of test parameters accessible by parameter unique id
+        /// </summary>
         private readonly Dictionary<string, ParamValue> parameters = new Dictionary<string, ParamValue>();
-
-        #region Known Parameters Ids
-
-        public const string MinAngle = "MinAngle";
-        public const string MinCurrent = "MinCurrent";
-        public const string MaxCurrent = "MaxCurrent";
-        public const string MaxOverloadTime = "MaxOverloadTime";
-        public const string MaxTestingTime = "MaxTestingTime";
-        public const string TestPresence = "Presence";
-
-        public const string SupplierName = "SupplierName";
-        public const string SupplierCode = "SupplierCode";
-        public const string PartNumber = "PartNumber";        
-        public const string DescriptionId = "Description";
-        public const string Weight = "Weight";
-        public const string Orientation = "Orientation";
-
-        // direction light
-        public const string LighteningTime = "LightingTime";
-        public const string BreakTime = "BreakTime";
-        public const string BlinkCount = "BlinksCount";
-
-        public const string TestingTime = "TestingTime";
-
-        #endregion
 
         /// <summary>
         /// Constant string "Enabled". Use this when checking <see cref="PropertyChanged"/> event
@@ -176,6 +158,10 @@ namespace MTS.Editor
 
         #region Constructros
 
+        /// <summary>
+        /// Initialize a new instance of test.
+        /// </summary>
+        /// <param name="id">Unique test identifier across the application.</param>
         public TestValue(string id) : base(id) { }
 
         #endregion

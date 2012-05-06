@@ -46,7 +46,7 @@ namespace MTS.Tester
             presenceChannel = channel;
 
             // from test parameters get TestPresence parameter
-            presenceParam = testParam.GetParam<BoolParam>(TestValue.TestPresence);
+            presenceParam = testParam.GetParam<BoolParam>(ParamIds.TestPresence);
         }
 
         #endregion

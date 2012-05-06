@@ -210,7 +210,7 @@ namespace MTS.Tester
             //scheduler.AddWaitForStart();
 
             // rubber test
-            TestValue rubber = tests.GetTest(TestCollection.Rubber);
+            TestValue rubber = tests.GetTest(TestIds.Rubber);
             if (rubber != null)
                 scheduler.AddRubberTest(rubber);
 
@@ -218,22 +218,22 @@ namespace MTS.Tester
             scheduler.AddTravelTests(tests);
 
             // pull-off test
-            TestValue pullOff = tests.GetTest(TestCollection.Pulloff);
+            TestValue pullOff = tests.GetTest(TestIds.Pulloff);
             if (pullOff != null)
                 scheduler.AddPulloffTest(pullOff);
 
             // test powerfold
-            TestValue powerfold = tests.GetTest(TestCollection.Powerfold);
+            TestValue powerfold = tests.GetTest(TestIds.Powerfold);
             if (powerfold != null)
                 scheduler.AddTask(new PowerfoldTest(channels, powerfold));
             
             // test blinker
-            TestValue blinker = tests.GetTest(TestCollection.DirectionLight);
+            TestValue blinker = tests.GetTest(TestIds.DirectionLight);
             if (blinker != null)
                 scheduler.AddTask(new DirectionLightTest(channels, blinker));
 
             // test spiral
-            TestValue spiral = tests.GetTest(TestCollection.Heating);
+            TestValue spiral = tests.GetTest(TestIds.Heating);
             if (spiral != null)
                 scheduler.AddTask(new HeatingFoilTest(channels, spiral));
 
@@ -367,7 +367,7 @@ namespace MTS.Tester
         private void createShift(TestCollection tests)
         {
             ToStringVisitor toString = new ToStringVisitor();
-            ParamTypeVisotor paramType = new ParamTypeVisotor();
+            ParamTypeVisitor paramType = new ParamTypeVisitor();
 
             // 1) create a new instance of shift and save it to database
             dbShift = context.StartShift(mirrorId, operatorId).Single();
@@ -571,10 +571,10 @@ namespace MTS.Tester
             MTS.IO.Channel.DigitalInput<MTS.IO.Address.DummyAddress> ch = new IO.Channel.DigitalInput<IO.Address.DummyAddress>();
             ch.Id = "IsTravelEnabled";
             ch.SetValue(
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelEast)).Value &&
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelNorth)).Value &&
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelSouth)).Value &&
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestCollection.TravelWest)).Value);
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelEast)).Value &&
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelNorth)).Value &&
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelSouth)).Value &&
+                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelWest)).Value);
             channels.AddChannel(ch);
         }
 

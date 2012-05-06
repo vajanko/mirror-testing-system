@@ -128,11 +128,11 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get LighteningTime item
-            lighteningTimeParam = testParam.GetParam<DoubleParam>(TestValue.LighteningTime);
+            lighteningTimeParam = testParam.GetParam<DoubleParam>(ParamIds.LighteningTime);
             // from test parameters get BreakTime item
-            breakTimeParam = testParam.GetParam<DoubleParam>(TestValue.BreakTime);
+            breakTimeParam = testParam.GetParam<DoubleParam>(ParamIds.BreakTime);
             // from test parameters get BlinksTime item
-            blinksCountParam = testParam.GetParam<IntParam>(TestValue.BlinkCount);
+            blinksCountParam = testParam.GetParam<IntParam>(ParamIds.BlinkCount);
 
             // for measuring time we only use milliseconds
             lightingTime = convert(lighteningTimeParam, Units.Miliseconds);

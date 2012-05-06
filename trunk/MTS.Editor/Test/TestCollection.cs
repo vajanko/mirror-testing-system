@@ -14,21 +14,6 @@ namespace MTS.Editor
     {
         private readonly Dictionary<string, TestValue> tests = new Dictionary<string, TestValue>();
 
-        #region Known Test Ids
-
-        public const string Info = "Info";
-        public const string TravelEast = "TravelEast";
-        public const string TravelWest = "TravelWest";
-        public const string TravelSouth = "TravelSouth";
-        public const string TravelNorth = "TravelNorth";
-        public const string Powerfold = "Powerfold";
-        public const string DirectionLight = "DirectionLight";
-        public const string Heating = "HeatingFoil";
-        public const string Pulloff = "Pulloff";
-        public const string Rubber = "Rubber";
-
-        #endregion
-
         public TestValue this[string key]
         {
             get { return tests[key]; }

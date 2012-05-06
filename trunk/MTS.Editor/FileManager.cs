@@ -142,7 +142,8 @@ namespace MTS.Editor
         /// </summary>
         public static string GetNewName()
         {
-            return NewFileString + ++lastNewFileIndex;  // index of last created file name
+            // index of last created file name
+            return string.Format("{0}{1}", NewFileString, ++lastNewFileIndex);
         }
 
         /// <summary>

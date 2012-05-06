@@ -8,6 +8,10 @@ using MTS.Base;
 
 namespace MTS.Editor
 {
+    /// <summary>
+    /// Class that encapsulate the functionality of initializing collection of test and
+    /// parameters from given xml data.
+    /// </summary>
     class TestXmlParser
     {
         #region Param Value Types
@@ -122,6 +126,8 @@ namespace MTS.Editor
 
         #endregion
 
+        #region Visitors
+
         /// <summary>
         /// Visitor used to convert parameter string representation to strongly typed value
         /// </summary>
@@ -130,6 +136,8 @@ namespace MTS.Editor
         /// Visitor used to convert parameter to string representation
         /// </summary>
         private readonly ToStringVisitor toString = new ToStringVisitor();
+
+        #endregion
 
         /// <summary>
         /// Creates an instance of parameter value parsing it from given xml structure
