@@ -92,7 +92,7 @@ namespace MTS.Tester
             : base(channels, testParam) 
         {
             // from test parameters get TestingTime item
-            testingTimeParam = testParam.GetParam<DoubleParam>(TestValue.TestingTime);
+            testingTimeParam = testParam.GetParam<DoubleParam>(ParamIds.TestingTime);
 
             // for measuring time we only use milliseconds
             testingTime = convert(testingTimeParam, Units.Miliseconds);

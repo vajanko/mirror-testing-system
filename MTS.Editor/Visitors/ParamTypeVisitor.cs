@@ -8,7 +8,7 @@ namespace MTS.Editor
     /// <summary>
     /// Converts parameter type to a corresponding enumerator value
     /// </summary>
-    public class ParamTypeVisotor : IValueVisitor
+    public class ParamTypeVisitor : IValueVisitor
     {
         private ParamType result;
         public ParamType GetParamType(ValueBase param)

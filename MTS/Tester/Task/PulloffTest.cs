@@ -98,7 +98,7 @@ namespace MTS.Tester
         public PulloffTest(Channels channels, TestValue testParam)
             : base(channels, testParam)
         {
-            IntParam iValue = testParam.GetParam<IntParam>(TestValue.TestingTime);
+            IntParam iValue = testParam.GetParam<IntParam>(ParamIds.TestingTime);
             if (iValue != null)     // it must be of type integer
                 testingTime = iValue.NumericValue;
         }

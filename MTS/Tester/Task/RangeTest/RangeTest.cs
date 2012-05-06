@@ -103,9 +103,9 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MinCurrent parameter
-            minCurrentParam = testParam.GetParam<DoubleParam>(TestValue.MinCurrent);
+            minCurrentParam = testParam.GetParam<DoubleParam>(ParamIds.MinCurrent);
             // from test parameters get MaxCurrent parameter
-            maxCurrentParam = testParam.GetParam<DoubleParam>(TestValue.MaxCurrent);
+            maxCurrentParam = testParam.GetParam<DoubleParam>(ParamIds.MaxCurrent);
 
             // for measuring current only use miliampheres
             maxCurrent = convert(maxCurrentParam, Units.Miliampheres);

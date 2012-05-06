@@ -71,7 +71,7 @@ namespace MTS.Tester
             : base(channels, testParam)
         {
             // from test parameters get MAX_TESTING_TIME item
-            maxTestingTimeParam = testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
+            maxTestingTimeParam = testParam.GetParam<DoubleParam>(ParamIds.MaxTestingTime);
             // for measuring time only use milliseconds
             maxTestingTime = convert(maxTestingTimeParam, Units.Miliseconds);
         }

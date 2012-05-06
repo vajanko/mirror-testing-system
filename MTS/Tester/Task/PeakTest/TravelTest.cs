@@ -146,13 +146,13 @@ namespace MTS.Tester
 
             // initialization of testing parameters
             // from test parameters get MinAngle item
-            minAngleParam = testParam.GetParam<DoubleParam>(TestValue.MinAngle);
+            minAngleParam = testParam.GetParam<DoubleParam>(ParamIds.MinAngle);
             // from test parameters get MaxTestingTime item
-            maxTestingTimeParam= testParam.GetParam<DoubleParam>(TestValue.MaxTestingTime);
+            maxTestingTimeParam = testParam.GetParam<DoubleParam>(ParamIds.MaxTestingTime);
 
             // for measuring angle only use degrees
             minAngle = convert(minAngleParam, Units.Degrees);
-            // for measuring time only use miliseconds
+            // for measuring time only use milliseconds
             maxTestingTime = convert(maxTestingTimeParam, Units.Miliseconds);
         }
 

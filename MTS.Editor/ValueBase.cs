@@ -5,19 +5,28 @@ using System.ComponentModel;
 
 namespace MTS.Editor
 {
+    /// <summary>
+    /// Base class for test and parameter configuration. Test contains collection of parameters.
+    /// </summary>
     public abstract class ValueBase : INotifyPropertyChanged, ICloneable
     {
         /// <summary>
-        /// (Get/Set) This property could be optionally used to store database id of test or parameter value
+        /// (Get/Set) This property could be optionally used to store database id of test or parameter value.
         /// </summary>
         public int DatabaseId { get; set; }
         /// <summary>
-        /// (Get) Unique identifier of value
+        /// (Get) Unique identifier of test or parameter.
         /// </summary>
         public string ValueId { get; protected set; }
 
+        /// <summary>
+        /// (Get/Set) Localized name of test or parameter.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// (Get/Set) Localized description of test or parameter.
+        /// </summary>
         public string Description { get; set; }
 
         /// <summary>
@@ -70,6 +79,11 @@ namespace MTS.Editor
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize a new instance of base class for test or parameter.
+        /// </summary>
+        /// <param name="id">Unique identifier of test or parameter. Parameter id must be unique
+        /// inside the test it belongs to.</param>
         public ValueBase(string id)
         {
             ValueId = id;
