@@ -92,6 +92,7 @@
     <Compile Include="Types\Operator\OperatorTypes.cs" />
     <Compile Include="Types\Unit\UnitData.cs" />
     <Compile Include="Types\Unit\UnitEnum.cs" />
+    <Compile Include="Types\Unit\UnitTypes.cs" />
     <Compile Include="UI\CommandViewModel.cs" />
     <Compile Include="UI\DelegateCommand.cs" />
     <Compile Include="UI\ErrorWindowViewModel.cs" />

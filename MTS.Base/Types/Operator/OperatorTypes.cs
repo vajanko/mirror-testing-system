@@ -6,11 +6,20 @@ using MTS.Base.Properties;
 
 namespace MTS.Base
 {
+    /// <summary>
+    /// Class that manages application types of operator indexed by <see cref="OperatorEnum"/>
+    /// </summary>
     public class OperatorTypes : IDataTypeManager<IDataType<OperatorEnum>, OperatorEnum>
     {
         private static readonly OperatorTypes instance = new OperatorTypes();
+        /// <summary>
+        /// (Get) Singleton instance managing application types of operator
+        /// </summary>
         public static OperatorTypes Instance { get { return instance; } }
 
+        /// <summary>
+        /// Collection of operators data indexed by operator type - <see cref="OperatorEnum"/>
+        /// </summary>
         private Dictionary<OperatorEnum, IDataType<OperatorEnum>> operators = new Dictionary<OperatorEnum, IDataType<OperatorEnum>>();
 
         #region IDataTypeManager<IDataType<OperatorEnum>,OperatorEnum> Members
