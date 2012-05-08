@@ -52,8 +52,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigException.cs" />
-    <Compile Include="ConfigNotFoundException.cs" />
+    <Compile Include="Exception\ConfigException.cs" />
+    <Compile Include="Exception\ConfigNotFoundException.cs" />
     <Compile Include="Controls\BoolBindingSelector.cs" />
     <Compile Include="Controls\BoolNegationConverter.cs" />
     <Compile Include="Controls\ConditionalLabel.cs" />
@@ -74,6 +74,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -85,8 +90,8 @@
     <Compile Include="Types\Operator\OperatorData.cs" />
     <Compile Include="Types\Operator\OperatorEnum.cs" />
     <Compile Include="Types\Operator\OperatorTypes.cs" />
-    <Compile Include="Types\UnitData.cs" />
-    <Compile Include="Types\UnitEnum.cs" />
+    <Compile Include="Types\Unit\UnitData.cs" />
+    <Compile Include="Types\Unit\UnitEnum.cs" />
     <Compile Include="UI\CommandViewModel.cs" />
     <Compile Include="UI\DelegateCommand.cs" />
     <Compile Include="UI\ErrorWindowViewModel.cs" />
@@ -117,6 +122,10 @@
       <LastGenOutput>Errors.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MTS.Base.Properties</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

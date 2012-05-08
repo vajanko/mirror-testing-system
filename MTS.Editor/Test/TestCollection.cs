@@ -8,21 +8,49 @@ using System.ComponentModel;
 namespace MTS.Editor
 {
     /// <summary>
-    /// TODO: update summary
+    /// Collection of test and their parameters. This collection is used during shift execution when all
+    /// enabled tests are executed. Test are accessed by unique id.
     /// </summary>
     public class TestCollection : IEnumerable<TestValue>
     {
+        /// <summary>
+        /// Collection of test identified by string id
+        /// </summary>
         private readonly Dictionary<string, TestValue> tests = new Dictionary<string, TestValue>();
 
+        /// <summary>
+        /// (Get/Set) Test with given id
+        /// </summary>
+        /// <param name="key">Id of test to get</param>
+        /// <returns>Test with specified id</returns>
+        /// <exception cref="TestNotFoundException">Test with given id doesn't exist in current collection</exception>
         public TestValue this[string key]
         {
-            get { return tests[key]; }
-            set { tests[key] = value; }
+            get
+            {
+                try
+                {
+                    return tests[key];
+                }
+                catch (Exception ex)
+                {
+                    throw new TestNotFoundException(key, ex);
+                }
+            }
+            set {
+                tests[key] = value; 
+            }
         }
-        public bool ContainsKey(string key)
+        /// <summary>
+        /// Gets value indicating whether a test with given id exists in current collection of tests.
+        /// </summary>
+        /// <param name="key">Unique identifier of the test</param>
+        /// <returns>Value indicating whether test with given id exists in current collection of tests</returns>
+        public bool ContainsTest(string key)
         {
             return tests.ContainsKey(key);
         }
+
         public void AddTest(TestValue test)
         {
             tests.Add(test.ValueId, test);
@@ -97,6 +125,9 @@ namespace MTS.Editor
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize a new empty <see cref="TestCollection"/>
+        /// </summary>
         public TestCollection()
         {
             IsCurrentVersion = true;

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MTS.Editor.Properties {
+namespace MTS.Base.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MTS.Editor.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MTS.Editor.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MTS.Base.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,38 @@ namespace MTS.Editor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter with {0} id could not be found in test {1}.
+        ///   Looks up a localized string similar to Administrator of the application. Can add, remove and modify operator accounts and change application settings..
         /// </summary>
-        internal static string ParamNotFoundMsg {
+        internal static string AdminDescription {
             get {
-                return ResourceManager.GetString("ParamNotFoundMsg", resourceCulture);
+                return ResourceManager.GetString("AdminDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test with {0} id could not be found..
+        ///   Looks up a localized string similar to Admin.
         /// </summary>
-        internal static string TestNotFoundMsg {
+        internal static string AdminName {
             get {
-                return ResourceManager.GetString("TestNotFoundMsg", resourceCulture);
+                return ResourceManager.GetString("AdminName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instance of {0} cannot be converted to string..
+        ///   Looks up a localized string similar to User of the application. Can execute tests and edit parameters..
         /// </summary>
-        internal static string ToStringConversionMsg {
+        internal static string UserDescription {
             get {
-                return ResourceManager.GetString("ToStringConversionMsg", resourceCulture);
+                return ResourceManager.GetString("UserDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        internal static string UserName {
+            get {
+                return ResourceManager.GetString("UserName", resourceCulture);
             }
         }
     }

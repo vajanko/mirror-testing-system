@@ -412,7 +412,7 @@ namespace MTS.Editor
             {
                 foreach (XElement xmlTest in testElements)
                 {
-                    if (!tc.ContainsKey(xmlTest.Attribute(IdAttr).Value))
+                    if (!tc.ContainsTest(xmlTest.Attribute(IdAttr).Value))
                     {   // we have discovered that test file contains element that is not contained in the template
                         tc.InvalidateCurrentVersion();
                         break;

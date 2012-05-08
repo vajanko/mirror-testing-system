@@ -25,11 +25,11 @@ namespace MTS.Base
             : base(message)
         {
         }
-        public ConfigException(string message, Exception innerException)
+        public ConfigException(string message, Exception innerException = null)
             : base(message, innerException)
         {
         }
-        public ConfigException(string configPath, string message, Exception innerException)
+        public ConfigException(string configPath, string message, Exception innerException = null)
             : this(message, innerException)
         {
             ConfigPath = configPath;

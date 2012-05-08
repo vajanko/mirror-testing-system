@@ -8,6 +8,9 @@ namespace MTS.Base
     public static class Output
     {
         static private TextBox textBox;
+        /// <summary>
+        /// (Get/Set) Instance of <see cref="TextBox"/> where any output is written
+        /// </summary>
         static public TextBox TextBox
         {
             get { return textBox; }

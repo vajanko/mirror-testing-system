@@ -10,7 +10,6 @@ namespace MTS.Base
     {
         public ICommand Command { get; private set; }
 
-
         #region Constructors
 
         public CommandViewModel(string displayName, ICommand command)
