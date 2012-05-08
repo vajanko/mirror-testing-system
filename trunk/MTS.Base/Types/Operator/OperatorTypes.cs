@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MTS.Base.Properties;
 
 namespace MTS.Base
 {
@@ -65,9 +66,9 @@ namespace MTS.Base
         {
             // initialize operator types
             operators.Add(OperatorEnum.Admin,
-                new OperatorData(OperatorEnum.Admin, "Admin", "Administrator of the application. Can add, remove and modify operator accounts and change application settings"));
+                new OperatorData(OperatorEnum.Admin, Resources.AdminName, Resources.AdminDescription));
             operators.Add(OperatorEnum.User,
-                new OperatorData(OperatorEnum.User, "User", "User of the application. Can execute tests and edit parameters"));
+                new OperatorData(OperatorEnum.User, Resources.UserName, Resources.UserDescription));
         }
 
         #endregion

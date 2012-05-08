@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ParamNotFoundMsg" xml:space="preserve">
-    <value>Parameter with {0} id could not be found in test {1}</value>
-    <comment>Parameters: Parameter id, test id</comment>
+  <data name="AdminDescription" xml:space="preserve">
+    <value>Administrator of the application. Can add, remove and modify operator accounts and change application settings.</value>
   </data>
-  <data name="TestNotFoundMsg" xml:space="preserve">
-    <value>Test with {0} id could not be found.</value>
-    <comment>Parameters: Test id</comment>
+  <data name="AdminName" xml:space="preserve">
+    <value>Admin</value>
   </data>
-  <data name="ToStringConversionMsg" xml:space="preserve">
-    <value>Instance of {0} cannot be converted to string.</value>
-    <comment>Parameters: Target type</comment>
+  <data name="UserDescription" xml:space="preserve">
+    <value>User of the application. Can execute tests and edit parameters.</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>

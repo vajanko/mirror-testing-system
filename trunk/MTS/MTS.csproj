@@ -161,6 +161,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Editor\TestFileItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Tester\TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,6 +216,9 @@
     <Compile Include="Data\OperatorSource.cs" />
     <Compile Include="Controls\Converters\ParamValueConverter.cs" />
     <Compile Include="Data\ResultStyleSelector.cs" />
+    <Compile Include="Editor\TestFileItem.xaml.cs">
+      <DependentUpon>TestFileItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Installer.cs">
       <SubType>Component</SubType>
     </Compile>

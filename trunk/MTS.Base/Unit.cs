@@ -170,15 +170,15 @@ namespace MTS.Base
         {
             None = new Unit() { Name = "", FullName = "None" };
 
-            Miliampheres = new Unit() { Name = "mA", FullName = "Miliampheres" };
+            Miliampheres = new Unit() { Name = "mA", FullName = "Milliampheres" };
             Ampheres = new Unit { Name = "A", FullName = "Ampheres", SmallerUnit = Miliampheres };
             Miliampheres.LargerUnit = Ampheres;
 
             Seconds = new Unit() { Name = "s", FullName = "Seconds" };
-            Miliseconds = new Unit() { Name = "ms", FullName = "Miliseconds", LargerUnit = Seconds };
+            Miliseconds = new Unit() { Name = "ms", FullName = "Milliseconds", LargerUnit = Seconds };
             Seconds.SmallerUnit = Miliseconds;
 
-            Milimeters = new Unit() { Name = "mm", FullName = "Milimeters" };
+            Milimeters = new Unit() { Name = "mm", FullName = "Millimeters" };
 
             Grams = new Unit() { Name = "g", FullName = "Grams" };
 
