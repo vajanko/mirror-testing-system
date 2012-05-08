@@ -12,6 +12,9 @@ using MTS.Base;
 
 namespace MTS.Editor
 {
+    /// <summary>
+    /// Class that encapsulate functionality of reading and writing testing files.
+    /// </summary>
     public static class FileManager
     {
         #region Constants
@@ -25,15 +28,10 @@ namespace MTS.Editor
         /// </summary>
         private const string defFileExtension = ".tc";
         /// <summary>
-        /// Constant string describing filter for file dialog that will handle opening or saveing files
+        /// Constant string describing filter for file dialog that will handle opening or saving files
         /// containing collection of test parameters
         /// </summary>
         private const string fileFilter = "Test collections (" + defFileExtension + ")|*" + defFileExtension;
-
-        /// <summary>
-        /// String is displayed in the caption of message box when a file error occures
-        /// </summary>
-        private const string fileError = "File error";
 
         #endregion
 
@@ -156,7 +154,8 @@ namespace MTS.Editor
         /// <exception cref="System.IO.IOException">File could not be read because of insufficient privileges or other
         /// IO error</exception>
         /// <exception cref="System.IO.FileNotFoundException">File does not exist</exception>
-        /// <exception cref="MTS.Base.ConfigException">Template file was not found</exception>
+        /// <exception cref="MTS.Base.ConfigNotFoundException">Template file was not found</exception>
+        /// <exception cref="MTS.Base.ConfigException">Template file is corrupted</exception>
         public static TestCollection ReadFile(string path)
         {
             // notice that TestValue and ParamValue instances do not know anything about file format
@@ -287,9 +286,9 @@ namespace MTS.Editor
             return dialog;
         }
         /// <summary>
-        /// Create and configure a new dialog to save a file wist testing parameters
+        /// Create and configure a new dialog to save a file with testing parameters
         /// </summary>
-        /// <returns>An instance of <see cref="SaveFileDialog"/> configured for saveing test collection
+        /// <returns>An instance of <see cref="SaveFileDialog"/> configured for saving test collection
         /// files</returns>
         public static SaveFileDialog CreateSaveFileDialog()
         {

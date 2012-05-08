@@ -327,12 +327,6 @@
     <Content Include="config\task1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="config\template.dtd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="config\testfile.dtd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -363,12 +357,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\newFile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="config\template.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\viewData.png" />
