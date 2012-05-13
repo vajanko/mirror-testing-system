@@ -43,11 +43,11 @@ namespace MTS.Tester
         /// <summary>
         /// These tasks are executing at this time
         /// </summary>
-        private LinkedList<Task> executing = new LinkedList<Task>();
+        private LinkedList<Task> running = new LinkedList<Task>();
         /// <summary>
         /// These tasks are already executed - necessary to collect data
         /// </summary>
-        private LinkedList<Task> executed = new LinkedList<Task>();
+        private LinkedList<Task> finished = new LinkedList<Task>();
         /// <summary>
         /// Result of all executed tasks
         /// </summary>
@@ -69,11 +69,11 @@ namespace MTS.Tester
         /// <summary>
         /// (Get) Number of executed tasks
         /// </summary>
-        public int ExecutedTasks { get { return executed.Count; } }
+        public int ExecutedTasks { get { return finished.Count; } }
         /// <summary>
         /// (Get) Number of currently executing tasks
         /// </summary>
-        public int ExecutingTasks { get { return executing.Count; } }
+        public int ExecutingTasks { get { return running.Count; } }
 
         #endregion
 
@@ -307,8 +307,8 @@ namespace MTS.Tester
         /// <param name="args">Event argument that holds task result and status data</param>
         private void taskExecuted(Task sender, TaskExecutedEventArgs args)
         {
-            executing.Remove(sender);   // move from executing to executed
-            executed.AddFirst(sender);
+            running.Remove(sender);   // move from executing to executed
+            finished.AddFirst(sender);
 
             // save result
             results.Add(args.Result);
@@ -327,7 +327,7 @@ namespace MTS.Tester
             } while (task != null);
             Output.WriteLine("");
             // 
-            if (prepared.Count == 0 && executing.Count == 0)
+            if (prepared.Count == 0 && running.Count == 0)
                 IsFinished = true;
         }
         /// <summary>
@@ -337,14 +337,13 @@ namespace MTS.Tester
         /// executed</returns>
         private Task getNextTask()
         {
-
             if (toExecute.Count == 0)
                 return null;
 
             Task task = null;
 
             Task t = toExecute.Peek();
-            if (executing.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId)))
+            if (running.Concat(prepared).All(e => !requiredGraph.Contains(e.ScheduleId, t.ScheduleId)))
             {
                 task = toExecute.Dequeue();
             }
@@ -375,9 +374,9 @@ namespace MTS.Tester
         {
             executingTask.TaskExecuted -= new TaskExecutedHandler(taskExecuted);
             // remove executing task from executing collection
-            executing.Remove(executingTask);
+            running.Remove(executingTask);
             // move it to executed collection
-            executed.AddFirst(executingTask);
+            finished.AddFirst(executingTask);
             // add new task to collection of prepared tasks at the first position
             // - this will execute it in the next update
             newTask.TaskExecuted += new TaskExecutedHandler(taskExecuted);  // this will remove it when finished
@@ -441,7 +440,7 @@ namespace MTS.Tester
             foreach (Task task in prepared)
             {
                 task.Initialize(time);
-                executing.AddFirst(task);
+                running.AddFirst(task);
             }
             prepared.Clear();           // prepared tasks became executing
 
@@ -449,7 +448,7 @@ namespace MTS.Tester
             channels.Update();
 
             // update all executing tasks
-            LinkedListNode<Task> node1 = executing.First, node2;
+            LinkedListNode<Task> node1 = running.First, node2;
             while (node1 != null)
             {
                 node2 = node1.Next;
@@ -472,7 +471,7 @@ namespace MTS.Tester
             prepared.Clear();
 
             // change states of all executing tasks to aborting
-            foreach (Task task in executing)
+            foreach (Task task in running)
                 task.Abort();
             // update all executing tasks to abort themselves
             Update(time);

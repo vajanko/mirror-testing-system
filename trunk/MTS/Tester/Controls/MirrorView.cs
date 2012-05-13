@@ -16,25 +16,34 @@ using System.Windows.Shapes;
 namespace MTS.Tester.Controls
 {
     /// <summary>
-    /// TODO: Update summary
+    /// Control that displays 3D model of mirror glass.
     /// </summary>
     public class MirrorView : Control
     {
         #region Dependency Properties
 
+        /// <summary>
+        /// This method is called when <see cref="MirrorView.RotationAngle"/> dependency property change
+        /// </summary>
+        /// <param name="source">Instance of dependency object on which <see cref="MirrorView.RotationAngle"/>
+        /// has been changed</param>
+        /// <param name="args">Dependency property changed event arguments</param>
         static private void rotationChanged(DependencyObject source, DependencyPropertyChangedEventArgs args) 
         {   // called when RotationAxis or RotationAngle changed
-
+            
         }
 
         #region RotationAxis Property
 
+        /// <summary>
+        /// Identifies <see cref="MirrorView.RotationAxis"/> dependency
+        /// </summary>
         public static readonly DependencyProperty RotationAxisProperty =
             DependencyProperty.Register("RotationAxis", typeof(Vector3D), typeof(MirrorView),
             new PropertyMetadata(new PropertyChangedCallback(rotationChanged)));
 
         /// <summary>
-        /// (Get/Set DP) Axis arond which is the mirror rotated
+        /// (Get/Set) Axis around which is the mirror rotated. This is dependency property.
         /// </summary>
         public Vector3D RotationAxis
         {
@@ -46,12 +55,15 @@ namespace MTS.Tester.Controls
 
         #region RotationAngle Property
 
+        /// <summary>
+        /// Identifies <see cref="MirrorView.RotationAngle"/> dependency
+        /// </summary>
         public static readonly DependencyProperty RotationAngleProperty =
             DependencyProperty.Register("RotationAngle", typeof(double), typeof(MirrorView),
             new PropertyMetadata(new PropertyChangedCallback(rotationChanged)));
 
         /// <summary>
-        /// (Get/Set DP) Angle of mirror rotation
+        /// (Get/Set) Angle of mirror rotation. This is dependency property.
         /// </summary>
         public double RotationAngle
         {
@@ -63,11 +75,14 @@ namespace MTS.Tester.Controls
 
         #region HorizontalAngle Property
 
+        /// <summary>
+        /// Identifies <see cref="MirrorView.HorizontalAngle"/> dependency
+        /// </summary>
         public static readonly DependencyProperty HorizontalAngleProperty =
             DependencyProperty.Register("HorizontalAngle", typeof(double), typeof(MirrorView));
 
         /// <summary>
-        /// (Get/Set DP) Horizontal angle of mirror rotation
+        /// (Get/Set) Horizontal angle of mirror rotation. This is dependency property.
         /// </summary>
         public double HorizontalAngle
         {
@@ -79,11 +94,14 @@ namespace MTS.Tester.Controls
 
         #region VerticalAngle Property
 
+        /// <summary>
+        /// Identifies <see cref="MirrorView.VerticalAngle"/> dependency
+        /// </summary>
         public static readonly DependencyProperty VerticalAngleProperty =
             DependencyProperty.Register("VerticalAngle", typeof(double), typeof(MirrorView));
 
         /// <summary>
-        /// (Get/Set DP) Vertical angle of mirror rotation
+        /// (Get/Set) Vertical angle of mirror rotation. This is dependency property.
         /// </summary>
         public double VerticalAngle
         {
@@ -95,9 +113,16 @@ namespace MTS.Tester.Controls
 
         #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// Initialize <see cref="MirrorView"/> dependency properties.
+        /// </summary>
         static MirrorView()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MirrorView), new FrameworkPropertyMetadata(typeof(MirrorView)));
         }
+
+        #endregion
     }
 }

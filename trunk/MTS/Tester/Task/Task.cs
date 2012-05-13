@@ -71,8 +71,6 @@ namespace MTS.Tester
 
         #endregion
 
-        
-
         /// <summary>
         /// Event that is raised when task get executed
         /// </summary>
@@ -135,6 +133,10 @@ namespace MTS.Tester
             goTo(ExState.Aborting);
         }
 
+        /// <summary>
+        /// Get value describing final result of this task
+        /// </summary>
+        /// <returns></returns>
         protected virtual TaskResultType getResultCode()
         {
             return resultCode;
@@ -148,7 +150,7 @@ namespace MTS.Tester
                 ResultCode = getResultCode(),
                 Begin = this.Begin,
                 End = this.End,
-                HasData = false
+                //HasData = false
             };
         }
 
@@ -171,70 +173,48 @@ namespace MTS.Tester
             /// Test is being initialized
             /// </summary>
             Initializing,
-
             /// <summary>
             /// Test has been initialized and prerequisites has been finished. Testing may be started
             /// </summary>
             Starting,
-
             /// <summary>
             /// Test is measuring some kind of value (current, time, temperature, ...)
             /// </summary>
             Measuring,
 
             /// <summary>
-            /// Direction light is switched on, current is being measured
+            /// Electrical circuit is switched on, current is being measured
             /// </summary>
-            BlinkerOn,
+            On,
             /// <summary>
-            /// Direction light is switched off, nothing is being provided
+            /// Electrical circuit is switched off, nothing is being provided
             /// </summary>
-            BlinkerOff,
+            Off,
 
             /// <summary>
-            /// Whole mirror is being unfolded
+            /// Some hardware component is or is being moved up (sucker disk, distance sensors, glass ...)
             /// </summary>
-            Unfolding,
+            Up,
             /// <summary>
-            /// Whole mirror is being folded
+            /// Some hardware component is or is being moved down (sucker disk, distance sensors, glass ...)
             /// </summary>
-            Folding,
+            Down,
+            /// <summary>
+            /// Some hardware component is or is being moved left
+            /// </summary>
+            Left,
+            /// <summary>
+            /// Some hardware component is or is being moved right
+            /// </summary>
+            Right,
 
             /// <summary>
-            /// Sucker for pull-off test is down
+            /// Generic state of a task - used together with <see cref="ExState.StateB"/>
             /// </summary>
-            SuckerIsDown,
-            /// <summary>
-            /// Sucker for pull-off test is up
-            /// </summary>
-            SuckerIsUp,
-            /// <summary>
-            /// Air from the sucker disk is being sucked in. Vacuum is going to be created
-            /// </summary>
-            Sucking,
-            /// <summary>
-            /// Air is being blew in the sucker disk. This removes vacuum, so sucker disk may be moved
-            /// down. This is usually done when finalizing pull-off test.
-            /// </summary>
-            Blowing,
-            /// <summary>
-            /// Some hardware component is being moved up (sucker disk, distance sensors, glass ...)
-            /// </summary>
-            MoveingUp,
-            /// <summary>
-            /// Some hardware component is being moved down (sucker disk, distance sensors, glass ...)
-            /// </summary>
-            MoveingDown,
-            /// <summary>
-            /// Some hardware component is being moved left
-            /// </summary>
-            MoveingLeft,
-            /// <summary>
-            /// Some hardware component is being moved right
-            /// </summary>
-            MoveingRight,
-
             StateA,
+            /// <summary>
+            /// Generic state of a task - used together with <see cref="ExState.StateA"/>
+            /// </summary>
             StateB,
 
             /// <summary>

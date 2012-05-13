@@ -5,7 +5,10 @@ using MTS.Data.Types;
 
 namespace MTS.Tester.Result
 {
-    public class TaskResult : ResultBase
+    /// <summary>
+    /// Class describing task execution activity
+    /// </summary>
+    public class TaskResult
     {
         #region Properties
 
@@ -36,18 +39,20 @@ namespace MTS.Tester.Result
         /// </summary>
         public List<ParamResult> Params { get; private set; }
 
+        /// <summary>
+        /// (Get/Set) Description of task result data
+        /// </summary>
+        public string Description { get; set; }
+
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize a new instance of <see cref="TaskResult"/>
+        /// </summary>
         public TaskResult()
-            : base(0)
-        {
-            HasData = false;
-        }
-        public TaskResult(int databaseId)
-            : base(databaseId)
-        {
+        {   // task doesn't have any data by default
             Params = new List<ParamResult>();
         }
 

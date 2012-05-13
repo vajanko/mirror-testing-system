@@ -180,12 +180,6 @@ namespace MTS.Admin.Controls
                 // create scheduler and add tasks needed for calibration process
                 scheduler = new TaskScheduler(channels);
                 scheduler.Load(Settings.Default.GetCalibConfigPath());
-                
-                //scheduler.AddInitSequence();        // open device and wait for mirror to be inserted, then close it
-                //scheduler.AddDistanceSensorsUp();   // move up distance sensors for measuring
-                //scheduler.AddTask(new Calibrate(channels));     // read distance sensor values
-                //scheduler.AddDistanceSensorsDown(); // move down distance sensors - so device could be opened
-                //scheduler.AddOpenDevice();          // open device - after that calibration has finished
 
                 CalibrationState++;
                 Stopwatch watch = new Stopwatch();  // time elapsed since last loop
@@ -227,7 +221,6 @@ namespace MTS.Admin.Controls
             {
                 Status += "Failed!";
                 Output.WriteLine("An error occurred while calibrating mirror: {0}", ex.Message);
-                //ExceptionManager.ShowError(ex);
             }
             finally
             {   // release connection allocated resources
@@ -249,7 +242,7 @@ namespace MTS.Admin.Controls
 
             try
             {   // if any of this data is missing as exception will be thrown
-                TaskResult res = results.Where(r => r.HasData).First();
+                TaskResult res = results.Where(r => r.Description == "Calibration").First();
                 ParamResult disX = res.Params.Where(p => p.ResultParam.ValueId == "DistanceX").First();
                 ParamResult disY = res.Params.Where(p => p.ResultParam.ValueId == "DistanceY").First();
                 ParamResult disZ = res.Params.Where(p => p.ResultParam.ValueId == "DistanceZ").First();

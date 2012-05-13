@@ -35,25 +35,25 @@ namespace MTS.Tester
                     testingTime = 0;                // initialize variables                    
 
                     channels.SuckerUp();            // start to move sucker disk up
-                    goTo(ExState.MoveingUp);
+                    goTo(ExState.Up);
                     break;
-                case ExState.MoveingUp:
+                case ExState.Up:
                     if (channels.IsSuckerUp.Value)
                     {                               // sucker disk is already up
                         channels.StartSucking();    // suck air to create vacuum
-                        goTo(ExState.Sucking);
+                        goTo(ExState.StateA);
                     }                               // otherwise sucker disk is not yet up
                     break;
-                case ExState.Sucking:
+                case ExState.StateA:
                     if (channels.IsVacuum.Value)
                     {                               // there is already vacuum inside the sucker disk
                         channels.StopAir();         // stop sucking air
                         channels.SuckerDown();      // move sucker disk down
                         StartWatch(time);           // measure time
-                        goTo(ExState.MoveingDown);
+                        goTo(ExState.Down);
                     }                               // otherwise there is no vacuum yet
                     break;
-                case ExState.MoveingDown:           // this is actually required testing
+                case ExState.Down:           // this is actually required testing
                     // measure time and finish if time has elapsed
 
                     if (channels.IsSuckerDown.Value)
@@ -64,10 +64,10 @@ namespace MTS.Tester
                     {   // enough time has elapsed, remove sucker disk from mirror
                         channels.StartBlowing();    // first vacuum must be removed
                         channels.SuckerUp();        // stop to pull-off and wait for vacuum to be removed
-                        goTo(ExState.Blowing);      // wait for vacuum to be removed
+                        goTo(ExState.StateB);       // wait for vacuum to be removed
                     }                               // otherwise pull-off test is being executed
                     break;
-                case ExState.Blowing:
+                case ExState.StateB:
                     if (!channels.IsVacuum.Value)
                     {                               // vacuum is already removed
                         channels.StopAir();         // stop blowing air

@@ -7,7 +7,7 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    class Wait : Task
+    sealed class Wait : Task
     {
         /// <summary>
         /// Time that we are going to wait

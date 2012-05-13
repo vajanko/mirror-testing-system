@@ -10,7 +10,6 @@ using MTS.IO;
 using MTS.Base;
 using MTS.Editor;
 using MTS.Data;
-using MTS.Data.Converters;
 using MTS.Data.Types;
 using MTS.Tester.Result;
 using System.Runtime.CompilerServices;
@@ -39,7 +38,7 @@ namespace MTS.Tester
         /// <summary>
         /// Id of operator who has executed this shift
         /// </summary>
-        private int operatorId;
+        //private int operatorId;
 
         #endregion
 
@@ -364,36 +363,37 @@ namespace MTS.Tester
         /// start time of shift. Also all tests and parameters that are going to be used in this shift will be saved
         /// </summary>
         /// <param name="tests">All defined tests that could be executed (also disabled)</param>
-        private void createShift(TestCollection tests)
-        {
-            ToStringVisitor toString = new ToStringVisitor();
-            ParamTypeVisitor paramType = new ParamTypeVisitor();
+        //private void createShift(TestCollection tests)
+        //{
+        //    ToStringVisitor toString = new ToStringVisitor();
+        //    ParamTypeVisitor paramType = new ParamTypeVisitor();
+            
+        //    // 1) create a new instance of shift and save it to database
+        //    int operatorId = Admin.Operator.Instance.Id;
+        //    dbShift = context.StartShift(mirrorId, operatorId).Single();
 
-            // 1) create a new instance of shift and save it to database
-            dbShift = context.StartShift(mirrorId, operatorId).Single();
+        //    // 2) save information about used tests in current shift
+        //    foreach (TestValue tv in tests.Where(t => t.Enabled))
+        //    {   // add used tests in this shift (only enabled)
+        //        Test dbTest = context.AddTest(tv.ValueId, dbShift.Id).Single();
+        //        tv.DatabaseId = dbTest.Id;
 
-            // 2) save information about used tests in current shift
-            foreach (TestValue tv in tests.Where(t => t.Enabled))
-            {   // add used tests in this shift (only enabled)
-                Test dbTest = context.AddTest(tv.ValueId, dbShift.Id).Single();
-                tv.DatabaseId = dbTest.Id;
+        //        foreach (ParamValue pv in tv)
+        //        {
+        //            string unit = null;
+        //            if (pv is UnitParam)
+        //            {
+        //                unit = (pv as UnitParam).Unit.Name;
+        //            }
 
-                foreach (ParamValue pv in tv)
-                {
-                    string unit = null;
-                    if (pv is UnitParam)
-                    {
-                        unit = (pv as UnitParam).Unit.Name;
-                    }
+        //            string paramValue = toString.ConvertToString(pv);
+        //            byte paramDbType = paramType.GetDbParamType(pv);
 
-                    string paramValue = toString.ConvertToString(pv);
-                    byte paramDbType = paramType.GetDbParamType(pv);
-
-                    Param dbParam = context.AddParam(dbTest.Id, pv.ValueId, paramValue, paramDbType, unit).Single();
-                    pv.DatabaseId = dbParam.Id;
-                }
-            }
-        }
+        //            Param dbParam = context.AddParam(dbTest.Id, pv.ValueId, paramValue, paramDbType, unit).Single();
+        //            pv.DatabaseId = dbParam.Id;
+        //        }
+        //    }
+        //}
         /// <summary>
         /// Save produced results from one sequence of tests. One shift contains many sequences. At this time
         /// shift is already saved in database and we reference it when saving outputs
@@ -407,11 +407,10 @@ namespace MTS.Tester
             {
                 // this converter is used to convert object value to its string representation when
                 // saving to and retrieving from database
-                ParamTypeConverter converter = new ParamTypeConverter();
                 ToStringVisitor toString = new ToStringVisitor();
 
                 // only save test outputs which have data to be saved
-                foreach (TaskResult tRes in results.Where(t => t.HasData))
+                foreach (TestResult tRes in results.OfType<TestResult>()) //.Where(t => t.HasData))
                 {
                     byte resultCode = (byte)tRes.ResultCode;
 
@@ -422,7 +421,7 @@ namespace MTS.Tester
                     context.SaveChanges();
 
                     // only save parameter outputs which have data to be saved
-                    foreach (ParamResult pRes in tRes.Params.Where(p => p.HasData))
+                    foreach (ParamResult pRes in tRes.Params)
                     {
                         string resulValue = toString.ConvertToString(pRes.ResultParam);
 
@@ -468,7 +467,8 @@ namespace MTS.Tester
         /// </summary>
         public void Initialize()
         {
-            Passed = 0;         // nothing is finished yet
+            // nothing is finished yet
+            Passed = 0;
             Failed = 0;
             IsAborting = false;
 
@@ -515,7 +515,8 @@ namespace MTS.Tester
             // create database layer
             context = new MTSContext();
             // create and save a new instance of this to database
-            createShift(shiftTests);
+            int operatorId = Admin.Operator.Instance.Id;
+            dbShift = context.StartShift(mirrorId, operatorId, shiftTests);
 
             // enter the update loop
             loop.Start();
@@ -561,21 +562,13 @@ namespace MTS.Tester
             this.mirrorId = mirrorId;
             this.channels = channels;
             this.shiftTests = tests;
-            this.operatorId = Admin.Operator.Instance.Id;
+            //this.operatorId = Admin.Operator.Instance.Id;
 
             // remove special channels if they are already added
             channels.ClearSpecialChannels();
             // add special channels for test enabled value
             foreach (var test in tests)
-                channels.AddChannel(new TestChannel(test));
-            MTS.IO.Channel.DigitalInput<MTS.IO.Address.DummyAddress> ch = new IO.Channel.DigitalInput<IO.Address.DummyAddress>();
-            ch.Id = "IsTravelEnabled";
-            ch.SetValue(
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelEast)).Value &&
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelNorth)).Value &&
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelSouth)).Value &&
-                channels.GetChannel<IDigitalInput>(string.Format("Is{0}Enabled", TestIds.TravelWest)).Value);
-            channels.AddChannel(ch);
+                channels.AddSpecialChannel(new TestChannel(test));
         }
 
         #endregion

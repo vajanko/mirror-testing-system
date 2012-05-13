@@ -1,5 +1,4 @@
 ﻿using System;
-//using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 
 using MTS.IO;
@@ -50,7 +49,7 @@ namespace MTS.Tester
                 ResultCode = getResultCode(),
                 Begin = this.Begin,
                 End = this.End,
-                HasData = true
+                Description = "Calibration"
             };
             
             // as result return measured calibration values - distances of measuring calibrators

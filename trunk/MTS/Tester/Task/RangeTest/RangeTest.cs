@@ -77,9 +77,9 @@ namespace MTS.Tester
         /// used parameters.
         /// </summary>
         /// <returns>Object describing all results of this task</returns>
-        protected override TaskResult getResult()
+        protected override TestResult getTestResult()
         {   // only add parameters to already created test result
-            TaskResult result = base.getResult();
+            TestResult result = base.getTestResult();
 
             // correct values if they are to small or too big - if some of these values is double.MaxValue
             // or double.MinValue it means that testing time has been set to 0

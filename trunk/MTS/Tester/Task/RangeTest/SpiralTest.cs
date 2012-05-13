@@ -68,9 +68,9 @@ namespace MTS.Tester
         /// used parameters.
         /// </summary>
         /// <returns>Object describing all results of this task</returns>
-        protected override TaskResult getResult()
+        protected override TestResult getTestResult()
         {
-            TaskResult result = base.getResult();
+            TestResult result = base.getTestResult();
 
             // we have been measuring time in milliseconds, now convert it back to parameter unit
             // in this state will be saved to database

@@ -19,14 +19,16 @@ using MTS.IO;
 namespace MTS.Tester.Controls
 {
     /// <summary>
-    /// Control that holds a flow of values measured each one per timestamp
+    /// Control that holds a flow of values measured each one per timestamp. This control can be connected
+    /// to the value source using <see cref="GetNewValue"/> delegate and regularly calling <see cref="Update"/>
+    /// method. Control proportions are adjusted automatically according to the maximum value.
     /// </summary>
     public class FlowControl : Control, INotifyPropertyChanged
     {
         #region Properties
 
         /// <summary>
-        /// (Get) Collection of measured values
+        /// (Get) Ordered collection of measured values
         /// </summary>
         public DoubleQueue Values
         {
@@ -44,14 +46,15 @@ namespace MTS.Tester.Controls
             set
             {
                 currentValue = value;
-                RaisePropertyChanged("CurrentValue");
+                OnPropertyChanged("CurrentValue");
             }
         }
 
         /// <summary>
-        /// Method that will return new value that should be added to this controls
+        /// (Get/Set) Method that will return new value that should be added to this controls. If this
+        /// value is not set the <see cref="Update"/> method has no effect.
         /// </summary>
-        public Func<double> GetNewValue;
+        public Func<double> GetNewValue { get; set; }
 
         #endregion
 
@@ -180,9 +183,16 @@ namespace MTS.Tester.Controls
 
         #region INotifyPropertyChanged Members
 
+        /// <summary>
+        /// Handler that will be called when any property of this <see cref="FlowControl"/> change
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void RaisePropertyChanged(string name)
+        /// <summary>
+        /// Raise property changed event
+        /// </summary>
+        /// <param name="name">Name of property that has been changed</param>
+        protected void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
@@ -190,17 +200,28 @@ namespace MTS.Tester.Controls
 
         #endregion
 
+        /// <summary>
+        /// Raise dependency property changed event
+        /// </summary>
+        /// <param name="e">Property changed event arguments</param>
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
             // when ActualWidth changes - step will be changed appropriately
             if (e.Property == ActualWidthProperty && ActualWidth != 0)
-                Values.Step = ActualWidth / ValuesCapacity; // entire line (all values) are always displayed
-            // when ActualWidth changes - zero will be changed appropriately
+            {   // entire line (all values) are always displayed
+                Values.Step = ActualWidth / ValuesCapacity; 
+            }
             else if (e.Property == ActualHeightProperty)
+            {   // when ActualWidth changes - zero will be changed appropriately
                 Zero = ActualHeight / 2;    // zero line is always in the middle
+            }
         }
 
+        /// <summary>
+        /// Add new value to the set of values displayed in this <see cref="FlowControl"/>
+        /// </summary>
+        /// <param name="value">Value to add. This value becomes <see cref="CurrentValue"/></param>
         public void AddValue(double value)
         {
             // by adding new values, too old ones get removed from Values collection
@@ -208,12 +229,14 @@ namespace MTS.Tester.Controls
             // last value added
             CurrentValue = value;
             MaxValue = Values.MaxValue;
-                 
-            RaisePropertyChanged("Values");     // this is for binding
+
+            // reset the binding
+            OnPropertyChanged("Values");
         }
 
         /// <summary>
-        /// Get a new value and add it to the control. For this <see cref="GetNewValue"/> delegate is used
+        /// Get a new value and add it to the control. For this <see cref="GetNewValue"/> delegate is necessary to
+        /// be set up.
         /// </summary>
         public void Update()
         {
@@ -223,6 +246,9 @@ namespace MTS.Tester.Controls
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize a new instance of <see cref="FlowControl"/> with empty set of displayed values.
+        /// </summary>
         public FlowControl()
         {
             // new measured values are added and too old values are removed
@@ -235,6 +261,9 @@ namespace MTS.Tester.Controls
             SetBinding(ValuesCapacityProperty, bind);
         }
 
+        /// <summary>
+        /// Initialize <see cref="FlowControl"/> dependency properties
+        /// </summary>
         static FlowControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FlowControl), new FrameworkPropertyMetadata(typeof(FlowControl)));
@@ -243,6 +272,10 @@ namespace MTS.Tester.Controls
         #endregion        
     }
 
+    /// <summary>
+    /// A queue of double values used by <see cref="FlowControl"/>. Additional properties common for the set
+    /// of values displayed in graph are added.
+    /// </summary>
     public class DoubleQueue : Queue<double>
     {
         /// <summary>
@@ -284,7 +317,7 @@ namespace MTS.Tester.Controls
         }
 
         /// <summary>
-        /// Create a new instance of <typeparamref name="DoubleQueue"/> with default capacity
+        /// Create a new instance of <typeparamref name="DoubleQueue"/> with default capacity 20 items
         /// </summary>
         public DoubleQueue() { Capacity = 20; }
     }

@@ -87,6 +87,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Types\IDataType.cs" />
     <Compile Include="Types\IDataTypeManager.cs" />
+    <Compile Include="Types\Mirror\MirrorType.cs" />
     <Compile Include="Types\Operator\OperatorData.cs" />
     <Compile Include="Types\Operator\OperatorEnum.cs" />
     <Compile Include="Types\Operator\OperatorTypes.cs" />

@@ -7,7 +7,7 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    class WaitForChannels : ChannelsTask<IDigitalInput>
+    sealed class WaitForChannels : ChannelsTask<IDigitalInput>
     {
         /// <summary>
         /// Check if particular channels have required value and finish this task if so

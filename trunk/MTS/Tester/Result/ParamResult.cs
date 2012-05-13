@@ -3,9 +3,21 @@ using MTS.Editor;
 
 namespace MTS.Tester.Result
 {
-    public class ParamResult : ResultBase 
+    /// <summary>
+    /// Class describing result of a test parameter
+    /// </summary>
+    public class ParamResult
     {
+        /// <summary>
+        /// (Get) Result parameter value produced during testing
+        /// </summary>
         public ParamValue ResultParam { get; private set; }
+
+        /// <summary>
+        /// (Get) Database id of parameter or test used to produce this result. Set to zero if there 
+        /// will not be any reference to database
+        /// </summary>
+        public int DatabaseId { get { return ResultParam.DatabaseId; } }
 
         #region Constructors
 
@@ -18,13 +30,9 @@ namespace MTS.Tester.Result
         /// <param name="paramValue">Value of parameter. If this is null value will not be save to database
         /// but will be referenced by test output as used parameter</param>
         public ParamResult(ParamValue usedParam, object resultValue = null)
-            : base(usedParam.DatabaseId)
         {
             ResultParam = usedParam.Clone() as ParamValue;
             ResultParam.Value = resultValue;
-            // if parameter should not be saved to database, must be explicitly set
-            // by default all parameters are saved to database (even if result value is null)
-            HasData = true;
         }
 
         #endregion

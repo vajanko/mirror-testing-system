@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Mirror.cs" />
+    <Compile Include="Classes\MTSContext.cs" />
     <Compile Include="Converters\ResultCodeConverter.cs" />
     <Compile Include="DbParamResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
@@ -76,7 +77,6 @@
     <Compile Include="MirrorResult.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MTSDataHelper.cs" />
     <Compile Include="Operator.cs">
       <DependentUpon>MTSModel.tt</DependentUpon>
     </Compile>
@@ -201,6 +201,10 @@
     <ProjectReference Include="..\MTS.Base\MTS.Base.csproj">
       <Project>{0AE7820B-31EC-4D62-B36B-E8CD63369ABC}</Project>
       <Name>MTS.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS.Editor\MTS.Editor.csproj">
+      <Project>{D497E8F2-AC8A-49E7-9BF8-8147888DB90A}</Project>
+      <Name>MTS.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
