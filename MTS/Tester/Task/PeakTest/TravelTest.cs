@@ -48,7 +48,7 @@ namespace MTS.Tester
         private CenterTask center;
         private bool centering;
 
-        public override void Update(DateTime time)
+        public sealed override void Update(DateTime time)
         {
             // In this case, if max time elapsed, task has to be finished. The final position has not been reached,
             // but we already know that this is a bed peace
@@ -65,14 +65,6 @@ namespace MTS.Tester
                     center.TaskExecuted += new TaskExecutedHandler(center_TaskExecuted);
 
                     goTo(ExState.Starting);
-
-                    //StartWatch(time);                               // start to measure time
-                    //channels.MoveMirror(travelDirection);           // start to move mirror glass
-                    //actuatorChannel = travelDirection.IsHorizontal() ?
-                    //    channels.HorizontalActuatorCurrent :        // decide on which channel to measure current
-                    //    channels.VerticalActuatorCurrent;           // depends on which direction we are moving in
-                    //goTo(ExState.Measuring);                        // switch to next state
-                    //Output.WriteLine("Moving in direction: {0}", travelDirection);
                     break;
                 case ExState.Starting:
                     if (!centering)
@@ -113,9 +105,9 @@ namespace MTS.Tester
             centering = false;
         }
 
-        protected override TaskResult getResult()
+        protected sealed override TestResult getTestResult()
         {
-            TaskResult result = base.getResult();
+            TestResult result = base.getTestResult();
 
             // we have been measuring angle in degrees, now convert it back to parameter unit
             // in this state will be saved to database
@@ -128,7 +120,7 @@ namespace MTS.Tester
 
             return result;
         }
-        protected override TaskResultType getResultCode()
+        protected sealed override TaskResultType getResultCode()
         {
             if (angleMeasured >= minAngle)
                 return base.getResultCode();

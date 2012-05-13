@@ -89,9 +89,9 @@ namespace MTS.Tester
         /// used parameters.
         /// </summary>
         /// <returns>Object describing all results of this task</returns>
-        protected override TaskResult getResult()
+        protected override TestResult getTestResult()
         {   // these are common value such as duration and result code
-            TaskResult result = base.getResult();
+            TestResult result = base.getTestResult();
 
             // prepare value for saving to database
             validate(ref maxMeasuredOverloadTime);

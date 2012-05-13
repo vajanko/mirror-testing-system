@@ -276,7 +276,7 @@
     <Compile Include="Tester\Task\PeakTest\PeakTest.cs" />
     <Compile Include="Tester\Task\PeakTest\PowerfoldTest.cs" />
     <Compile Include="Tester\Task\RangeTest\RangeTest.cs" />
-    <Compile Include="Tester\Task\Scheduler.cs" />
+    <Compile Include="Tester\Task\TaskScheduler.cs" />
     <Compile Include="Tester\Task\RangeTest\SpiralTest.cs" />
     <Compile Include="Tester\Task\PulloffTest.cs" />
     <Compile Include="Tester\Task\Task.cs" />

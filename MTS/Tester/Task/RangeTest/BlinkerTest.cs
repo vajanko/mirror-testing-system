@@ -63,10 +63,10 @@ namespace MTS.Tester
 
                     channels.DirectionLightOn.On();                         // switch on direction light
                     StartWatch(time);                                       // start measuring time of light on
-                    goTo(ExState.BlinkerOn);                                // go to next state
+                    goTo(ExState.On);                                // go to next state
                     Output.WriteLine("Switching direction light on");
                     break;
-                case ExState.BlinkerOn:   // measure current
+                case ExState.On:   // measure current
                     measureCurrent(channels.DirectionLightCurrent);         // measure current
                     if (TimeElapsed(time) >= lightingTime)                  // if lighting time elapsed
                     {
@@ -74,17 +74,17 @@ namespace MTS.Tester
                         StartWatch(time);                                   // start to measure time of light off
                         ++blinksCountMeasured;                              // increase one lighting period
                         goTo(blinksCountMeasured < blinksCount ? 
-                            ExState.BlinkerOff : ExState.Finalizing);
-                        if (exState == ExState.BlinkerOff)
+                            ExState.Off : ExState.Finalizing);
+                        if (exState == ExState.Off)
                             Output.WriteLine("Switching direction light off");
                     }                                                       // off blinker
                     break;
-                case ExState.BlinkerOff:  // do not measure current
+                case ExState.Off:  // do not measure current
                     if (TimeElapsed(time) >= breakTime)                     // if break time elapsed
                     {
                         channels.DirectionLightOn.On();               // switch on light
                         StartWatch(time);                                   // start to measure time of light on
-                        goTo(ExState.BlinkerOn);
+                        goTo(ExState.On);
                         Output.WriteLine("Switching direction light on");
                     }   // after blinker is off always come a period when blinker is on
                     break;
@@ -105,9 +105,9 @@ namespace MTS.Tester
         /// used parameters.
         /// </summary>
         /// <returns>Object describing all results of this task</returns>
-        protected override TaskResult getResult()
+        protected override TestResult getTestResult()
         {
-            TaskResult result = base.getResult();
+            TestResult result = base.getTestResult();
 
             // these values have been used but not output has been generated
             result.Params.Add(new ParamResult(lighteningTimeParam));

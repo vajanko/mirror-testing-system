@@ -30,14 +30,23 @@ namespace MTS.Tester
         /// used parameters.
         /// </summary>
         /// <returns>Object describing all results of this task</returns>
-        protected override TaskResult getResult()
+        protected sealed override TaskResult getResult()
+        {
+            return getTestResult();
+        }
+        /// <summary>
+        /// Generate object holding result data for this test such as time of execution and results of 
+        /// used parameters.
+        /// </summary>
+        /// <returns>Object describing all results of this test and its parameters</returns>
+        protected virtual TestResult getTestResult()
         {
             return new TestResult(testParam)
             {
                 Begin = Begin,
                 End = End,
                 ResultCode = getResultCode(),   // this method may be overridden and return result depending on test
-                HasData = Enabled               // value indicating that this result has data to be saved to database
+                //HasData = Enabled               // value indicating that this result has data to be saved to database
             };
         }
 

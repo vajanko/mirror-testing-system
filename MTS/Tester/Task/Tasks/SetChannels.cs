@@ -7,7 +7,7 @@ using MTS.Tester.Result;
 
 namespace MTS.Tester
 {
-    class SetChannels : ChannelsTask<IDigitalOutput>
+    sealed class SetChannels : ChannelsTask<IDigitalOutput>
     {
         public override void Update(DateTime time)
         {

@@ -39,17 +39,17 @@ namespace MTS.Tester
                     isOverloaded = false;
 
                     channels.StartUnfolding();                   // start to unfold
-                    goTo(ExState.Unfolding);                     // switch to next state
+                    goTo(ExState.StateA);                        // switch to next state
                     break;
-                case ExState.Unfolding:                          // check current while unfolding
+                case ExState.StateA:                             // check current while unfolding
                     measureCurrent(time, channels.PowerfoldCurrent);
                     if (channels.IsUnfolded())
                     {
                         channels.StartFolding();                 // stop unfolding and start to fold
-                        goTo(ExState.Folding);                   // switch to next state
+                        goTo(ExState.StateB);                    // switch to next state
                     }
                     break;
-                case ExState.Folding:                            // check current while folding
+                case ExState.StateB:                             // check current while folding
                     measureCurrent(time, channels.PowerfoldCurrent);
                     if (channels.IsFolded())
                         goTo(ExState.Finalizing);                // switch to next state

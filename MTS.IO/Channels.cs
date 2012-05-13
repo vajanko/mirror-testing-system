@@ -6,24 +6,32 @@ using System.Windows.Media.Media3D;
 
 namespace MTS.IO
 {
-
     /// <summary>
     /// This class is only a thin cover over some IModule implementation
     /// It allows access to channels directly by properties
     /// </summary>
     public class Channels : IModule
     {
+        #region Fields
+
         /// <summary>
         /// Instance of layer that is responsible for communication with hardware
         /// </summary>
         private IModule module;
 
+        /// <summary>
+        /// Collection of special channels. Special channels are defined by the application to
+        /// allow uniform communication of execution logic with the rest of this application. All test have a special
+        /// channel of name Is{testName}Enabled. Special channels are not transferred over network.
+        /// </summary>
         private Dictionary<string, IChannel> specialChannels = new Dictionary<string, IChannel>();
 
         /// <summary>
         /// Collection of setting for all analog channels. This includes raw/real low/high values
         /// </summary>
         private ChannelSettings settings;
+
+        #endregion
 
         #region IModule Members
 
@@ -58,8 +66,6 @@ namespace MTS.IO
             // Consider this when setting variable names in TwinCAT IO Server or 
             // editing configuration file for Moxa
 
-            // setting channels property here is only temporary a will be changed in the future
-            // this could be also done with reflection
             Type thisType = this.GetType();
             foreach (var channel in module.Inputs)
             {
@@ -70,124 +76,7 @@ namespace MTS.IO
             {
                 PropertyInfo prop = thisType.GetProperty(channel.Id);
                 initializeChannel((IAnalogInput)prop.GetValue(this, null), settings.GetSetting(channel.Id));
-            }
-
-            //// analog inputs - also initialize its settings raw/real low/high values
-            //DistanceX = module.GetChannel<IAnalogInput<TAddress>>("DistanceX");
-            //initializeChannel(DistanceX, settings.GetSetting("DistanceX"));
-
-            //DistanceY = module.GetChannel<IAnalogInput<TAddress>>("DistanceY");
-            //initializeChannel(DistanceY, settings.GetSetting("DistanceY"));
-
-            //DistanceZ = module.GetChannel<IAnalogInput<TAddress>>("DistanceZ");
-            //initializeChannel(DistanceZ, settings.GetSetting("DistanceZ"));
-
-            //PowerfoldCurrent = module.GetChannel<IAnalogInput<TAddress>>("PowerfoldCurrent");
-            //initializeChannel(PowerfoldCurrent, settings.GetSetting("PowerfoldCurrent"));
-
-            //HeatingFoilCurrent = module.GetChannel<IAnalogInput<TAddress>>("HeatingFoilCurrent");
-            //initializeChannel(HeatingFoilCurrent, settings.GetSetting("HeatingFoilCurrent"));
-
-            //VerticalActuatorCurrent = module.GetChannel<IAnalogInput<TAddress>>("VerticalActuatorCurrent");
-            //initializeChannel(VerticalActuatorCurrent, settings.GetSetting("VerticalActuatorCurrent"));
-
-            //HorizontalActuatorCurrent = module.GetChannel<IAnalogInput<TAddress>>("HorizontalActuatorCurrent");
-            //initializeChannel(HorizontalActuatorCurrent, settings.GetSetting("HorizontalActuatorCurrent"));
-
-            //DirectionLightCurrent = module.GetChannel<IAnalogInput<TAddress>>("DirectionLightCurrent");
-            //initializeChannel(DirectionLightCurrent, settings.GetSetting("DirectionLightCurrent"));
-
-            //PowerSupplyVoltage1 = module.GetChannel<IAnalogInput<TAddress>>("PowerSupplyVoltage1");
-            //initializeChannel(PowerSupplyVoltage1, settings.GetSetting("PowerSupplyVoltage1"));
-
-            //PowerSupplyVoltage2 = module.GetChannel<IAnalogInput<TAddress>>("PowerSupplyVoltage2");
-            //initializeChannel(PowerSupplyVoltage2, settings.GetSetting("PowerSupplyVoltage2"));
-            ////// analog inputs
-
-            //// digital inputs
-            //IsDistanceSensorUp = module.GetChannel<IDigitalInput<TAddress>>("IsDistanceSensorUp");
-            //IsDistanceSensorDown = module.GetChannel<IDigitalInput<TAddress>>("IsDistanceSensorDown");
-            //IsSuckerUp = module.GetChannel<IDigitalInput<TAddress>>("IsSuckerUp");
-            //IsSuckerDown = module.GetChannel<IDigitalInput<TAddress>>("IsSuckerDown");
-            //IsVacuum = module.GetChannel<IDigitalInput<TAddress>>("IsVacuum");
-            //IsLeftRubberPresent = module.GetChannel<IDigitalInput<TAddress>>("IsLeftRubberPresent");
-
-            //IsPowerfoldDown = module.GetChannel<IDigitalInput<TAddress>>("IsPowerfoldDown");
-            //IsPowerfoldUp = module.GetChannel<IDigitalInput<TAddress>>("IsPowerfoldUp");
-            //IsOldPowerfoldUp = module.GetChannel<IDigitalInput<TAddress>>("IsOldPowerfoldUp");
-            //IsRightRubberPresent = module.GetChannel<IDigitalInput<TAddress>>("IsRightRubberPresent");
-
-            //IsLeftMirror = module.GetChannel<IDigitalInput<TAddress>>("IsLeftMirror");
-            //IsOldMirror = module.GetChannel<IDigitalInput<TAddress>>("IsOldMirror");
-            //IsOldPowerfoldDown = module.GetChannel<IDigitalInput<TAddress>>("IsOldPowerfoldDown");
-            //IsStartPressed = module.GetChannel<IDigitalInput<TAddress>>("IsStartPressed");
-            //IsAckPressed = module.GetChannel<IDigitalInput<TAddress>>("IsAckPressed");
-
-            //IsLocked = module.GetChannel<IDigitalInput<TAddress>>("IsLocked");
-            //IsOldLocked = module.GetChannel<IDigitalInput<TAddress>>("IsOldLocked");
-
-            //IsPowerSupplyOff = module.GetChannel<IDigitalInput<TAddress>>("IsPowerSupplyOff");
-            //// digital inputs
-
-            //// digital outputs
-            //AllowMirrorMovement = module.GetChannel<IDigitalOutput<TAddress>>("AllowMirrorMovement");
-            //MoveMirrorVertical = module.GetChannel<IDigitalOutput<TAddress>>("MoveMirrorVertical");
-            //MoveMirrorHorizontal = module.GetChannel<IDigitalOutput<TAddress>>("MoveMirrorHorizontal");
-            //MoveMirrorReverse = module.GetChannel<IDigitalOutput<TAddress>>("MoveMirrorReverse");
-            //FoldPowerfold = module.GetChannel<IDigitalOutput<TAddress>>("FoldPowerfold");
-            //UnfoldPowerfold = module.GetChannel<IDigitalOutput<TAddress>>("UnfoldPowerfold");
-            //HeatingFoilOn = module.GetChannel<IDigitalOutput<TAddress>>("HeatingFoilOn");
-            //DirectionLightOn = module.GetChannel<IDigitalOutput<TAddress>>("DirectionLightOn");
-
-            //LockWeak = module.GetChannel<IDigitalOutput<TAddress>>("LockWeak");
-            //UnlockWeak = module.GetChannel<IDigitalOutput<TAddress>>("UnlockWeak");
-            //MoveDistanceSensorUp = module.GetChannel<IDigitalOutput<TAddress>>("MoveDistanceSensorUp");
-            //MoveDistanceSensorDown = module.GetChannel<IDigitalOutput<TAddress>>("MoveDistanceSensorDown");
-            //MoveSuckerUp = module.GetChannel<IDigitalOutput<TAddress>>("MoveSuckerUp");
-            //MoveSuckerDown = module.GetChannel<IDigitalOutput<TAddress>>("MoveSuckerDown");
-            //SuckOn = module.GetChannel<IDigitalOutput<TAddress>>("SuckOn");
-            //BlowOn = module.GetChannel<IDigitalOutput<TAddress>>("BlowOn");
-
-            //AllowPowerSupply = module.GetChannel<IDigitalOutput<TAddress>>("AllowPowerSupply");
-            //LockStrong = module.GetChannel<IDigitalOutput<TAddress>>("LockStrong");
-            //UnlockStrong = module.GetChannel<IDigitalOutput<TAddress>>("UnlockStrong");
-            //GreenLightOn = module.GetChannel<IDigitalOutput<TAddress>>("GreenLightOn");
-            //RedLightOn = module.GetChannel<IDigitalOutput<TAddress>>("RedLightOn");
-            //BuzzerOn = module.GetChannel<IDigitalOutput<TAddress>>("BuzzerOn");
-
-            // digital outputs
-
-            //// ???
-            //TestingDeviceOpened = module.GetChannel("TestingDeviceOpened");
-            //TestingDeviceClosed = module.GetChannel("TestingDeviceClosed");
-            //ErrorAcknButton = module.GetChannel("ErrorAcknButton");
-
-            //// powerfold
-            //PowerFoldUnfoldedPositionSensor1 = module.GetChannel("PowerFoldUnfoldedPositionSensor1");
-            //PowerFoldUnfoldedPositionSensor2 = module.GetChannel("PowerFoldUnfoldedPositionSensor2");
-            //PowerFoldFoldedPositionSensor = module.GetChannel("PowerFoldFoldedPositionSensor");
-            
-
-            //HeatingFoilSignSensor = module.GetChannel("HeatingFoilSignSensor");
-
-            //SensorHeadOut = module.GetChannel("SensorHeadOut");
-            //SensorHeadIn = module.GetChannel("SensorHeadIn");
-            //InsCheck1 = module.GetChannel("InsCheck1");
-            //InsCheck2 = module.GetChannel("InsCheck2");
-            //InsCheck3 = module.GetChannel("InsCheck3");
-            //InsCheck4 = module.GetChannel("InsCheck4");
-            //InsCheck5 = module.GetChannel("InsCheck5");
-            //InsCheck6 = module.GetChannel("InsCheck6");
-            //InsCheck7 = module.GetChannel("InsCheck7");
-            //InsCheck8 = module.GetChannel("InsCheck8");
-            //InsCheck9 = module.GetChannel("InsCheck9");
-            //InsCheck10 = module.GetChannel("InsCheck10");
-            //InsCheck11 = module.GetChannel("InsCheck11");
-            //InsCheck12 = module.GetChannel("InsCheck12");
-            //InsCheck13 = module.GetChannel("InsCheck13");
-            //InsCheck14 = module.GetChannel("InsCheck14");
-            //InsCheck15 = module.GetChannel("InsCheck15");
-            //InsCheck16 = module.GetChannel("InsCheck16");            
+            }          
         }
         /// <summary>
         /// Write all output and read all input channels (in this order)
@@ -246,12 +135,16 @@ namespace MTS.IO
         /// (Get) Name of underlying module communication protocol
         /// </summary>
         public string ProtocolName { get { return module.ProtocolName; } }
-
+        /// <summary>
+        /// (Get) Enumerate all input channels
+        /// </summary>
         public IEnumerable<IChannel> Inputs
         {
             get { return module.Inputs; }
         }
-
+        /// <summary>
+        /// (Get) Enumerate all output channels
+        /// </summary>
         public IEnumerable<IChannel> Outputs
         {
             get { return module.Outputs; }
@@ -267,7 +160,7 @@ namespace MTS.IO
             return module.GetChannel(id);
         }
         /// <summary>
-        /// Get all channels contained in this current module of <typeparamref name="TChannel"/> type
+        /// Get all channels contained in this module of <typeparamref name="TChannel"/> type
         /// </summary>
         /// <typeparam name="TChannel">Type of channels to get. For example <see cref="IAnalogInput"/>
         /// or <see cref="IDigitalOutput"/> channels.</typeparam>
@@ -277,6 +170,13 @@ namespace MTS.IO
             foreach (var channel in module.GetChannels<TChannel>())
                 yield return channel;
         }
+        /// <summary>
+        /// Get channel of <typeparamref name="TChannel"/> type with given id.
+        /// </summary>
+        /// <typeparam name="TChannel"></typeparam>
+        /// <param name="id"></param>
+        /// <returns>Channel of <typeparamref name="TChannel"/> type with <paramref name="id"/> or
+        /// null if there is no such a channel</returns>
         public TChannel GetChannel<TChannel>(string id) where TChannel : IChannel
         {
             if (specialChannels.ContainsKey(id))
@@ -290,6 +190,10 @@ namespace MTS.IO
 
         #region IEnumerable Members
 
+        /// <summary>
+        /// Enumerate all channels in this module
+        /// </summary>
+        /// <returns>Enumerator of all channels</returns>
         public System.Collections.IEnumerator GetEnumerator()
         {
             return module.GetEnumerator();
@@ -688,99 +592,194 @@ namespace MTS.IO
 
         #endregion
 
-        public void ClearSpecialChannels()
-        {
-            specialChannels.Clear();
-        }
-        public void AddChannel(IChannel channel)
-        {
-            specialChannels.Add(channel.Id, channel);
-        }
-
         // TODO: add description of channels
         #region Channels
 
         #region Digital inputs
 
-        public IDigitalInput IsDistanceSensorUp { get; set; }
-        public IDigitalInput IsDistanceSensorDown { get; set; }
-        public IDigitalInput IsSuckerUp { get; set; }
-        public IDigitalInput IsSuckerDown { get; set; }
-        public IDigitalInput IsVacuum { get; set; }
-        public IDigitalInput IsLeftRubberPresent { get; set; }
-
-
-        public IDigitalInput IsPowerfoldDown { get; set; }
-        public IDigitalInput IsPowerfoldUp { get; set; }
-        public IDigitalInput IsOldPowerfoldUp { get; set; }
-        public IDigitalInput IsRightRubberPresent { get; set; }
-        public IDigitalInput IsLeftMirror { get; set; }
-        public IDigitalInput IsOldMirror { get; set; }
-        public IDigitalInput IsOldPowerfoldDown { get; set; }
-        public IDigitalInput IsStartPressed { get; set; }
-        public IDigitalInput IsAckPressed { get; set; }
-
-        public IDigitalInput IsLocked { get; set; }
-        public IDigitalInput IsOldLocked { get; set; }
-
-        public IDigitalInput HeatingFoilSignSensor { get; set; }
-        public IDigitalInput PowerFoldUnfoldedPositionSensor1 { get; set; }
-        public IDigitalInput PowerFoldUnfoldedPositionSensor2 { get; set; }
-        public IDigitalInput PowerFoldFoldedPositionSensor { get; set; }
-        public IDigitalInput TestingDeviceOpened { get; set; }
-        public IDigitalInput TestingDeviceClosed { get; set; }
+        /// <summary>
+        /// (Get) Channel indicating whether calibrators are in upper position. If true measurement of
+        /// mirror glass can be performed.
+        /// </summary>
+        public IDigitalInput IsDistanceSensorUp { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether calibrators are in lower position. If true it is possible
+        /// to manipulate with the mirror or pull off test can be performed. At the end of testing sequence
+        /// calibrators must be moved down.
+        /// </summary>
+        public IDigitalInput IsDistanceSensorDown { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether sucker disk is in upper position. If true pull of test
+        /// can be performed.
+        /// </summary>
+        public IDigitalInput IsSuckerUp { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether sucker disk is in lower position. If true it is possible to 
+        /// manipulate with the mirror or mirror glass movement can be performed. At the end of testing 
+        /// sequence sucker disk must be moved down.
+        /// </summary>
+        public IDigitalInput IsSuckerDown { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether vacuum is created in the space between sucker disk and mirror
+        /// glass. If true the glass pull off process can be performed.
+        /// </summary>
+        public IDigitalInput IsVacuum { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether rubber on mirror cable is present. This value is only significant
+        /// for left mirror. For right mirror always is false.
+        /// </summary>
+        public IDigitalInput IsLeftRubberPresent { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether rubber on mirror cable is present. This value is only significant
+        /// for right mirror. For left mirror always is false.
+        /// </summary>
+        public IDigitalInput IsRightRubberPresent { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether tester device is closed. This value is significant only for
+        /// new mirror types. For old mirror it is unpredictable.
+        /// </summary>
+        public IDigitalInput IsLocked { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether tester device is closed. This value is significant only for
+        /// old mirror types. For new mirror it is unpredictable.
+        /// </summary>
+        public IDigitalInput IsOldLocked { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating the orientation of mirror inserted to tester. If true it is left
+        /// otherwise it is right.
+        /// </summary>
+        public IDigitalInput IsLeftMirror { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating the type of mirror inserted to tester. If true it is old
+        /// otherwise if is new type.
+        /// </summary>
+        public IDigitalInput IsOldMirror { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether START button on the tester is pressed. If true it is pressed
+        /// otherwise it is released.
+        /// </summary>
+        public IDigitalInput IsStartPressed { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether power supply of tester is switched off. If true power supply
+        /// is off otherwise it is on.
+        /// </summary>
+        public IDigitalInput IsPowerSupplyOff { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether mirror is folded. If true mirror is folded (on the car 
+        /// it will be closer to the window) otherwise it is unfolded. This value is significant only
+        /// for new mirror types. For old mirror type it is unpredictable.
+        /// </summary>
+        public IDigitalInput IsPowerfoldDown { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether mirror is unfolded. If true mirror is unfolded (on the car
+        /// it will be in its default position) otherwise it is folded. This value is significant only
+        /// for new mirror types. For old mirror type it is unpredictable.
+        /// </summary>
+        public IDigitalInput IsPowerfoldUp { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether mirror is folded. If true mirror is folded (on the car 
+        /// it will be closer to the window) otherwise it is unfolded. This value is significant only
+        /// for old mirror types. For new mirror type it is unpredictable.
+        /// </summary>
+        public IDigitalInput IsOldPowerfoldDown { get; private set; }
+        /// <summary>
+        /// (Get) Channel indicating whether mirror is unfolded. If true mirror is unfolded (on the car
+        /// it will be in its default position) otherwise it is folded. This value is significant only
+        /// for new mirror types. For old mirror type it is unpredictable.
+        /// </summary>
+        public IDigitalInput IsOldPowerfoldUp { get; private set; }
         
-        public IDigitalInput ErrorAcknButton { get; set; }
+        /// <summary>
+        /// (Get) Channel indicating whether ERROR ACKNOWLEDGMENT button on the tester is pressed. If true it
+        /// is pressed otherwise it is released.
+        /// </summary>
+        public IDigitalInput IsAckPressed { get; private set; }
 
-        public IDigitalInput SensorHeadOut { get; set; }
-        public IDigitalInput SensorHeadIn { get; set; }
-        public IDigitalInput InsCheck1 { get; set; }
-        public IDigitalInput InsCheck2 { get; set; }
-        public IDigitalInput InsCheck3 { get; set; }
-        public IDigitalInput InsCheck4 { get; set; }
-        public IDigitalInput InsCheck5 { get; set; }
-        public IDigitalInput InsCheck6 { get; set; }
-        public IDigitalInput InsCheck7 { get; set; }
-        public IDigitalInput InsCheck8 { get; set; }
-        public IDigitalInput InsCheck9 { get; set; }
-        public IDigitalInput InsCheck10 { get; set; }
-        public IDigitalInput InsCheck11 { get; set; }
-        public IDigitalInput InsCheck12 { get; set; }
-        public IDigitalInput InsCheck13 { get; set; }
-        public IDigitalInput InsCheck14 { get; set; }
-        public IDigitalInput InsCheck15 { get; set; }
-        public IDigitalInput InsCheck16 { get; set; }
-        public IDigitalInput IsPowerSupplyOff { get; set; }
+        //public IDigitalInput HeatingFoilSignSensor { get; private set; }
+        //public IDigitalInput PowerFoldUnfoldedPositionSensor1 { get; private set; }
+        //public IDigitalInput PowerFoldUnfoldedPositionSensor2 { get; private set; }
+        //public IDigitalInput PowerFoldFoldedPositionSensor { get; private set; }
+        //public IDigitalInput TestingDeviceOpened { get; private set; }
+        //public IDigitalInput TestingDeviceClosed { get; private set; }
 
+        //public IDigitalInput ErrorAcknButton { get; private set; }
+
+        //public IDigitalInput SensorHeadOut { get; private set; }
+        //public IDigitalInput SensorHeadIn { get; private set; }
+        public IDigitalInput InsCheck1 { get; private set; }
+        public IDigitalInput InsCheck2 { get; private set; }
+        public IDigitalInput InsCheck3 { get; private set; }
+        public IDigitalInput InsCheck4 { get; private set; }
+        public IDigitalInput InsCheck5 { get; private set; }
+        public IDigitalInput InsCheck6 { get; private set; }
+        public IDigitalInput InsCheck7 { get; private set; }
+        public IDigitalInput InsCheck8 { get; private set; }
+        public IDigitalInput InsCheck9 { get; private set; }
+        public IDigitalInput InsCheck10 { get; private set; }
+        public IDigitalInput InsCheck11 { get; private set; }
+        public IDigitalInput InsCheck12 { get; private set; }
+        public IDigitalInput InsCheck13 { get; private set; }
+        public IDigitalInput InsCheck14 { get; private set; }
+        public IDigitalInput InsCheck15 { get; private set; }
+        public IDigitalInput InsCheck16 { get; private set; }
 
         #endregion
 
         #region Digital outputs
 
-        public IDigitalOutput AllowMirrorMovement { get; set; }
-        public IDigitalOutput MoveMirrorVertical { get; set; }
-        public IDigitalOutput MoveMirrorHorizontal { get; set; }
-        public IDigitalOutput MoveMirrorReverse { get; set; }
-        public IDigitalOutput FoldPowerfold { get; set; }
-        public IDigitalOutput UnfoldPowerfold { get; set; }
-        public IDigitalOutput HeatingFoilOn { get; set; }
-        public IDigitalOutput DirectionLightOn { get; set; }
+        public IDigitalOutput AllowMirrorMovement { get; private set; }
+        public IDigitalOutput MoveMirrorVertical { get; private set; }
+        public IDigitalOutput MoveMirrorHorizontal { get; private set; }
+        public IDigitalOutput MoveMirrorReverse { get; private set; }
+        public IDigitalOutput FoldPowerfold { get; private set; }
+        public IDigitalOutput UnfoldPowerfold { get; private set; }
+        public IDigitalOutput HeatingFoilOn { get; private set; }
+        public IDigitalOutput DirectionLightOn { get; private set; }
 
-        public IDigitalOutput LockWeak { get; set; }
-        public IDigitalOutput UnlockWeak { get; set; }
-        public IDigitalOutput MoveDistanceSensorUp { get; set; }
-        public IDigitalOutput MoveDistanceSensorDown { get; set; }
-        public IDigitalOutput MoveSuckerUp { get; set; }
-        public IDigitalOutput MoveSuckerDown { get; set; }
-        public IDigitalOutput SuckOn { get; set; }
-        public IDigitalOutput BlowOn { get; set; }
+        public IDigitalOutput LockWeak { get; private set; }
+        public IDigitalOutput UnlockWeak { get; private set; }
+        public IDigitalOutput MoveDistanceSensorUp { get; private set; }
+        public IDigitalOutput MoveDistanceSensorDown { get; private set; }
+        /// <summary>
+        /// (Get) Channel that controls sucker disk. If true support with the sucker disk is being
+        /// moved up otherwise no action is performed.
+        /// </summary>
+        public IDigitalOutput MoveSuckerUp { get; private set; }
+        /// <summary>
+        /// (Get) Channel that controls sucker disk. If true support with the sucker disk is being
+        /// moved down otherwise no action is performed.
+        /// </summary>
+        public IDigitalOutput MoveSuckerDown { get; private set; }
+        /// <summary>
+        /// (Get) Channel that controls air sucking on sucker disk. If true the air is being sucked,
+        /// otherwise no action is performed. Do not use together with <see cref="BlowOn"/>.
+        /// </summary>
+        public IDigitalOutput SuckOn { get; private set; }
+        /// <summary>
+        /// (Get) Channel that controls air blowing on sucker disk. If true the air is being blown,
+        /// otherwise on action is performed. Do not user together with <see cref="SuckOn"/>.
+        /// </summary>
+        public IDigitalOutput BlowOn { get; private set; }
 
-        public IDigitalOutput AllowPowerSupply { get; set; }
-        public IDigitalOutput LockStrong { get; set; }
-        public IDigitalOutput UnlockStrong { get; set; }
-        public IDigitalOutput GreenLightOn { get; set; }
-        public IDigitalOutput RedLightOn { get; set; }
-        public IDigitalOutput BuzzerOn { get; set; }
+        public IDigitalOutput AllowPowerSupply { get; private set; }
+        public IDigitalOutput LockStrong { get; private set; }
+        public IDigitalOutput UnlockStrong { get; private set; }
+
+        /// <summary>
+        /// (Get) Channel that controls the green light on tester. If true green light is switched on
+        /// otherwise it is off.
+        /// </summary>
+        public IDigitalOutput GreenLightOn { get; private set; }
+        /// <summary>
+        /// (Get) Channel that controls the red light on tester. If true red light is switched on
+        /// otherwise it is off.
+        /// </summary>
+        public IDigitalOutput RedLightOn { get; private set; }
+        /// <summary>
+        /// (Get) Channel that controls the buzzer on tester. If true buzzer is switched on
+        /// otherwise it is off.
+        /// </summary>
+        public IDigitalOutput BuzzerOn { get; private set; }
 
         #endregion
 
@@ -797,6 +796,30 @@ namespace MTS.IO
 
         public IAnalogInput PowerSupplyVoltage1 { get; set; }
         public IAnalogInput PowerSupplyVoltage2 { get; set; }
+
+        #endregion
+
+        #region Special Channels
+
+        /// <summary>
+        /// Remove all special channels from this module. Special channels are defined by the application to
+        /// allow uniform communication of execution logic with the rest of this application. All test have a special
+        /// channel of name Is{testName}Enabled. Special channels are not transferred over network.
+        /// </summary>
+        public void ClearSpecialChannels()
+        {
+            specialChannels.Clear();
+        }
+        /// <summary>
+        /// Add a new special channel to this module. Special channels are defined by the application to
+        /// allow uniform communication of execution logic with the rest of this application. All test have a special
+        /// channel of name Is{testName}Enabled. Special channels are not transferred over network.
+        /// </summary>
+        /// <param name="channel">Instance of special channel to be added</param>
+        public void AddSpecialChannel(IChannel channel)
+        {
+            specialChannels.Add(channel.Id, channel);
+        }
 
         #endregion
 

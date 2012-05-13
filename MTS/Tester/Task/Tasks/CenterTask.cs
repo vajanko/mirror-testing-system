@@ -32,10 +32,10 @@ namespace MTS.Tester
         {
             switch (dir)
             {
-                case MoveDirection.Up: return ExState.MoveingUp;
-                case MoveDirection.Down: return ExState.MoveingDown;
-                case MoveDirection.Left: return ExState.MoveingLeft;
-                case MoveDirection.Right: return ExState.MoveingRight;
+                case MoveDirection.Up: return ExState.Up;
+                case MoveDirection.Down: return ExState.Down;
+                case MoveDirection.Left: return ExState.Left;
+                case MoveDirection.Right: return ExState.Right;
                 default: return ExState.Finalizing;
             }
         }
@@ -59,19 +59,19 @@ namespace MTS.Tester
                     setupCenter(ver, hor);
                     Output.WriteLine("Centering ... ");
                     break;
-                case ExState.MoveingUp:
+                case ExState.Up:
                     if (ver <= 0)
                         setupCenter(0, hor);
                     break;
-                case ExState.MoveingDown:
+                case ExState.Down:
                     if (ver >= 0)
                         setupCenter(0, hor);
                     break;
-                case ExState.MoveingLeft:
+                case ExState.Left:
                     if (hor >= 0)
                         goTo(ExState.Finalizing);
                     break;
-                case ExState.MoveingRight:
+                case ExState.Right:
                     if (hor <= 0)
                         goTo(ExState.Finalizing);
                     break;

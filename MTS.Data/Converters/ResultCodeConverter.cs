@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MTS.Data.Converters
 {
-    class ResultCodeConverter
-    {
-    }
+    //class ResultCodeConverter
+    //{
+    //}
 }

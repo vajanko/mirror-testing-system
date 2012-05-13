@@ -15,7 +15,8 @@ using MTS.Data;
 namespace MTS.Tester
 {
     /// <summary>
-    /// Interaction logic for TestWindow.xaml
+    /// Interaction logic for TestWindow.xaml. Dockable window that allows the operator to execute
+    /// and follow testing.
     /// </summary>
     public partial class TestWindow : DocumentContent
     {
@@ -183,15 +184,17 @@ namespace MTS.Tester
         }
 
         /// <summary>
-        /// This method is called when before new testing is started. Here variables (like number of tested mirrors)
+        /// This method is called before new testing is started. Here variables (like number of tested mirrors)
         /// should be initialized
         /// </summary>
         private void initializeTesting()
         {
+            // initialize tested mirrors
             Passed = 0;
             Failed = 0;
 
-            IsRunning = true;       // disable other controls
+            // disable other controls
+            IsRunning = true;
         }
 
         /// <summary>
@@ -278,7 +281,8 @@ namespace MTS.Tester
         /// <param name="e">Timer elapsed event argument</param>
         void timer_Tick(object sender, EventArgs e)
         {
-            if (channels.IsDistanceSensorUp.Value)  // measuring is activated
+            // only update when measuring of mirror glass is activated
+            if (channels.IsDistanceSensorUp.Value)
             {
                 mirrorView.RotationAxis = channels.GetRotationAxis();
                 mirrorView.RotationAngle = channels.GetRotationAngle();
@@ -289,7 +293,9 @@ namespace MTS.Tester
 
             // update all analog channels controls
             foreach (var ctrl in analogControls)
+            {
                 ctrl.Update();
+            }
         }
         /// <summary>
         /// Close connection with tester hardware if it exists. This method must be called only on same thread
@@ -344,7 +350,8 @@ namespace MTS.Tester
         /// <param name="channels"></param>
         private void bindChannels(Channels channels)
         {
-
+            // You can possibly bind lights with some control on the UI and let light change
+            // to indicate on UI as well
         }
 
         #endregion
