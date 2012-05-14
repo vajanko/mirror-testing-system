@@ -8,7 +8,7 @@
     <ProjectGuid>{7F77CEFE-86C1-4C83-AB45-A44F87D3AC41}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Praetor.Setup</RootNamespace>
+    <RootNamespace>MTS.Setup</RootNamespace>
     <AssemblyName>DbInstaller</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
