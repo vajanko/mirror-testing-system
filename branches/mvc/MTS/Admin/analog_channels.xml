@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE channels SYSTEM "analog_channels.dtd">
+
+<channels>
+  <channel id="distanceX">
+    <name>Distance Sensor X</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>100</realHigh>
+  </channel>
+  <channel id="distanceY">
+    <name>Distance Sensor Y</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>100</realHigh>
+  </channel>
+  <channel id="distanceZ">
+    <name>Distance Sensor Z</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>100</realHigh>
+  </channel>
+  
+  <channel id="powerfoldCurrent">
+    <name>Powerfold current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>4000</realHigh>
+  </channel>
+  <channel id="heatingFoilCurrent">
+    <name>Heating Foil Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>4000</realHigh>
+  </channel>
+
+  <channel id="verticalActuatorCurrent">
+    <name>Vertical Actuator Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>2000</realHigh>
+  </channel>
+  <channel id="horizontalActuatorCurrent">
+    <name>Horizontal Actuator Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>2000</realHigh>
+  </channel>
+
+  <channel id="directionLightCurrent">
+    <name>Direction Light Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>2000</realHigh>
+  </channel>
+
+  <channel id="powerSupplyVoltage1">
+    <name>Power Supply Voltage 1</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>10</realHigh>
+  </channel>
+  <channel id="powerSupplyVoltage2">
+    <name>Power Supply Voltage 2</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>4095</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>10</realHigh>
+  </channel>
+           
+</channels>

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<channels>
+  <channel id="distanceX">
+    <name>Distance Sensor X</name>
+    <description></description>
+    <rawLow>2</rawLow>
+    <rawHigh>2</rawHigh>
+    <realLow>2</realLow>
+    <realHigh>1</realHigh>
+  </channel>
+  <channel id="distanceY">
+    <name>Distance Sensor Y</name>
+    <description></description>
+    <rawLow>2</rawLow>
+    <rawHigh>2</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="distanceZ">
+    <name>Distance Sensor Z</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>22</rawHigh>
+    <realLow>37</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="powerfoldCurrent">
+    <name>Powerfold current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="heatingFoilCurrent">
+    <name>Heating Foil Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="verticalActuatorCurrent">
+    <name>Vertical Actuator Current</name>
+    <description></description>
+    <rawLow>20</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="horizontalActuatorCurrent">
+    <name>Horizontal Actuator Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="directionLightCurrent">
+    <name>Direction Light Current</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="powerSupplyVoltage1">
+    <name>Power Supply Voltage 1</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+  <channel id="powerSupplyVoltage2">
+    <name>Power Supply Voltage 2</name>
+    <description></description>
+    <rawLow>0</rawLow>
+    <rawHigh>0</rawHigh>
+    <realLow>0</realLow>
+    <realHigh>0</realHigh>
+  </channel>
+</channels>

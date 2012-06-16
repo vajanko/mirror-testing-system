@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C186DE23-9AF7-4C5D-8328-7E00AE2AC4FF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MTS</RootNamespace>
+    <AssemblyName>MTS</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <StartupObject>MTS.App</StartupObject>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AvalonDock, Version=1.3.3571.0, Culture=neutral, PublicKeyToken=85a1e0ada7ec13e4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="AvalonDock.Themes">
+      <HintPath>..\lib\AvalonDock.Themes.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="OK.Collections.Generic">
+      <HintPath>..\lib\OK.Collections.Generic.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Admin\Controls\ChangePasswordControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\Controls\ProfileWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\Controls\CalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Admin\Controls\EthercatSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Admin\Controls\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Admin\Controls\ModbusSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Admin\SettingsItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Data\DataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Data\EditOperatorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Editor\TestFileItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Tester\TestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WindowMain.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Admin\Controls\ChangePasswordControl.xaml.cs">
+      <DependentUpon>ChangePasswordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Controls\ProfileWindow.xaml.cs">
+      <DependentUpon>ProfileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Admin\Controls\OperatorTypeConverter.cs" />
+    <Compile Include="Controls\Converters\ParamIdToNameConverter.cs" />
+    <Compile Include="Controls\Converters\TaskResultTypeConverter.cs" />
+    <Compile Include="Controls\Converters\TestIdToNameConverter.cs" />
+    <Compile Include="Controls\PopupWindow.xaml.cs">
+      <DependentUpon>PopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Validators\PasswordEqualityValidator.cs" />
+    <Compile Include="Controls\Validators\RequiredFieldValidator.cs" />
+    <Compile Include="Admin\Controls\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Operator.cs" />
+    <Compile Include="Admin\Printing\PrintingLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\Printing\PrintingManager.cs" />
+    <Compile Include="Data\EditOperatorWindow.xaml.cs">
+      <DependentUpon>EditOperatorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\OperatorSource.cs" />
+    <Compile Include="Controls\Converters\ParamValueConverter.cs" />
+    <Compile Include="Data\ResultStyleSelector.cs" />
+    <Compile Include="Editor\TestFileItem.xaml.cs">
+      <DependentUpon>TestFileItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Installer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Installer.Designer.cs">
+      <DependentUpon>Installer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tester\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Tester\Result\ParamResult.cs" />
+    <Compile Include="Tester\Result\ResultBase.cs" />
+    <Compile Include="Tester\Result\ResultVisitor.cs" />
+    <Compile Include="Tester\Result\TaskExecutedEventArgs.cs" />
+    <Compile Include="Tester\Result\TaskResult.cs" />
+    <Compile Include="Tester\Result\TestResult.cs" />
+    <Compile Include="Tester\ShiftExecutedEventArgs.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelEastTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelNorthTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelSouthTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelWestTest.cs" />
+    <Compile Include="Tester\Task\PresenceTest\ChannelTest.cs" />
+    <Compile Include="Tester\Task\TaskParser.cs" />
+    <Compile Include="Tester\Task\Tasks\ChannelTask.cs" />
+    <Compile Include="Tester\TestChannel.cs" />
+    <Compile Include="WindowMain.xaml.cs">
+      <DependentUpon>WindowMain.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\DataWindow.xaml.cs">
+      <DependentUpon>DataWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tester\Controls\DoubleAmplifierConverter.cs" />
+    <Compile Include="Tester\Controls\DoubleToPointCollection.cs" />
+    <Compile Include="Tester\Controls\FlowControl.cs" />
+    <Compile Include="Tester\Controls\MirrorView.cs" />
+    <Compile Include="Admin\Controls\CalibrationWindow.xaml.cs">
+      <DependentUpon>CalibrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Controls\EthercatSettings.xaml.cs">
+      <DependentUpon>EthercatSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Controls\ModbusSettings.xaml.cs">
+      <DependentUpon>ModbusSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\SettingsItem.xaml.cs">
+      <DependentUpon>SettingsItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tester\Shift.cs" />
+    <Compile Include="Tester\Task\PresenceTest\PresenceTest.cs" />
+    <Compile Include="Tester\Task\RangeTest\BlinkerTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\PeakTest.cs" />
+    <Compile Include="Tester\Task\PeakTest\PowerfoldTest.cs" />
+    <Compile Include="Tester\Task\RangeTest\RangeTest.cs" />
+    <Compile Include="Tester\Task\TaskScheduler.cs" />
+    <Compile Include="Tester\Task\RangeTest\SpiralTest.cs" />
+    <Compile Include="Tester\Task\PulloffTest.cs" />
+    <Compile Include="Tester\Task\Task.cs" />
+    <Compile Include="Tester\Task\Tasks\Calibrate.cs" />
+    <Compile Include="Tester\Task\Tasks\CenterTask.cs" />
+    <Compile Include="Tester\Task\Tasks\SetChannels.cs" />
+    <Compile Include="Tester\Task\Tasks\Wait.cs" />
+    <Compile Include="Tester\Task\Tasks\WaitForChannels.cs" />
+    <Compile Include="Tester\Task\Tasks\IfChannels.cs" />
+    <Compile Include="Tester\Task\TestTask.cs" />
+    <Compile Include="Tester\Task\PeakTest\TravelTest.cs" />
+    <Compile Include="Tester\TestWindow.xaml.cs">
+      <DependentUpon>TestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MTSCommands.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tester\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config">
+      <CustomToolNamespace>MTS.Properties</CustomToolNamespace>
+    </None>
+    <Content Include="config\dummyConfig.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="config\moxaConfig.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="config\task1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <Content Include="config\tasks.dtd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\saveFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\closeFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\openFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\newFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\viewData.png" />
+    <Resource Include="Resources\icons\viewTester.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\viewSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IO\IO.csproj">
+      <Project>{5567B55F-5C10-4A5C-9F4A-35E60DBEA897}</Project>
+      <Name>IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS.Base\MTS.Base.csproj">
+      <Project>{0AE7820B-31EC-4D62-B36B-E8CD63369ABC}</Project>
+      <Name>MTS.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS.Data\MTS.Data.csproj">
+      <Project>{2EB96BD9-B33C-4116-ADD3-7E43E5D4B101}</Project>
+      <Name>MTS.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS.Editor\MTS.Editor.csproj">
+      <Project>{D497E8F2-AC8A-49E7-9BF8-8147888DB90A}</Project>
+      <Name>MTS.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTS.IO\MTS.IO.csproj">
+      <Project>{F97F01D8-FF45-4879-A3C9-1326AB3E66CA}</Project>
+      <Name>MTS.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.SQL.Server.Compact.3.5">
+      <Visible>False</Visible>
+      <ProductName>SQL Server Compact 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Sql.Server.Express.10.0">
+      <Visible>False</Visible>
+      <ProductName>SQL Server 2008 Express Edition</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\loginWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\errorWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\login.png" />
+    <Resource Include="Resources\icons\logout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\about.png" />
+    <Resource Include="Resources\icons\help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\delete.png" />
+    <Resource Include="Resources\icons\exit.png" />
+    <Resource Include="Resources\icons\saveAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\redo.png" />
+    <Resource Include="Resources\icons\undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\profile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\tasks.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\calibration.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

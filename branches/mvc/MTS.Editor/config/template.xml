@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE tests SYSTEM "template.dtd">
+
+<tests>
+  <!-- Informative parameters about test collection -->
+  <test id="Info">
+    <name>Information</name>
+    <group>Informative Settings</group>
+    <description>This setting will not be used for testing.</description>
+    <param id="Orientation">
+      <name>Orientation</name>
+      <description></description>
+      <type>enum</type>
+      <value>0</value>      <!-- index of selected value -->
+      <values>
+        <value>Left left-handed</value>
+        <value>Right left-handed</value>
+        <value>Left right-handed</value>
+        <value>Right right-handed</value>
+      </values>
+    </param>
+    <param id="PartNumber">
+      <name>Part Number</name>
+      <description></description>
+      <type>string</type>
+      <value></value>
+    </param>
+    <param id="SupplierName">
+      <name>Supplier Name</name>
+      <description></description>
+      <type>string</type>
+      <value></value>      
+    </param>
+    <param id="Description">
+      <name>Description</name>
+      <description></description>
+      <type>string</type>
+      <value></value>
+    </param>
+  </test>
+  
+  <!-- Tear test -->
+  <test id="Pulloff" enabled="true">
+    <name>Pull-off Test</name>
+    <group>Other</group>
+    <description></description>
+    <param id="TestingTime">
+      <name>Testing Time</name>
+      <description>Time of glass pulling off</description>
+      <type>double</type>
+      <value>2.5</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  
+  <!-- Travel tests -->
+  <test id="TravelEast">
+    <name>Travel East</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type decimals="1">double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+    <param id="MaxTestingTime">
+      <name>Max Testing Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>3.0</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  <test id="TravelWest">
+    <name>Travel West</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type decimals="1">double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+    <param id="MaxTestingTime">
+      <name>Max Testing Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>3.0</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  <test id="TravelSouth">
+    <name>Travel South</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type decimals="1">double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+    <param id="MaxTestingTime">
+      <name>Max Testing Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>3.0</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  <test id="TravelNorth">
+    <name>Travel North</name>
+    <group>Travel Tests</group>
+    <description></description>
+    <param id="MinAngle">
+      <name>Min angle</name>
+      <description></description>
+      <type decimals="1">double</type>
+      <value>5.0</value>
+      <min>0</min>
+      <max>15</max>
+      <unit type="degrees"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>2000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>500</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+    <param id="MaxTestingTime">
+      <name>Max Testing Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>3.0</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+
+  <!-- Current tests -->
+  <test id="Powerfold">
+    <name>Powerfold</name>
+    <group>Current Tests</group>
+    <description></description>
+    <param id="Presence">
+      <name>Test presence</name>
+      <description></description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxOverloadTime">
+      <name>Max overload time</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>5000</max>
+      <unit type="miliseconds"/>
+    </param>
+    <param id="MaxTestingTime">
+      <name>Max testing time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>3</value>
+      <min>0</min>
+      <max>10</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  <test id="HeatingFoil">
+    <name>Heating Foil</name>
+    <group>Current Tests</group>
+    <description></description>
+    <param id="Presence">
+      <name>Test presence</name>
+      <description></description>
+      <type>bool</type>
+      <value>true</value>      
+    </param>
+    <param id="MinCurrent">
+      <name>Min Current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>100</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max Current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="TestingTime">
+      <name>Testing Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>2.5</value>
+      <min>0</min>
+      <max>20</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  <test id="DirectionLight">
+    <name>Direction Light</name>
+    <group>Current Tests</group>
+    <description></description>
+    <param id="Presence">
+      <name>Test presence</name>
+      <description></description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+    <param id="MinCurrent">
+      <name>Min Current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>100</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="MaxCurrent">
+      <name>Max Current</name>
+      <description></description>
+      <type decimals="0">double</type>
+      <value>200</value>
+      <min>0</min>
+      <max>4000</max>
+      <unit type="miliampheres"/>
+    </param>
+    <param id="BlinksCount">
+      <name>Number of Blinks</name>
+      <description></description>
+      <type>int</type>
+      <value>2</value>
+      <min>1</min>
+      <max>10</max>
+      <unit type="none"/>
+    </param>
+    <param id="LightingTime">
+      <name>Lighting Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>1.5</value>
+      <min>0</min>
+      <max>5</max>
+      <unit type="seconds"/>
+    </param>
+    <param id="BreakTime">
+      <name>Break Time</name>
+      <description></description>
+      <type decimals="2">double</type>
+      <value>1.5</value>
+      <min>0</min>
+      <max>5</max>
+      <unit type="seconds"/>
+    </param>
+  </test>
+  
+  <!-- Presence test -->
+  <test id="Rubber">
+    <name>Rubber</name>
+    <group>Presence Tests</group>
+    <description>Test presence of rubber</description>
+    <param id="Presence">
+      <name>Is present</name>
+      <description>If enabled rubber should be present</description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+  </test>
+  <test id="MirrorGlass">
+    <name>Mirror Glass</name>
+    <group>Presence Tests</group>
+    <description>Test presence of mirror glass</description>
+    <param id="Presence">
+      <name>Is present</name>
+      <description>If enabled mirror glass should be present</description>
+      <type>bool</type>
+      <value>true</value>
+    </param>
+  </test>
+        
+</tests>

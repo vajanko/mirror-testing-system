@@ -1,0 +1,14 @@
+﻿<Application x:Class="MTS.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    StartupUri="WindowMain.xaml">
+    <Application.Resources>
+        <!-- Setup style for all windows in this application -->
+        <Style x:Key="commonWindow" TargetType="{x:Type Window}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
+            <Setter Property="ResizeMode" Value="CanResize"/>
+            <Setter Property="ShowInTaskbar" Value="False"/>
+        </Style>
+    </Application.Resources>
+</Application>

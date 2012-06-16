@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C186DE23-9AF7-4C5D-8328-7E00AE2AC4FF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MTS</RootNamespace>
+    <AssemblyName>MTS</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WindowMain.xaml.cs">
+      <DependentUpon>WindowMain.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\IntervalCurrent.xaml.cs">
+      <DependentUpon>IntervalCurrent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MaxCurrent.xaml.cs">
+      <DependentUpon>MaxCurrent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumericBox.cs" />
+    <Compile Include="Controls\Presence.xaml.cs">
+      <DependentUpon>Presence.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Sensor.xaml.cs">
+      <DependentUpon>Sensor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\EditorModule\FileManager.cs" />
+    <Compile Include="Modules\EditorModule\Test\Metadata.cs" />
+    <Compile Include="Modules\EditorModule\Test\Collection.cs" />
+    <Compile Include="Modules\EditorModule\Test\TestCollection.cs" />
+    <Compile Include="Modules\EditorModule\Test\TestParam.cs" />
+    <Compile Include="Modules\EditorModule\Params.cs" />
+    <Compile Include="Modules\EditorModule\TestControl.cs" />
+    <Compile Include="Controls\UnitButton.xaml.cs">
+      <DependentUpon>UnitButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UpDownButton.cs" />
+    <Compile Include="Modules\AdminModule\Component\HardwareComponent.cs" />
+    <Compile Include="Modules\AdminModule\RTB\Mxio.cs" />
+    <Compile Include="Modules\AdminModule\RTB\RTB.cs" />
+    <Compile Include="Modules\EditorModule\Test\Test.cs" />
+    <Compile Include="Modules\EditorModule\Test\Values.cs" />
+    <Compile Include="Modules\Parts\IPanel.cs" />
+    <Compile Include="Controls\Mirror.xaml.cs">
+      <DependentUpon>Mirror.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TestWindow.xaml.cs">
+      <DependentUpon>TestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\StringCollection.cs" />
+    <Compile Include="Modules\EditorModule\TestFile.xaml.cs">
+      <DependentUpon>TestFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Settings\LanguageInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\DataModule\" />
+    <Folder Include="Modules\TesterModule\Gui\" />
+    <Folder Include="Resources\Icons\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <ReferencePath Include="bin\Debug\AvalonDock.dll" />
+    <ReferencePath Include="bin\Debug\AvalonDock.Themes.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\PresentationCore.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\PresentationFramework.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Core.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Data.DataSetExtensions.dll" />
+    <ReferencePath Include="E:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll" />
+    <ReferencePath Include="E:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll" />
+    <ReferencePath Include="E:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll" />
+    <ReferencePath Include="E:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll" />
+    <ReferencePath Include="E:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Xml.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Xml.Linq.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\UIAutomationProvider.dll" />
+    <ReferencePath Include="E:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\WindowsBase.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Controls\IntervalCurrent.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Controls\MaxCurrent.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Controls\UnitButton.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Controls\Presence.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Controls\Sensor.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Modules\EditorModule\TestFile.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\Controls\Mirror.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\TestWindow.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\WindowMain.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\App.g.cs" />
+    <Compile Include="E:\Documents and Settings\kovaco\My Documents\university\rocnikovy projekt\code\MTS\MTS\obj\Debug\GeneratedInternalTypeHelper.g.cs" />
+  </ItemGroup>
+</Project>

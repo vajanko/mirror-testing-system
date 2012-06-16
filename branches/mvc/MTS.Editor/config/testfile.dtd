@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!ELEMENT tests (test)*>
+<!ELEMENT test (param)*>
+
+<!--
+  Parameter: contains string representation of value. When file is loaded
+  this string is parsed to apropriate type
+-->
+<!ELEMENT param (#PCDATA)>
+
+<!-- 
+  Test:
+    - unique (identifier) id
+    - is enabled or disabled
+-->
+<!ATTLIST test 
+          id ID #REQUIRED
+          enabled (true|false) "false">
+
+<!--
+  Parameters:
+    - unique (identifier) name
+-->
+<!ATTLIST param 
+  id NMTOKEN #REQUIRED>
