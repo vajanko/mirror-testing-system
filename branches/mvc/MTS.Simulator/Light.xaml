@@ -1,8 +1,0 @@
-﻿<UserControl x:Class="MTS.Simulator.Light"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Name="lightRoot">
-    <Ellipse Width="{Binding Width, ElementName=lightRoot}" 
-             Height="{Binding Height, ElementName=lightRoot}" x:Name="light">
-    </Ellipse>
-</UserControl>
