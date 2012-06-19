@@ -87,33 +87,23 @@ namespace MTS.Editor
         /// Create a new test collection and add it to the document content.
         /// New filename will be generated
         /// </summary>
-        /// <returns>Value indicating whether new file could be created</returns>
-        public bool New()
+        /// <exception cref="MTS.Base.ConfigException">Template file not found or is corrupted</exception>
+        public void New()
         {
-            try
-            {
-                // create new unsaved file
-                IsSaved = false;
-                // which does not exists
-                Exists = false;
-                // fill with default collection
-                Tests = FileManager.CreateNew();
-                // create view of tests - grouping and sorting
-                createTestView(Tests);
-                // register method that is called when any property is changed
-                Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
-                // newly created file gets some unique name
-                ItemId = FileManager.GetNewName();
+            // create new unsaved file
+            IsSaved = false;
+            // which does not exists
+            Exists = false;
+            // fill with default collection
+            Tests = FileManager.CreateNew();
+            // create view of tests - grouping and sorting
+            createTestView(Tests);
+            // register method that is called when any property is changed
+            Tests.SetPropertyChangedHandler(TestFile_PropertyChanged);
+            // newly created file gets some unique name
+            ItemId = FileManager.GetNewName();
 
-                Output.WriteLine("New file \"" + ItemId + "\" created.");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ExceptionManager.ShowError(ex);
-            }
-
-            return false;
+            Output.WriteLine("New file \"{0} created.", ItemId);
         }
         /// <summary>
         /// This method is called whenever any of test parameters change. Status of file will be changed to unsaved

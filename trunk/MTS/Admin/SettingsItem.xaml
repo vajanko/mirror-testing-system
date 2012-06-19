@@ -191,9 +191,9 @@
                     
                     <StackPanel Grid.Column="0">
                         <Label Style="{StaticResource sectionHeaderStyle}">Actions:</Label>
-                        <Button Content="Add" Click="addOperator_Click" />
+                        <Button Content="Add" Click="addOperator_Click" x:Name="deleteOperatorButton" />
                         <Button Content="Delete" Click="deleteOperator_Click"/>
-                        <Button Content="Edit" Click="editOperator_Click"/>
+                        <Button Content="Edit" Click="editOperator_Click" x:Name="editOperatorButton"/>
                     </StackPanel>                    
                     <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="5" HorizontalAlignment="Stretch" 
                                   VerticalAlignment="Stretch"/>

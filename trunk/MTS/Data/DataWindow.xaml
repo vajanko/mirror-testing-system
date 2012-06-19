@@ -170,16 +170,7 @@
                         </MultiBinding>
                     </DataGridTextColumn.Binding>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="outputValue" Header="Output">
-                    <DataGridTextColumn.Binding>
-                        <MultiBinding Converter="{StaticResource paramValueConverter}">
-                            <MultiBinding.Bindings>
-                                <Binding Path="OutputValue"/>
-                                <Binding Path="ValueType"/>
-                            </MultiBinding.Bindings>
-                        </MultiBinding>
-                    </DataGridTextColumn.Binding>
-                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="outputValue" Header="Output" Binding="{Binding OutputValue, StringFormat=F2}"/>
                 <DataGridTextColumn x:Name="unitColumn" Header="Unit" Binding="{Binding Unit}"/>
                 
             </DataGrid.Columns>

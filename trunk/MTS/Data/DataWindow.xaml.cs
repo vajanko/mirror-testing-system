@@ -98,7 +98,7 @@ namespace MTS.Data
             }
         }
         /// <summary>
-        /// This method is called when size of the main grid in data window is changed. Each datagrid in the main window
+        /// This method is called when size of the main grid in data window is changed. Each data grid in the main window
         /// get half size of the window so scrollbars will be visible on them
         /// </summary>
         private void mainGrid_SizeChanged(object sender, SizeChangedEventArgs e)

@@ -13,14 +13,6 @@ namespace MTS.Tester
         #region Private fields
 
         /// <summary>
-        /// Time when blinker was switched on. This is measured value.
-        /// </summary>
-        private TimeSpan blinkerOn;
-        /// <summary>
-        /// Time when blinker was switched off. This is measured value.
-        /// </summary>
-        private TimeSpan blinkerOff;
-        /// <summary>
         /// Number of blinks that are not executed yet. This value should be initialized when test is being executed.
         /// </summary>
         private int blinksCountMeasured;
@@ -38,11 +30,11 @@ namespace MTS.Tester
         /// </summary>
         private readonly IntParam blinksCountParam;
         /// <summary>
-        /// Time of blinker switched on in miliseconds
+        /// Time of blinker switched on in milliseconds
         /// </summary>
         private readonly double lightingTime;
         /// <summary>
-        /// Time of blinker switched off in miliseconds
+        /// Time of blinker switched off in milliseconds
         /// </summary>
         private readonly double breakTime;
         /// <summary>

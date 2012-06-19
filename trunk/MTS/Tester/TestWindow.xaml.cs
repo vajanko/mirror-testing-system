@@ -18,7 +18,7 @@ namespace MTS.Tester
     /// Interaction logic for TestWindow.xaml. Dockable window that allows the operator to execute
     /// and follow testing.
     /// </summary>
-    public partial class TestWindow : DocumentContent
+    public partial class TestWindow : DocumentItem
     {
         #region Private fields
 

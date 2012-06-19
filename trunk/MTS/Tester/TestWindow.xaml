@@ -1,4 +1,4 @@
-﻿<ad:DocumentContent x:Class="MTS.Tester.TestWindow"
+﻿<base:DocumentItem x:Class="MTS.Tester.TestWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
@@ -117,4 +117,4 @@
             </ListBox.ItemsPanel>
         </ListBox>
     </DockPanel>
-</ad:DocumentContent>
+</base:DocumentItem>

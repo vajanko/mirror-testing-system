@@ -19,12 +19,14 @@ using System.Collections.Specialized;
 using AvalonDock;
 using Microsoft.Win32;
 
+using P = MTS.Properties;
 using MTS.Properties;
 using MTS.Base;
 using MTS.Base.Properties;
 using MTS.IO;
 using MTS.Data;
 using MTS.Admin.Controls;
+
 
 namespace MTS.Admin
 {
@@ -570,20 +572,19 @@ namespace MTS.Admin
             Data.Operator op = operatorsGrid.SelectedValue as Data.Operator;
             if (op == null)
             {   // no operator is selected
-                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, "No operator is selected. Select an operator and then click \"Delete\"");
+                string msg = string.Format(P.Resources.NoOperatorSelectedMsg, deleteOperatorButton.Content.ToString());
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, msg);
             }
             else if (op.Id == Operator.Instance.Id)
             {   // current (logged in) operator could not be deleted
-                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ExclamationIcon, @"Operator you want to delete is 
-currently logged in. To delete this operator log in as a different user.");
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ExclamationIcon, P.Resources.DeleteLoggedOperatorMsg);
             }
             else
             {
                 try
                 {
                     // delete operator (and its data) but ask before - this action must be confirmed
-                    if (MessageBox.Show(@"Do you really want to delete selected operator and his data? All 
-shifts executed by this operator will be deleted!", "Delete operator", MessageBoxButton.YesNo,
+                    if (MessageBox.Show(P.Resources.DeleteOperatorMsg, P.Resources.DeleteOperatorTitle, MessageBoxButton.YesNo,
                                                   MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
                     {
                         // delete selected operator and all his data from database
@@ -609,7 +610,8 @@ shifts executed by this operator will be deleted!", "Delete operator", MessageBo
             Data.Operator op = operatorsGrid.SelectedValue as Data.Operator;
             if (op == null)
             {
-                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, "No operator is selected. Select an operator and then click \"Edit\"");
+                string msg = string.Format(P.Resources.NoOperatorSelectedMsg, editOperatorButton.Content.ToString());
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, msg);
             }
             else
             {

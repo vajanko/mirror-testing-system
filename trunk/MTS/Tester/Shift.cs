@@ -200,49 +200,49 @@ namespace MTS.Tester
 
             return scheduler;
 
-            // add for providing basic steps to start executing test
-            // this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
-            // close device
-            scheduler.AddInitSequence();
+            //// add for providing basic steps to start executing test
+            //// this contains tasks such as: open device, wait for mirror to be inserted, wait for start button,
+            //// close device
+            //scheduler.AddInitSequence();
 
-            // wait for start
-            //scheduler.AddWaitForStart();
+            //// wait for start
+            ////scheduler.AddWaitForStart();
 
-            // rubber test
-            TestValue rubber = tests.GetTest(TestIds.Rubber);
-            if (rubber != null)
-                scheduler.AddRubberTest(rubber);
+            //// rubber test
+            //TestValue rubber = tests.GetTest(TestIds.Rubber);
+            //if (rubber != null)
+            //    scheduler.AddRubberTest(rubber);
 
-            // add tests of mirror movement
-            scheduler.AddTravelTests(tests);
+            //// add tests of mirror movement
+            //scheduler.AddTravelTests(tests);
 
-            // pull-off test
-            TestValue pullOff = tests.GetTest(TestIds.Pulloff);
-            if (pullOff != null)
-                scheduler.AddPulloffTest(pullOff);
+            //// pull-off test
+            //TestValue pullOff = tests.GetTest(TestIds.Pulloff);
+            //if (pullOff != null)
+            //    scheduler.AddPulloffTest(pullOff);
 
-            // test powerfold
-            TestValue powerfold = tests.GetTest(TestIds.Powerfold);
-            if (powerfold != null)
-                scheduler.AddTask(new PowerfoldTest(channels, powerfold));
+            //// test powerfold
+            //TestValue powerfold = tests.GetTest(TestIds.Powerfold);
+            //if (powerfold != null)
+            //    scheduler.AddTask(new PowerfoldTest(channels, powerfold));
             
-            // test blinker
-            TestValue blinker = tests.GetTest(TestIds.DirectionLight);
-            if (blinker != null)
-                scheduler.AddTask(new DirectionLightTest(channels, blinker));
+            //// test blinker
+            //TestValue blinker = tests.GetTest(TestIds.DirectionLight);
+            //if (blinker != null)
+            //    scheduler.AddTask(new DirectionLightTest(channels, blinker));
 
-            // test spiral
-            TestValue spiral = tests.GetTest(TestIds.Heating);
-            if (spiral != null)
-                scheduler.AddTask(new HeatingFoilTest(channels, spiral));
+            //// test spiral
+            //TestValue spiral = tests.GetTest(TestIds.Heating);
+            //if (spiral != null)
+            //    scheduler.AddTask(new HeatingFoilTest(channels, spiral));
 
-            // open device
-            scheduler.AddOpenDevice();
+            //// open device
+            //scheduler.AddOpenDevice();
 
-            // add first task to be executed
-            scheduler.Initialize();
+            //// add first task to be executed
+            //scheduler.Initialize();
 
-            return scheduler;
+            //return scheduler;
         }
 
         /// <summary>
@@ -405,12 +405,8 @@ namespace MTS.Tester
         {
             try
             {
-                // this converter is used to convert object value to its string representation when
-                // saving to and retrieving from database
-                ToStringVisitor toString = new ToStringVisitor();
-
                 // only save test outputs which have data to be saved
-                foreach (TestResult tRes in results.OfType<TestResult>()) //.Where(t => t.HasData))
+                foreach (TestResult tRes in results.OfType<TestResult>())
                 {
                     byte resultCode = (byte)tRes.ResultCode;
 
@@ -423,14 +419,12 @@ namespace MTS.Tester
                     // only save parameter outputs which have data to be saved
                     foreach (ParamResult pRes in tRes.Params)
                     {
-                        string resulValue = toString.ConvertToString(pRes.ResultParam);
-
                         // save param output (notice that if could be null also)
                         context.ParamOutputs.Add(new ParamOutput
                         {
                             ParamId = pRes.DatabaseId,      // parameter used for this output
                             TestOutpuId = testOutputId,     // test output to which this parameter output belongs
-                            Value = resulValue  // value of parameter output (could be null)
+                            Value = pRes.ResultParam
                         });
                         // context should not be saved - will be saved with next test output or at the end of loop
                     }
@@ -565,10 +559,10 @@ namespace MTS.Tester
             //this.operatorId = Admin.Operator.Instance.Id;
 
             // remove special channels if they are already added
-            channels.ClearSpecialChannels();
+            //channels.ClearSpecialChannels();
             // add special channels for test enabled value
-            foreach (var test in tests)
-                channels.AddSpecialChannel(new TestChannel(test));
+            //foreach (var test in tests)
+            //    channels.AddSpecialChannel(new TestChannel(test));
         }
 
         #endregion

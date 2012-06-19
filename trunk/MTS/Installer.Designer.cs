@@ -28,7 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            // 
+            // Installer
+            // 
+            this.AfterUninstall += new System.Configuration.Install.InstallEventHandler(this.Installer_AfterUninstall);
+            this.BeforeUninstall += new System.Configuration.Install.InstallEventHandler(this.Installer_BeforeUninstall);
+
         }
 
         #endregion

@@ -62,10 +62,12 @@ namespace MTS.Data
         /// </summary>
         private void passwordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            //Controls.Validators.PasswordEqualityValidator val = new Controls.Validators.PasswordEqualityValidator();
-            //val.ConfirmPassword = confirmPasswordBox;
-            //val.Password = passwordBox;
             Password = passwordBox.Password;
+        }
+
+        private void root_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Type = (OperatorEnum)this.typeBox.SelectedIndex;
         }
 
         #endregion

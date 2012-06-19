@@ -666,8 +666,8 @@ IF OBJECT_ID('ParamOutput', N'U') IS NOT NULL
 CREATE TABLE ParamOutput (
 	-- primary key
 	Id	INT IDENTITY(1,1),
-	-- Value of parameter output in string representation
-	Value VARCHAR(50),
+	-- Value of parameter output - this is always only double value
+	Value FLOAT,
 	-- Id of the parameter which was used to measure output value on current row
 	ParamId INT NOT NULL,
 	-- Id of test output to which parameter output on current row belongs to

@@ -125,7 +125,7 @@ namespace MTS.Admin
                     return context.Operators.FirstOrDefault(o => o.Login == login && o.Password == passHash) != null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //ExceptionManager.ShowError(ex);
             }

@@ -190,7 +190,7 @@ namespace MTS.Tester
         class TaskData
         {
             public Task Task;
-            public string Id;
+            //public string Id;
             public List<string> Required = new List<string>();
 
             public TaskData(Task task)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MTS.Data"
         xmlns:val="clr-namespace:MTS.Controls.Validators"
         Title="Operator" MinWidth="300" Width="400" MaxWidth="500" MinHeight="200" MaxHeight="400" 
-        ShowInTaskbar="False" x:Name="root">
+        ShowInTaskbar="False" x:Name="root" Closing="root_Closing">
     <DockPanel LastChildFill="False">
         <DockPanel.Resources>
             <Style TargetType="TextBox">

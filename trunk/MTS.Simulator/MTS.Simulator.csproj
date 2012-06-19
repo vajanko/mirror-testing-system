@@ -113,7 +113,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="dummyConfig.csv">
+    <Content Include="config\simulatorConfig.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">

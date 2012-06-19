@@ -123,6 +123,10 @@
   <data name="AdminName" xml:space="preserve">
     <value>Admin</value>
   </data>
+  <data name="InvalidCmdParameterTypeMsg" xml:space="preserve">
+    <value>Command parameter must be of type {0}. {1} type parameter is given</value>
+    <comment>Parameters: 0: expected type of parameter 1: given type of parameter</comment>
+  </data>
   <data name="UserDescription" xml:space="preserve">
     <value>User of the application. Can execute tests and edit parameters.</value>
   </data>
