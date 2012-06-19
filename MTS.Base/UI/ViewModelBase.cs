@@ -7,6 +7,9 @@ using System.Diagnostics;
 
 namespace MTS.Base
 {
+    /// <summary>
+    /// Base class for MVVM application design pattern
+    /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         private string _displayName;
@@ -64,10 +67,13 @@ namespace MTS.Base
 
         #region IDisposable Members
 
-        public void Dispose()
+        public virtual void Dispose()
         {
-            
+            // prepared to be overriden
         }
+        /// <summary>
+        /// Force current View-model to be disposed
+        /// </summary>
         public virtual void OnDispose()
         {
             Dispose();
@@ -77,6 +83,10 @@ namespace MTS.Base
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize a new instance of View-model instance with given localized display name
+        /// </summary>
+        /// <param name="displaName">Localized string used to display on the user interface</param>
         public ViewModelBase(string displaName)
         {
             DisplayName = displaName;

@@ -15,9 +15,9 @@ namespace MTS.Data
     public partial class ParamOutput
     {
         public int Id { get; set; }
-        public string Value { get; set; }
         public int ParamId { get; set; }
         public int TestOutpuId { get; set; }
+        public Nullable<double> Value { get; set; }
     
         public virtual Param Param { get; set; }
         public virtual TestOutput TestOutput { get; set; }

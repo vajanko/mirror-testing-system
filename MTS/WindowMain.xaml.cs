@@ -29,6 +29,11 @@ namespace MTS
     /// </summary>
     public partial class WindowMain : Window
     {
+        /// <summary>
+        /// (Get) Value indicating whether testing window is opened and execution is running
+        /// </summary>
+        public bool IsTestRunning { get; private set; }
+
         #region Events
 
         #region Menu Events
@@ -37,21 +42,10 @@ namespace MTS
         /// This method is called when MainMenu->File->Exit item is clicked
         /// </summary>
         private void menuClick_Exit(object sender, RoutedEventArgs e)
-        {   // get references to all items that should be closed
-            List<DocumentItem> toClose = new List<DocumentItem>();
-            foreach (DocumentContent item in filePane.Items)
-            {   // we car only about our document items
-                if (item is DocumentItem)
-                    toClose.Add(item as DocumentItem);
-            }
-            // try to close all selected document items
-            while (toClose.Count > 0)
-            {
-                DocumentItem item = toClose[0];
-                toClose.RemoveAt(0);
-                if (!item.Close())  // if user do not want to close this item - application won't be closed
-                    return;
-            }
+        {   // first of all try to close all windows
+            if (!closeAll())
+                return;
+
             // close main application window
             this.Close();
         }
@@ -66,24 +60,8 @@ namespace MTS
         /// This method is called when MainMenu->Options->Log out item is clicked
         /// </summary>
         private void logout_Click(object sender, RoutedEventArgs e)
-        {   // before logout close all tab items (some of them may require logged in user instance)
-            List<DocumentItem> toClose = new List<DocumentItem>();
-            foreach (DocumentContent item in filePane.Items)
-            {   // get all document items - should be closed
-                if (item is DocumentItem)
-                    toClose.Add(item as DocumentItem);
-            }
-            while (toClose.Count > 0)
-            {
-                DocumentItem item = toClose[0];
-                toClose.RemoveAt(0);
-                if (!item.Close())
-                    return; // this DocumentItem could not be closed - logout is not successful
-            }
-            // now all document items are closed - operator will be logged out
-            Output.WriteLine("Logout {0}", Admin.Operator.Instance.Login);
-            Admin.Operator.LogOut();
-            IsLoggedIn = false;
+        {
+            logout();
         }
         /// <summary>
         /// This method is called when 
@@ -113,6 +91,36 @@ namespace MTS
 
         #endregion
 
+        #region Drag Drop Events
+
+        private void filePane_DragEnter(object sender, DragEventArgs e)
+        {
+            if (filePane.IsMouseOver && e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Move;
+            }
+        }
+
+        private void filePane_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files != null)
+                {
+                    foreach (var file in files)
+                        openTestFile(file);
+                }
+            }
+        }
+
+        private void filePane_DragLeave(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.None;
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands
@@ -121,24 +129,32 @@ namespace MTS
 
         private void newCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // check if testing is running otherwise ..
-
-            e.CanExecute = true;
+            // do not allow create new file if testing is running
+            e.CanExecute = !IsTestRunning;
             e.Handled = true;
         }
         private void newExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // create new tab
-            TestFileItem file = new TestFileItem();
-            // fill it with new test collection
-            if (file.New())
+            try
             {
+                // create new tab
+                TestFileItem file = new TestFileItem();
+                // fill it with new test collection
+                file.New();
+
                 // add to the main pane
                 filePane.Items.Add(file);
                 // activate it - show to user
                 filePane.SelectedItem = file;
             }
-            e.Handled = true;
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
+            finally
+            {
+                e.Handled = true;
+            }
         }
 
         #endregion
@@ -147,9 +163,8 @@ namespace MTS
 
         private void openCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // check if testing is running otherwise ..
-            
-            e.CanExecute = true;
+            // do not allow to open a file if testing is running
+            e.CanExecute = !IsTestRunning;
             e.Handled = true;
         }
         private void openExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -161,8 +176,26 @@ namespace MTS
             // file entered - create new tab
             if (dialog.ShowDialog() == true)
             {
-                openTestFile(dialog.FileName);
-                e.Handled = true;   // opening file has been finished
+                HandleOpenFile(dialog.FileName);
+            }
+            e.Handled = true;
+        }
+        /// <summary>
+        /// Open given file if it can be opened. Handle all exception a present them to the user.
+        /// </summary>
+        /// <param name="filename"></param>
+        public void HandleOpenFile(string filename)
+        {
+            if (IsTestRunning)
+                return;
+
+            try
+            {
+                openTestFile(filename);
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
             }
         }
         private void openTestFile(string filename)
@@ -203,12 +236,22 @@ namespace MTS
         }
         private void closeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // if close command could be executed, SelectedItem must be DocumentContent
-            DocumentContent file = (filePane.SelectedItem as DocumentContent);
-            if (file != null)
-                file.Close();       // We do not care if it is saved or not. If DocumentContent could
-                                    // not be closed it file.Close() will return false
-            e.Handled = true;
+            try
+            {
+                // if close command could be executed, SelectedItem must be DocumentContent
+                DocumentContent file = (filePane.SelectedItem as DocumentContent);
+                if (file != null)
+                    file.Close();       // We do not care if it is saved or not. If DocumentContent could
+                // not be closed it file.Close() will return false
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
+            finally
+            {
+                e.Handled = true;
+            }
         }
 
         #endregion
@@ -226,11 +269,21 @@ namespace MTS
         }
         private void saveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // when this method is called we are sure that filePane exists and selected item is a test file
-            // and it is not saved
-            DocumentItem item = getActiveItem();    // check for errors
-            item.Save();
-            e.Handled = true;
+            try
+            {
+                // when this method is called we are sure that filePane exists and selected item is a test file
+                // and it is not saved
+                DocumentItem item = getActiveItem();    // check for errors
+                item.Save();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
+            finally
+            {
+                e.Handled = true;
+            }
         }
 
         #endregion
@@ -247,27 +300,29 @@ namespace MTS
         }
         private void saveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // when this method is called we are sure that filePane exists and selected item is a test file
-            var dialog = FileManager.CreateSaveFileDialog();
-            // ask user where to store the file
-            if (dialog.ShowDialog(this) == true)    
+            try
             {
-                try
+                // when this method is called we are sure that filePane exists and selected item is a test file
+                var dialog = FileManager.CreateSaveFileDialog();
+                // ask user where to store the file
+                if (dialog.ShowDialog(this) == true)
                 {
                     TestFileItem file = getActiveTestFile();
                     file.SaveAs(dialog.FileName);
                 }
-                catch (Exception ex)
-                {
-                    ExceptionManager.ShowError(ex);
-                    // move this to FileManager
-                    //MessageBox.Show("File could not be saved", "File error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
-            e.Handled = true;
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
+            finally
+            {
+                e.Handled = true;
+            }
         }
 
         #endregion
+
         // help
         private void helpCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -289,6 +344,8 @@ namespace MTS
             e.Handled = true;
         }
 
+        #region Login Command
+
         private void logInCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = !Admin.Operator.IsLoggedIn();
@@ -299,6 +356,10 @@ namespace MTS
             login();
         }
 
+        #endregion
+
+        #region Logout Command
+
         private void logOutCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Admin.Operator.IsLoggedIn();
@@ -306,25 +367,12 @@ namespace MTS
         }
         private void logOutExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // before logout close all tab items (some of them may require logged in user instance)
-            List<DocumentItem> toClose = new List<DocumentItem>();
-            foreach (DocumentContent item in filePane.Items)
-            {   // get all document items - should be closed
-                if (item is DocumentItem)
-                    toClose.Add(item as DocumentItem);
-            }
-            while (toClose.Count > 0)
-            {
-                DocumentItem item = toClose[0];
-                toClose.RemoveAt(0);
-                if (!item.Close())
-                    return; // this DocumentItem could not be closed - logout is not successful
-            }
-            // now all document items are closed - operator will be logged out
-            Output.WriteLine("Logout {0}", Admin.Operator.Instance.Login);
-            Admin.Operator.LogOut();
-            IsLoggedIn = false;
+            logout();
         }
+
+        #endregion
+
+        #region View Profile Command
 
         private void viewProfileCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -337,26 +385,10 @@ namespace MTS
             wnd.ShowDialog();
         }
 
-        /// <summary>
-        /// Get an instance of document content of type  <see cref="DocumentItem"/> that is currently active inside the main area -
-        /// <paramref name="filePane"/>.
-        /// Return null if there is no such a document content
-        /// </summary>
-        private DocumentItem getActiveItem()
-        {
-            return (filePane == null) ? null : (filePane.SelectedItem as DocumentItem);
-        }
-        /// <summary>
-        /// Get an instance of document content of type <see cref="TestFileItem"/> that is currently active inside the main area -
-        /// <paramref name="filePane"/>.
-        /// Return null if there is no such a document content
-        /// </summary>
-        private TestFileItem getActiveTestFile()
-        {
-            return (filePane == null) ? null : (filePane.SelectedItem as TestFileItem);
-        }
+        #endregion
 
-        //viewTester
+        #region View Tester Command
+
         private void viewTesterCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (filePane != null && filePane.Items != null)
@@ -386,9 +418,16 @@ namespace MTS
             {
                 ExceptionManager.ShowError(ex);
             }
+            finally
+            {
+                e.Handled = true;
+            }
         }
 
-        // viewSettings
+        #endregion
+
+        #region View Settings Command
+
         private void viewSettingsCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (filePane != null && filePane.Items != null)
@@ -407,24 +446,36 @@ namespace MTS
         }
         private void viewSettingsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var tab = new SettingsItem(); // create new settings window
-            filePane.Items.Add(tab);        // add it to tab collection
-            filePane.SelectedItem = tab;    // select just created tab
+            try
+            {
+                var tab = new SettingsItem(); // create new settings window
+                filePane.Items.Add(tab);        // add it to tab collection
+                filePane.SelectedItem = tab;    // select just created tab
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
         }
 
-        // viewData
+        #endregion
+
+        #region View Data Command
+
         private void viewDataCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (filePane != null && filePane.Items != null)
             {
                 // data window could be opened just once
                 foreach (var item in filePane.Items)
+                {
                     if (item is DataWindow)     // one of tab is a data window
                     {
                         e.CanExecute = false;   // could not open next one
                         e.Handled = true;
                         return;
                     }
+                }
                 // there is no data window - could be opened
                 e.CanExecute = true;
             }
@@ -433,10 +484,19 @@ namespace MTS
         }
         private void viewDataExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var tab = new DataWindow();
-            filePane.Items.Add(tab);
-            filePane.SelectedItem = tab;
+            try
+            {
+                var tab = new DataWindow();
+                filePane.Items.Add(tab);
+                filePane.SelectedItem = tab;
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
         }
+
+        #endregion
 
         #endregion
 
@@ -457,12 +517,15 @@ namespace MTS
 
         #endregion
 
+        #region Private Methods
+
         /// <summary>
         /// Open login window (this will block the application) and ask user for login and password.
         /// This window will be opened until user is logged in successfully or it is manually closed by user
         /// </summary>
         private void login()
         {
+#if DEBUG
             if (!Admin.Operator.TryLogin("admin", "admin"))
             {   // for debugging: try to login as admin, if it is not possible display login window
                 LoginWindow loginWindow = new LoginWindow(this, false);
@@ -474,13 +537,81 @@ namespace MTS
                     loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
                     loginWindow.ShowDialog();
                 }
+
             }
+#else
+            LoginWindow loginWindow = new LoginWindow(this, false);
+            loginWindow.ShowDialog();   // show window for first time
+
+            // if result is null this loop will end without logging in
+            while (loginWindow.Result == LoginResult.Fail)
+            {
+                loginWindow = new LoginWindow(this, !(bool)loginWindow.DialogResult);
+                loginWindow.ShowDialog();
+            }
+#endif
             if (Admin.Operator.IsLoggedIn())
             {
                 Output.WriteLine("Login {0}", Admin.Operator.Instance.Login);
                 IsLoggedIn = true;
             }
         }
+
+        /// <summary>
+        /// Close all open windows and if successful logout the currently logged in operator
+        /// </summary>
+        private void logout()
+        {
+            if (!closeAll())
+                return;
+
+            // now all document items are closed - operator will be logged out
+            string login = Admin.Operator.Instance.Login;
+            Admin.Operator.LogOut();
+            Output.WriteLine("Logout {0}", login);
+            IsLoggedIn = false;
+        }
+        /// <summary>
+        /// Try to close all tab items. If one of them can not be closed (blocked by the user)
+        /// the process of closing is stopped
+        /// </summary>
+        /// <returns>True if all tab items were closed</returns>
+        private bool closeAll()
+        {
+            List<DocumentItem> toClose = new List<DocumentItem>();
+            toClose.AddRange(filePane.Items.OfType<DocumentItem>());
+
+            while (toClose.Count > 0)
+            {
+                DocumentItem item = toClose[0];
+                toClose.RemoveAt(0);
+                if (!item.Close())
+                    return false; // this DocumentItem could not be closed - logout is not successful
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get an instance of document content of type  <see cref="DocumentItem"/> that is currently active inside the main area -
+        /// <paramref name="filePane"/>.
+        /// Return null if there is no such a document content
+        /// </summary>
+        private DocumentItem getActiveItem()
+        {
+            return (filePane == null) ? null : (filePane.SelectedItem as DocumentItem);
+        }
+        /// <summary>
+        /// Get an instance of document content of type <see cref="TestFileItem"/> that is currently active inside the main area -
+        /// <paramref name="filePane"/>.
+        /// Return null if there is no such a document content
+        /// </summary>
+        private TestFileItem getActiveTestFile()
+        {
+            return (filePane == null) ? null : (filePane.SelectedItem as TestFileItem);
+        }
+
+        #endregion
 
         #region Constructors
 

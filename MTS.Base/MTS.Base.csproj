@@ -94,11 +94,21 @@
     <Compile Include="Types\Unit\UnitData.cs" />
     <Compile Include="Types\Unit\UnitEnum.cs" />
     <Compile Include="Types\Unit\UnitTypes.cs" />
-    <Compile Include="UI\CommandViewModel.cs" />
-    <Compile Include="UI\DelegateCommand.cs" />
-    <Compile Include="UI\ErrorWindowViewModel.cs" />
-    <Compile Include="UI\GenericDelegateCommand.cs" />
-    <Compile Include="UI\ViewModelBase.cs" />
+    <Compile Include="UI\CommandViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\DelegateCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\ErrorWindowViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\GenericDelegateCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\ViewModelBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>

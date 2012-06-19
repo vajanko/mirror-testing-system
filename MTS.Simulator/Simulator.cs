@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using MTS.IO;
 using MTS.IO.Address;
 using MTS.IO.Module;
+using System.IO;
 
 
 namespace MTS.Simulator
@@ -24,7 +25,8 @@ namespace MTS.Simulator
             InitializeComponent();
 
             channels = new Channels(new DummyModule(), HWSettings.Default.ChannelSettings);
-            channels.LoadConfiguration("dummyConfig.csv");
+            string currentDir = Path.GetDirectoryName(Application.ExecutablePath);
+            channels.LoadConfiguration(Path.Combine(currentDir, "config\\simulatorConfig.csv"));
             channels.Initialize();
 
             foldTimer.Interval = (double)foldingTime.Value;

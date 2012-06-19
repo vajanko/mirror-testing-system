@@ -13,8 +13,15 @@ using System.Windows.Media.Imaging;
 
 namespace MTS.Base
 {
+    /// <summary>
+    /// View-model class for a window that is suppose to display error messages (optionally
+    /// created from an exception)
+    /// </summary>
     public class ErrorWindowViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Caught exception to be presented in the error window
+        /// </summary>
         private Exception exception;
 
         #region Properties
@@ -64,21 +71,9 @@ namespace MTS.Base
             }
         }
 
-        //private Image _errorIcon;
         /// <summary>
-        /// (Get/Set) Error icon displayed in the error window. <see cref="PropertyChanged"/> event is raised
-        /// when this property change.
+        /// (Get) Image source of icon displayed in the error window
         /// </summary>
-        //public Image ErrorIcon
-        //{
-        //    get { return _errorIcon; }
-        //    set
-        //    {
-        //        _errorIcon = value;
-        //        OnPropertyChanged("ErrorIcon");
-        //    }
-        //}
-
         public ImageSource ErrorIcon { get; private set; }
 
         private bool _canSendError;
@@ -126,8 +121,17 @@ namespace MTS.Base
             }
         }
 
+        /// <summary>
+        /// (Get) Command that sends a(n email) message about the current error.
+        /// </summary>
         public ICommand SendErrorCommand { get; private set; }
+        /// <summary>
+        /// (Get) Command that displays details about the current error.
+        /// </summary>
         public ICommand ViewDetailsCommand { get; private set; }
+        /// <summary>
+        /// (Get) Command that opens application log file.
+        /// </summary>
         public ICommand ViewLogCommand { get; private set; }
 
         /// <summary>
@@ -261,8 +265,14 @@ namespace MTS.Base
 
         #region Constructors
 
-        public ErrorWindowViewModel(string displayName = "Error", Exception exception = null, System.Drawing.Bitmap errorIcon = null)
-            : base(displayName)
+        /// <summary>
+        /// Initialize a new instance of view-model for window designed to display error messages
+        /// </summary>
+        /// <param name="title">Error window title</param>
+        /// <param name="exception">Instance of exception to be displayed</param>
+        /// <param name="errorIcon">Instance of an image to be displayed as an error icon</param>
+        public ErrorWindowViewModel(string title = "Error", Exception exception = null, System.Drawing.Bitmap errorIcon = null)
+            : base(title)
         {
             this.exception = exception;
 
