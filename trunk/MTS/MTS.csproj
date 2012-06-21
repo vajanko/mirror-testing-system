@@ -127,6 +127,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Admin\Controls\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -207,6 +211,9 @@
     </Page>
     <Compile Include="Admin\Controls\ChangePasswordControl.xaml.cs">
       <DependentUpon>ChangePasswordControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Controls\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Admin\Controls\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>

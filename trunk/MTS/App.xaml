@@ -9,6 +9,7 @@
             <Setter Property="WindowStyle" Value="SingleBorderWindow"/>
             <Setter Property="ResizeMode" Value="CanResize"/>
             <Setter Property="ShowInTaskbar" Value="False"/>
+            <Setter Property="SizeToContent" Value="WidthAndHeight"/>
         </Style>
     </Application.Resources>
 </Application>
