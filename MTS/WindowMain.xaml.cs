@@ -71,6 +71,28 @@ namespace MTS
             Admin.Controls.ProfileWindow wnd = new Admin.Controls.ProfileWindow();
             wnd.ShowDialog();
         }
+        /// <summary>
+        /// This method is called when MainMenu->Options->Change password ... item is clicked
+        /// </summary>
+        private void changePassword_Click(object sender, RoutedEventArgs e)
+        {
+            ChangePasswordControl changeCtrl = new ChangePasswordControl(Admin.Operator.Instance.Login, Admin.Operator.CanLogin);
+            changeCtrl.PasswordFailed += new ChangePasswordControl.PasswordFailedHandler(changeCtrl_PasswordFailed);
+            changeCtrl.PasswordChanged += new ChangePasswordControl.PasswordChangedHandler(changeCtrl_PasswordChanged);
+
+            DialogWindow dialog = new DialogWindow(changeCtrl);
+            dialog.ShowDialog();
+        }
+
+        void changeCtrl_PasswordChanged(object sender, ChangedPasswordEventArgs e)
+        {
+            MessageBox.Show("Password changed successfully", "Success");
+        }
+
+        void changeCtrl_PasswordFailed(object sender, EventArgs e)
+        {
+            MessageBox.Show(string.Format("Changing password for {0} failed!", Admin.Operator.Instance.Login), "Fail");
+        }
 
         #endregion
 

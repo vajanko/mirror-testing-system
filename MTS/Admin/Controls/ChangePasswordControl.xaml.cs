@@ -11,13 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MTS.Base;
 
 namespace MTS.Admin.Controls
 {
     /// <summary>
     /// Allows user to change password
     /// </summary>
-    public partial class ChangePasswordControl : UserControl
+    public partial class ChangePasswordControl : UserControl, IDialogControl
     {
         #region Fields
 
@@ -25,6 +26,7 @@ namespace MTS.Admin.Controls
         /// Login of operator we want to change
         /// </summary>
         private string login;
+
         /// <summary>
         /// Delegate gets login and password and return value indicating whether these credentials are valid
         /// </summary>
@@ -90,6 +92,26 @@ namespace MTS.Admin.Controls
             else
                 OnPasswordFailed();
         }
+        private bool changePassword()
+        {
+            // check if given password is correct - exists in database
+            // and if the change two password are the same - if so fire changed event
+            if (validateOldPassword(login, passwordBox.Password) &&
+                newPasswordBox.Password == confirmPasswordBox.Password)
+            {
+                OnPasswordChanged(passwordBox.Password, newPasswordBox.Password);
+                return true;
+            }
+            else
+            {
+                OnPasswordFailed();
+                return false;
+            }
+        }
+        private bool cancel()
+        {
+            return true;
+        }
 
         /// <summary>
         /// Initialize <see cref="ChangePasswordControl"/> by passing it user login which password could be changed
@@ -124,6 +146,38 @@ namespace MTS.Admin.Controls
             : this()
         {
             Init(login, passValidator);
+        }
+
+        #endregion
+
+        #region IDialogControl Members
+
+        private DialogSettings dialogSettings;
+        public IDialogSettings Settings
+        {
+            get
+            {
+                if (dialogSettings == null)
+                {
+                    dialogSettings = new DialogSettings();
+                    dialogSettings.Title = "Change password";
+                    dialogSettings.Button1Content = "Change";
+                    dialogSettings.Button1Click = changePassword;
+                    dialogSettings.Buttton1Visibility = Visibility.Visible;
+                    dialogSettings.DefaultButton = ButtonType.Button1;
+
+                    dialogSettings.Button2Content = "Cancel";
+                    dialogSettings.Button2Click = cancel;
+                    dialogSettings.Button2Visibility = Visibility.Visible;
+                }
+
+                return dialogSettings;
+            }
+        }
+
+        public Control Control
+        {
+            get { return this; }
         }
 
         #endregion

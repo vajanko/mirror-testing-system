@@ -100,12 +100,15 @@
     <Compile Include="UI\DelegateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UI\DialogSettings.cs" />
     <Compile Include="UI\ErrorWindowViewModel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UI\GenericDelegateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UI\IDialogControl.cs" />
+    <Compile Include="UI\IDialogSettings.cs" />
     <Compile Include="UI\ViewModelBase.cs">
       <SubType>Code</SubType>
     </Compile>

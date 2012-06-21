@@ -1,0 +1,27 @@
+﻿<Window x:Class="MTS.Admin.Controls.DialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DialogWindow" Style="{StaticResource commonWindow}">
+    <DockPanel x:Name="dockPanel">
+        <ContentControl DockPanel.Dock="Top" x:Name="contentCtrl">
+            
+        </ContentControl>
+        <Grid Grid.IsSharedSizeScope="True" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="3"/>
+                    <Setter Property="Padding" Value="5,0"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Buttons"/>
+                <ColumnDefinition SharedSizeGroup="Buttons"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="button1" Content="button1" Grid.Column="0"/>
+            <Button x:Name="button2" Content="button2" Grid.Column="1"/>
+        </Grid>
+    </DockPanel>
+</Window>
