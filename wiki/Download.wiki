@@ -1,0 +1,6 @@
+#summary Current downloads
+
+= Download Page =
+
+Download the latest MTS installer here:
+  * [http://mts.php5.cz/install/MTS_Setup.zip Version: 1.0.0]
