@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MTS.Data"
         xmlns:val="clr-namespace:MTS.Controls.Validators"
         Title="Operator" MinWidth="300" Width="400" MaxWidth="500" MinHeight="200" MaxHeight="400" 
-        ShowInTaskbar="False" x:Name="root" Closing="root_Closing">
+        ShowInTaskbar="False" x:Name="root" Style="{StaticResource commonWindow}" Icon="/MTS;component/Resources/UserEdit_16.png">
     <DockPanel LastChildFill="False">
         <DockPanel.Resources>
             <Style TargetType="TextBox">
@@ -36,18 +36,15 @@
 
         <UniformGrid DockPanel.Dock="Bottom" Rows="1" Columns="2" HorizontalAlignment="Right">
             <Button IsCancel="True">Cancel</Button>
-            <Button IsDefault="True" Click="okButton_Click" >OK</Button>
+            <Button IsDefault="True" Click="okButton_Click">OK</Button>
         </UniformGrid>
 
         <Grid DockPanel.Dock="Left" MinWidth="150">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition MaxWidth="100"/>
+                <ColumnDefinition MinWidth="100"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -55,13 +52,20 @@
             </Grid.RowDefinitions>
         
             <Label Grid.Column="0" Grid.Row="0">Name:</Label>
-            <TextBox Grid.Column="1" Grid.Row="0" x:Name="nameBox" 
-                     Text="{Binding OperatorName, ElementName=root, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Column="1" Grid.Row="0">
+                <TextBox.Text>
+                    <Binding Path="Name">
+                        <Binding.ValidationRules>
+                            <val:RequiredFieldValidator/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         
             <Label Grid.Column="0" Grid.Row="1">Surname:</Label>
-            <TextBox Grid.Column="1" Grid.Row="1" x:Name="surnameBox">
+            <TextBox Grid.Column="1" Grid.Row="1">
                 <TextBox.Text>
-                    <Binding Path="OperatorSurname" ElementName="root" UpdateSourceTrigger="PropertyChanged">
+                    <Binding Path="Surname">
                         <Binding.ValidationRules>
                             <val:RequiredFieldValidator/>
                         </Binding.ValidationRules>
@@ -70,31 +74,20 @@
             </TextBox>
         
             <Label Grid.Column="0" Grid.Row="2">Login:</Label>
-            <TextBox Grid.Column="1" Grid.Row="2" x:Name="loginBox">                
+            <TextBox Grid.Column="1" Grid.Row="2" x:Name="loginBox">
                 <TextBox.Text>
-                    <Binding Path="Login" ElementName="root">
+                    <Binding Path="Login" ValidatesOnDataErrors="True">
                         <Binding.ValidationRules>
                             <val:RequiredFieldValidator/>
+                            <val:UniqueLoginValidator x:Name="loginValidator"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
         
-            <Label Grid.Column="0" Grid.Row="3">Password:</Label>
-            <PasswordBox Grid.Column="1" Grid.Row="3" Height="20" PasswordChanged="passwordBox_PasswordChanged"  
-                         x:Name="passwordBox">
-            </PasswordBox>
-            
-            <Label Grid.Column="0" Grid.Row="4">Confirm:</Label>
-            <PasswordBox Grid.Column="1" Grid.Row="4" Height="20" x:Name="confirmPasswordBox"/>
-        
-            <Label Grid.Column="0" Grid.Row="5">Group:</Label>
-            <ComboBox Grid.Column="1" Grid.Row="5" x:Name="typeBox" Height="20" SelectedIndex="0"
-                      ItemsSource="{Binding DataTypes}">
+            <Label Grid.Column="0" Grid.Row="3">Group:</Label>
+            <ComboBox Grid.Column="1" Grid.Row="3" x:Name="typeBox" Height="20" SelectedIndex="{Binding Type}">
             </ComboBox>
-            
-            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Margin="3" Padding="3" Foreground="Red" 
-                       Text="{Binding ErrorMessage, ElementName=root}"/>
         </Grid>
 
         <Grid DockPanel.Dock="Top">
@@ -112,12 +105,12 @@
 
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <TextBlock Text="Operator: "/>
-                <TextBlock Text="{Binding Text, ElementName=loginBox}"/>
+                <TextBlock Text="{Binding Login}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding Text, ElementName=nameBox}"/>
-                <TextBlock Text="{Binding Text, ElementName=surnameBox}"/>
+                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Text="{Binding Surname}"/>
             </StackPanel>
             <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="5"
                        Text="{Binding SelectedItem.Description, ElementName=typeBox}"/>

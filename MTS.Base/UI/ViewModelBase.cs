@@ -69,7 +69,7 @@ namespace MTS.Base
 
         public virtual void Dispose()
         {
-            // prepared to be overriden
+            // prepared to be overridden
         }
         /// <summary>
         /// Force current View-model to be disposed

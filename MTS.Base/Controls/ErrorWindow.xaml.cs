@@ -29,6 +29,12 @@ namespace MTS.Base
             this.DialogResult = true;
         }
 
+        private void root_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && sender is Window)
+                (sender as Window).Close();
+        }
+
         #region Constructors
 
         public ErrorWindow()

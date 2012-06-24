@@ -191,16 +191,16 @@
                     
                     <StackPanel Grid.Column="0">
                         <Label Style="{StaticResource sectionHeaderStyle}">Actions:</Label>
-                        <Button Content="Add" Click="addOperator_Click" x:Name="deleteOperatorButton" />
+                        <Button Content="Add" Click="addOperator_Click" x:Name="deleteOperatorButton"/>
                         <Button Content="Delete" Click="deleteOperator_Click"/>
                         <Button Content="Edit" Click="editOperator_Click" x:Name="editOperatorButton"/>
                     </StackPanel>                    
                     <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="5" HorizontalAlignment="Stretch" 
                                   VerticalAlignment="Stretch"/>
                     <DataGrid Grid.Column="2" x:Name="operatorsGrid" ItemsSource="{Binding}"
-                              CanUserReorderColumns="True" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False"
+                              CanUserReorderColumns="True" CanUserSortColumns="True" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
                               AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray" VerticalGridLinesBrush="DarkGray"
-                              SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0">
+                              SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0" MouseDoubleClick="operatorsGrid_MouseDoubleClick">
                         <DataGrid.Resources>
                             <ctrl:OperatorTypeConverter x:Key="operatorTypeConverter"/>
                         </DataGrid.Resources>

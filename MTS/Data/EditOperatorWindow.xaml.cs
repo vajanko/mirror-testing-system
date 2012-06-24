@@ -22,21 +22,8 @@ namespace MTS.Data
     /// </summary>
     public partial class EditOperatorWindow : Window
     {
-        #region Properties
-
-        public string OperatorName { get; set; }
-        public string OperatorSurname { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public OperatorEnum Type { get; set; }
-
-        public string ErorrMessage
-        {
-            get;
-            set;
-        }
-
-        #endregion
+        private OperatorViewModel viewModel;
+        MTSContext dbContext;
 
         #region Events
 
@@ -45,65 +32,55 @@ namespace MTS.Data
         /// </summary>
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            // check whether password provided by user are equal
-            if (passwordBox.SecurePassword.Length > 0 && passwordBox.Password == confirmPasswordBox.Password)
+            bool valid = isValid(this);
+
+            if (!valid)
             {
-                this.DialogResult = true;
+                string error = getError(this);
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, error);
             }
             else
             {
-                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, "Passwords you have entered are different");
+                this.DialogResult = valid;
             }
         }
 
-        /// <summary>
-        /// This method is called when value of password box change. Update value of <see cref="Password"/>
-        /// property.
-        /// </summary>
-        private void passwordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private bool isValid(DependencyObject obj)
         {
-            Password = passwordBox.Password;
+            bool hasErrors = Validation.GetHasError(obj);
+            hasErrors = hasErrors || LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>().All(ch => isValid(ch));
+
+            return !hasErrors;
         }
 
-        private void root_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private string getError(DependencyObject obj)
         {
-            Type = (OperatorEnum)this.typeBox.SelectedIndex;
+            var errors = Validation.GetErrors(obj);
+            if (errors.Count > 0)
+                return errors[0].ErrorContent.ToString();
+
+            string error = LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>()
+                .Select(ch => getError(ch)).FirstOrDefault(e => e != null);
+
+            return error;
         }
 
         #endregion
-
-        private bool finalValidation()
-        {
-            bool result = passwordBox.SecurePassword.Length > 0 &&
-                passwordBox.SecurePassword.ToString() == confirmPasswordBox.SecurePassword.ToString();
-
-            result = result && isValid(loginBox.GetBindingExpression(TextBox.TextProperty), loginBox.Text);
-            result = result && isValid(nameBox.GetBindingExpression(TextBox.TextProperty), nameBox.Text);
-            result = result && isValid(surnameBox.GetBindingExpression(TextBox.TextProperty), surnameBox.Text);
-            
-            return result;
-        }
-        private bool isValid(BindingExpression exp, object value)
-        {
-            return exp != null &&
-                exp.ValidationError.RuleInError.Validate(value, System.Globalization.CultureInfo.CurrentCulture).IsValid;
-        }
 
         #region Constructors
 
         public EditOperatorWindow()
         {
             InitializeComponent();
-            Password = string.Empty;
-            typeBox.DataContext = OperatorTypes.Instance;
+            typeBox.ItemsSource = OperatorTypes.Instance.DataTypes;
+            dbContext = new MTSContext();
         }
-        public EditOperatorWindow(string name, string surname, string login, OperatorEnum type)
+        public EditOperatorWindow(OperatorViewModel viewModel)
             : this()
         {
-            nameBox.Text = name;
-            surnameBox.Text = surname;
-            loginBox.Text = login;
-            typeBox.SelectedIndex = (int)type;
+            this.viewModel = viewModel;
+            this.DataContext = viewModel;
+            loginValidator.MyLogin = viewModel.Login;
         }
 
         #endregion

@@ -312,9 +312,10 @@ namespace MTS.Admin.Controls
         /// <summary>
         /// Create a new instace of calibration window and initialize its components
         /// </summary>
-        public CalibrationWindow()
+        public CalibrationWindow(Window owner = null)
         {
             InitializeComponent();
+            this.Owner = owner;
         }
 
         #endregion
