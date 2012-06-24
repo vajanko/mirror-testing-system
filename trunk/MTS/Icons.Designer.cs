@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MTS.Properties {
+namespace MTS {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace MTS.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Icons {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Icons() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MTS.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MTS.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MTS.Icons", typeof(Icons).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,66 +60,44 @@ namespace MTS.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap ChangePasswordIcon {
+        internal static System.Drawing.Bitmap ChangePassword_16 {
             get {
-                object obj = ResourceManager.GetObject("ChangePasswordIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("ChangePassword_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Operator you want to delete is currently logged in. To delete this operator log in as a different user..
-        /// </summary>
-        internal static string DeleteLoggedOperatorMsg {
+        internal static System.Drawing.Bitmap Error_16 {
             get {
-                return ResourceManager.GetString("DeleteLoggedOperatorMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do you really want to delete selected operator and his data? All shifts executed by this operator will be deleted!.
-        /// </summary>
-        internal static string DeleteOperatorMsg {
-            get {
-                return ResourceManager.GetString("DeleteOperatorMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete operator.
-        /// </summary>
-        internal static string DeleteOperatorTitle {
-            get {
-                return ResourceManager.GetString("DeleteOperatorTitle", resourceCulture);
-            }
-        }
-        
-        internal static System.Drawing.Bitmap LoginFailedIcon {
-            get {
-                object obj = ResourceManager.GetObject("LoginFailedIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Error_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to No operator is selected. Select an operator and then click &quot;{0}&quot;.
-        /// </summary>
-        internal static string NoOperatorSelectedMsg {
+        internal static System.Drawing.Bitmap LoginFailed_16 {
             get {
-                return ResourceManager.GetString("NoOperatorSelectedMsg", resourceCulture);
-            }
-        }
-        
-        internal static System.Drawing.Bitmap viewData {
-            get {
-                object obj = ResourceManager.GetObject("viewData", resourceCulture);
+                object obj = ResourceManager.GetObject("LoginFailed_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap viewTester {
+        internal static System.Drawing.Bitmap User_16 {
             get {
-                object obj = ResourceManager.GetObject("viewTester", resourceCulture);
+                object obj = ResourceManager.GetObject("User_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap UserAdd_16 {
+            get {
+                object obj = ResourceManager.GetObject("UserAdd_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap UserDelete_16 {
+            get {
+                object obj = ResourceManager.GetObject("UserDelete_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

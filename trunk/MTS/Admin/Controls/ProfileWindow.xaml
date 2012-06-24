@@ -2,43 +2,39 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:MTS.Admin.Controls"
-        Title="Operator profile" Height="230" Width="320" Icon="/MTS;component/Resources/icons/profile.png"
+        Title="{Binding DisplayName}" Icon="/MTS;component/Resources/icons/profile.png"
         Style="{StaticResource commonWindow}" ResizeMode="NoResize" KeyUp="Window_KeyUp">
-    <StackPanel>
-        <StackPanel.Resources>
+    <Grid>
+        <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="Margin" Value="3"/>
             </Style>
-        </StackPanel.Resources>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Full name:"/>
-            <TextBlock Grid.Column="1" x:Name="nameBlock"/>
+            <local:OperatorTypeConverter x:Key="opConverter"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition MinWidth="100"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Full name:"/>
+        <TextBlock Grid.Column="1" Text="{Binding FullName}"/>
 
-            <TextBlock Grid.Row="1" Text="Login:"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="loginBlock"/>
+        <TextBlock Grid.Row="1" Text="Login:"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Login}"/>
 
-            <TextBlock Grid.Row="2" Text="Group:"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="groupBlock"/>
-            
-            <TextBlock Grid.Column="2" Text="Shifts:"/>
-            <TextBlock Grid.Column="3" x:Name="shiftsCount"/>
-            
-            <TextBlock Grid.Column="2" Grid.Row="1" Text="Testing time:"/>
-            <TextBlock Grid.Column="3" Grid.Row="1" x:Name="testingTime"/>
-        </Grid>
-        <Label Content="Change password:" FontSize="14"/>
-        <local:ChangePasswordControl x:Name="changePassword" Margin="5"
-           PasswordFailed="changePassword_PasswordFailed" PasswordChanged="changePassword_PasswordChanged"/>
-    </StackPanel>
+        <TextBlock Grid.Row="2" Text="Group:"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Group, Converter={StaticResource opConverter}}"/>
+
+        <TextBlock Grid.Row="3" Text="Shifts:"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TotalShifts}"/>
+
+        <TextBlock Grid.Row="4" Text="Testing time:"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding TotalTestingTime, StringFormat=hh\\:mm}"/>
+    </Grid>
 </Window>

@@ -20,39 +20,6 @@ namespace MTS.Admin.Controls
     /// </summary>
     public partial class ProfileWindow : Window
     {
-
-        /// <summary>
-        /// This method is called when password of operator failed to change. A message about failure is displayed
-        /// to user.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void changePassword_PasswordFailed(object sender, EventArgs e)
-        {
-            ExceptionManager.ShowError(Errors.ErrorTitle, 
-                "Your current password is either incorrect or new and confirmation password do not match");
-        }
-        /// <summary>
-        /// This method is called when password of operator is changed. A message about success is displayed to user
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void changePassword_PasswordChanged(object sender, ChangedPasswordEventArgs e)
-        {
-            Operator.ChangePassword(e.Login, e.OldPassword, e.NewPassword);
-            MessageBox.Show("Password changed successfully", "Password", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        /// <summary>
-        /// This method is called when user try to change this operator password. It is checked if password can be
-        /// changed
-        /// </summary>
-        /// <param name="login">Login of operator who's password you want to change</param>
-        /// <param name="password">Password of operator who's password you want to change</param>
-        /// <returns></returns>
-        private bool validatePassword(string login, string password)
-        {   // ask database if this credentials are valid to change this user password
-            return Operator.CanLogin(login, password);
-        }
         /// <summary>
         /// This method is called when keyboard key is released. If <see cref="Key.Escape"/> was pressed window
         /// is closed.
@@ -72,14 +39,11 @@ namespace MTS.Admin.Controls
         /// Create a new instance of operator profile window containing his or her basic information and
         /// possibility to change password
         /// </summary>
-        public ProfileWindow()
+        public ProfileWindow(ProfileWindowViewModel viewModel)
         {
+            this.DataContext = viewModel;
+
             InitializeComponent();
-            // initialize profile data - operator info
-            changePassword.Init(Operator.Instance.Login, validatePassword);
-            nameBlock.Text = Operator.Instance.FullName;
-            loginBlock.Text = Operator.Instance.Login;
-            groupBlock.Text = Operator.Instance.Type.ToString();
         }
 
         #endregion

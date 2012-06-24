@@ -483,12 +483,24 @@ namespace MTS.Admin
         /// </summary>
         private void calibrate_Click(object sender, RoutedEventArgs e)
         {
-            CalibrationWindow form = new CalibrationWindow();
+            CalibrationWindow form = new CalibrationWindow(getParentWindow());
 
             if (form.ShowDialog() == true)      // calibration finished successfully
             {   // show calibrated values to user (do not save yet)
                 IsSaved = false;      // calibration values has been changed
             }
+        }
+        private Window getParentWindow()
+        {
+            FrameworkElement ctrl = this;
+            while (ctrl != null)
+            {
+                if (ctrl is Window)
+                    return ctrl as Window;
+                ctrl = ctrl.Parent as FrameworkElement;
+            }
+
+            return null;
         }
 
         #endregion
@@ -536,32 +548,26 @@ namespace MTS.Admin
         private void addOperator_Click(object sender, RoutedEventArgs e)
         {
             // create dialog for creating a new operator
-            EditOperatorWindow dialog = new EditOperatorWindow();
+            OperatorViewModel viewModel = new OperatorViewModel("New operator");
+            EditOperatorWindow dialog = new EditOperatorWindow(viewModel);
 
-            if (dialog.ShowDialog() == true)    // otherwise no operator will be added
-            {
-                // from password compute hash - only that will be saved to database
-                string password = Operator.ComputeHash(dialog.Password);
+            if (dialog.ShowDialog() != true)
+                return;     // cancel clicked
 
-                try
-                {   // create and add new operator
-                    context.Operators.Add(new Data.Operator()
-                    {
-                        Login = dialog.Login,
-                        Name = dialog.OperatorName,
-                        Surname = dialog.OperatorSurname,
-                        Password = password,
-                        Type = (byte)dialog.Type
-                    });
-                    // commit changes - here an exception could be thrown
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    ExceptionManager.ShowError(ex);
-                }
-                updateOperatorsGrid();
+            try
+            {   // create and add new operator
+                Data.Operator op = new Data.Operator();
+                viewModel.GetData(op);
+                context.Operators.Add(op);
+
+                // commit changes - here an exception could be thrown
+                context.SaveChanges();
             }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
+            updateOperatorsGrid();
         }
         /// <summary>
         /// This method is called when delete button in operators settings section is clicked. Selected operator
@@ -608,31 +614,22 @@ namespace MTS.Admin
         private void editOperator_Click(object sender, RoutedEventArgs e)
         {
             Data.Operator op = operatorsGrid.SelectedValue as Data.Operator;
-            if (op == null)
-            {
-                string msg = string.Format(P.Resources.NoOperatorSelectedMsg, editOperatorButton.Content.ToString());
-                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, msg);
-            }
-            else
-            {
-                EditOperatorWindow dialog = new EditOperatorWindow(op.Name, op.Surname, op.Login, (OperatorEnum)op.Type);
-                if (dialog.ShowDialog() == true)
-                {
-                    try
-                    {
-                        op.Name = dialog.OperatorName;
-                        op.Surname = dialog.OperatorSurname;
-                        op.Login = dialog.Login;
-                        op.Type = (byte)dialog.Type;
-                        context.SaveChanges();
-                        updateOperatorsGrid();
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionManager.ShowError(ex);
-                    }
-                }
-            }
+            editOperator(op);
+        }
+        /// <summary>
+        /// This method is called when operators grid is double clicked. Selected operator will be opened
+        /// for editing in a new window.
+        /// </summary>
+        /// <param name="sender">Instance of grid that was double-clicked</param>
+        /// <param name="e">Double click event argument</param>
+        private void operatorsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGrid grid = (sender as DataGrid);
+            if (grid == null)
+                return;
+
+            Data.Operator op = grid.SelectedValue as Data.Operator;
+            editOperator(op);
         }
 
         /// <summary>
@@ -641,6 +638,35 @@ namespace MTS.Admin
         private void updateOperatorsGrid()
         {
             operatorsGrid.DataContext = context.Operators.ToList();
+        }
+
+        private void editOperator(Data.Operator op)
+        {
+            if (op == null)
+            {   // no operator is selected
+                string msg = string.Format(P.Resources.NoOperatorSelectedMsg, editOperatorButton.Content.ToString());
+                ExceptionManager.ShowError(Errors.ErrorTitle, Errors.ErrorIcon, msg);
+                return;
+            }
+
+            OperatorViewModel viewModel = new OperatorViewModel("Edit operator");
+            viewModel.LoadData(op);
+            EditOperatorWindow dialog = new EditOperatorWindow(viewModel);
+
+            if (dialog.ShowDialog() != true)
+                return;     // cancel clicked
+
+
+            try
+            {   // save data to database
+                viewModel.GetData(op);
+                context.SaveChanges();
+                updateOperatorsGrid();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.ShowError(ex);
+            }
         }
 
         #endregion

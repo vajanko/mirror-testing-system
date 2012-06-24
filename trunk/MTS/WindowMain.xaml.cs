@@ -19,6 +19,8 @@ using MTS.Admin;
 using MTS.Admin.Controls;
 using MTS.Data;
 using MTS.Tester;
+using P = MTS.Properties;
+
 
 using AvalonDock;
 
@@ -64,12 +66,11 @@ namespace MTS
             logout();
         }
         /// <summary>
-        /// This method is called when 
+        /// This method is called when MainMenu->Options->Profile item is clicked
         /// </summary>
         private void profile_Click(object sender, RoutedEventArgs e)
         {
-            Admin.Controls.ProfileWindow wnd = new Admin.Controls.ProfileWindow();
-            wnd.ShowDialog();
+            showProfile();
         }
         /// <summary>
         /// This method is called when MainMenu->Options->Change password ... item is clicked
@@ -78,20 +79,15 @@ namespace MTS
         {
             ChangePasswordControl changeCtrl = new ChangePasswordControl(Admin.Operator.Instance.Login, Admin.Operator.CanLogin);
             changeCtrl.PasswordFailed += new ChangePasswordControl.PasswordFailedHandler(changeCtrl_PasswordFailed);
-            changeCtrl.PasswordChanged += new ChangePasswordControl.PasswordChangedHandler(changeCtrl_PasswordChanged);
 
-            DialogWindow dialog = new DialogWindow(changeCtrl);
+            DialogWindow dialog = new DialogWindow(changeCtrl, this, Icons.ChangePassword_16);
             dialog.ShowDialog();
-        }
-
-        void changeCtrl_PasswordChanged(object sender, ChangedPasswordEventArgs e)
-        {
-            MessageBox.Show("Password changed successfully", "Success");
         }
 
         void changeCtrl_PasswordFailed(object sender, EventArgs e)
         {
-            MessageBox.Show(string.Format("Changing password for {0} failed!", Admin.Operator.Instance.Login), "Fail");
+            MessageControl.Show(string.Format("Changing password for {0} failed!", Admin.Operator.Instance.Login), 
+                "Fail", Icons.LoginFailed_16, this);
         }
 
         #endregion
@@ -403,8 +399,7 @@ namespace MTS
         }
         private void viewProfileExecuted(object sender, ExecutedRoutedEventArgs e)
         {   // show window with operator profiles
-            Admin.Controls.ProfileWindow wnd = new Admin.Controls.ProfileWindow();
-            wnd.ShowDialog();
+            showProfile();
         }
 
         #endregion
@@ -548,7 +543,7 @@ namespace MTS
         private void login()
         {
 #if DEBUG
-            if (!Admin.Operator.TryLogin("admin", "admin"))
+            if (!Admin.Operator.TryLogin("admin", "admin1"))
             {   // for debugging: try to login as admin, if it is not possible display login window
                 LoginWindow loginWindow = new LoginWindow(this, false);
                 loginWindow.ShowDialog();   // show window for first time
@@ -613,6 +608,29 @@ namespace MTS
 
             return true;
         }
+
+        /// <summary>
+        /// Show profile window of currently logged in operator
+        /// </summary>
+        private void showProfile()
+        {
+            ProfileWindowViewModel viewModel = new ProfileWindowViewModel("Profile");
+            var op = Admin.Operator.Instance;
+            viewModel.FullName = op.FullName;
+            viewModel.Login = op.Login;
+            viewModel.Group = op.Type;
+
+            using (MTSContext context = new MTSContext())
+            {
+                var opResults = context.OperatorResults.Single(o => o.Id == op.Id);
+                viewModel.TotalTestingTime = opResults.TotalTime;
+                viewModel.TotalShifts = opResults.TotalSequences;
+            }
+
+            ProfileWindow profileWindow = new ProfileWindow(viewModel);
+            profileWindow.ShowDialog();
+        }
+
 
         /// <summary>
         /// Get an instance of document content of type  <see cref="DocumentItem"/> that is currently active inside the main area -

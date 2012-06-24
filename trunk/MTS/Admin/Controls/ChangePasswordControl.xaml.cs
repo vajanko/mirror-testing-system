@@ -16,7 +16,7 @@ using MTS.Base;
 namespace MTS.Admin.Controls
 {
     /// <summary>
-    /// Allows user to change password
+    /// Control that allows user to change his/her password
     /// </summary>
     public partial class ChangePasswordControl : UserControl, IDialogControl
     {
@@ -92,22 +92,30 @@ namespace MTS.Admin.Controls
             else
                 OnPasswordFailed();
         }
+        /// <summary>
+        /// Perform user password change. Return value whether it has been changed successfully
+        /// </summary>
+        /// <returns>True if password has been changed successfully, otherwise false</returns>
         private bool changePassword()
         {
             // check if given password is correct - exists in database
             // and if the change two password are the same - if so fire changed event
             if (validateOldPassword(login, passwordBox.Password) &&
                 newPasswordBox.Password == confirmPasswordBox.Password)
-            {
+            {   // raise password success event
                 OnPasswordChanged(passwordBox.Password, newPasswordBox.Password);
                 return true;
             }
             else
-            {
+            {   // raise password failed event
                 OnPasswordFailed();
                 return false;
             }
         }
+        /// <summary>
+        /// Cancel password changing
+        /// </summary>
+        /// <returns>Constant true value</returns>
         private bool cancel()
         {
             return true;
@@ -153,6 +161,9 @@ namespace MTS.Admin.Controls
         #region IDialogControl Members
 
         private DialogSettings dialogSettings;
+        /// <summary>
+        /// (Get) Dialog window settings
+        /// </summary>
         public IDialogSettings Settings
         {
             get
@@ -163,7 +174,7 @@ namespace MTS.Admin.Controls
                     dialogSettings.Title = "Change password";
                     dialogSettings.Button1Content = "Change";
                     dialogSettings.Button1Click = changePassword;
-                    dialogSettings.Buttton1Visibility = Visibility.Visible;
+                    dialogSettings.Button1Visibility = Visibility.Visible;
                     dialogSettings.DefaultButton = ButtonType.Button1;
 
                     dialogSettings.Button2Content = "Cancel";
@@ -174,7 +185,9 @@ namespace MTS.Admin.Controls
                 return dialogSettings;
             }
         }
-
+        /// <summary>
+        /// (Get) Control displayed in the dialog window
+        /// </summary>
         public Control Control
         {
             get { return this; }

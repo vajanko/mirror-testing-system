@@ -1,16 +1,15 @@
-﻿<Window x:Class="MTS.Admin.Controls.DialogWindow"
+﻿<Window x:Class="MTS.Base.DialogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DialogWindow" Style="{StaticResource commonWindow}">
+        Title="DialogWindow" Style="{StaticResource commonWindow}" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        KeyUp="Window_KeyUp" Icon="/MTS.Base;component/Resources/icons/DialogIcon.png">
     <DockPanel x:Name="dockPanel">
-        <ContentControl DockPanel.Dock="Top" x:Name="contentCtrl">
-            
-        </ContentControl>
         <Grid Grid.IsSharedSizeScope="True" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
             <Grid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="3"/>
                     <Setter Property="Padding" Value="5,0"/>
+                    <Setter Property="MinWidth" Value="50"/>
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>

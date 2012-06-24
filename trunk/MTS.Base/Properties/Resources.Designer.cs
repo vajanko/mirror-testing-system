@@ -87,6 +87,13 @@ namespace MTS.Base.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap mts {
+            get {
+                object obj = ResourceManager.GetObject("mts", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to User of the application. Can execute tests and edit parameters..
         /// </summary>

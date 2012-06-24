@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="{Binding DisplayName}" MinWidth="220" MinHeight="170"
         Width="350" Height="170" MaxHeight="400" MaxWidth="600" x:Name="root" Topmost="True"
-        Style="{StaticResource commonWindow}" Icon="/MTS;component/Resources/icons/errorWindow.png">
+        Style="{StaticResource commonWindow}" Icon="/MTS;component/Resources/icons/errorWindow.png" KeyUp="root_KeyUp">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>

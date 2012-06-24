@@ -127,7 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Admin\Controls\DialogWindow.xaml">
+    <Page Include="Admin\Controls\LoginControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,12 +212,13 @@
     <Compile Include="Admin\Controls\ChangePasswordControl.xaml.cs">
       <DependentUpon>ChangePasswordControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Admin\Controls\DialogWindow.xaml.cs">
-      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    <Compile Include="Admin\Controls\LoginControl.xaml.cs">
+      <DependentUpon>LoginControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Admin\Controls\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Admin\UI\ProfileWindowViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -229,6 +230,7 @@
     <Compile Include="Controls\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Validators\UniqueLoginValidator.cs" />
     <Compile Include="Controls\Validators\PasswordEqualityValidator.cs" />
     <Compile Include="Controls\Validators\RequiredFieldValidator.cs" />
     <Compile Include="Admin\Controls\LoginWindow.xaml.cs">
@@ -245,8 +247,14 @@
     <Compile Include="Data\OperatorSource.cs" />
     <Compile Include="Controls\Converters\ParamValueConverter.cs" />
     <Compile Include="Data\ResultStyleSelector.cs" />
+    <Compile Include="Data\UI\OperatorViewModel.cs" />
     <Compile Include="Editor\TestFileItem.xaml.cs">
       <DependentUpon>TestFileItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.resx</DependentUpon>
     </Compile>
     <Compile Include="Installer.cs">
       <SubType>Component</SubType>
@@ -336,6 +344,20 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Resource Include="Resources\Calibration_16.png" />
+    <Resource Include="Resources\UserEdit_16.png" />
+    <Resource Include="Resources\Error_16.png" />
+    <Resource Include="Resources\UserDelete_16.png" />
+    <Resource Include="Resources\UserAdd_16.png" />
+    <Resource Include="Resources\LoginFailed_16.png" />
+    <Resource Include="Resources\ChangePassword_16.png" />
+    <None Include="Resources\User_16.png" />
+    <Resource Include="Resources\icons\changePassword.png" />
+    <Resource Include="Resources\icons\loginFailed.png" />
+    <EmbeddedResource Include="Icons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Installer.resx">
       <DependentUpon>Installer.cs</DependentUpon>
     </EmbeddedResource>

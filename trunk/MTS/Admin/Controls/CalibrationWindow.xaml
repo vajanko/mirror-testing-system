@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:MTS.Base;assembly=MTS.Base"
     Title="Calibration" Topmost="True" ResizeMode="NoResize" Width="300" Height="150"
-        x:Name="root" Initialized="window_Initialized" Style="{StaticResource commonWindow}">
+        x:Name="root" Initialized="window_Initialized" Style="{StaticResource commonWindow}" Icon="/MTS;component/Resources/Calibration_16.png">
     <Grid Margin="10,0">
         <Grid.Resources>
             <Style TargetType="{x:Type Button}">
