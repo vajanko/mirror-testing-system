@@ -490,18 +490,7 @@ namespace MTS.Admin
                 IsSaved = false;      // calibration values has been changed
             }
         }
-        private Window getParentWindow()
-        {
-            FrameworkElement ctrl = this;
-            while (ctrl != null)
-            {
-                if (ctrl is Window)
-                    return ctrl as Window;
-                ctrl = ctrl.Parent as FrameworkElement;
-            }
-
-            return null;
-        }
+        
 
         #endregion
 

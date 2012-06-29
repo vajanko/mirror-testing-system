@@ -32,7 +32,8 @@
         </DockPanel.Resources>
         <StackPanel DockPanel.Dock="Left">
             <CheckBox Content="Check all" Margin="3" x:Name="checkAllBox" Checked="checkAllBox_Checked" Unchecked="checkAllBox_Unchecked"/>
-            <ListBox ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" MinWidth="150" x:Name="checkTestListBox">
+            <ListBox ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" MinWidth="150" x:Name="checkTestListBox"
+                     SelectionChanged="checkTestListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type ListBoxItem}">
                         <CheckBox IsChecked="{Binding Enabled}" Margin="3" Content="{Binding Name}"/>
@@ -42,7 +43,7 @@
         </StackPanel>
         <!-- Main area where all controls for setting testing parameters are placed -->
         <ListBox ItemsSource="{Binding}" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     DockPanel.Dock="Left" x:Name="testList" IsSynchronizedWithCurrentItem="True">
+                     DockPanel.Dock="Left" x:Name="testList" IsSynchronizedWithCurrentItem="True" ScrollViewer.PanningMode="VerticalFirst">
             <ListBox.Resources>
                 <!-- Styles -->
                 <Style TargetType="{x:Type base:UpDownButton}">
@@ -102,7 +103,8 @@
                 <DataTemplate DataType="{x:Type ed:TestValue}">
                     <!-- Test property Parameters is a dictionary - collection of <key,value> pairs. Because we only
                              want values, binding to Parameters.Values is used -->
-                    <ListView ItemsSource="{Binding}" x:Name="testListView" SelectionMode="Single" LostKeyboardFocus="testListView_LostKeyboardFocus">
+                    <ListView ItemsSource="{Binding}" x:Name="testListView" SelectionMode="Single" LostKeyboardFocus="testListView_LostKeyboardFocus"
+                              ScrollViewer.CanContentScroll="False">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="{x:Type ListViewItem}">
                                 <Setter Property="Background" Value="Pink"/>

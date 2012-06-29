@@ -106,6 +106,14 @@ namespace MTS
                 openTestFile(Application.Current.Properties["open"].ToString());
             }
         }
+        /// <summary>
+        /// This method is called when window is being closed. It is checked whether there are any open documents.
+        /// </summary>
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!closeAll())
+                e.Cancel = true;
+        }
 
         #endregion
 
@@ -543,7 +551,7 @@ namespace MTS
         private void login()
         {
 #if DEBUG
-            if (!Admin.Operator.TryLogin("admin", "admin1"))
+            if (!Admin.Operator.TryLogin("admin", "admin"))
             {   // for debugging: try to login as admin, if it is not possible display login window
                 LoginWindow loginWindow = new LoginWindow(this, false);
                 loginWindow.ShowDialog();   // show window for first time
