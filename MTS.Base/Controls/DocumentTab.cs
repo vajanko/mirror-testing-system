@@ -135,8 +135,10 @@ namespace MTS.Base
             // check if item is saved so we it could be closed
             if (!IsSaved)
             {
+                Window parent = getParentWindow();
+
                 // item is not saved - ask user what to do
-                var result = MessageBox.Show("\"" + Title + "\" is not saved. Save changes?", "Item not saved!",
+                var result = MessageBox.Show(parent, string.Format("\"{0}\" is not saved. Save changes?", Title), "Item not saved!",
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes);
 
                 if (result == MessageBoxResult.Cancel)      // user changed his opinion
@@ -160,6 +162,23 @@ namespace MTS.Base
         public virtual void Save()
         {
             IsSaved = true;
+        }
+
+        /// <summary>
+        /// Get the instance of a window that host current control
+        /// </summary>
+        /// <returns>Instance of parent window or null if current control is not placed in a window</returns>
+        protected Window getParentWindow()
+        {
+            FrameworkElement ctrl = this;
+            while (ctrl != null)
+            {
+                if (ctrl is Window)
+                    return ctrl as Window;
+                ctrl = ctrl.Parent as FrameworkElement;
+            }
+
+            return null;
         }
 
         #region Constructors

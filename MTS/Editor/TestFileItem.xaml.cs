@@ -234,7 +234,9 @@ namespace MTS.Editor
         protected void SelectCurrentItem(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (sender is ListBoxItem)
+            {
                 (sender as ListBoxItem).IsSelected = true;
+            }
         }
 
         /// <summary>
@@ -248,6 +250,15 @@ namespace MTS.Editor
             ListView view = sender as ListView;
             if (view != null && !view.IsKeyboardFocusWithin)
                 view.SelectedIndex = -1;
+        }
+
+        /// <summary>
+        /// This method is called when selected item of the side list of test checkboxes change. The selected
+        /// test will be brought into view.
+        /// </summary>
+        private void checkTestListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            testList.ScrollIntoView(testList.SelectedItem);
         }
 
         #endregion
@@ -285,5 +296,6 @@ namespace MTS.Editor
             }
             box.Content = "Check all";
         }
+        
     }
 }
