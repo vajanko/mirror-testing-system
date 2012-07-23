@@ -264,11 +264,11 @@ namespace MTS.Tester
                 // create scheduler with tasks to be executed
                 scheduler = createScheduler(shiftTests);
 
-                GCLatencyMode oldMode = GCSettings.LatencyMode;
-                RuntimeHelpers.PrepareConstrainedRegions();
-                try
-                {
-                    GCSettings.LatencyMode = GCLatencyMode.LowLatency;
+                //GCLatencyMode oldMode = GCSettings.LatencyMode;
+                //RuntimeHelpers.PrepareConstrainedRegions();
+                //try
+                //{
+                    //GCSettings.LatencyMode = GCLatencyMode.LowLatency;
 
                     // this loop tests one mirror
                     while (!scheduler.IsFinished)
@@ -284,11 +284,11 @@ namespace MTS.Tester
                             Thread.Sleep(200);              // for presentation purpose only                    
                         }
                     } 
-                }
-                finally
-                {
-                    GCSettings.LatencyMode = oldMode;
-                }
+                //}
+                //finally
+                //{
+                //    GCSettings.LatencyMode = oldMode;
+                //}
          
                 Output.WriteLine(Resource.SequenceFinishedMsg, Finished + 1);
 
@@ -346,10 +346,17 @@ namespace MTS.Tester
             if (Properties.Settings.Default.PrintLabels)
             {   // if printing of labels is required
                 // print label for test mirror
+                var testInfo = this.shiftTests.GetTest(TestIds.Info);
+                var partNumber = testInfo.GetParam<StringParam>(ParamIds.PartNumber);
+                var supplier = testInfo.GetParam<StringParam>(ParamIds.SupplierName);
+                var description = testInfo.GetParam<StringParam>(ParamIds.DescriptionId);
+                string message = string.Empty;
                 if (resultCode == TaskResultType.Completed)
-                    Admin.Printing.PrintingManager.Print("mirror", Resource.PassedMsg);
+                    message = Resource.PassedMsg;
                 else if (resultCode == TaskResultType.Failed)
-                    Admin.Printing.PrintingManager.Print("mirror", Resource.FailedMsg);
+                    message = Resource.FailedMsg;
+
+                Admin.Printing.PrintingManager.Print(description.StringValue, partNumber.StringValue, supplier.StringValue, message);
             }
 
             // wait a moment to display light

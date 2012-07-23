@@ -31,6 +31,15 @@ namespace MTS.Admin.Printing
         /// </summary>
         public string MirrorName { get; set; }
         /// <summary>
+        /// (Get/Set) Part number of tested mirror for which this label is printed
+        /// </summary>
+        public string PartNumber { get; set; }
+        /// <summary>
+        /// (Get/Set) Supplier name of tested mirror for which this label is printed
+        /// </summary>
+        public string Supplier { get; set; }
+
+        /// <summary>
         /// (Get/Set) Description of testing result. Will be printed on the label
         /// </summary>
         public string Result { get; set; }
@@ -45,7 +54,7 @@ namespace MTS.Admin.Printing
         /// </summary>
         public string PrintText
         {
-            get { return string.Join("\n", MirrorName, Result, string.Format(dateFormat, Date)); }
+            get { return string.Join("\n", MirrorName, PartNumber, Supplier, Result, string.Format(dateFormat, Date)); }
         }
 
         /// <summary>

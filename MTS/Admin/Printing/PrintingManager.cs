@@ -17,10 +17,16 @@ namespace MTS.Admin.Printing
         /// <param name="mirrorName">Name of the mirror to be printed on the label</param>
         /// <param name="result">Result message of mirror testing process that will be printed on the label</param>
         /// <param name="date">Date when mirror testing was executed</param>
-        public static void Print(string mirrorName, string result, DateTime date)
+        public static void Print(string mirrorName, string partNumber, string supplier,
+            string result, DateTime date)
         {
             // create a new label
-            PrintLabel label = new PrintLabel(mirrorName, result, date);
+            PrintLabel label = new PrintLabel(mirrorName, result, date)
+            {
+                PartNumber = partNumber,
+                Supplier = supplier
+            };
+
             // initialize its size
             label.PageWidth = (int)((double)Settings.Default.PrinterWidth * 3.93700787);
             label.PageHeight = (int)((double)Settings.Default.PrinterHeight * 3.93700787);
@@ -34,9 +40,9 @@ namespace MTS.Admin.Printing
         /// </summary>
         /// <param name="mirrorName">Name of the mirror to be printed on the label</param>
         /// <param name="result">Result message of mirror testing process that will be printed on the label</param>
-        public static void Print(string mirrorName, string result)
+        public static void Print(string mirrorName, string partNumber, string supplier, string result)
         {
-            Print(mirrorName, result, DateTime.Now);
+            Print(mirrorName, partNumber, supplier, result, DateTime.Now);
         }
     }
 }
