@@ -119,6 +119,10 @@ namespace MTS.Base
 
         #endregion
 
+        /// <summary>
+        /// This method is called when a key is released. It is checking for Escape key which will close
+        /// the dialog window.
+        /// </summary>
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape && sender is Window)
