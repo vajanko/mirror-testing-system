@@ -228,6 +228,7 @@
     <Compile Include="Controls\Converters\ParamIdToNameConverter.cs" />
     <Compile Include="Controls\Converters\TaskResultTypeConverter.cs" />
     <Compile Include="Controls\Converters\TestIdToNameConverter.cs" />
+    <Compile Include="Controls\GreyscaleEffect.cs" />
     <Compile Include="Controls\PopupWindow.xaml.cs">
       <DependentUpon>PopupWindow.xaml</DependentUpon>
     </Compile>
@@ -353,6 +354,9 @@
     <Resource Include="Resources\UserAdd_16.png" />
     <Resource Include="Resources\LoginFailed_16.png" />
     <Resource Include="Resources\ChangePassword_16.png" />
+    <Content Include="Greyscale.ps">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\User_16.png" />
     <Resource Include="Resources\icons\changePassword.png" />
     <Resource Include="Resources\icons\loginFailed.png" />
