@@ -478,36 +478,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B771000F5DCC464F57715C680BEAA97C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B11776D3E687C132EB4225EE140FA0EA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2A73BDFC1C88317753765A053DAC756B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1C993C0DE93388E8DD0F04C8434242AD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E2D1D233653866E2FE7E9D16F34D877B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E8C03783F4197EC3CB77BF42F12112D0"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -598,7 +568,31 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B771000F5DCC464F57715C680BEAA97C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B11776D3E687C132EB4225EE140FA0EA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_0B86A9360FDAF540EF20259C69C474F6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2A73BDFC1C88317753765A053DAC756B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1C993C0DE93388E8DD0F04C8434242AD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -617,6 +611,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D38EF2913AD07C003716E6FEE38B18EF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E2D1D233653866E2FE7E9D16F34D877B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -699,10 +699,10 @@
                     "Name" = "8:Microsoft .NET Framework 4 (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Sql.Server.Express.10.0"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Sql.Server.Express.10.5.UnOfficial"
                     {
-                    "Name" = "8:SQL Server 2008 Express"
-                    "ProductCode" = "8:Microsoft.Sql.Server.Express.10.0"
+                    "Name" = "8:SQL Server 2008 R2 Express"
+                    "ProductCode" = "8:Microsoft.Sql.Server.Express.10.5.UnOfficial"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.4.5"
                     {
@@ -1896,7 +1896,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MTS"
         "ProductCode" = "8:{1E05FCAD-23DB-48C1-9765-44453C17BD60}"
-        "PackageCode" = "8:{49E8649F-2446-4339-BDD7-0F18DA881DEC}"
+        "PackageCode" = "8:{0D8B4362-AD1C-4A6E-9683-A34EB29C795F}"
         "UpgradeCode" = "8:{58D1A402-8096-4CBB-B9C4-8EF359022A5A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
