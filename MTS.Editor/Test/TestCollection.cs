@@ -53,10 +53,11 @@ namespace MTS.Editor
 
         public void AddTest(TestValue test)
         {
-            tests.Add(test.ValueId, test);
+            AddTest(test.ValueId, test);
         }
         public void AddTest(string key, TestValue test)
         {
+            test.OrderIndex = tests.Count;
             tests.Add(key, test);
         }
         public TestValue GetTest(string key)

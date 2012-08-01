@@ -104,6 +104,7 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -248,6 +249,7 @@
     <Compile Include="Controls\Converters\ParamValueConverter.cs" />
     <Compile Include="Data\ResultStyleSelector.cs" />
     <Compile Include="Data\UI\OperatorViewModel.cs" />
+    <Compile Include="Editor\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="Editor\TestFileItem.xaml.cs">
       <DependentUpon>TestFileItem.xaml</DependentUpon>
     </Compile>

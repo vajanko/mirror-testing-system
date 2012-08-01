@@ -3,6 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:MTS.Base;assembly=MTS.Base"
     xmlns:ed="clr-namespace:MTS.Editor;assembly=MTS.Editor"
+    xmlns:local="clr-namespace:MTS.Editor"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     Height="400" Width="400" x:Name="root" Title="{Binding ItemTitle, RelativeSource={RelativeSource self}}">
     <DockPanel LastChildFill="True" DataContext="{Binding Tests}">
         <DockPanel.Resources>
@@ -73,26 +75,27 @@
                          user change any value it's get synchronized -->
                 <!-- UpDownButton for numeric parameter -->
                 <DataTemplate DataType="{x:Type ed:IntParam}">
-                    <base:UpDownButton Decimals="0"/>
+                    <base:UpDownButton Decimals="0" TabIndex="{Binding OrderIndex}"/>
                 </DataTemplate>
                 <!-- UpDownButton for real numeric parameter -->
                 <DataTemplate DataType="{x:Type ed:DoubleParam}">
-                    <base:UpDownButton Decimals="{Binding Decimals}"/>
+                    <base:UpDownButton Decimals="{Binding Decimals}" TabIndex="{Binding OrderIndex}"/>
                 </DataTemplate>
                 <!-- ChechBox for Boolean parameter -->
                 <DataTemplate DataType="{x:Type ed:BoolParam}">
-                    <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay}">
+                    <CheckBox IsChecked="{Binding BoolValue, Mode=TwoWay}" TabIndex="{Binding OrderIndex}">
                         <Label Content="{Binding Text}"/>
                         <!-- BoolParameterMetadata has additional property for check box description -->
                     </CheckBox>
                 </DataTemplate>
                 <!-- TextBox for string parameter -->
                 <DataTemplate DataType="{x:Type ed:StringParam}">
-                    <TextBox Text="{Binding StringValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="140"/>
+                    <TextBox Text="{Binding StringValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="140"
+                             TabIndex="{Binding OrderIndex}" />
                 </DataTemplate>
                 <!-- ComboBox for enumerator parameter -->
                 <DataTemplate DataType="{x:Type ed:EnumParam}">
-                    <ComboBox SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Values}" MinWidth="140"/>
+                    <ComboBox SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" ItemsSource="{Binding Values}" MinWidth="140" TabIndex="{Binding OrderIndex}"/>
                 </DataTemplate>
                 <!-- Add new data templates here if new type of parameter is necessary ... -->
             </ListBox.Resources>
@@ -104,12 +107,16 @@
                     <!-- Test property Parameters is a dictionary - collection of <key,value> pairs. Because we only
                              want values, binding to Parameters.Values is used -->
                     <ListView ItemsSource="{Binding}" x:Name="testListView" SelectionMode="Single" LostKeyboardFocus="testListView_LostKeyboardFocus"
-                              ScrollViewer.CanContentScroll="False">
+                              ScrollViewer.CanContentScroll="False" KeyboardNavigation.TabNavigation="Local"  Focusable="False" TabIndex="{Binding OrderIndex}">
+                        <i:Interaction.Behaviors>
+                            <local:IgnoreMouseWheelBehavior/>
+                        </i:Interaction.Behaviors>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="{x:Type ListViewItem}">
                                 <Setter Property="Background" Value="Pink"/>
                                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                                 <Setter Property="Margin" Value="0,1"/>
+                                <Setter Property="IsTabStop" Value="False"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListViewItem}">

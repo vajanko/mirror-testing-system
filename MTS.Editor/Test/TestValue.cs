@@ -90,10 +90,11 @@ namespace MTS.Editor
         }
         public void AddParam(ParamValue param)
         {
-            parameters.Add(param.ValueId, param);
+            AddParam(param.ValueId, param);
         }
         public void AddParam(string key, ParamValue param)
         {
+            param.OrderIndex = parameters.Count;
             parameters.Add(key, param);
         }
         /// <summary>

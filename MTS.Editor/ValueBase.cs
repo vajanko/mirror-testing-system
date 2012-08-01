@@ -29,6 +29,13 @@ namespace MTS.Editor
         /// </summary>
         public string Description { get; set; }
 
+        private int orderIndex;
+        public int OrderIndex
+        {
+            get { return orderIndex; }
+            set { orderIndex = value; OnPropertyChanged("OrderIndex"); }
+        }
+
         /// <summary>
         /// Call visitor method on this instance of test or parameter value adding new functions.
         /// </summary>
